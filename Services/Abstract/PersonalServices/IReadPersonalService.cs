@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Services.Abstract.PersonalServices
 {
-	public interface IReadPersonalService
+	public interface IReadPersonalService : IReadService<ReadPersonalDto>
 	{
-		Task<List<ReadPersonalDto>> GetAllAsync();
-		Task<ReadPersonalDto> GetSingleAsync();
-		Task<bool> GetAnyAsync();
+		
 	}
 }

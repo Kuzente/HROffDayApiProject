@@ -9,11 +9,8 @@ using System.Threading.Tasks;
 
 namespace Services.Abstract.BranchServices
 {
-	public interface IWriteBranchService
+	public interface IWriteBranchService : IWriteService<ReadBranchDto,WriteBranchDto>
 	{
-		Task<IResultWithDataDto<ReadBranchDto>> AddAsync(WriteBranchDto writeBranchDto);
-		Task<IResultWithDataDto<ReadBranchDto>> UpdateAsync(WriteBranchDto writeBranchDto);
-		Task<bool> DeleteAsync(int Id);
-		Task<bool> RemoveAsync(int Id);
+		
 	}
 }

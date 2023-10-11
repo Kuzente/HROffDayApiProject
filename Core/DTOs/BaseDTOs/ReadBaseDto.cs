@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Core.DTOs.BaseDTOs
 {
-	public class ReadBaseDto
+	public class ReadBaseDto :BaseDto
 	{
 		public int ID { get; set; }
 		public DateTime CreatedAt { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.DTOs.BaseDTOs
 {
-	public class WriteBaseDto
+	public class WriteBaseDto : BaseDto
 	{
 		public int ID { get; set; }
 		public DateTime CreatedAt { get; set; }

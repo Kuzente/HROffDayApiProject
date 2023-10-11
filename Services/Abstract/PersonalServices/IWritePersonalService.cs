@@ -8,11 +8,8 @@ using System.Threading.Tasks;
 
 namespace Services.Abstract.PersonalServices
 {
-	public interface IWritePersonalService 
+	public interface IWritePersonalService : IWriteService<ReadPersonalDto,WritePersonalDto>
 	{
-		Task<IResultWithDataDto<ReadPersonalDto>> AddAsync(WritePersonalDto writePersonalDto);
-		Task<IResultWithDataDto<ReadPersonalDto>> UpdateAsync(WritePersonalDto writePersonalDto);
-		Task<IResultWithDataDto<bool>> DeleteAsync(int Id);
-		Task<IResultWithDataDto<bool>> RemoveAsync(int Id);
+		
 	}
 }

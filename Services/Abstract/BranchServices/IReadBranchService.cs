@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace Services.Abstract.BranchServices
 {
-	public interface IReadBranchService
+	public interface IReadBranchService : IReadService<ReadBranchDto>
 	{
-		Task<List<ReadBranchDto>> GetAllAsync();
-		Task<ReadBranchDto> GetSingleAsync();
-		Task<bool> GetAnyAsync();
+		
 	}
 }
