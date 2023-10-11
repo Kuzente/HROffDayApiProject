@@ -22,8 +22,7 @@ namespace Services.Concrete.BranchServices
 			_unitOfWork = unitOfWork;
 		}
 		public async Task<List<ReadBranchDto>> GetAllAsync()
-		{
-			ReadBranchDto result = new ReadBranchDto();
+		{			
 			var entities = await Task.Run(() => _unitOfWork.ReadBranchRepository.GetAll());
 			return _mapper.Map<List<ReadBranchDto>>(entities.ToList());
 		}

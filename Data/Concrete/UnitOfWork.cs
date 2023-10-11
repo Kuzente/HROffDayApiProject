@@ -1,8 +1,10 @@
 ﻿using Data.Abstract;
 using Data.Abstract.BranchRepositories;
+using Data.Abstract.OffDayRepositories;
 using Data.Abstract.PersonalRepositories;
 using Data.Abstract.PositionRepositories;
 using Data.Concrete.BranchRepositories;
+using Data.Concrete.OffDayRepositories;
 using Data.Concrete.PersonalRepositories;
 using Data.Concrete.PositionRepositories;
 using Data.Context;
@@ -31,6 +33,8 @@ namespace Data.Concrete
 		public IWritePositionRepository WritePositionRepository { get; private set; }
 
 		public IReadPositionRepository ReadPositionRepository { get; private set; }
+		public IWriteOffDayRepository WriteOffDayRepository { get; private set; }
+		public IReadOffDayRepository ReadOffDayRepository { get; private set; }
 
 		public UnitOfWork(DataContext context)
 		{
@@ -41,6 +45,8 @@ namespace Data.Concrete
 			ReadBranchRepository = new ReadBranchRepository(_context);
 			WritePositionRepository = new WritePositionRepository(_context);
 			ReadPositionRepository = new ReadPositionRepository(_context);
+			ReadOffDayRepository = new ReadOffDayRepository(_context);
+			WriteOffDayRepository = new WriteOffDayRepository(_context);
 			_transaction = _context.Database.BeginTransaction();
 		}
 

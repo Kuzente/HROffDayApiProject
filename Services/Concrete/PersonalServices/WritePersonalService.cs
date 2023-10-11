@@ -62,12 +62,13 @@ namespace Services.Concrete.PersonalServices
 			}
 			return res;
 		}
-		public Task<IResultWithDataDto<bool>> DeleteAsync(int Id)
+
+		public Task<bool> DeleteAsync(int Id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<IResultWithDataDto<bool>> RemoveAsync(int Id)
+		public Task<bool> RemoveAsync(int Id)
 		{
 			throw new NotImplementedException();
 		}

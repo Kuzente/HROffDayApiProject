@@ -3,8 +3,10 @@ using Data.Abstract.BranchRepositories;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Abstract.BranchServices;
 using Services.Abstract.PersonalServices;
+using Services.Abstract.PositionServices;
 using Services.Concrete.BranchServices;
 using Services.Concrete.PersonalServices;
+using Services.Concrete.PositionServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +27,8 @@ namespace Services
 			services.AddScoped(typeof(IWritePersonalService), typeof(WritePersonalService));
 			services.AddScoped(typeof(IReadBranchService), typeof(ReadBranchService));
 			services.AddScoped(typeof(IWriteBranchService), typeof(WriteBranchService));
+			services.AddScoped(typeof(IReadPositionService), typeof(ReadPositionService));
+			services.AddScoped(typeof(IWritePositionService), typeof(WritePositionService));
 		}
 	}
 }

@@ -1,4 +1,7 @@
-﻿using Core.DTOs.PositionDTOs;
+﻿using AutoMapper;
+using Core.DTOs.BranchDTOs;
+using Core.DTOs.PositionDTOs;
+using Data.Abstract;
 using Services.Abstract.PositionServices;
 using System;
 using System.Collections.Generic;
@@ -10,9 +13,18 @@ namespace Services.Concrete.PositionServices
 {
 	public class ReadPositionService : IReadPositionService
 	{
-		public Task<List<ReadPositionDto>> GetAllAsync()
+		private readonly IUnitOfWork _unitOfWork;
+		private readonly IMapper _mapper;
+
+		public ReadPositionService(IMapper mapper, IUnitOfWork unitOfWork)
 		{
-			throw new NotImplementedException();
+			_mapper = mapper;
+			_unitOfWork = unitOfWork;
+		}
+		public async Task<List<ReadPositionDto>> GetAllAsync()
+		{
+			var entities = await Task.Run(() => _unitOfWork.ReadPositionRepository.GetAll());
+			return _mapper.Map<List<ReadPositionDto>>(entities.ToList());
 		}
 
 		public Task<bool> GetAnyAsync()
