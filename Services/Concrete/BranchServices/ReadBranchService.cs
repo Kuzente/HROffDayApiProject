@@ -23,11 +23,11 @@ public class ReadBranchService : IReadBranchService
 
 	public Task<bool> GetAnyAsync()
 	{
-		throw new NotImplementedException(); //TODO
+		throw new NotImplementedException(); 
 	}
 
 	public Task<ReadBranchDto> GetSingleAsync()
 	{
-		throw new NotImplementedException(); //TODO
+		throw new NotImplementedException(); 
 	}
 }
