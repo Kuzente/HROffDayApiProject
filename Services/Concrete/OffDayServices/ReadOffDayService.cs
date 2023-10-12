@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.DTOs.OffDayDTOs;
 using Data.Abstract;
+using Microsoft.EntityFrameworkCore;
 using Services.Abstract.OffDayServices;
 
 namespace Services.Concrete.OffDayServices;
@@ -19,6 +20,11 @@ public class ReadOffDayService : IReadOffDayService
 	public async Task<List<ReadOffDayDto>> GetAllAsync()
 	{
 		var entities = await Task.Run(() => _unitOfWork.ReadOffDayRepository.GetAll());
+		return _mapper.Map<List<ReadOffDayDto>>(entities.ToList());
+	}
+	public async Task<List<ReadOffDayDto>> GetAllWithPersonal()
+	{
+		var entities = await Task.Run(() => _unitOfWork.ReadOffDayRepository.GetAll(include:p=> p.Include(a=>a.Personal)));
 		return _mapper.Map<List<ReadOffDayDto>>(entities.ToList());
 	}
 
