@@ -1,12 +1,5 @@
 ﻿using Core.DTOs.BaseDTOs;
-using Core.DTOs.BranchDTOs;
 using Core.Interfaces;
-using Core.Interfaces.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Abstract
 {
@@ -14,7 +7,7 @@ namespace Services.Abstract
 	{
 		Task<IResultWithDataDto<T>> AddAsync(T1 writeDto);
 		Task<IResultWithDataDto<T>> UpdateAsync(T1 writeDto);
-		Task<bool> DeleteAsync(int Id);
-		Task<bool> RemoveAsync(int Id);
+		Task<bool> DeleteAsync(int id);
+		Task<bool> RemoveAsync(int id);
 	}
 }

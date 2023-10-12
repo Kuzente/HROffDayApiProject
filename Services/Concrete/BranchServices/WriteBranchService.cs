@@ -1,16 +1,10 @@
 ﻿using AutoMapper;
 using Core.DTOs;
 using Core.DTOs.BranchDTOs;
-using Core.DTOs.PersonalDTOs;
 using Core.Entities;
 using Core.Interfaces;
 using Data.Abstract;
 using Services.Abstract.BranchServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Concrete.BranchServices
 {
@@ -45,9 +39,9 @@ namespace Services.Concrete.BranchServices
 			return res;
 		}
 
-		public async Task<bool> DeleteAsync(int Id)
+		public async Task<bool> DeleteAsync(int id)
 		{
-			var findData = await _unitOfWork.ReadBranchRepository.GetByIdAsync(Id);
+			var findData = await _unitOfWork.ReadBranchRepository.GetByIdAsync(id);
 			 await _unitOfWork.WriteBranchRepository.DeleteAsync(findData);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -55,9 +49,9 @@ namespace Services.Concrete.BranchServices
 			return true;
 		}
 
-		public async Task<bool> RemoveAsync(int Id)
+		public async Task<bool> RemoveAsync(int id)
 		{
-			var findData = await _unitOfWork.ReadBranchRepository.GetByIdAsync(Id);
+			var findData = await _unitOfWork.ReadBranchRepository.GetByIdAsync(id);
 			await _unitOfWork.WriteBranchRepository.RemoveAsync(findData);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)

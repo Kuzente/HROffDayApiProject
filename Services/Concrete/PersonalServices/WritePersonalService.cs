@@ -5,11 +5,6 @@ using Core.Entities;
 using Core.Interfaces;
 using Data.Abstract;
 using Services.Abstract.PersonalServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Concrete.PersonalServices
 {
@@ -63,12 +58,12 @@ namespace Services.Concrete.PersonalServices
 			return res;
 		}
 
-		public Task<bool> DeleteAsync(int Id)
+		public Task<bool> DeleteAsync(int id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<bool> RemoveAsync(int Id)
+		public Task<bool> RemoveAsync(int id)
 		{
 			throw new NotImplementedException();
 		}

@@ -2,11 +2,6 @@
 using Data.Abstract;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Concrete
 {
@@ -14,7 +9,7 @@ namespace Data.Concrete
 	{
 		private readonly DataContext _context;
 
-		public WriteRepository(DataContext context) => _context = context ?? throw new ArgumentNullException(nameof(DataContext));
+		public WriteRepository(DataContext context) => _context = context ?? throw new ArgumentNullException(nameof(context));
 		public async Task<T> AddAsync(T entity)
 		{
 			try
@@ -55,11 +50,11 @@ namespace Data.Concrete
 			}
 		}
 
-		public async Task<bool> DeleteByIdAsync(int Id)
+		public async Task<bool> DeleteByIdAsync(int id)
 		{
 			try
 			{ 
-				var entity = await _context.FindAsync<T>(Id);
+				var entity = await _context.FindAsync<T>(id);
 				if (entity != null)
 				{
 					entity.Status = Core.Enums.EntityStatusEnum.Archive;
@@ -93,7 +88,7 @@ namespace Data.Concrete
 		{
 			try
 			{
-				_ = await Task.Run(() => _context.Remove<T>(entity));
+				_ = await Task.Run(() => _context.Remove(entity));
 				return true;
 			}
 			catch (DbUpdateException ex)
@@ -102,14 +97,14 @@ namespace Data.Concrete
 			}
 		}
 
-		public async Task<bool> RemoveByIdAsync(int Id)
+		public async Task<bool> RemoveByIdAsync(int id)
 		{
 			try
 			{
-				var entity = await _context.FindAsync<T>(Id);
+				var entity = await _context.FindAsync<T>(id);
 				if (entity == null)
 					return false;
-				_ = await Task.Run(() => _context.Remove<T>(entity));
+				_ = await Task.Run(() => _context.Remove(entity));
 				return true;
 			}
 			catch (DbUpdateException ex)

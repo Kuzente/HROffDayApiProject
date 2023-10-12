@@ -1,9 +1,4 @@
 ﻿using Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Abstract
 {
@@ -18,12 +13,12 @@ namespace Data.Abstract
 		List<T> UpdateRange(List<T> entities);
 		#endregion
 		#region Kaydı durum değerini silindi olarak İşaretleme işlemleri
-		Task<bool> DeleteByIdAsync(int Id);
+		Task<bool> DeleteByIdAsync(int id);
 		Task<bool> DeleteAsync(T entity);
 		Task<bool> DeleteRangeAsync(List<T> entities);
 		#endregion
 		#region Kalıcı olarak silme işlemleri
-		Task<bool> RemoveByIdAsync(int Id);
+		Task<bool> RemoveByIdAsync(int id);
 		Task<bool> RemoveAsync(T entity);
 		Task<bool> RemoveRangeAsync(List<T> entities);
 		#endregion

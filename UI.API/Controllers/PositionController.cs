@@ -1,8 +1,5 @@
-﻿using Core.DTOs.BranchDTOs;
-using Core.DTOs.PositionDTOs;
-using Data.Abstract.PositionRepositories;
+﻿using Core.DTOs.PositionDTOs;
 using Microsoft.AspNetCore.Mvc;
-using Services.Abstract.BranchServices;
 using Services.Abstract.PositionServices;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

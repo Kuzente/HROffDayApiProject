@@ -1,13 +1,7 @@
 ﻿using AutoMapper;
 using Core.DTOs.BranchDTOs;
-using Core.DTOs.PersonalDTOs;
 using Data.Abstract;
 using Services.Abstract.BranchServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Concrete.BranchServices
 {

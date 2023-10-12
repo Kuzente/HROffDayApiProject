@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.Entities
@@ -14,7 +9,7 @@ namespace Core.Entities
 		[DisplayName("Personal Adı - Soyadı"), Required]
 		public string NameSurname { get; set; }
 		[DisplayName("Toplam İzin"), Required]
-		public int TotalLeave { get; set; } = 0;
+		public int TotalLeave { get; set; } 
 		[DisplayName("Doğum Tarihi"), Required]
 		public DateTime BirthDate { get; set; }
 		[DisplayName("TC Kimlik No"), Required]

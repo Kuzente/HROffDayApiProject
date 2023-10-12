@@ -1,8 +1,6 @@
 using Core.DTOs.BranchDTOs;
-using Core.DTOs.PersonalDTOs;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.BranchServices;
-using Services.Abstract.PersonalServices;
 
 namespace UI.API.Controllers
 {

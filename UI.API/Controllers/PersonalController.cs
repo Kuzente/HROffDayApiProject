@@ -1,6 +1,4 @@
-﻿using Core.DTOs.BranchDTOs;
-using Core.DTOs.PersonalDTOs;
-using Microsoft.AspNetCore.Http;
+﻿using Core.DTOs.PersonalDTOs;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.PersonalServices;
 

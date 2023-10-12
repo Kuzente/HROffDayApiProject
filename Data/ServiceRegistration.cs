@@ -11,20 +11,13 @@ using Data.Concrete.PositionRepositories;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data
 {
-	public static class ServiceRegistiration
+	public static class ServiceRegistration
 	{
-		public static void AddDataLayerService(this IServiceCollection services , string connectionstring)
+		public static void AddDataLayerService(this IServiceCollection services , string? connectionstring)
 		{
-			var assembly = Assembly.GetExecutingAssembly();
 			services.AddDbContext<DataContext>(opt => opt.UseSqlServer(connectionstring));
 			services.AddScoped<IUnitOfWork,UnitOfWork>();
 			services.AddScoped(typeof(IReadRepository<>),typeof(ReadRepository<>));

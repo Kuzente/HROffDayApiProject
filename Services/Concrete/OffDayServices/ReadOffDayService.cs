@@ -1,13 +1,7 @@
 ﻿using AutoMapper;
-using Core.DTOs.BranchDTOs;
 using Core.DTOs.OffDayDTOs;
 using Data.Abstract;
 using Services.Abstract.OffDayServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Concrete.OffDayServices
 {

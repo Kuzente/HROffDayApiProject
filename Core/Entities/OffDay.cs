@@ -1,11 +1,6 @@
 ﻿using Core.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.Entities
@@ -17,25 +12,25 @@ namespace Core.Entities
 		[Required, DisplayName("İzin Bitiş Tarihi")]
 		public DateTime EndDate { get; set; }
 		[Required, DisplayName("Toplam İzin Günü")] 
-		public int CountLeave { get; set; } = 0;
+		public int CountLeave { get; set; } 
 		[DisplayName("Haftalık İzin")]
-		public int LeaveByWeek { get; set; } = 0;
+		public int LeaveByWeek { get; set; }
 		[DisplayName("Yıllık İzin")]
-		public int LeaveByYear { get; set; } = 0;
+		public int LeaveByYear { get; set; } 
 		[DisplayName("Resmi İzin")]
-		public int LeaveByPublicHoliday { get; set; } = 0;
+		public int LeaveByPublicHoliday { get; set; } 
 		[DisplayName("Ücretsiz İzin")]
-		public int LeaveByFreeDay { get; set; } = 0;
+		public int LeaveByFreeDay { get; set; } 
 		[DisplayName("Alacak İzin")]
-		public int LeaveByTaken { get; set; } = 0;
+		public int LeaveByTaken { get; set; } 
 		[DisplayName("Seyahat İzin")]
-		public int LeaveByTravel { get; set; } = 0;
+		public int LeaveByTravel { get; set; } 
 		[DisplayName("Ölüm İzin")]
-		public int LeaveByDead { get; set; } = 0;
+		public int LeaveByDead { get; set; } 
 		[DisplayName("Babalık İzin")]
-		public int LeaveByFather { get; set; } = 0;
+		public int LeaveByFather { get; set; }
 		[DisplayName("Evlilik İzin")]
-		public int LeaveByMarried { get; set; } = 0;
+		public int LeaveByMarried { get; set; }
 		[DisplayName("İzin Durumu")]
 		public OffDayStatusEnum OffDayStatus { get; set; }
 

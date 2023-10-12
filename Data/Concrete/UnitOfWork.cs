@@ -8,20 +8,14 @@ using Data.Concrete.OffDayRepositories;
 using Data.Concrete.PersonalRepositories;
 using Data.Concrete.PositionRepositories;
 using Data.Context;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data.Concrete
 {
 	public class UnitOfWork : IUnitOfWork
 	{
 		private readonly DataContext _context;
-		IDbContextTransaction _transaction = null;
+		private readonly IDbContextTransaction _transaction;
 
 		public IWritePersonalRepository WritePersonalRepository { get; private set; }
 		public IReadPersonalRepository ReadPersonalRepository { get; private set; }
@@ -38,7 +32,7 @@ namespace Data.Concrete
 
 		public UnitOfWork(DataContext context)
 		{
-			_context = context ?? throw new ArgumentNullException(nameof(DataContext));
+			_context = context ?? throw new ArgumentNullException(nameof(context));
 			WritePersonalRepository = new WritePersonalRepository(_context);
 			ReadPersonalRepository = new ReadPersonalRepository(_context);
 			WriteBranchRepository = new WriteBranchRepository(_context);
@@ -59,12 +53,10 @@ namespace Data.Concrete
 				Dispose();
 				return true;
 			}
-			else
-			{
-				_transaction.Rollback();
-				Dispose();
-				return false;
-			}
+
+			_transaction.Rollback();
+			Dispose();
+			return false;
 		}
 
 		public void Dispose() => _context.Dispose();
