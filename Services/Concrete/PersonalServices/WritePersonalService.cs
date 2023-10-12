@@ -60,12 +60,12 @@ public class WritePersonalService : IWritePersonalService
 
 	public Task<bool> DeleteAsync(int id)
 	{
-		throw new NotImplementedException();
+		throw new NotImplementedException(); //TODO
 	}
 
 	public Task<bool> RemoveAsync(int id)
 	{
-		throw new NotImplementedException();
+		throw new NotImplementedException(); //TODO
 	}
 
 		

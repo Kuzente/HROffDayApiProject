@@ -23,11 +23,11 @@ public class ReadPositionService : IReadPositionService
 
 	public Task<bool> GetAnyAsync()
 	{
-		throw new NotImplementedException();
+		throw new NotImplementedException(); //TODO
 	}
 
 	public Task<ReadPositionDto> GetSingleAsync()
 	{
-		throw new NotImplementedException();
+		throw new NotImplementedException(); //TODO
 	}
 }

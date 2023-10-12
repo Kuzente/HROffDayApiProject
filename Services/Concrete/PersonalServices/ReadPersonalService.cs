@@ -31,11 +31,11 @@ public class ReadPersonalService : IReadPersonalService
 
 	public Task<bool> GetAnyAsync()
 	{
-		throw new NotImplementedException();
+		throw new NotImplementedException(); //TODO
 	}
 
 	public Task<ReadPersonalDto> GetSingleAsync()
 	{
-		throw new NotImplementedException();
+		throw new NotImplementedException(); //TODO
 	}
 }

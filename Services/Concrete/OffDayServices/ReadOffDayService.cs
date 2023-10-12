@@ -24,11 +24,11 @@ public class ReadOffDayService : IReadOffDayService
 
 	public Task<bool> GetAnyAsync()
 	{
-		throw new NotImplementedException();
+		throw new NotImplementedException(); //TODO
 	}
 
 	public Task<ReadOffDayDto> GetSingleAsync()
 	{
-		throw new NotImplementedException();
+		throw new NotImplementedException(); //TODO
 	}
 }
