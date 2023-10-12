@@ -1,8 +1,7 @@
 ﻿using Core.Entities;
 
-namespace Data.Abstract.BranchRepositories
+namespace Data.Abstract.BranchRepositories;
+
+public interface IWriteBranchRepository : IWriteRepository<Branch>
 {
-	public interface IWriteBranchRepository : IWriteRepository<Branch>
-	{
-	}
 }

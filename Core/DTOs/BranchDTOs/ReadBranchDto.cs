@@ -1,9 +1,8 @@
 ﻿using Core.DTOs.BaseDTOs;
 
-namespace Core.DTOs.BranchDTOs
+namespace Core.DTOs.BranchDTOs;
+
+public class ReadBranchDto : ReadBaseDto
 {
-	public class ReadBranchDto : ReadBaseDto
-	{
-		public string Name { get; set; }
-	}
+	public string Name { get; set; }
 }

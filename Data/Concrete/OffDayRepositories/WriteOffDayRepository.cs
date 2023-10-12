@@ -2,12 +2,11 @@
 using Data.Abstract.OffDayRepositories;
 using Data.Context;
 
-namespace Data.Concrete.OffDayRepositories
+namespace Data.Concrete.OffDayRepositories;
+
+public class WriteOffDayRepository : WriteRepository<OffDay>, IWriteOffDayRepository
 {
-	public class WriteOffDayRepository : WriteRepository<OffDay>, IWriteOffDayRepository
+	public WriteOffDayRepository(DataContext context) : base(context)
 	{
-		public WriteOffDayRepository(DataContext context) : base(context)
-		{
-		}
 	}
 }

@@ -1,8 +1,7 @@
 ﻿using Core.Entities;
 
-namespace Data.Abstract.BranchRepositories
+namespace Data.Abstract.BranchRepositories;
+
+public interface IReadBranchRepository : IReadRepository<Branch>
 {
-	public interface IReadBranchRepository : IReadRepository<Branch>
-	{
-	}
 }

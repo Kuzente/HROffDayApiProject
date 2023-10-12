@@ -1,8 +1,7 @@
 ﻿using Core.Entities;
 
-namespace Data.Abstract.PositionRepositories
+namespace Data.Abstract.PositionRepositories;
+
+public interface IWritePositionRepository : IWriteRepository<Position>
 {
-	public interface IWritePositionRepository : IWriteRepository<Position>
-	{
-	}
 }

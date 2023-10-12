@@ -2,12 +2,11 @@
 using Data.Abstract.BranchRepositories;
 using Data.Context;
 
-namespace Data.Concrete.BranchRepositories
+namespace Data.Concrete.BranchRepositories;
+
+public class ReadBranchRepository : ReadRepository<Branch>, IReadBranchRepository
 {
-	public class ReadBranchRepository : ReadRepository<Branch>, IReadBranchRepository
+	public ReadBranchRepository(DataContext context) : base(context)
 	{
-		public ReadBranchRepository(DataContext context) : base(context)
-		{
-		}
 	}
 }

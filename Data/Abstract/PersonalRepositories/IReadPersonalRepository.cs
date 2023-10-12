@@ -1,8 +1,7 @@
 ﻿using Core.Entities;
 
-namespace Data.Abstract.PersonalRepositories
+namespace Data.Abstract.PersonalRepositories;
+
+public interface IReadPersonalRepository : IReadRepository<Personal>
 {
-	public interface IReadPersonalRepository : IReadRepository<Personal>
-	{
-	}
 }

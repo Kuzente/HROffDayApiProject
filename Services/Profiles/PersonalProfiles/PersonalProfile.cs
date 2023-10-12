@@ -2,14 +2,13 @@
 using Core.DTOs.PersonalDTOs;
 using Core.Entities;
 
-namespace Services.Profiles.PersonalProfiles
+namespace Services.Profiles.PersonalProfiles;
+
+public class PersonalProfile : Profile
 {
-	public class PersonalProfile : Profile
+	public PersonalProfile() 
 	{
-		public PersonalProfile() 
-		{
-			CreateMap<Personal,ReadPersonalDto>();
-			CreateMap<WritePersonalDto,Personal>();
-		}
+		CreateMap<Personal,ReadPersonalDto>();
+		CreateMap<WritePersonalDto,Personal>();
 	}
 }

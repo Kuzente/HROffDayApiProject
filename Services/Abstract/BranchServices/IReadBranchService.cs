@@ -1,9 +1,8 @@
 ﻿using Core.DTOs.BranchDTOs;
 
-namespace Services.Abstract.BranchServices
+namespace Services.Abstract.BranchServices;
+
+public interface IReadBranchService : IReadService<ReadBranchDto>
 {
-	public interface IReadBranchService : IReadService<ReadBranchDto>
-	{
 		
-	}
 }

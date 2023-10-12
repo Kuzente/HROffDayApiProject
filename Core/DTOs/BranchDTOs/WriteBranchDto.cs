@@ -1,9 +1,8 @@
 ﻿using Core.DTOs.BaseDTOs;
 
-namespace Core.DTOs.BranchDTOs
+namespace Core.DTOs.BranchDTOs;
+
+public class WriteBranchDto : WriteBaseDto
 {
-	public class WriteBranchDto : WriteBaseDto
-	{
-		public string Name { get; set; }
-	}
+	public string Name { get; set; }
 }

@@ -1,8 +1,7 @@
 ﻿using Core.Entities;
 
-namespace Data.Abstract.OffDayRepositories
+namespace Data.Abstract.OffDayRepositories;
+
+public interface IReadOffDayRepository : IReadRepository<OffDay>
 {
-	public interface IReadOffDayRepository : IReadRepository<OffDay>
-	{
-	}
 }

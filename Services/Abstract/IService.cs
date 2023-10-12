@@ -1,8 +1,7 @@
 ﻿using Core.DTOs.BaseDTOs;
 
-namespace Services.Abstract
+namespace Services.Abstract;
+
+public interface IService<T> where T : BaseDto
 {
-	public interface IService<T> where T : BaseDto
-	{
-	}
 }

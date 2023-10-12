@@ -1,9 +1,8 @@
 ﻿using Core.DTOs.PersonalDTOs;
 
-namespace Services.Abstract.PersonalServices
+namespace Services.Abstract.PersonalServices;
+
+public interface IReadPersonalService : IReadService<ReadPersonalDto>
 {
-	public interface IReadPersonalService : IReadService<ReadPersonalDto>
-	{
-		Task<List<ReadPersonalDto>> GetAllWithBranchAndPositionAsync();
-	}
+	Task<List<ReadPersonalDto>> GetAllWithBranchAndPositionAsync();
 }

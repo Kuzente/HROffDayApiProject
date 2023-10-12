@@ -1,6 +1,5 @@
-﻿namespace Core.Interfaces.Base
+﻿namespace Core.Interfaces.Base;
+
+public interface IBaseDto
 {
-	public interface IBaseDto
-	{
-	}
 }

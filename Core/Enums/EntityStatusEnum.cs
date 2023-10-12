@@ -1,10 +1,9 @@
-﻿namespace Core.Enums
+﻿namespace Core.Enums;
+
+public enum EntityStatusEnum
 {
-	public enum EntityStatusEnum
-	{
-		Online = 0,
-		Offline = 1,
-		Archive = 2,
-		Deleted = 3,
-	}
+	Online = 0,
+	Offline = 1,
+	Archive = 2,
+	Deleted = 3
 }

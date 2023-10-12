@@ -1,8 +1,7 @@
 ﻿using Core.DTOs.OffDayDTOs;
 
-namespace Services.Abstract.OffDayServices
+namespace Services.Abstract.OffDayServices;
+
+public interface IReadOffDayService : IReadService<ReadOffDayDto>
 {
-	public interface IReadOffDayService : IReadService<ReadOffDayDto>
-	{
-	}
 }

@@ -1,9 +1,8 @@
 ﻿using Core.DTOs.BranchDTOs;
 
-namespace Services.Abstract.BranchServices
+namespace Services.Abstract.BranchServices;
+
+public interface IWriteBranchService : IWriteService<ReadBranchDto,WriteBranchDto>
 {
-	public interface IWriteBranchService : IWriteService<ReadBranchDto,WriteBranchDto>
-	{
 		
-	}
 }

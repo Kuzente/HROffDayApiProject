@@ -2,14 +2,13 @@
 using Core.DTOs.PositionDTOs;
 using Core.Entities;
 
-namespace Services.Profiles.PositionProfiles
+namespace Services.Profiles.PositionProfiles;
+
+public class PositionProfile : Profile
 {
-	public class PositionProfile : Profile
-	{
-		public PositionProfile() 
-		{ 
-			CreateMap<Position,ReadPositionDto>();
-			CreateMap<WritePositionDto, Position>();
-		}
+	public PositionProfile() 
+	{ 
+		CreateMap<Position,ReadPositionDto>();
+		CreateMap<WritePositionDto, Position>();
 	}
 }

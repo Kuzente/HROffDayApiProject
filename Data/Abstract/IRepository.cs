@@ -1,9 +1,8 @@
 ﻿using Core.Entities;
 
-namespace Data.Abstract
+namespace Data.Abstract;
+
+public interface IRepository<T> where T : BaseEntity
 {
-	public interface IRepository<T> where T : BaseEntity
-	{
 		
-	}
 }

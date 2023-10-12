@@ -1,10 +1,9 @@
-﻿namespace Core.Enums
+﻿namespace Core.Enums;
+
+public enum OffDayStatusEnum
 {
-	public enum OffDayStatusEnum
-	{
-		WaitingForFirst = 0,
-		WaitingForSecond = 1,
-		Approved = 2,
-		Rejected = 3,
-	}
+	WaitingForFirst = 0,
+	WaitingForSecond = 1,
+	Approved = 2,
+	Rejected = 3
 }

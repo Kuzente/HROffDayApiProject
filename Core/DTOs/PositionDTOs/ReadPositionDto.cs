@@ -1,9 +1,8 @@
 ﻿using Core.DTOs.BaseDTOs;
 
-namespace Core.DTOs.PositionDTOs
+namespace Core.DTOs.PositionDTOs;
+
+public class ReadPositionDto : ReadBaseDto
 {
-	public class ReadPositionDto : ReadBaseDto
-	{
-		public string Name { get; set; }
-	}
+	public string Name { get; set; }
 }

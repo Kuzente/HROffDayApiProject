@@ -1,9 +1,8 @@
 ﻿using Core.DTOs.PositionDTOs;
 
-namespace Services.Abstract.PositionServices
+namespace Services.Abstract.PositionServices;
+
+public interface IReadPositionService : IReadService<ReadPositionDto>
 {
-	public interface IReadPositionService : IReadService<ReadPositionDto>
-	{
 		
-	}
 }

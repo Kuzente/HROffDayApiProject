@@ -1,8 +1,7 @@
 ﻿using Core.Entities;
 
-namespace Data.Abstract.OffDayRepositories
+namespace Data.Abstract.OffDayRepositories;
+
+public interface IWriteOffDayRepository : IWriteRepository<OffDay>
 {
-	public interface IWriteOffDayRepository : IWriteRepository<OffDay>
-	{
-	}
 }

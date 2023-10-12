@@ -1,8 +1,7 @@
 ﻿using Core.DTOs.OffDayDTOs;
 
-namespace Services.Abstract.OffDayServices
+namespace Services.Abstract.OffDayServices;
+
+public interface IWriteOffDayService : IWriteService<ReadOffDayDto,WriteOffDayDto>
 {
-	public interface IWriteOffDayService : IWriteService<ReadOffDayDto,WriteOffDayDto>
-	{
-	}
 }
