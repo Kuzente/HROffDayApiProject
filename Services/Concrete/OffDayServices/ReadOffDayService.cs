@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using Core.DTOs.OffDayDTOs;
 using Data.Abstract;
 using Microsoft.EntityFrameworkCore;
@@ -36,5 +37,10 @@ public class ReadOffDayService : IReadOffDayService
 	public Task<ReadOffDayDto> GetSingleAsync()
 	{
 		throw new NotImplementedException(); //TODO
+	}
+
+	public Task<bool> GetAnyAsync(Expression<Func<ReadOffDayDto, bool>>? predicate = null)
+	{
+		throw new NotImplementedException();
 	}
 }

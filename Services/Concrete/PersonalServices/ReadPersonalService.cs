@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using Core.DTOs.PersonalDTOs;
 using Data.Abstract;
 using Microsoft.EntityFrameworkCore;
@@ -37,5 +38,10 @@ public class ReadPersonalService : IReadPersonalService
 	public Task<ReadPersonalDto> GetSingleAsync()
 	{
 		throw new NotImplementedException(); //TODO
+	}
+
+	public Task<bool> GetAnyAsync(Expression<Func<ReadPersonalDto, bool>>? predicate = null)
+	{
+		throw new NotImplementedException();
 	}
 }

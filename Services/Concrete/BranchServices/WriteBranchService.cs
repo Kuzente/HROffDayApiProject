@@ -4,6 +4,7 @@ using Core.DTOs.BranchDTOs;
 using Core.Entities;
 using Core.Interfaces;
 using Data.Abstract;
+using Microsoft.EntityFrameworkCore;
 using Services.Abstract.BranchServices;
 
 namespace Services.Concrete.BranchServices;
@@ -42,7 +43,8 @@ public class WriteBranchService : IWriteBranchService
 	public async Task<bool> DeleteAsync(int id)
 	{
 		var findData = await _unitOfWork.ReadBranchRepository.GetByIdAsync(id);
-		await _unitOfWork.WriteBranchRepository.DeleteAsync(findData);
+		if (findData.FirstOrDefault() is null) return false;
+		await _unitOfWork.WriteBranchRepository.DeleteAsync(findData.First());
 		var resultCommit = _unitOfWork.Commit();
 		if (!resultCommit)
 			return false;
@@ -52,7 +54,8 @@ public class WriteBranchService : IWriteBranchService
 	public async Task<bool> RemoveAsync(int id)
 	{
 		var findData = await _unitOfWork.ReadBranchRepository.GetByIdAsync(id);
-		await _unitOfWork.WriteBranchRepository.RemoveAsync(findData);
+		if (findData.FirstOrDefault() is null) return false;
+		await _unitOfWork.WriteBranchRepository.RemoveAsync(findData.First());
 		var resultCommit = _unitOfWork.Commit();
 		if (!resultCommit)
 			return false;
@@ -64,6 +67,9 @@ public class WriteBranchService : IWriteBranchService
 		IResultWithDataDto<ReadBranchDto> res = new ResultWithDataDto<ReadBranchDto>();
 		try
 		{
+			var getdata = await _unitOfWork.ReadBranchRepository.GetByIdAsync(writeBranchDto.ID);
+			if (getdata.FirstOrDefault() is null)
+				return res.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Veri Bulunamadı!!!");
 			var mapset = _mapper.Map<Branch>(writeBranchDto);
 			var resultData = await _unitOfWork.WriteBranchRepository.Update(mapset);
 			var resultCommit = _unitOfWork.Commit();
@@ -75,6 +81,7 @@ public class WriteBranchService : IWriteBranchService
 		catch (Exception ex)
 		{
 			res.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+			
 		}
 		return res;
 	}

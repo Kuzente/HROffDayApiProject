@@ -7,15 +7,23 @@ namespace Core.Entities;
 public partial class Personal : BaseEntity
 {
 	[DisplayName("Personal Adı - Soyadı"), Required]
-	public string NameSurname { get; set; }
+	public string NameSurname { get; set; } 
 	[DisplayName("Toplam İzin"), Required]
-	public int TotalLeave { get; set; } 
+	public int TotalYearLeave { get; set; } 
 	[DisplayName("Doğum Tarihi"), Required]
 	public DateTime BirthDate { get; set; }
+	[DisplayName("İşe Başlama Tarihi"), Required]
+	public DateTime StartJobDate { get; set; }
+	[DisplayName("İşten Ayrılış Tarihi")]
+	public DateTime? EndJobDate { get; set; } 
 	[DisplayName("TC Kimlik No"), Required]
 	public string IdentificationNumber { get; set; }
 	[DisplayName("Sicil No"), Required]
 	public string RegistirationNumber { get; set; }
+	[DisplayName("Telefon No")]
+	public string? Phonenumber { get; set; }
+	[DisplayName("Özel Durum")]
+	public bool RetiredOrOld { get; set; }
 
 
 }

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using Core.DTOs.PositionDTOs;
 using Data.Abstract;
 using Services.Abstract.PositionServices;
@@ -21,13 +22,19 @@ public class ReadPositionService : IReadPositionService
 		return _mapper.Map<List<ReadPositionDto>>(entities.ToList());
 	}
 
-	public Task<bool> GetAnyAsync()
-	{
-		throw new NotImplementedException(); //TODO
-	}
-
 	public Task<ReadPositionDto> GetSingleAsync()
 	{
-		throw new NotImplementedException(); //TODO
+		throw new NotImplementedException();
+	}
+
+	public Task<bool> GetAnyAsync()
+	{
+		throw new NotImplementedException();
+	}
+
+	public async Task<bool> GetAnyByNameAsync(string name)
+	{
+		var result = await _unitOfWork.ReadPositionRepository.GetAny(p=> p.Name == name);
+		return result;
 	}
 }

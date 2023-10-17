@@ -22,7 +22,7 @@ public class PersonalController : ControllerBase
 		return await _readPersonalService.GetAllAsync();
 	}
 	[HttpGet]
-	public async Task<List<ReadPersonalDto>> GetAllWithBranch()
+	public async Task<List<ReadPersonalDto>> GetAllWithBranchAndPosition()
 	{
 		return await _readPersonalService.GetAllWithBranchAndPositionAsync();
 	}

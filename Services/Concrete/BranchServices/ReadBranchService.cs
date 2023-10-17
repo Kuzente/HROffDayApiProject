@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using Core.DTOs.BranchDTOs;
 using Data.Abstract;
 using Services.Abstract.BranchServices;
@@ -21,13 +22,19 @@ public class ReadBranchService : IReadBranchService
 		return _mapper.Map<List<ReadBranchDto>>(entities.ToList());
 	}
 
-	public Task<bool> GetAnyAsync()
+	public Task<ReadBranchDto> GetSingleAsync()
 	{
 		throw new NotImplementedException(); 
 	}
 
-	public Task<ReadBranchDto> GetSingleAsync()
+	public Task<bool> GetAnyAsync()
 	{
-		throw new NotImplementedException(); 
+		throw new NotImplementedException();
+	}
+
+	public async Task<List<ReadBranchDto>> GetAllOrderByAsync()
+	{
+		var entities = await Task.Run(() => _unitOfWork.ReadBranchRepository.GetAll(orderBy: p=> p.OrderBy(a=>a.Name)));
+		return _mapper.Map<List<ReadBranchDto>>(entities.ToList());
 	}
 }

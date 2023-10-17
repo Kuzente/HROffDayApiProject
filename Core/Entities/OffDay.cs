@@ -33,12 +33,14 @@ public partial class OffDay : BaseEntity
 	public int LeaveByMarried { get; set; }
 	[DisplayName("İzin Durumu")]
 	public OffDayStatusEnum OffDayStatus { get; set; }
+	[DisplayName("Açıklama")]
+	public string? Description { get; set; }
 
 }
 public partial class OffDay
 {
 	[Required]
 	public int Personal_Id { get; set; }
-	[ForeignKey(nameof(Personal_Id))]
+	[ForeignKey(nameof(Personal_Id)),Required]
 	public Personal Personal { get; set; }
 }

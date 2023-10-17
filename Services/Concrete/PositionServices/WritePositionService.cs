@@ -41,7 +41,8 @@ public class WritePositionService : IWritePositionService
 	public async Task<bool> DeleteAsync(int id)
 	{
 		var findData = await _unitOfWork.ReadPositionRepository.GetByIdAsync(id);
-		await _unitOfWork.WritePositionRepository.DeleteAsync(findData);
+		if (findData.FirstOrDefault() is null) return false;
+		await _unitOfWork.WritePositionRepository.DeleteAsync(findData.First());
 		var resultCommit = _unitOfWork.Commit();
 		if (!resultCommit)
 			return false;
@@ -51,7 +52,8 @@ public class WritePositionService : IWritePositionService
 	public async Task<bool> RemoveAsync(int id)
 	{
 		var findData = await _unitOfWork.ReadPositionRepository.GetByIdAsync(id);
-		await _unitOfWork.WritePositionRepository.RemoveAsync(findData);
+		if (findData.FirstOrDefault() is null) return false;
+		await _unitOfWork.WritePositionRepository.RemoveAsync(findData.First());
 		var resultCommit = _unitOfWork.Commit();
 		if (!resultCommit)
 			return false;
@@ -63,6 +65,9 @@ public class WritePositionService : IWritePositionService
 		IResultWithDataDto<ReadPositionDto> res = new ResultWithDataDto<ReadPositionDto>();
 		try
 		{
+			var getdata = await _unitOfWork.ReadPositionRepository.GetByIdAsync(writeBranchDto.ID);
+			if (getdata.FirstOrDefault() is null)
+				return res.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Veri Bulunamadı!!!");
 			var mapset = _mapper.Map<Position>(writeBranchDto);
 			var resultData = await _unitOfWork.WritePositionRepository.Update(mapset);
 			var resultCommit = _unitOfWork.Commit();

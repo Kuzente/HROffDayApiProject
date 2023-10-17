@@ -28,20 +28,20 @@ public class BranchController : ControllerBase
 	[HttpPost]
 	public async Task<IActionResult> Add([FromBody] WriteBranchDto dto)
 	{
-		await _writeBranchService.AddAsync(dto);
-		return Ok();
+		var result = await _writeBranchService.AddAsync(dto);
+		return Ok(result);
 	}
 	[HttpPut]
 	public async Task<IActionResult> Update([FromBody] WriteBranchDto dto)
 	{
-		await _writeBranchService.UpdateAsync(dto);
-		return Ok();
+		var result = await _writeBranchService.UpdateAsync(dto);
+		return Ok(result);
 	}
 	[HttpPut]
 	public async Task<IActionResult> Archive([FromBody] int id)
 	{
-		await _writeBranchService.DeleteAsync(id);
-		return Ok();
+		var result = await _writeBranchService.DeleteAsync(id);
+		return Ok(result);
 	}
 	[HttpDelete]
 	public async Task<IActionResult> Delete([FromBody] int id)

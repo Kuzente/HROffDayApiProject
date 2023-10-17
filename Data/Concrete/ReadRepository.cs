@@ -26,21 +26,21 @@ public class ReadRepository<T> : IReadRepository<T> where T : BaseEntity
 		return query;
 	}
 
-	public bool GetAny(Expression<Func<T, bool>>? predicate = null)
+	public async Task<bool> GetAny(Expression<Func<T, bool>>? predicate = null)
 	{
 		IQueryable<T> query = _context.Set<T>();
 		query = query.AsNoTracking();
-		return query.Any(predicate ?? throw new ArgumentNullException(nameof(predicate)));
+		return await Task.Run(() => query.Any(predicate));
 	}
 
-	public async Task<T> GetByIdAsync(int id, bool disableTracking = true, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
+	public async Task<IQueryable<T>> GetByIdAsync(int id, bool disableTracking = true, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
 	{
 		IQueryable<T> query = _context.Set<T>();
 		if (disableTracking)
 			query = query.AsNoTracking();
 		if (include != null)
 			query = include(query);
-		return await query.Where(d => d.ID == id).FirstOrDefaultAsync() ?? throw new InvalidOperationException();
+		return await Task.Run((() => query.Where(d => d.ID == id)));
 	}
 
 	public async Task<T> GetSingleAsync(bool disableTracking = true, Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
@@ -52,6 +52,6 @@ public class ReadRepository<T> : IReadRepository<T> where T : BaseEntity
 			query = include(query);
 		if (predicate != null)
 			query = query.Where(predicate);
-		return await query.FirstOrDefaultAsync() ?? throw new InvalidOperationException();
+		return await query.FirstOrDefaultAsync();
 	}
 }

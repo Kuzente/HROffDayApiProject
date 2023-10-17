@@ -46,7 +46,7 @@ public class UnitOfWork : IUnitOfWork
 
 	public bool Commit(bool state = true)
 	{
-		_context.SaveChanges();
+		_context.SaveChangesAsync();
 		if (state)
 		{
 			_transaction.Commit();

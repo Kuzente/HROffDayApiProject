@@ -24,6 +24,16 @@ public class PositionController : ControllerBase
 	{
 		return await _readPositionService.GetAllAsync();
 	}
+	[HttpGet]
+	public async Task<IActionResult> GetAny(string name)
+	{
+		var result =  await _readPositionService.GetAnyByNameAsync(name);
+		if (result)
+		{
+			return Ok();
+		}
+		return NotFound();
+	}
 
 
 	[HttpPost]

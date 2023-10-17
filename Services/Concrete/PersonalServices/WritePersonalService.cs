@@ -43,6 +43,9 @@ public class WritePersonalService : IWritePersonalService
 		IResultWithDataDto<ReadPersonalDto> res = new ResultWithDataDto<ReadPersonalDto>();
 		try
 		{
+			var getdata = await _unitOfWork.ReadPersonalRepository.GetByIdAsync(writePersonalDto.ID);
+			if (getdata.FirstOrDefault() is null)
+				return res.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Veri Bulunamadı!!!");
 			var mapset = _mapper.Map<Personal>(writePersonalDto);
 			var resultData = await _unitOfWork.WritePersonalRepository.Update(mapset);
 			var resultCommit = _unitOfWork.Commit();

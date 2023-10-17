@@ -9,7 +9,11 @@ public class ReadPersonalDto : ReadBaseDto
 		
 	public string NameSurname { get; set; }
 		
-	public int TotalLeave { get; set; } 
+	public int TotalYearLeave { get; set; } 
+	public DateTime StartJobDate { get; set; }
+	public DateTime? EndJobDate { get; set; } 
+	public string? Phonenumber { get; set; }
+	public bool RetiredOrOld { get; set; }
 		
 	public DateTime BirthDate { get; set; }
 

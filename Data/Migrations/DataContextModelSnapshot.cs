@@ -68,6 +68,9 @@ namespace Data.Migrations
                     b.Property<DateTime>("DeletedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
@@ -140,6 +143,9 @@ namespace Data.Migrations
                     b.Property<DateTime>("DeletedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("EndJobDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("IdentificationNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -151,6 +157,9 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Phonenumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Position_Id")
                         .HasColumnType("int");
 
@@ -158,10 +167,16 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("RetiredOrOld")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("StartJobDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("TotalLeave")
+                    b.Property<int>("TotalYearLeave")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
