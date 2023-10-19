@@ -27,16 +27,19 @@ public class WriteBranchService : IWriteBranchService
 		{
 			var mapSet = _mapper.Map<Branch>(writeBranchDto);
 			var resultData = await _unitOfWork.WriteBranchRepository.AddAsync(mapSet);
+			
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
 			var mapResult = _mapper.Map<ReadBranchDto>(resultData);
 			res.SetData(mapResult);
+
 		}
 		catch (Exception ex)
 		{
 			res.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
 		}
+
 		return res;
 	}
 

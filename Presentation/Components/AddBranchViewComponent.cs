@@ -8,9 +8,9 @@ public class AddBranchViewComponent : ViewComponent
 {
     
 
-    public IViewComponentResult Invoke(WriteBranchDto dto)
+    public async Task<IViewComponentResult> InvokeAsync(WriteBranchDto dto)
     {
-        return View(dto);
+        return await Task.Run(()=> View(dto));
     }
     
 }
