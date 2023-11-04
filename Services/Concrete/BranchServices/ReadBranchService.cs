@@ -2,8 +2,10 @@
 using AutoMapper;
 using Core.DTOs;
 using Core.DTOs.BranchDTOs;
+using Core.Enums;
 using Core.Interfaces;
 using Data.Abstract;
+using Microsoft.EntityFrameworkCore;
 using Services.Abstract.BranchServices;
 
 namespace Services.Concrete.BranchServices;
@@ -18,13 +20,13 @@ public class ReadBranchService : IReadBranchService
 		_mapper = mapper;
 		_unitOfWork = unitOfWork;
 	}
-	public async Task<List<ReadBranchDto>> GetAllAsync()
+	public async Task<List<BranchDto>> GetAllAsync()
 	{			
 		var entities = await Task.Run(() => _unitOfWork.ReadBranchRepository.GetAll());
-		return _mapper.Map<List<ReadBranchDto>>(entities.ToList());
+		return _mapper.Map<List<BranchDto>>(entities.ToList());
 	}
 
-	public Task<ReadBranchDto> GetSingleAsync()
+	public Task<BranchDto> GetSingleAsync()
 	{
 		throw new NotImplementedException(); 
 	}
@@ -34,17 +36,14 @@ public class ReadBranchService : IReadBranchService
 		throw new NotImplementedException();
 	}
 
-	public async Task<IResultWithDataDto<List<ReadBranchDto>>> GetAllOrderByAsync()
+	public async Task<IResultWithDataDto<List<BranchDto>>> GetAllOrderByAsync()
 	{
-		IResultWithDataDto<List<ReadBranchDto>> res = new ResultWithDataDto<List<ReadBranchDto>>();
+		IResultWithDataDto<List<BranchDto>> res = new ResultWithDataDto<List<BranchDto>>();
 		try
 		{
 			var resultData = await Task.Run(() => _unitOfWork.ReadBranchRepository.GetAll(orderBy: p=> p.OrderBy(a=>a.Name)));
-			var mapData = _mapper.Map<List<ReadBranchDto>>(resultData.ToList());
+			var mapData = _mapper.Map<List<BranchDto>>(resultData.ToList());
 			res.SetData(mapData);
-			var resultCommit = _unitOfWork.Commit();
-			if (!resultCommit)
-				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
 		}
 		catch (Exception ex)
 		{
@@ -54,29 +53,24 @@ public class ReadBranchService : IReadBranchService
 		
 	}
 
-	public async Task<ResultWithPagingDataDto<List<ReadBranchDto>>> GetAllPagingOrderByAsync(int pageNumber)
+	public async Task<ResultWithPagingDataDto<List<BranchDto>>> GetAllPagingOrderByAsync(int pageNumber,string search)
 	{
-		ResultWithPagingDataDto<List<ReadBranchDto>> res = new ResultWithPagingDataDto<List<ReadBranchDto>>(pageNumber:pageNumber);
+		ResultWithPagingDataDto<List<BranchDto>> res = new ResultWithPagingDataDto<List<BranchDto>>(pageNumber,search);
 		try
+		//String.IsNullOrEmpty(search) ? null : a => a.Name.Contains(search)
 		{
-			var allData = await Task.Run(() =>
-				_unitOfWork.ReadBranchRepository.GetAll(
-					orderBy: p => p.OrderBy(a => a.Name))
-					
-				);
-			var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)
+                var allData = await Task.Run(() =>
+                _unitOfWork.ReadBranchRepository.GetAll(
+                    orderBy: p => p.OrderBy(a => a.Name),
+                    predicate: a => (a.Status == EntityStatusEnum.Online || a.Status == EntityStatusEnum.Offline) && 
+                                    (string.IsNullOrEmpty(search) || a.Name.Contains(search))
+                    ));   
+            var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)
 				.Take(res.PageSize).ToList();
-			var mapData = _mapper.Map<List<ReadBranchDto>>(resultData);
+			var mapData = _mapper.Map<List<BranchDto>>(resultData);
 			res.SetData(mapData);
 			res.TotalRecords = allData.Count();
 			res.TotalPages = Convert.ToInt32(Math.Ceiling((double)res.TotalRecords / (double)res.PageSize));
-			var resultCommit = _unitOfWork.Commit();
-			if (!resultCommit)
-			{
-				res.SetStatus(false).SetErr("Commit Fail")
-					.SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-				return res;
-			}
 			
 		}
 		catch (Exception ex)
@@ -86,4 +80,57 @@ public class ReadBranchService : IReadBranchService
 
 		return res;
 	}
+
+	public async Task<ResultWithPagingDataDto<List<BranchDto>>> GetAllDeletedBranchPagingOrderByAsync(int pageNumber, string search)
+	{
+		ResultWithPagingDataDto<List<BranchDto>> res = new ResultWithPagingDataDto<List<BranchDto>>(pageNumber,search);
+		try
+		{
+			var allData = await Task.Run(() =>
+				_unitOfWork.ReadBranchRepository.GetAll(
+					orderBy: p => p.OrderBy(a => a.Name),
+					predicate: a => (a.Status == EntityStatusEnum.Archive ) && 
+					                (string.IsNullOrEmpty(search) || a.Name.Contains(search))
+				));   
+			var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)
+				.Take(res.PageSize).ToList();
+			var mapData = _mapper.Map<List<BranchDto>>(resultData);
+			res.SetData(mapData);
+			res.TotalRecords = allData.Count();
+			res.TotalPages = Convert.ToInt32(Math.Ceiling((double)res.TotalRecords / (double)res.PageSize));
+			
+		}
+		catch (Exception ex)
+		{
+			res.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+
+		return res;
+	}
+
+	public async Task<IResultWithDataDto<BranchDto>> GetByIdUpdate(int id)
+    {
+        IResultWithDataDto<BranchDto> res = new ResultWithDataDto<BranchDto>();
+        try
+        {
+            var resultData = await Task.Run(() => _unitOfWork.ReadBranchRepository.GetByIdAsync(id));
+            var mapData = _mapper.Map<BranchDto>(resultData.FirstOrDefault());
+            res.SetData(mapData);
+        }
+        catch (Exception ex)
+        {
+            res.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+        }
+        return res;
+    }
+    public async Task<List<BranchNameDto>> GetAllJustNames()
+    {
+        var entities = await Task.Run(() => _unitOfWork.ReadBranchRepository
+		.GetAll(predicate: p=> p.Status == EntityStatusEnum.Online,
+        orderBy: o=> o.OrderBy(p=> p.Name))
+		.Select(p => new BranchNameDto { ID = p.ID,Name = p.Name})
+		);
+        return entities.ToList();
+
+    }
 }

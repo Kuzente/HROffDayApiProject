@@ -30,7 +30,7 @@ public class OffDayController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] WriteOffDayDto dto)
     {
-        await _writeOffDayService.AddAsync(dto);
+        //await _writeOffDayService.AddAsync(dto);
         return Ok();
     }
     [HttpPut]
@@ -42,8 +42,8 @@ public class OffDayController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] WriteOffDayDto dto)
     {
-        var result = await _writeOffDayService.UpdateAsync(dto);
-        return Ok(result);
+        //var result = await _writeOffDayService.UpdateAsync(dto);
+        return Ok();
     }
     [HttpPut]
     public async Task<IActionResult> Archive([FromBody] int id)

@@ -2,7 +2,7 @@
 
 namespace Services.Abstract.BranchServices;
 
-public interface IWriteBranchService : IWriteService<ReadBranchDto,WriteBranchDto>
+public interface IWriteBranchService : IWriteService<BranchDto>
 {
 		
 }

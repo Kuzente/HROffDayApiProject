@@ -19,11 +19,7 @@ public class PositionController : ControllerBase
 		_writePositionService = writePositionService;
 	}
 
-	[HttpGet]
-	public async Task<List<ReadPositionDto>> GetAll()
-	{
-		return await _readPositionService.GetAllAsync();
-	}
+	
 	[HttpGet]
 	public async Task<IActionResult> GetAny(string name)
 	{
@@ -39,13 +35,13 @@ public class PositionController : ControllerBase
 	[HttpPost]
 	public async Task<IActionResult> Add([FromBody] WritePositionDto dto)
 	{
-		await _writePositionService.AddAsync(dto);
+		//await _writePositionService.AddAsync(dto);
 		return Ok();
 	}
 	[HttpPut]
 	public async Task<IActionResult> Update([FromBody] WritePositionDto dto)
 	{
-		await _writePositionService.UpdateAsync(dto);
+		//await _writePositionService.UpdateAsync(dto);
 		return Ok();
 	}
 	[HttpPut]

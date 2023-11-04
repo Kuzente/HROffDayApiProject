@@ -20,9 +20,9 @@ public class WriteBranchService : IWriteBranchService
 		_unitOfWork = unitOfWork;
 	}
 
-	public async Task<IResultWithDataDto<ReadBranchDto>> AddAsync(WriteBranchDto writeBranchDto)
+	public async Task<IResultWithDataDto<BranchDto>> AddAsync(BranchDto writeBranchDto)
 	{
-		IResultWithDataDto<ReadBranchDto> res = new ResultWithDataDto<ReadBranchDto>();
+		IResultWithDataDto<BranchDto> res = new ResultWithDataDto<BranchDto>();
 		try
 		{
 			var mapSet = _mapper.Map<Branch>(writeBranchDto);
@@ -31,7 +31,7 @@ public class WriteBranchService : IWriteBranchService
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-			var mapResult = _mapper.Map<ReadBranchDto>(resultData);
+			var mapResult = _mapper.Map<BranchDto>(resultData);
 			res.SetData(mapResult);
 
 		}
@@ -65,20 +65,24 @@ public class WriteBranchService : IWriteBranchService
 		return true;
 	}
 
-	public async Task<IResultWithDataDto<ReadBranchDto>> UpdateAsync(WriteBranchDto writeBranchDto)
+	public async Task<IResultWithDataDto<BranchDto>> UpdateAsync(BranchDto writeBranchDto)
 	{
-		IResultWithDataDto<ReadBranchDto> res = new ResultWithDataDto<ReadBranchDto>();
+		IResultWithDataDto<BranchDto> res = new ResultWithDataDto<BranchDto>();
 		try
 		{
-			var getdata = await _unitOfWork.ReadBranchRepository.GetByIdAsync(writeBranchDto.ID);
-			if (getdata.FirstOrDefault() is null)
+			var getdataQuary = await _unitOfWork.ReadBranchRepository.GetByIdAsync(writeBranchDto.ID);
+			var getData = getdataQuary.FirstOrDefault();
+			if (getData is null)
 				return res.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Veri Bulunamadı!!!");
 			var mapset = _mapper.Map<Branch>(writeBranchDto);
+			mapset.ID = getData.ID;
+			mapset.CreatedAt = getData.CreatedAt;
+			
 			var resultData = await _unitOfWork.WriteBranchRepository.Update(mapset);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-			var mapResult = _mapper.Map<ReadBranchDto>(resultData);
+			var mapResult = _mapper.Map<BranchDto>(resultData);
 			res.SetData(mapResult);
 		}
 		catch (Exception ex)

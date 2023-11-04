@@ -8,7 +8,8 @@ public class PositionProfile : Profile
 {
 	public PositionProfile() 
 	{ 
-		CreateMap<Position,ReadPositionDto>();
-		CreateMap<WritePositionDto, Position>();
+		CreateMap<Position,PositionDto>().ReverseMap();
+		CreateMap<Position,PositionNameDto>().ReverseMap();
+		
 	}
 }

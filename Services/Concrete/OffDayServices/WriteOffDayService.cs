@@ -106,4 +106,14 @@ public class WriteOffDayService : IWriteOffDayService
 		}
 		return res;
 	}
+
+    public Task<IResultWithDataDto<ReadOffDayDto>> AddAsync(ReadOffDayDto writeDto)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IResultWithDataDto<ReadOffDayDto>> UpdateAsync(ReadOffDayDto writeDto)
+    {
+        throw new NotImplementedException();
+    }
 }

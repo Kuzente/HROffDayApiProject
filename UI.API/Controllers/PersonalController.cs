@@ -31,7 +31,7 @@ public class PersonalController : ControllerBase
 	[HttpPost]
 	public async Task<IActionResult> Add([FromBody] WritePersonalDto dto)
 	{
-		await _writePersonalService.AddAsync(dto);
+		//await _writePersonalService.AddAsync(dto);
 		return Ok();
 	}
 	[HttpPut]

@@ -10,4 +10,6 @@ public class WritePersonalDto : WriteBaseDto
 	public string RegistirationNumber { get; set; }
 	public int Branch_Id { get; set; }
 	public int Position_Id { get; set; }
+	
+	public string Gender { get; set; }
 }

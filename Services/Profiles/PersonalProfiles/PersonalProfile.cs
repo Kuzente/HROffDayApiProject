@@ -8,7 +8,8 @@ public class PersonalProfile : Profile
 {
 	public PersonalProfile() 
 	{
-		CreateMap<Personal,ReadPersonalDto>();
+		CreateMap<Personal,ReadPersonalDto>().ReverseMap();
 		CreateMap<WritePersonalDto,Personal>();
+		CreateMap<AddPersonalDto,Personal>().ReverseMap();
 	}
 }

@@ -1,5 +1,11 @@
-﻿@model WriteBranchDto
-
+﻿@model BranchDto
+@{
+    int  pageNumber = System.Convert.ToInt32(Context.Request.Query["pageNumber"]);
+    if (pageNumber == 0)
+    {
+        pageNumber = 1;
+    }
+}
 <!--AddModal-->
 <form method="post" asp-controller="Branch" asp-action="AddBranch">
     <div class="modal fade" id="addModal" tabindex="-1" style=" padding-left: 0;" aria-hidden="true" role="dialog">
@@ -12,9 +18,9 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col mb-3">
-                            <input type="hidden" asp-for="ID"/>
                             <label for="nameBasic" class="form-label">Şube Adı</label>
                             <input type="text" asp-for="Name" id="nameBasic" class="form-control" placeholder="Şube Adını Giriniz!">
+                            <input type="hidden" name="pageNumber" value="@pageNumber">
                         </div>
                     </div>
                 </div>

@@ -2,7 +2,7 @@
 
 namespace Services.Abstract.OffDayServices;
 
-public interface IWriteOffDayService : IWriteService<ReadOffDayDto,WriteOffDayDto>
+public interface IWriteOffDayService : IWriteService<ReadOffDayDto>
 {
     Task<bool> ChangeOffDayStatus(int id,bool isApproved);
 }

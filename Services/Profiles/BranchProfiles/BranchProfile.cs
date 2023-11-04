@@ -8,7 +8,7 @@ public class BranchProfile : Profile
 {
 	public BranchProfile() 
 	{
-		CreateMap<Branch , ReadBranchDto>();
-		CreateMap<WriteBranchDto, Branch>();
+		CreateMap<Branch , BranchDto>().ReverseMap();
+		
 	}
 }

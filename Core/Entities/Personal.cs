@@ -24,6 +24,8 @@ public partial class Personal : BaseEntity
 	public string? Phonenumber { get; set; }
 	[DisplayName("Özel Durum")]
 	public bool RetiredOrOld { get; set; }
+	[DisplayName("Cinsiyet")]
+	public string Gender { get; set; }
 
 
 }

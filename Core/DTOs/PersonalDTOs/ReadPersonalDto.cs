@@ -9,11 +9,11 @@ public class ReadPersonalDto : ReadBaseDto
 		
 	public string NameSurname { get; set; }
 		
-	public int TotalYearLeave { get; set; } 
 	public DateTime StartJobDate { get; set; }
-	public DateTime? EndJobDate { get; set; } 
 	public string? Phonenumber { get; set; }
 	public bool RetiredOrOld { get; set; }
+	
+	public string Gender { get; set; }
 		
 	public DateTime BirthDate { get; set; }
 
@@ -21,8 +21,9 @@ public class ReadPersonalDto : ReadBaseDto
 		
 	public string RegistirationNumber { get; set; } 
 	public int Branch_Id { get; set; }
-	public ReadBranchDto Branch { get; set; }
-	public ReadPositionDto Position { get; set; }
+	public BranchDto Branch { get; set; }
+	public PositionDto Position { get; set; }
+	public int TotalYearLeave { get; set; } 
 
 
 }

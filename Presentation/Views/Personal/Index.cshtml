@@ -3,6 +3,11 @@
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
+    int pageNumber = System.Convert.ToInt32(Context.Request.Query["pageNumber"]);
+    if (pageNumber == 0)
+    {
+        pageNumber = 1;
+    }
 }
 
 <h2>Tüm Personeller</h2>
@@ -13,7 +18,7 @@
                 Tüm Personeller
             </h5></div>
         <div class="col-4 d-inline-flex justify-content-end ">
-            <button class="btn btn-primary m-3">Personel Ekle</button>
+            <button type="button" class="btn btn-primary m-3" data-bs-toggle="modal" data-bs-target="#addModal">Personel Ekle</button>
         </div>
         </div>
     <table class="table">
@@ -27,6 +32,7 @@
             <th>İşe Giriş Tarihi</th>
             <th>EYT</th>
             <th>Aktif Mi?</th>
+            <th>Sil</th>
 
         </tr>
         </thead>
@@ -34,7 +40,9 @@
         @foreach (var data in Model)
         {
             <tr>
-                <td>@data.NameSurname</td>
+                <td>
+                        <a href="blank">@data.NameSurname</a>
+                </td>
                 <td>@data.IdentificationNumber</td>
                 <td>@data.RegistirationNumber</td>
                 <td>@data.Branch.Name</td>
@@ -64,9 +72,51 @@
                         }
                     }
                 </td>
+                <td>
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#archivePersonal" data-item-id="@data.ID">Sil</button>
+                </td>
             </tr>
 
         }
         </tbody>
     </table>
 </div>
+@await Component.InvokeAsync("AddPersonal")
+<!--ArchiveModal-->
+<form asp-controller="Personal" asp-action="ArchivePersonal" method="post">
+    <div class="modal fade" id="archivePersonal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Personel Sil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="alert alert-danger" role="alert">
+                        İlgili Personel Silinecektir!!!
+                        <br />
+                        Emin Misiniz?
+                    </div>
+                    <input type="hidden" id="itemIdInput" name="id">
+                    <input type="hidden" name="pageNumber" value="@pageNumber">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal Et</button>
+                    <button type="submit" class="btn btn-danger">Sil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    // Sil butonuna tıklanınca
+    document.querySelectorAll(".btn-danger.btn-sm").forEach(function (button) {
+        button.addEventListener("click", function () {
+            var itemId = button.getAttribute("data-item-id"); // data-item-id değerini alın
+            document.getElementById("itemIdInput").value = itemId; // inputa taşıyın
+        });
+    });
+
+
+</script>

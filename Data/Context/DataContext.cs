@@ -11,7 +11,7 @@ public class DataContext : DbContext
 	public DbSet<Branch> Branches => Set<Branch>();
 	public DbSet<Position> Positions => Set<Position>();
 	public DbSet<OffDay> OffDays => Set<OffDay>();
-	public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+	public override int SaveChanges()
 	{
 		var datas = ChangeTracker.Entries<BaseEntity>();
 		foreach (var data in datas)
@@ -32,7 +32,7 @@ public class DataContext : DbContext
 					break;
 			}
 		}
-		return base.SaveChangesAsync(cancellationToken);
+		return base.SaveChanges();
 	}
 
 }

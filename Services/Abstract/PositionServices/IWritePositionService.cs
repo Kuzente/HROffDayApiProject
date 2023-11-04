@@ -2,7 +2,7 @@
 
 namespace Services.Abstract.PositionServices;
 
-public interface IWritePositionService : IWriteService<ReadPositionDto , WritePositionDto>
+public interface IWritePositionService : IWriteService<PositionDto>
 {
 		
 }

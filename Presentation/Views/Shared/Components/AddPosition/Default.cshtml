@@ -1,0 +1,36 @@
+﻿@model PositionDto
+@{
+    int pageNumber = System.Convert.ToInt32(Context.Request.Query["pageNumber"]);
+    if (pageNumber == 0)
+    {
+        pageNumber = 1;
+    }
+}
+<!--AddModal-->
+<form method="post" asp-controller="Position" asp-action="AddPosition">
+    <div class="modal fade" id="addModal" tabindex="-1" style=" padding-left: 0;" aria-hidden="true" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Ünvan Ekle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="nameBasic" class="form-label">Ünvan Adı</label>
+                            <input type="text" asp-for="Name" id="nameBasic" class="form-control" placeholder="Ünvan Adını Giriniz!">
+                            <input type="hidden" name="pageNumber" value="@pageNumber">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Kapat
+                    </button>
+                    <button type="submit" class="btn btn-primary">Ünvan Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

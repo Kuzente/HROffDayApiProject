@@ -19,9 +19,9 @@ public class WritePersonalService : IWritePersonalService
 		_mapper = mapper;
 	}
 
-	public async Task<IResultWithDataDto<ReadPersonalDto>> AddAsync(WritePersonalDto writePersonalDto)
+	public async Task<IResultWithDataDto<AddPersonalDto>> AddAsync(AddPersonalDto writePersonalDto)
 	{
-		IResultWithDataDto<ReadPersonalDto> res = new ResultWithDataDto<ReadPersonalDto>();
+		IResultWithDataDto<AddPersonalDto> res = new ResultWithDataDto<AddPersonalDto>();
 		try
 		{
 			var mapSet = _mapper.Map<Personal>(writePersonalDto);
@@ -29,7 +29,7 @@ public class WritePersonalService : IWritePersonalService
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-			var mapResult = _mapper.Map<ReadPersonalDto>(resultData);
+			var mapResult = _mapper.Map<AddPersonalDto>(resultData);
 			res.SetData(mapResult);
 		}
 		catch (Exception ex)
@@ -38,9 +38,9 @@ public class WritePersonalService : IWritePersonalService
 		}
 		return res;
 	}
-	public async Task<IResultWithDataDto<ReadPersonalDto>> UpdateAsync(WritePersonalDto writePersonalDto)
+	public async Task<IResultWithDataDto<WritePersonalDto>> UpdateAsync(WritePersonalDto writePersonalDto)
 	{
-		IResultWithDataDto<ReadPersonalDto> res = new ResultWithDataDto<ReadPersonalDto>();
+		IResultWithDataDto<WritePersonalDto> res = new ResultWithDataDto<WritePersonalDto>();
 		try
 		{
 			var getdata = await _unitOfWork.ReadPersonalRepository.GetByIdAsync(writePersonalDto.ID);
@@ -51,7 +51,7 @@ public class WritePersonalService : IWritePersonalService
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-			var mapResult = _mapper.Map<ReadPersonalDto>(resultData);
+			var mapResult = _mapper.Map<WritePersonalDto>(resultData);
 			res.SetData(mapResult);
 		}
 		catch (Exception ex)

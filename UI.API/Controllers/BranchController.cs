@@ -18,24 +18,20 @@ public class BranchController : ControllerBase
 	}
 
 		
-	[HttpGet]
-	public async Task<List<ReadBranchDto>> GetAll()
-	{
-		return await _readBranchService.GetAllAsync();
-	} 
+	
 		
 		
 	[HttpPost]
 	public async Task<IActionResult> Add([FromBody] WriteBranchDto dto)
 	{
-		var result = await _writeBranchService.AddAsync(dto);
-		return Ok(result);
+		//var result = await _writeBranchService.AddAsync(dto);
+		return Ok();
 	}
 	[HttpPut]
 	public async Task<IActionResult> Update([FromBody] WriteBranchDto dto)
 	{
-		var result = await _writeBranchService.UpdateAsync(dto);
-		return Ok(result);
+		//var result = await _writeBranchService.UpdateAsync(dto);
+		return Ok();
 	}
 	[HttpPut]
 	public async Task<IActionResult> Archive([FromBody] int id)
