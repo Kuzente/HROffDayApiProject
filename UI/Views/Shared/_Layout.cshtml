@@ -1,0 +1,52 @@
+﻿<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>İzin Takip CRM</title>
+    <!-- CSS files -->
+    <link href="/dist/css/tabler.min.css?1684106062" rel="stylesheet" />
+    <link href="/dist/css/tabler-flags.min.css?1684106062" rel="stylesheet" />
+    <link href="/dist/css/tabler-payments.min.css?1684106062" rel="stylesheet" />
+    <link href="/dist/css/tabler-vendors.min.css?1684106062" rel="stylesheet" />
+    <link href="/dist/css/demo.min.css?1684106062" rel="stylesheet" />
+    
+    <link href="/css/site.css" rel="stylesheet" />
+    
+</head>
+<body>
+    
+    <div class="page">
+        @await Html.PartialAsync("/Views/AdminLayoutPartials/Sidebar.cshtml")
+        @await Html.PartialAsync("/Views/AdminLayoutPartials/Navbar.cshtml")
+        
+        <div class="page-wrapper">
+        @RenderBody()
+        </div>
+    </div>
+    <!-- Libs JS -->
+    <script src="/dist/libs/apexcharts/dist/apexcharts.min.js?1684106062" defer></script>
+    <script src="/dist/libs/jsvectormap/dist/js/jsvectormap.min.js?1684106062" defer></script>
+    <script src="/dist/libs/jsvectormap/dist/maps/world.js?1684106062" defer></script>
+    <script src="/dist/libs/jsvectormap/dist/maps/world-merc.js?1684106062" defer></script>
+    
+<!-- Tabler Core -->
+<script src="/dist/js/demo-theme.min.js?1684106062"></script>
+<script src="/dist/js/tabler.min.js?1684106062" defer></script>
+<script src="/js/tom-select.js"></script>
+<script src="/dist/js/demo.min.js?1684106062" defer></script>
+
+<script defer>
+document.querySelectorAll('.selectListTom').forEach((el)=>{
+	let settings = {
+        allowEmptyOption: true,
+        plugins: ['dropdown_input']
+      
+	};
+ 	new TomSelect(el,settings);
+});
+</script>
+</body>
+</html>

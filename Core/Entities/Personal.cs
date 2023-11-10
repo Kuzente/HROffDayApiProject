@@ -26,6 +26,8 @@ public partial class Personal : BaseEntity
 	public bool RetiredOrOld { get; set; }
 	[DisplayName("Cinsiyet")]
 	public string Gender { get; set; }
+	[DisplayName("Kullanılan Yıllık İzin"), Required]
+	public int UsedYearLeave { get; set; } 
 
 
 }
@@ -39,5 +41,8 @@ public partial class Personal
 	public int Position_Id { get; set; }
 	[ForeignKey(nameof(Position_Id))]
 	public Position Position { get; set; }
-	public ICollection<OffDay> OffDays { get; set; }
+	// public int PersonalDetails_Id { get; set; }
+	// [ForeignKey(nameof(PersonalDetails_Id))]
+	// public PersonalDetails PersonalDetails { get; set; }
+	
 }

@@ -183,6 +183,9 @@ namespace Data.Migrations
                     b.Property<int>("TotalYearLeave")
                         .HasColumnType("int");
 
+                    b.Property<int>("UsedYearLeave")
+                        .HasColumnType("int");
+
                     b.HasKey("ID");
 
                     b.HasIndex("Branch_Id");

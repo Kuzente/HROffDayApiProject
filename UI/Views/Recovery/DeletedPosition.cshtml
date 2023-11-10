@@ -50,11 +50,20 @@ else
                 </form>
         </div>
         <div class="col-4"></div>
-                            <div class="col-4 p-3 text-end">
-                                <button type="button" class="btn">Toplam Silinen Ünvan 
-                                    <span class="badge bg-red ms-2">@Model.TotalRecords</span>
-                                    </button>
-                                </div>
+        <div class="col-4 p-3 text-end">
+            @if (Context.Request.Query.Any(kvp => kvp.Key != "pageNumber" && !string.IsNullOrEmpty(kvp.Value)))
+            {
+                <button type="button" class="btn">Filtrelenen Silinen Ünvan
+                    <span class="badge bg-danger ms-2">@Model.TotalRecords</span>
+                </button>
+            }
+            else
+            {
+                <button type="button" class="btn">Toplam Silinen Ünvan
+                    <span class="badge bg-danger ms-2">@Model.TotalRecords</span>
+                </button>
+            }
+        </div>
         
     </div>
     <table class="table">
@@ -83,7 +92,7 @@ else
                     @data.CreatedAt.ToString("dd/MM/yyyy")
                 </td>
                 <td>
-                    @data.ModifiedAt.ToString("dd/MM/yyyy")
+                    @data.DeletedAt.ToString("dd/MM/yyyy")
                 </td>
                 <td>
                     <a class=" btn btn-sm btn-success btn-pill w-50">Geri Döndür</a>

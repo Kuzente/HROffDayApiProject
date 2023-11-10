@@ -43,7 +43,26 @@ public class ReadPositionService : IReadPositionService
 		return result;
 	}
 
-    public async Task<ResultWithPagingDataDto<List<PositionDto>>> GetAllPagingOrderByAsync(int pageNumber, string search)
+	public async Task<IResultWithDataDto<List<PositionDto>>> GetAllOrderByAsync()
+	{
+		IResultWithDataDto<List<PositionDto>> res = new ResultWithDataDto<List<PositionDto>>();
+		try
+		{
+			var resultData = await Task.Run(() => _unitOfWork.ReadPositionRepository.GetAll(
+				orderBy: p=> p.OrderBy(a=>a.Name),
+				predicate: p=> (p.Status == EntityStatusEnum.Online || p.Status == EntityStatusEnum.Offline)
+			));
+			var mapData = _mapper.Map<List<PositionDto>>(resultData.ToList());
+			res.SetData(mapData);
+		}
+		catch (Exception ex)
+		{
+			res.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+		return res;
+	}
+
+	public async Task<ResultWithPagingDataDto<List<PositionDto>>> GetAllPagingOrderByAsync(int pageNumber, string search, bool  passive)
     {
         ResultWithPagingDataDto<List<PositionDto>> res = new ResultWithPagingDataDto<List<PositionDto>>(pageNumber, search);
         try
@@ -52,7 +71,8 @@ public class ReadPositionService : IReadPositionService
             _unitOfWork.ReadPositionRepository.GetAll(
                 orderBy: p => p.OrderBy(a => a.Name),
                 predicate: a => (a.Status == EntityStatusEnum.Online || a.Status == EntityStatusEnum.Offline) && 
-                                (string.IsNullOrEmpty(search) || a.Name.Contains(search))
+                                (string.IsNullOrEmpty(search) || a.Name.Contains(search))&& 
+                                (passive == false || passive ==  (a.Status == EntityStatusEnum.Offline))
                 ));
             var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)
                 .Take(res.PageSize).ToList();
@@ -70,7 +90,7 @@ public class ReadPositionService : IReadPositionService
         return res;
     }
 
-    public async Task<ResultWithPagingDataDto<List<PositionDto>>> GetAllDeletedBranchPagingOrderByAsync(int pageNumber, string search)
+    public async Task<ResultWithPagingDataDto<List<PositionDto>>> GetAllDeletedPositionPagingOrderByAsync(int pageNumber, string search)
     {
 	    ResultWithPagingDataDto<List<PositionDto>> res = new ResultWithPagingDataDto<List<PositionDto>>(pageNumber, search);
 	    try

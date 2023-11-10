@@ -1,0 +1,169 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\Services\Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\000f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\000m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\001f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\001m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\002f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\002m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\003f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\003m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\004f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\004m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\005f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\005m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\006f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\006m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\007f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\007m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\008f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\008m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\009f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\009m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\010f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\010m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\011f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\011m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\012f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\012m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\013f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\013m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\014f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\014m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\015f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\015m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\016f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\016m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\017f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\017m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\018f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\018m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\019f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\019m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\020f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\020m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\021f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\021m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\022f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\022m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\023f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\023m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\024f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\024m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\025f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\025m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\026f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\026m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\027f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\027m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\028f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\028m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\029f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\029m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\030f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\030m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\031f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\031m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\032f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\032m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\033f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\033m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\034f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\034m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\035f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\035m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\036f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\036m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\037f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\037m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\038f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\038m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\039f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\039m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\040f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\040m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\041f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\041m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\042f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\042m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\043f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\043m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\044f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\044m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\045f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\045m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\046f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\046m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\047f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\047m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\048f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\048m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\049f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\049m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\050f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\050m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\051f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\051m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\052f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\052m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\053f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\053m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\054f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\054m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\055f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\055m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\056f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\056m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\057f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\057m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\058f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\058m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\059f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\059m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\060f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\060m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\061f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\061m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\062f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\062m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\063f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\063m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\064f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\064m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\065f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\065m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\066f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\066m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\067f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\067m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\068f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\068m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\069f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\069m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\070f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\070m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\071f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\071m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\072f.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\072m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\073m.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\static\avatars\074m.jpg" />
+  </ItemGroup>
+
+</Project>

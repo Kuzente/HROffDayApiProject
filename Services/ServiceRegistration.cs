@@ -9,6 +9,10 @@ using Services.Concrete.PositionServices;
 using System.Reflection;
 using Services.Abstract.OffDayServices;
 using Services.Concrete.OffDayServices;
+using Services.ExcelDownloadServices.BranchServices;
+using Services.ExcelDownloadServices.PersonalServices;
+using Services.ExcelDownloadServices.PositionServices;
+using Services.FileUpload;
 
 namespace Services;
 
@@ -27,5 +31,9 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(IWritePositionService), typeof(WritePositionService));services.AddScoped(typeof(IReadPositionService), typeof(ReadPositionService));
 		services.AddScoped(typeof(IReadOffDayService), typeof(ReadOffDayService));
 		services.AddScoped(typeof(IWriteOffDayService), typeof(WriteOffDayService));
+		services.AddScoped(typeof(ExcelPersonalAddrange));
+		services.AddScoped(typeof(PersonalExcelExport));
+		services.AddScoped(typeof(BranchExcelExport));
+		services.AddScoped(typeof(PositionExcelExport));
 	}
 }

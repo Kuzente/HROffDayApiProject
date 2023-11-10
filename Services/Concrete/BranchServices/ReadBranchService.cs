@@ -41,7 +41,10 @@ public class ReadBranchService : IReadBranchService
 		IResultWithDataDto<List<BranchDto>> res = new ResultWithDataDto<List<BranchDto>>();
 		try
 		{
-			var resultData = await Task.Run(() => _unitOfWork.ReadBranchRepository.GetAll(orderBy: p=> p.OrderBy(a=>a.Name)));
+			var resultData = await Task.Run(() => _unitOfWork.ReadBranchRepository.GetAll(
+				orderBy: p=> p.OrderBy(a=>a.Name),
+				predicate: p=> (p.Status == EntityStatusEnum.Online || p.Status == EntityStatusEnum.Offline)
+				));
 			var mapData = _mapper.Map<List<BranchDto>>(resultData.ToList());
 			res.SetData(mapData);
 		}
@@ -53,7 +56,7 @@ public class ReadBranchService : IReadBranchService
 		
 	}
 
-	public async Task<ResultWithPagingDataDto<List<BranchDto>>> GetAllPagingOrderByAsync(int pageNumber,string search)
+	public async Task<ResultWithPagingDataDto<List<BranchDto>>> GetAllPagingOrderByAsync(int pageNumber,string search,bool passive)
 	{
 		ResultWithPagingDataDto<List<BranchDto>> res = new ResultWithPagingDataDto<List<BranchDto>>(pageNumber,search);
 		try
@@ -63,7 +66,8 @@ public class ReadBranchService : IReadBranchService
                 _unitOfWork.ReadBranchRepository.GetAll(
                     orderBy: p => p.OrderBy(a => a.Name),
                     predicate: a => (a.Status == EntityStatusEnum.Online || a.Status == EntityStatusEnum.Offline) && 
-                                    (string.IsNullOrEmpty(search) || a.Name.Contains(search))
+                                    (string.IsNullOrEmpty(search) || a.Name.Contains(search))&& 
+                                    (passive == false || passive ==  (a.Status == EntityStatusEnum.Offline))
                     ));   
             var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)
 				.Take(res.PageSize).ToList();

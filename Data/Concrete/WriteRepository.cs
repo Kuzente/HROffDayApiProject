@@ -41,6 +41,7 @@ public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
 		try
 		{
 			entity.Status = Core.Enums.EntityStatusEnum.Archive;
+			entity.DeletedAt = DateTime.Now;
 			_ = await Task.Run(() => _context.Update(entity));
 			return true;
 		}
@@ -130,6 +131,7 @@ public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
 	{
 		try
 		{
+			entity.ModifiedAt = DateTime.Now;
 			_ = await Task.Run(()=> _context.Update(entity));
 			return entity;
 		}

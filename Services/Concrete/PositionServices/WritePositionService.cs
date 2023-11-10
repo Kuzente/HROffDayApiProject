@@ -5,6 +5,7 @@ using Core.DTOs.PositionDTOs;
 using Core.Entities;
 using Core.Interfaces;
 using Data.Abstract;
+using Microsoft.EntityFrameworkCore;
 using Services.Abstract.PositionServices;
 
 namespace Services.Concrete.PositionServices;
@@ -42,8 +43,9 @@ public class WritePositionService : IWritePositionService
 	public async Task<bool> DeleteAsync(int id)
 	{
 		var findData = await _unitOfWork.ReadPositionRepository.GetByIdAsync(id);
-		if (findData.FirstOrDefault() is null) return false;
-		await _unitOfWork.WritePositionRepository.DeleteAsync(findData.First());
+		var data = await findData.FirstOrDefaultAsync();
+		if (data is null) return false;
+		await _unitOfWork.WritePositionRepository.DeleteAsync(data);
 		var resultCommit = _unitOfWork.Commit();
 		if (!resultCommit)
 			return false;
@@ -53,8 +55,9 @@ public class WritePositionService : IWritePositionService
 	public async Task<bool> RemoveAsync(int id)
 	{
 		var findData = await _unitOfWork.ReadPositionRepository.GetByIdAsync(id);
-		if (findData.FirstOrDefault() is null) return false;
-		await _unitOfWork.WritePositionRepository.RemoveAsync(findData.First());
+		var data = await findData.FirstOrDefaultAsync();
+		if (data is null) return false;
+		await _unitOfWork.WritePositionRepository.RemoveAsync(data);
 		var resultCommit = _unitOfWork.Commit();
 		if (!resultCommit)
 			return false;
@@ -67,7 +70,7 @@ public class WritePositionService : IWritePositionService
         try
         {
             var getdataQuary = await _unitOfWork.ReadPositionRepository.GetByIdAsync(writeBranchDto.ID);
-            var getData = getdataQuary.FirstOrDefault();
+            var getData = await getdataQuary.FirstOrDefaultAsync();
             if (getData is null)
                 return res.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Veri Bulunamadı!!!");
             var mapset = _mapper.Map<Position>(writeBranchDto);

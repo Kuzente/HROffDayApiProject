@@ -46,8 +46,9 @@ public class WriteBranchService : IWriteBranchService
 	public async Task<bool> DeleteAsync(int id)
 	{
 		var findData = await _unitOfWork.ReadBranchRepository.GetByIdAsync(id);
-		if (findData.FirstOrDefault() is null) return false;
-		await _unitOfWork.WriteBranchRepository.DeleteAsync(findData.First());
+		var data = await findData.FirstOrDefaultAsync();
+		if (data is null) return false;
+		await _unitOfWork.WriteBranchRepository.DeleteAsync(data);
 		var resultCommit = _unitOfWork.Commit();
 		if (!resultCommit)
 			return false;
@@ -57,8 +58,9 @@ public class WriteBranchService : IWriteBranchService
 	public async Task<bool> RemoveAsync(int id)
 	{
 		var findData = await _unitOfWork.ReadBranchRepository.GetByIdAsync(id);
-		if (findData.FirstOrDefault() is null) return false;
-		await _unitOfWork.WriteBranchRepository.RemoveAsync(findData.First());
+		var data = await findData.FirstOrDefaultAsync();
+		if (data is null) return false;
+		await _unitOfWork.WriteBranchRepository.RemoveAsync(data);
 		var resultCommit = _unitOfWork.Commit();
 		if (!resultCommit)
 			return false;
@@ -70,8 +72,8 @@ public class WriteBranchService : IWriteBranchService
 		IResultWithDataDto<BranchDto> res = new ResultWithDataDto<BranchDto>();
 		try
 		{
-			var getdataQuary = await _unitOfWork.ReadBranchRepository.GetByIdAsync(writeBranchDto.ID);
-			var getData = getdataQuary.FirstOrDefault();
+			var findData = await _unitOfWork.ReadBranchRepository.GetByIdAsync(writeBranchDto.ID);
+			var getData = await findData.FirstOrDefaultAsync();
 			if (getData is null)
 				return res.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Veri Bulunamadı!!!");
 			var mapset = _mapper.Map<Branch>(writeBranchDto);

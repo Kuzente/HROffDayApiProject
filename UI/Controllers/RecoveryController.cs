@@ -26,13 +26,13 @@ public class RecoveryController : Controller
     [HttpGet]
     public async Task<IActionResult> DeletedPosition(string search, int pageNumber = 1)
     {
-        var result = await _readPositionService.GetAllDeletedBranchPagingOrderByAsync(pageNumber, search);
+        var result = await _readPositionService.GetAllDeletedPositionPagingOrderByAsync(pageNumber, search);
         return View(result);
     }
     [HttpGet]
     public async Task<IActionResult> DeletedPersonal(string search, int pageNumber = 1)
     {
-        var result = await _readBranchService.GetAllDeletedBranchPagingOrderByAsync(pageNumber, search);
+        var result = await _readPersonalService.GetAllDeletedPersonalPagingOrderByAsync(pageNumber, search);
         return View(result);
     }
 }

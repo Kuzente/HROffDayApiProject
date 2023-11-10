@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+<link href="/dist/libs/dropzone/dist/dropzone.css" rel="stylesheet" />
+<form method="post" asp-controller="MultipleUpload" asp-action="PersonalUpload" class="dropzone" id="dropzone-custom"  enctype="multipart/form-data" >
+  <div class="fallback">
+    <input name="file" type="file" />
+  </div>
+  <div class="dz-message">
+    <h3 class="dropzone-msg-title">Dosyanızı Seçiniz</h3>
+    <span class="dropzone-msg-desc">Dosyanızı Seçiniz veya Sürükleyerek bırakınız</span>
+  </div>
+  <button type="submit" class="btn btn-success"> Kaydet</button>
+</form>
+
+
+<script src="/dist/libs/dropzone/dist/dropzone-min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    new Dropzone("#dropzone-custom")
+  })
+</script>
+
