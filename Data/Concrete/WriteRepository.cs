@@ -59,6 +59,7 @@ public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
 			if (entity != null)
 			{
 				entity.Status = Core.Enums.EntityStatusEnum.Archive;
+				entity.DeletedAt = DateTime.Now;
 				_ = await Task.Run(()=> _context.Update(entity));
 				return true;
 			}
@@ -76,7 +77,7 @@ public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
 		{
 			await Task.Run(() => _context.UpdateRange(entities));
 			foreach (var entity in entities)
-				await Task.Run(() => entity.Status = Core.Enums.EntityStatusEnum.Archive);
+				await Task.Run(() => entity.Status = Core.Enums.EntityStatusEnum.Archive );
 			return true;
 		}
 		catch (DbUpdateException ex)
@@ -120,6 +121,27 @@ public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
 		{
 			await Task.Run(() => _context.RemoveRange(entities));
 			return true;
+		}
+		catch (DbUpdateException ex)
+		{
+			throw new Exception(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+		}
+	}
+
+	public async Task<bool> RecoverAsync(int id)
+	{
+		try
+		{ 
+			var entity = await _context.FindAsync<T>(id);
+			if (entity != null)
+			{
+				entity.Status = Core.Enums.EntityStatusEnum.Online;
+				entity.DeletedAt = DateTime.MinValue;
+				entity.ModifiedAt = DateTime.Now;
+				_ = await Task.Run(()=> _context.Update(entity));
+				return true;
+			}
+			return false;
 		}
 		catch (DbUpdateException ex)
 		{

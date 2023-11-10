@@ -6,10 +6,11 @@ namespace Services.Abstract.PersonalServices;
 
 public interface IWritePersonalService 
 {
-    Task<IResultWithDataDto<AddPersonalDto>> AddAsync(AddPersonalDto writeDto);
-    Task<bool> AddRangeAsync(List<AddRangePersonalDto> writeDto);
+    Task<IResultDto> AddAsync(AddPersonalDto writeDto);
+    Task<IResultDto> AddRangeAsync(List<AddRangePersonalDto> writeDto);
     Task<IResultWithDataDto<WritePersonalDto>> UpdateAsync(WritePersonalDto writeDto);
-    Task<bool> DeleteAsync(int id);
+    Task<IResultDto> DeleteAsync(int id);
     Task<bool> RemoveAsync(int id);
-    Task<bool> ChangeStatus(int id);
+    Task<IResultDto> ChangeStatus(int id);
+    Task<IResultDto> RecoverAsync(int id);
 }

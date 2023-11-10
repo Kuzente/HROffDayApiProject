@@ -2,7 +2,7 @@
 
 namespace Services.Abstract.OffDayServices;
 
-public interface IReadOffDayService : IReadService<ReadOffDayDto>
+public interface IReadOffDayService
 {
     Task<List<ReadOffDayDto>> GetAllWithPersonal();
     

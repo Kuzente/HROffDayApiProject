@@ -24,7 +24,11 @@ public class MultipleUploadController : Controller
     public async Task<IActionResult> PersonalUpload(IFormFile file)
     {
         var list =  _excelPersonalAddrange.ImportDataFromExcel(file);
-        await _writePersonalService.AddRangeAsync(list);
+        var result = await _writePersonalService.AddRangeAsync(list);
+        if (!result.IsSuccess)
+        {
+            //Error Sayfası Yönlendir TODO
+        }
         return View();
     }
 }

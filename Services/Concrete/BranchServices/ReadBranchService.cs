@@ -92,7 +92,7 @@ public class ReadBranchService : IReadBranchService
 		{
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadBranchRepository.GetAll(
-					orderBy: p => p.OrderBy(a => a.Name),
+					orderBy: p => p.OrderByDescending(a => a.DeletedAt),
 					predicate: a => (a.Status == EntityStatusEnum.Archive ) && 
 					                (string.IsNullOrEmpty(search) || a.Name.Contains(search))
 				));   

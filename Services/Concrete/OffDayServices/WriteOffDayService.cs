@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core;
 using Core.DTOs;
 using Core.DTOs.OffDayDTOs;
 using Core.Entities;
@@ -41,26 +42,53 @@ public class WriteOffDayService : IWriteOffDayService
 		return res;
 	}
 
-	public async Task<bool> DeleteAsync(int id)
+	public async Task<IResultDto> DeleteAsync(int id)
 	{
-		var findData = await _unitOfWork.ReadOffDayRepository.GetByIdAsync(id);
-		if (findData.FirstOrDefault() is null) return false;
-		await _unitOfWork.WriteOffDayRepository.DeleteAsync(findData.First());
-		var resultCommit = _unitOfWork.Commit();
-		if (!resultCommit)
-			return false;
-		return true;
+		IResultDto res = new ResultDto();
+		
+		try
+		{
+			var result = await _unitOfWork.WriteOffDayRepository.DeleteByIdAsync(id);
+			if (!result)
+				res.SetStatus(false).SetErr("Data Layer Error")
+					.SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+			var resultCommit = _unitOfWork.Commit();
+			if (!resultCommit)
+				return res.SetStatus(false).SetErr("Commit Fail")
+					.SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+		}
+		catch (Exception ex)
+		{
+			res.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+		return res;
 	}
 
-	public async Task<bool> RemoveAsync(int id)
+	public Task<IResultDto> RecoverAsync(int id)
 	{
-		var findData = await _unitOfWork.ReadOffDayRepository.GetByIdAsync(id);
-		if (findData.FirstOrDefault() is null) return false;
-		await _unitOfWork.WriteOffDayRepository.RemoveAsync(findData.First());
-		var resultCommit = _unitOfWork.Commit();
-		if (!resultCommit)
-			return false;
-		return true;
+		throw new NotImplementedException();
+	}
+
+	public async Task<IResultDto> RemoveAsync(int id)
+	{
+		IResultDto res = new ResultDto();
+		
+		try
+		{
+			var result = await _unitOfWork.WriteOffDayRepository.RemoveByIdAsync(id);
+			if (!result)
+				res.SetStatus(false).SetErr("Data Layer Error")
+					.SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+			var resultCommit = _unitOfWork.Commit();
+			if (!resultCommit)
+				return res.SetStatus(false).SetErr("Commit Fail")
+					.SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+		}
+		catch (Exception ex)
+		{
+			res.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+		return res;
 	}
 
 	public async Task<bool> ChangeOffDayStatus(int id,bool isApproved)

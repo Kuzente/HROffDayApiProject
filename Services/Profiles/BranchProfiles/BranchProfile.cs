@@ -9,6 +9,7 @@ public class BranchProfile : Profile
 	public BranchProfile() 
 	{
 		CreateMap<Branch , BranchDto>().ReverseMap();
+		CreateMap<Branch , BranchNameDto>().ReverseMap();
 		
 	}
 }

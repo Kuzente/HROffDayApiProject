@@ -5,9 +5,8 @@ using Core.Querys;
 
 namespace Services.Abstract.PersonalServices;
 
-public interface IReadPersonalService : IReadService<PersonalDto>
+public interface IReadPersonalService
 {
-	Task<List<PersonalDto>> GetAllWithBranchAndPositionAsync();
 	Task<IResultWithDataDto<List<PersonalDto>>> GetAllWithFilterAsync(PersonalQuery query);
 	Task<IResultWithDataDto<PersonalDetailDto>> GetByIdDetailedPersonal(int id);
 	Task<ResultWithPagingDataDto<List<PersonalDto>>> GetAllPagingWithBranchAndPositionOrderByAsync(PersonalQuery query);

@@ -40,20 +40,9 @@ namespace UI.Controllers
             var result = await _writePersonalService.AddAsync(dto);
             if (!result.IsSuccess)
             {
-                NotFound();
+                //Error Page TODO
             }
             return RedirectToAction("Index", new { pageNumber = pageNumber });
-        }
-        [HttpPost]
-        public async Task<IActionResult> ArchivePersonal(int id, int pageNumber = 1)
-        {
-            var result = await _writePersonalService.DeleteAsync(id);
-            if (result)
-            {
-                return RedirectToAction("Index");
-            }
-
-            return RedirectToAction("Index");
         }
         [HttpGet]
         public async Task<IActionResult> ExportExcel([FromQuery] string query)

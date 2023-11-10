@@ -97,7 +97,7 @@ public class ReadPositionService : IReadPositionService
 	    {
 		    var allData = await Task.Run(() =>
 			    _unitOfWork.ReadPositionRepository.GetAll(
-				    orderBy: p => p.OrderBy(a => a.Name),
+				    orderBy: p => p.OrderByDescending(a => a.DeletedAt),
 				    predicate: a => (a.Status == EntityStatusEnum.Archive) && 
 				                    (string.IsNullOrEmpty(search) || a.Name.Contains(search))
 			    ));

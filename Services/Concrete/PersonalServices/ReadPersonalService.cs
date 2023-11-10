@@ -22,26 +22,7 @@ public class ReadPersonalService : IReadPersonalService
 		_mapper = mapper;
 		_unitOfWork = unitOfWork;
 	}
-
-	public async Task<List<PersonalDto>> GetAllAsync()
-	{
-		var entities = await Task.Run(() => _unitOfWork.ReadPersonalRepository.GetAll());
-		return _mapper.Map<List<PersonalDto>>(entities.ToList());
-	}
-
-	public async Task<List<PersonalDto>> GetAllWithBranchAndPositionAsync()
-	{
-		var entities = await Task.Run(() => _unitOfWork.ReadPersonalRepository.GetAll(
-			include:p=> p
-			.Include(a=>a.Branch)
-			.Include(b=>b.Position),
-			orderBy: o=> o
-			.OrderBy(o=>o.NameSurname)
-			)
-		);
-		return _mapper.Map<List<PersonalDto>>(entities.ToList());
-	}
-
+	
 	public async Task<IResultWithDataDto<List<PersonalDto>>> GetAllWithFilterAsync(PersonalQuery query)
 	{
 		IResultWithDataDto<List<PersonalDto>> res = new ResultWithDataDto<List<PersonalDto>>();
@@ -135,7 +116,7 @@ public class ReadPersonalService : IReadPersonalService
 		{
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadPersonalRepository.GetAll(
-					orderBy: p => p.OrderBy(a => a.NameSurname),
+					orderBy: p => p.OrderByDescending(a => a.DeletedAt),
 					predicate: a => (a.Status == EntityStatusEnum.Archive) && 
 					                (string.IsNullOrEmpty(search) || a.NameSurname.Contains(search))
 				));
@@ -154,19 +135,5 @@ public class ReadPersonalService : IReadPersonalService
 
 		return res;
 	}
-
-	public Task<bool> GetAnyAsync()
-	{
-		throw new NotImplementedException(); //TODO
-	}
-
-	public Task<PersonalDto> GetSingleAsync()
-	{
-		throw new NotImplementedException(); //TODO
-	}
-
-	public Task<bool> GetAnyAsync(Expression<Func<PersonalDto, bool>>? predicate = null)
-	{
-		throw new NotImplementedException();
-	}
+	
 }

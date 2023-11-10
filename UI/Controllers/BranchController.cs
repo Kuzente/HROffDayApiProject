@@ -51,12 +51,12 @@ namespace UI.Controllers
         public async Task<IActionResult> ArchiveBranch(int id, int pageNumber = 1)
         {
             var result = await _writeBranchService.DeleteAsync(id);
-            if (result)
+            if (!result.IsSuccess)
             {
-                return RedirectToAction("Index", new { pageNumber = pageNumber });
+                //Error Page TODO
             }
 
-            return BadRequest("Index");
+            return RedirectToAction("Index", new { pageNumber = pageNumber });
         }
         [HttpGet]
         public async Task<IActionResult> ExportExcel()

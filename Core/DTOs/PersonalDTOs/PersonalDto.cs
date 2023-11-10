@@ -16,8 +16,9 @@ public class PersonalDto : ReadBaseDto
 	
 	public string RegistirationNumber { get; set; } 
 	public int Branch_Id { get; set; }
-	public BranchDto Branch { get; set; }
-	public PositionDto Position { get; set; }
+	public int Position_Id { get; set; }
+	public BranchNameDto Branch { get; set; }
+	public PositionNameDto Position { get; set; }
 	public int TotalYearLeave { get; set; } 
 	public int UsedYearLeave { get; set; } 
 	

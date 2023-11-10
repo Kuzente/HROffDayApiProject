@@ -39,22 +39,22 @@ public class PersonalDetailController : Controller
     public async Task<IActionResult> ArchivePersonal(int id)
     {
         var result = await _writePersonalService.DeleteAsync(id);
-        if (result)
+        if (!result.IsSuccess)
         {
-            return RedirectToAction("Index", "Personal");
+            //Error Page Yönlendir TODO
         }
 
-        return BadRequest("Index");
+        return RedirectToAction("Index", "Personal");
     }
     [HttpPost]
     public async Task<IActionResult> ChangeStatus(int id)
     {
         var result = await _writePersonalService.ChangeStatus(id);
-        if (result)
+        if (!result.IsSuccess)
         {
-            return RedirectToAction("Edit",new { id = id });
+            //Error Page Yönlendir TODO
         }
 
-        return BadRequest("Index");
+        return RedirectToAction("Edit",new { id = id });
     }
 }

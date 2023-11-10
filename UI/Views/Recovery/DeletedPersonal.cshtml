@@ -93,7 +93,7 @@ else
                     @data.DeletedAt.ToString("dd/MM/yyyy")
                 </td>
                 <td>
-                    <a class=" btn btn-sm btn-success btn-pill w-50">Geri Döndür</a>
+                    <a asp-controller="Recovery" asp-action="RecoverPersonal" asp-route-id="@data.ID" asp-route-pageNumber="@Model.PageNumber" class=" btn btn-sm btn-success btn-pill w-50">Geri Döndür</a>
                 </td>
             </tr>
         }

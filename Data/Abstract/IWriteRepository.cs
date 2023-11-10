@@ -22,4 +22,10 @@ public interface IWriteRepository<T> : IRepository<T> where T : BaseEntity
 	Task<bool> RemoveAsync(T entity);
 	Task<bool> RemoveRangeAsync(List<T> entities);
 	#endregion
+
+	#region Silinen değeri geri döndürme İşlemi
+
+	Task<bool> RecoverAsync(int id);
+
+	#endregion
 }
