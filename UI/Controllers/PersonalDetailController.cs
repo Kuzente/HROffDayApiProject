@@ -33,7 +33,7 @@ public class PersonalDetailController : Controller
     #region Get/Post Actions
     public async Task<IActionResult> EditAjax(Guid id)
     {
-        var result = await _readPersonalService.GetUpdatePersonal(id);
+        var result = await _readPersonalService.GetUpdatePersonalService(id);
         return Ok(result);
     }
     [HttpPost]

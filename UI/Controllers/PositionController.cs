@@ -1,5 +1,6 @@
 ﻿using Core.DTOs.PositionDTOs;
 using Core.DTOs;
+using Core.Querys;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.PositionServices;
 using Services.ExcelDownloadServices.PositionServices;
@@ -22,7 +23,7 @@ namespace UI.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string search, bool passive, int sayfa = 1)
         {
-            var resultSearch = await _readPositionService.GetAllPagingOrderByAsync(sayfa, search, passive);
+            var resultSearch = await _readPositionService.GetPositionListService(sayfa, search, passive);
             return View(resultSearch);
         }
         [HttpPost]
@@ -39,7 +40,7 @@ namespace UI.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdatePosition(Guid id, string returnUrl)
         {
-            var result = await _readPositionService.GetByIdUpdate(id);
+            var result = await _readPositionService.GetUpdatePositionService(id);
             ViewData["ReturnUrl"] = returnUrl; 
             return View(result);
         }
@@ -61,10 +62,10 @@ namespace UI.Controllers
             return Redirect("/unvanlar"+returnUrl);
         }
         [HttpGet]
-        public async Task<IActionResult> ExportExcel(string returnUrl)
+        public async Task<IActionResult> ExportExcel(PositionQuery query,string returnUrl)
         {
            
-            var result = await _readPositionService.GetAllOrderByAsync();
+            var result = await _readPositionService.GetExcelPositionListService(query);
             if (result.IsSuccess)
             {
                 byte[] excelData = _positionExcelExport.ExportToExcel(result.Data); // Entity listesini Excel verisi olarak alın.

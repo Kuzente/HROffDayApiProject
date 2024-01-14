@@ -2,15 +2,16 @@
 using Core.DTOs;
 using Core.DTOs.PositionDTOs;
 using Core.Interfaces;
+using Core.Querys;
 
 namespace Services.Abstract.PositionServices;
 
 public interface IReadPositionService
 {
 	Task<bool> GetAnyByNameAsync(string name);
-	Task<IResultWithDataDto<List<PositionDto>>> GetAllOrderByAsync();
+	Task<IResultWithDataDto<List<PositionDto>>> GetExcelPositionListService(PositionQuery query); // Aktif Ünvanlar Excel Servisi
 	Task<List<PositionNameDto>> GetAllJustNames();
-    Task<ResultWithPagingDataDto<List<PositionDto>>> GetAllPagingOrderByAsync(int pageNumber, string search, bool  passive);
-    Task<ResultWithPagingDataDto<List<PositionDto>>> GetAllDeletedPositionPagingOrderByAsync(int pageNumber,string search);
-    Task<IResultWithDataDto<PositionDto>> GetByIdUpdate(Guid id);
-}
+    Task<ResultWithPagingDataDto<List<PositionDto>>> GetPositionListService(int pageNumber, string search, bool  passive); // Ünvan Listesi Servisi
+    Task<ResultWithPagingDataDto<List<PositionDto>>> GetDeletedPositionListService(int pageNumber,string search); // Silinen Ünvanlar Listesi Servisi
+    Task<IResultWithDataDto<PositionDto>> GetUpdatePositionService(Guid id); // Ünvan Güncelleme Get Servisi
+} 

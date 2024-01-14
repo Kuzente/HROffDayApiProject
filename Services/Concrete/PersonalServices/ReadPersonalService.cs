@@ -27,7 +27,7 @@ public class ReadPersonalService : IReadPersonalService
 		_unitOfWork = unitOfWork;
 	}
 	
-	public async Task<IResultWithDataDto<List<PersonalDto>>> GetAllWithFilterAsync(PersonalQuery query)
+	public async Task<IResultWithDataDto<List<PersonalDto>>> GetExcelPersonalListService(PersonalQuery query)
 	{
 		IResultWithDataDto<List<PersonalDto>> res = new ResultWithDataDto<List<PersonalDto>>();
 		try
@@ -59,7 +59,7 @@ public class ReadPersonalService : IReadPersonalService
 		return res;
 	}
 
-	public async Task<IResultWithDataDto<List<PassivePersonalDto>>> PassiveGetAllWithFilterAsync(PersonalQuery query)
+	public async Task<IResultWithDataDto<List<PassivePersonalDto>>> GetExcelPassivePersonalListService(PersonalQuery query)
 	{
 		IResultWithDataDto<List<PassivePersonalDto>> res = new ResultWithDataDto<List<PassivePersonalDto>>();
 		try
@@ -92,7 +92,7 @@ public class ReadPersonalService : IReadPersonalService
 	}
 
 
-	public async Task<IResultWithDataDto<ReadUpdatePersonalDto>> GetUpdatePersonal(Guid id)
+	public async Task<IResultWithDataDto<ReadUpdatePersonalDto>> GetUpdatePersonalService(Guid id)
 	{
 		IResultWithDataDto<ReadUpdatePersonalDto> res = new ResultWithDataDto<ReadUpdatePersonalDto>();
 		try
@@ -123,7 +123,7 @@ public class ReadPersonalService : IReadPersonalService
 		return res;
 	}
 
-	public async Task<ResultWithPagingDataDto<List<PersonalDto>>> GetAllPagingWithBranchAndPositionOrderByAsync(PersonalQuery query)
+	public async Task<ResultWithPagingDataDto<List<PersonalDto>>> GetPersonalListService(PersonalQuery query)
 	{
 		ResultWithPagingDataDto<List<PersonalDto>> res = new ResultWithPagingDataDto<List<PersonalDto>>(query.sayfa,query.search);
 		try
@@ -158,7 +158,7 @@ public class ReadPersonalService : IReadPersonalService
 		return res;
 	}
 
-	public async Task<ResultWithPagingDataDto<List<PassivePersonalDto>>> PassivePersonalGetAllPagingWithBranchAndPositionOrderByAsync(PersonalQuery query)
+	public async Task<ResultWithPagingDataDto<List<PassivePersonalDto>>> GetPassivePersonalListService(PersonalQuery query)
 	{
 		ResultWithPagingDataDto<List<PassivePersonalDto>> res = new ResultWithPagingDataDto<List<PassivePersonalDto>>(query.sayfa,query.search);
 		try
@@ -193,7 +193,7 @@ public class ReadPersonalService : IReadPersonalService
 		return res;
 	}
 
-	public async Task<ResultWithPagingDataDto<List<PersonalDto>>> GetAllDeletedPersonalPagingOrderByAsync(int pageNumber, string search)
+	public async Task<ResultWithPagingDataDto<List<PersonalDto>>> GetDeletedPersonalListService(int pageNumber, string search)
 	{
 		ResultWithPagingDataDto<List<PersonalDto>> res = new ResultWithPagingDataDto<List<PersonalDto>>(pageNumber, search);
 		try
@@ -220,7 +220,7 @@ public class ReadPersonalService : IReadPersonalService
 		return res;
 	}
 
-	public async Task<IResultWithDataDto<List<PersonalOffDayDto>>> GetAllPersonalByBranchId(Guid branchId)
+	public async Task<IResultWithDataDto<List<PersonalOffDayDto>>> GetAllPersonalByBranchIdService(Guid branchId)
 	{
 		IResultWithDataDto<List<PersonalOffDayDto>> res = new ResultWithDataDto<List<PersonalOffDayDto>>();
 		try

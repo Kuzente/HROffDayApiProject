@@ -21,7 +21,7 @@ public class OffDayController : Controller
     public async Task<IActionResult> AddOffDay(Guid id)
     {
         AddOffdayDto dto = new AddOffdayDto();
-        var personalResult = await _readPersonalService.GetAllPersonalByBranchId(id);
+        var personalResult = await _readPersonalService.GetAllPersonalByBranchIdService(id);
         if (!personalResult.IsSuccess)
         {
             //Error Sayfası TODO

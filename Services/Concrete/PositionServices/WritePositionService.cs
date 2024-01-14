@@ -81,28 +81,7 @@ public class WritePositionService : IWritePositionService
 		}
 		return res;
 	}
-
-	public async Task<IResultDto> RemoveAsync(Guid id)
-	{
-		IResultDto res = new ResultDto();
-		
-		try
-		{
-			var result = await _unitOfWork.WritePositionRepository.RemoveByIdAsync(id);
-			if (!result)
-				res.SetStatus(false).SetErr("Data Layer Error")
-					.SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
-			var resultCommit = _unitOfWork.Commit();
-			if (!resultCommit)
-				return res.SetStatus(false).SetErr("Commit Fail")
-					.SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-		}
-		catch (Exception ex)
-		{
-			res.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
-		}
-		return res;
-	}
+	
 
 	public async Task<IResultWithDataDto<PositionDto>> UpdateAsync(PositionDto writeBranchDto)
 	{

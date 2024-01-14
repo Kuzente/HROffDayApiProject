@@ -29,7 +29,7 @@ public class PassivePersonalController : Controller
     public async Task<IActionResult> Index([FromQuery] PersonalQuery query)
     {
             
-        var personals = await _readPersonalService.PassivePersonalGetAllPagingWithBranchAndPositionOrderByAsync(query);
+        var personals = await _readPersonalService.GetPassivePersonalListService(query);
         ViewBag.Positions = await _readPositionService.GetAllJustNames();
         ViewBag.Branches = await _readBranchService.GetAllJustNames();
         return View(personals);
@@ -43,7 +43,7 @@ public class PassivePersonalController : Controller
     public async Task<IActionResult> ExportExcel(PersonalQuery query,string returnUrl)
     {
         
-        var result = await _readPersonalService.PassiveGetAllWithFilterAsync(query);
+        var result = await _readPersonalService.GetExcelPassivePersonalListService(query);
         if (result.IsSuccess)
         {
             byte[] excelData = _passivePersonalExcelExport.ExportToExcel(result.Data); // Entity listesini Excel verisi olarak alın.

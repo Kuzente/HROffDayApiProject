@@ -30,13 +30,12 @@ namespace UI.Controllers
         public async Task<IActionResult> Index([FromQuery] PersonalQuery query)
         {
             
-            var personals = await _readPersonalService.GetAllPagingWithBranchAndPositionOrderByAsync(query);
+            var personals = await _readPersonalService.GetPersonalListService(query);
             ViewBag.Positions = await _readPositionService.GetAllJustNames();
             ViewBag.Branches = await _readBranchService.GetAllJustNames();
             return View(personals);
         }
         
-
         #endregion
 
         #region GET/POST Actions
@@ -44,7 +43,7 @@ namespace UI.Controllers
         public async Task<IActionResult> ExportExcel(PersonalQuery query, string returnUrl)
         {
             //PersonalQuery queryGet = System.Text.Json.JsonSerializer.Deserialize<PersonalQuery>(query);
-            var result = await _readPersonalService.GetAllWithFilterAsync(query);
+            var result = await _readPersonalService.GetExcelPersonalListService(query);
             if (result.IsSuccess)
             {
                 byte[] excelData = _personalExcelExport.ExportToExcel(result.Data); // Entity listesini Excel verisi olarak alın.

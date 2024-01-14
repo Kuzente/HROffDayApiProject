@@ -6,6 +6,7 @@ using Core.DTOs.PositionDTOs;
 using Core.Entities;
 using Core.Enums;
 using Core.Interfaces;
+using Core.Querys;
 using Data.Abstract;
 using Services.Abstract.PositionServices;
 
@@ -21,21 +22,6 @@ public class ReadPositionService : IReadPositionService
 		_mapper = mapper;
 		_unitOfWork = unitOfWork;
 	}
-	public async Task<List<PositionDto>> GetAllAsync()
-	{
-		var entities = await Task.Run(() => _unitOfWork.ReadPositionRepository.GetAll());
-		return _mapper.Map<List<PositionDto>>(entities.ToList());
-	}
-
-	public Task<PositionDto> GetSingleAsync()
-	{
-		throw new NotImplementedException();
-	}
-
-	public Task<bool> GetAnyAsync()
-	{
-		throw new NotImplementedException();
-	}
 
 	public async Task<bool> GetAnyByNameAsync(string name)
 	{
@@ -43,14 +29,16 @@ public class ReadPositionService : IReadPositionService
 		return result;
 	}
 
-	public async Task<IResultWithDataDto<List<PositionDto>>> GetAllOrderByAsync()
+	public async Task<IResultWithDataDto<List<PositionDto>>> GetExcelPositionListService(PositionQuery query)
 	{
 		IResultWithDataDto<List<PositionDto>> res = new ResultWithDataDto<List<PositionDto>>();
 		try
 		{
 			var resultData = await Task.Run(() => _unitOfWork.ReadPositionRepository.GetAll(
 				orderBy: p=> p.OrderBy(a=>a.Name),
-				predicate: p=> (p.Status == EntityStatusEnum.Online || p.Status == EntityStatusEnum.Offline)
+				predicate: p=> (p.Status == EntityStatusEnum.Online || p.Status == EntityStatusEnum.Offline) &&
+				               (string.IsNullOrWhiteSpace(query.search) || p.Name.Contains(query.search))&& 
+				               (string.IsNullOrEmpty(query.passive) || p.Status == EntityStatusEnum.Offline)
 			));
 			var mapData = _mapper.Map<List<PositionDto>>(resultData.ToList());
 			res.SetData(mapData);
@@ -62,7 +50,7 @@ public class ReadPositionService : IReadPositionService
 		return res;
 	}
 
-	public async Task<ResultWithPagingDataDto<List<PositionDto>>> GetAllPagingOrderByAsync(int pageNumber, string search, bool  passive)
+	public async Task<ResultWithPagingDataDto<List<PositionDto>>> GetPositionListService(int pageNumber, string search, bool  passive)
     {
         ResultWithPagingDataDto<List<PositionDto>> res = new ResultWithPagingDataDto<List<PositionDto>>(pageNumber, search);
         try
@@ -90,7 +78,7 @@ public class ReadPositionService : IReadPositionService
         return res;
     }
 
-    public async Task<ResultWithPagingDataDto<List<PositionDto>>> GetAllDeletedPositionPagingOrderByAsync(int pageNumber, string search)
+    public async Task<ResultWithPagingDataDto<List<PositionDto>>> GetDeletedPositionListService(int pageNumber, string search)
     {
 	    ResultWithPagingDataDto<List<PositionDto>> res = new ResultWithPagingDataDto<List<PositionDto>>(pageNumber, search);
 	    try
@@ -117,7 +105,7 @@ public class ReadPositionService : IReadPositionService
 	    return res;
     }
 
-    public async Task<IResultWithDataDto<PositionDto>> GetByIdUpdate(Guid id)
+    public async Task<IResultWithDataDto<PositionDto>> GetUpdatePositionService(Guid id)
     {
         IResultWithDataDto<PositionDto> res = new ResultWithDataDto<PositionDto>();
         try

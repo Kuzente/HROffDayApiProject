@@ -103,12 +103,7 @@ public class WritePersonalService : IWritePersonalService
 		}
 		return res;
 	}
-
-	public Task<bool> RemoveAsync(Guid id)
-	{
-		throw new NotImplementedException(); //TODO
-	}
-
+	
 	public async Task<IResultDto> ChangeStatus(Guid id)
 	{
 		IResultDto res = new ResultDto();

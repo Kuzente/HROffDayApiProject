@@ -11,5 +11,5 @@ public interface IWritePositionService
     Task<IResultWithDataDto<PositionDto>> UpdateAsync(PositionDto writeDto);
     Task<IResultDto> DeleteAsync(Guid id);
     Task<IResultDto> RecoverAsync(Guid id);
-    Task<IResultDto> RemoveAsync(Guid id);
+    
 }

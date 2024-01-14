@@ -10,11 +10,11 @@ namespace Services.Abstract.PersonalServices;
 
 public interface IReadPersonalService
 {
-	Task<IResultWithDataDto<List<PersonalDto>>> GetAllWithFilterAsync(PersonalQuery query);
-	Task<IResultWithDataDto<List<PassivePersonalDto>>> PassiveGetAllWithFilterAsync(PersonalQuery query);
-	Task<IResultWithDataDto<ReadUpdatePersonalDto>> GetUpdatePersonal(Guid id);
-	Task<ResultWithPagingDataDto<List<PersonalDto>>> GetAllPagingWithBranchAndPositionOrderByAsync(PersonalQuery query);
-	Task<ResultWithPagingDataDto<List<PassivePersonalDto>>> PassivePersonalGetAllPagingWithBranchAndPositionOrderByAsync(PersonalQuery query);
-	Task<ResultWithPagingDataDto<List<PersonalDto>>> GetAllDeletedPersonalPagingOrderByAsync(int pageNumber,string search);
-	Task<IResultWithDataDto<List<PersonalOffDayDto>>> GetAllPersonalByBranchId(Guid branchId);
+	Task<IResultWithDataDto<List<PersonalDto>>> GetExcelPersonalListService(PersonalQuery query); // Aktif Personel Excel Servisi
+	Task<IResultWithDataDto<List<PassivePersonalDto>>> GetExcelPassivePersonalListService(PersonalQuery query); // Pasif Personel Excel Servisi
+	Task<IResultWithDataDto<ReadUpdatePersonalDto>> GetUpdatePersonalService(Guid id); // Personel Düzenleme Get Servisi
+	Task<ResultWithPagingDataDto<List<PersonalDto>>> GetPersonalListService(PersonalQuery query); // Aktif Personel Listesi Servisi
+	Task<ResultWithPagingDataDto<List<PassivePersonalDto>>> GetPassivePersonalListService(PersonalQuery query); // Pasif Personel Listesi Servisi
+	Task<ResultWithPagingDataDto<List<PersonalDto>>> GetDeletedPersonalListService(int pageNumber,string search); // Silinen Personel Listesi Servisi
+	Task<IResultWithDataDto<List<PersonalOffDayDto>>> GetAllPersonalByBranchIdService(Guid branchId); // İzin Ekleme Şube ID ye göre personel getiren Servis
 }

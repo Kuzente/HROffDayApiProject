@@ -26,19 +26,19 @@ public class RecoveryController : Controller
     [HttpGet]
     public async Task<IActionResult> DeletedBranch(string search, int sayfa = 1)
     {
-        var result = await _readBranchService.GetAllDeletedBranchPagingOrderByAsync(sayfa, search);
+        var result = await _readBranchService.GetDeletedBranchListService(sayfa, search);
         return View(result);
     }
     [HttpGet]
     public async Task<IActionResult> DeletedPosition(string search, int sayfa = 1)
     {
-        var result = await _readPositionService.GetAllDeletedPositionPagingOrderByAsync(sayfa, search);
+        var result = await _readPositionService.GetDeletedPositionListService(sayfa, search);
         return View(result);
     }
     [HttpGet]
     public async Task<IActionResult> DeletedPersonal(string search, int sayfa = 1)
     {
-        var result = await _readPersonalService.GetAllDeletedPersonalPagingOrderByAsync(sayfa, search);
+        var result = await _readPersonalService.GetDeletedPersonalListService(sayfa, search);
         return View(result);
     }
     [HttpGet]

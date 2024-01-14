@@ -1,6 +1,7 @@
 ﻿using Core.DTOs.BranchDTOs;
 using Core.DTOs;
 using Core.DTOs.BaseDTOs;
+using Core.Querys;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.BranchServices;
 using Services.ExcelDownloadServices.BranchServices;
@@ -24,12 +25,12 @@ namespace UI.Controllers
         #region PageActions
         public async Task<IActionResult> Index(string search, bool passive, int sayfa = 1)
         {
-            var resultSearch = await _readBranchService.GetAllPagingOrderByAsync(sayfa, search , passive);
+            var resultSearch = await _readBranchService.GetBranchListService(sayfa, search , passive);
             return View(resultSearch);
         }
         public async Task<IActionResult> UpdateBranch(Guid id, string returnUrl)
         {
-            var result = await _readBranchService.GetByIdUpdate(id);
+            var result = await _readBranchService.GetUpdateBranchService(id);
             ViewData["ReturnUrl"] = returnUrl;
             return View(result);
         }
@@ -37,11 +38,11 @@ namespace UI.Controllers
         #endregion
 
         #region Get/Post Actions
-
-        public async Task<IActionResult> ExportExcel(string returnUrl)
+        [HttpPost]
+        public async Task<IActionResult> ExportExcel(BranchQuery query,string returnUrl)
         {
             
-            var result = await _readBranchService.GetAllOrderByAsync();
+            var result = await _readBranchService.GetExcelBranchListService(query);
             if (result.IsSuccess)
             {
                 byte[] excelData = _branchExcelExport.ExportToExcel(result.Data); // Entity listesini Excel verisi olarak alın.
