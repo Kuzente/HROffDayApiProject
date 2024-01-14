@@ -31,12 +31,12 @@ public class PassivePersonalController : Controller
         ViewBag.Branches = await _readBranchService.GetAllJustNames();
         return View(personals);
     }
-    [HttpGet]
-    public async Task<IActionResult> ExportExcel([FromQuery] string query)
+    [HttpPost]
+    public async Task<IActionResult> ExportExcel(PersonalQuery query,string returnUrl)
     {
           
-        PersonalQuery queryGet = System.Text.Json.JsonSerializer.Deserialize<PersonalQuery>(query);
-        var result = await _readPersonalService.PassiveGetAllWithFilterAsync(queryGet);
+        
+        var result = await _readPersonalService.PassiveGetAllWithFilterAsync(query);
         if (result.IsSuccess)
         {
             byte[] excelData = _passivePersonalExcelExport.ExportToExcel(result.Data); // Entity listesini Excel verisi olarak alın.
@@ -47,6 +47,7 @@ public class PassivePersonalController : Controller
             await response.Body.WriteAsync(excelData, 0, excelData.Length);
             return new EmptyResult();
         }
-        return RedirectToAction("Index");
+
+        return Redirect("cikarilan-personeller" + returnUrl);
     }
 }

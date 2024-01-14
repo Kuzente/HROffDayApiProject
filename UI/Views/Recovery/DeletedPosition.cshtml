@@ -1,0 +1,179 @@
+﻿@using Core.Enums
+@model ResultWithPagingDataDto<List<PositionDto>>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+    var sayfa = Convert.ToInt32(Context.Request.Query["sayfa"]);
+    var returnUrl = Context.Request.QueryString.ToString();
+    var maxVisiblePages = 5;
+    var startPage = Math.Max(1, Model.PageNumber - (maxVisiblePages / 2));
+    var endPage = Math.Min(Model.TotalPages, startPage + (maxVisiblePages - 1));
+}
+<!--Heading Area-->
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                    Ünvanlar
+                </div>
+                <h2 class="page-title">
+                    Silinmiş Tüm Ünvanlar
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Heading Area-->
+@if (!Model.IsSuccess)
+{
+    <div class="card container-xl mt-3">
+        <div class="text-center p-5">
+            <h1 class="display-4">Üzgünüz</h1>
+            <p>@Model.Message</p>
+            <p>@Model.Err</p>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card container-xl mt-3">
+        <div class="row">
+            <div class="col-6">
+                <div class="row p-3">
+                    <div class="col-md-6">
+                        <form class="d-flex " action="/silinen-unvanlar" method="get">
+                            <input class="form-control me-2" type="search" placeholder="Ara" name="search" aria-label="Search">
+                            <button class="btn btn-outline-primary" type="submit">Ara</button>
+
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        @if (!string.IsNullOrEmpty(Context.Request.Query["search"]))
+                        {
+                            <a href="/silinen-unvanlar" class="btn btn-outline-secondary">Temizle</a>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-2"></div>
+            <div class="col-4 p-3 text-end">
+                @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && !string.IsNullOrEmpty(kvp.Value)))
+                {
+                    <button type="button" class="btn">
+                        Filtrelenen Silinen Ünvan
+                        <span class="badge bg-danger ms-2">@Model.TotalRecords</span>
+                    </button>
+                }
+                else
+                {
+                    <button type="button" class="btn">
+                        Toplam Silinen Ünvan
+                        <span class="badge bg-danger ms-2">@Model.TotalRecords</span>
+                    </button>
+                }
+            </div>
+
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Şube Adı</th>
+                <th>Durum</th>
+                <th>Oluşturulma Tarihi</th>
+                <th>Silinme Tarihi</th>
+                <th>Geri Getir</th>
+            </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+            @foreach (var data in Model.Data)
+            {
+                <tr>
+                    <td>@data.Name</td>
+                    <td>
+                        @if (data.Status == EntityStatusEnum.Archive)
+                        {
+                            <span class="badge bg-danger">Silinmiş</span>
+                        }
+
+                    </td>
+                    <td>
+                        @data.CreatedAt.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @data.DeletedAt.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        <a href="/unvan-gerigetir?id=@data.ID&returnUrl=@returnUrl" class=" btn btn-sm btn-success btn-pill w-50">Geri Döndür</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+
+        </table>
+        <!--Pagination-->
+        <div class="border-top pt-3 mx-3">
+            <div class="border-top pt-3 mx-3">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li class="page-item first @(Model.PageNumber <= 1 ? "disabled" : "")">
+                            <a data-firstButton class="w-33 h-px-30 page-link cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-bar-to-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M10 12l10 0"></path>
+                                    <path d="M10 12l4 4"></path>
+                                    <path d="M10 12l4 -4"></path>
+                                    <path d="M4 4l0 16"></path>
+                                </svg>
+                            </a>
+                        </li>
+                        <li class="page-item prev @(Model.PageNumber <= 1 ? "disabled" : "")">
+                            <a data-prevButton class="w-33 h-px-30 page-link cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M5 12l14 0"></path>
+                                    <path d="M5 12l6 6"></path>
+                                    <path d="M5 12l6 -6"></path>
+                                </svg>
+                            </a>
+                        </li>
+                        @for (int i = startPage; i <= endPage; i++)
+                        {
+                            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                                <a data-paginationButton="@Model.PageNumber" class="w-33 h-px-30 page-link cursor-pointer">@i</a>
+                            </li>
+                        }
+                        <li class="page-item next @(Model.PageNumber >= Model.TotalPages ? "disabled" : "")">
+                            <a data-nextButton class="w-33 h-px-30 page-link cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M5 12l14 0"></path>
+                                    <path d="M13 18l6 -6"></path>
+                                    <path d="M13 6l6 6"></path>
+                                </svg>
+                            </a>
+                        </li>
+                        <li class="page-item last @(Model.PageNumber >= Model.TotalPages ? "disabled" : "")">
+                            <a data-lastButton="@Model.TotalPages" class="w-33 h-px-30 page-link cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-bar-to-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M14 12l-10 0"></path>
+                                    <path d="M14 12l-4 4"></path>
+                                    <path d="M14 12l-4 -4"></path>
+                                    <path d="M20 4l0 16"></path>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    @section Scripts
+    {
+        <script src="/js/custom/recovery/recover.js"></script>
+
+    }
+}

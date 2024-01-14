@@ -42,7 +42,10 @@ app.MapControllerRoute(name: "personalListGet", pattern: "personeller", defaults
 app.MapControllerRoute(name: "personalListCreate", pattern: "create-personal", defaults: new { controller = "Personal", action = "AddPersonal" });
 app.MapControllerRoute(name: "personalListGetSelect", pattern: "get-select-items", defaults: new { controller = "Personal", action = "GetBranchAndPositions" });
 app.MapControllerRoute(name: "downloadPersonelExcelListGet", pattern: "personeller-excel", defaults: new { controller = "Personal", action = "ExportExcel" });
-
+#endregion
+#region PassivePersonelList
+app.MapControllerRoute(name: "passivePersonalListGet", pattern: "cikarilan-personeller", defaults: new { controller = "PassivePersonal", action = "Index" });
+app.MapControllerRoute(name: "downloadPassivePersonelExcelListGet", pattern: "cikarilan-personeller-excel", defaults: new { controller = "PassivePersonal", action = "ExportExcel" });
 
 #endregion
 
@@ -63,10 +66,9 @@ app.MapControllerRoute(name: "updatePositionGetPost", pattern: "unvan-duzenle", 
 app.MapControllerRoute(name: "addPositionPost", pattern: "unvan-ekle", defaults: new { controller = "Position", action = "AddPosition" });
 app.MapControllerRoute(name: "deletePositionPost", pattern: "unvan-sil", defaults: new { controller = "Position", action = "ArchivePosition" });
 
-
 #endregion
 
-#region Recovery
+#region RecoveryPages
 app.MapControllerRoute(name: "recoveryBranchList", pattern: "silinen-subeler", defaults: new { controller = "Recovery", action = "DeletedBranch" });
 app.MapControllerRoute(name: "recoveryPositionList", pattern: "silinen-unvanlar", defaults: new { controller = "Recovery", action = "DeletedPosition" });
 app.MapControllerRoute(name: "recoveryPersonalList", pattern: "silinen-personeller", defaults: new { controller = "Recovery", action = "DeletedPersonal" });
