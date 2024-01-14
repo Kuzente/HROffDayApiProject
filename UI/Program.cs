@@ -1,10 +1,16 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.OData;
+using NToastNotify;
 using Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddNToastNotifyToastr(new ToastrOptions()
+{
+    ProgressBar = true,
+    PositionClass = ToastPositions.TopRight,
+    
+});
 builder.Services.AddControllers().AddJsonOptions(opt =>
 {
     opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -27,7 +33,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseNToastNotify();
 app.UseAuthorization();
 
 #region PersonalDetails
@@ -68,6 +74,11 @@ app.MapControllerRoute(name: "deletePositionPost", pattern: "unvan-sil", default
 
 #endregion
 
+#region OffDay
+
+
+
+#endregion
 #region RecoveryPages
 app.MapControllerRoute(name: "recoveryBranchList", pattern: "silinen-subeler", defaults: new { controller = "Recovery", action = "DeletedBranch" });
 app.MapControllerRoute(name: "recoveryPositionList", pattern: "silinen-unvanlar", defaults: new { controller = "Recovery", action = "DeletedPosition" });

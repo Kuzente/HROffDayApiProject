@@ -3,6 +3,7 @@ using Core.DTOs;
 using Core.DTOs.BaseDTOs;
 using Core.Querys;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using Services.Abstract.BranchServices;
 using Services.ExcelDownloadServices.BranchServices;
 using UI.Models;
@@ -11,26 +12,36 @@ namespace UI.Controllers
 {
     public class BranchController : Controller
     {
+        private readonly IToastNotification _toastNotification;
         private readonly IReadBranchService _readBranchService;
         private readonly IWriteBranchService _writeBranchService;
         private readonly BranchExcelExport _branchExcelExport;
 
-        public BranchController(IReadBranchService readBranchService, IWriteBranchService writeBranchService, BranchExcelExport branchExcelExport)
+        public BranchController(IReadBranchService readBranchService, IWriteBranchService writeBranchService, BranchExcelExport branchExcelExport, IToastNotification toastNotification)
         {
             _readBranchService = readBranchService;
             _writeBranchService = writeBranchService;
             _branchExcelExport = branchExcelExport;
+            _toastNotification = toastNotification;
         }
 
         #region PageActions
         public async Task<IActionResult> Index(string search, bool passive, int sayfa = 1)
         {
             var resultSearch = await _readBranchService.GetBranchListService(sayfa, search , passive);
+            if (!resultSearch.IsSuccess)
+            {
+                _toastNotification.AddErrorToastMessage(resultSearch.Message, new ToastrOptions { Title = "Hata" });
+            }
             return View(resultSearch);
         }
         public async Task<IActionResult> UpdateBranch(Guid id, string returnUrl)
         {
             var result = await _readBranchService.GetUpdateBranchService(id);
+            if (!result.IsSuccess)
+            {
+                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+            }
             ViewData["ReturnUrl"] = returnUrl;
             return View(result);
         }
@@ -54,6 +65,7 @@ namespace UI.Controllers
                 return new EmptyResult();
             }
 
+            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
             return Redirect("/subeler"+returnUrl);
         }
         [HttpPost]
@@ -62,9 +74,13 @@ namespace UI.Controllers
             var result = await _writeBranchService.AddAsync(dto);
             if (!result.IsSuccess)
             {
-                //Error Page TODO
+                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
             }
-
+            else
+            {
+                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Eklendi", new ToastrOptions { Title = "Başarılı" }); 
+            }
+            
             return Redirect("/subeler"+returnUrl);
         }
       
@@ -72,7 +88,14 @@ namespace UI.Controllers
         public async Task<IActionResult> UpdateBranch(ResultWithDataDto<BranchDto> dto, string returnUrl)
         {
             var result = await _writeBranchService.UpdateAsync(dto.Data);
-
+            if (!result.IsSuccess)
+            {
+                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+            }
+            else
+            {
+                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Düzenlendi", new ToastrOptions { Title = "Başarılı" }); 
+            }
             return Redirect("/subeler"+returnUrl);
         }
         [HttpPost]
@@ -81,9 +104,12 @@ namespace UI.Controllers
             var result = await _writeBranchService.DeleteAsync(id);
             if (!result.IsSuccess)
             {
-                //Error Page TODO
+                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
             }
-
+            else
+            {
+                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Silindi", new ToastrOptions { Title = "Başarılı" }); 
+            }
             return Redirect("/subeler"+returnUrl);
         }
         #endregion

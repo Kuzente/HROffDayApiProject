@@ -1,5 +1,6 @@
 ﻿using Core.Querys;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using Services.Abstract.BranchServices;
 using Services.Abstract.PersonalServices;
 using Services.Abstract.PositionServices;
@@ -9,18 +10,20 @@ namespace UI.Controllers;
 
 public class PassivePersonalController : Controller
 {
+    private readonly IToastNotification _toastNotification;
     private readonly IReadPersonalService _readPersonalService;
     private readonly IReadBranchService _readBranchService;
     private readonly IReadPositionService _readPositionService;
     private readonly PassivePersonalExcelExport _passivePersonalExcelExport;
     
 
-    public PassivePersonalController(IReadPersonalService readPersonalService, IReadBranchService readBranchService, IReadPositionService readPositionService, PassivePersonalExcelExport passivePersonalExcelExport)
+    public PassivePersonalController(IReadPersonalService readPersonalService, IReadBranchService readBranchService, IReadPositionService readPositionService, PassivePersonalExcelExport passivePersonalExcelExport, IToastNotification toastNotification)
     {
         _readPersonalService = readPersonalService;
         _readBranchService = readBranchService;
         _readPositionService = readPositionService;
         _passivePersonalExcelExport = passivePersonalExcelExport;
+        _toastNotification = toastNotification;
     }
 
     #region PageActions
@@ -30,6 +33,10 @@ public class PassivePersonalController : Controller
     {
             
         var personals = await _readPersonalService.GetPassivePersonalListService(query);
+        if (!personals.IsSuccess)
+        {
+            _toastNotification.AddErrorToastMessage(personals.Message, new ToastrOptions { Title = "Hata" });
+        }
         ViewBag.Positions = await _readPositionService.GetAllJustNames();
         ViewBag.Branches = await _readBranchService.GetAllJustNames();
         return View(personals);
@@ -54,7 +61,7 @@ public class PassivePersonalController : Controller
             await response.Body.WriteAsync(excelData, 0, excelData.Length);
             return new EmptyResult();
         }
-
+        _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
         return Redirect("cikarilan-personeller" + returnUrl);
     }
 

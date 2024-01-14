@@ -2,6 +2,7 @@
 using Core.DTOs.PersonalDTOs.ReadDtos;
 using Core.Querys;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using Services.Abstract.BranchServices;
 using Services.Abstract.PersonalServices;
 using Services.Abstract.PositionServices;
@@ -11,19 +12,21 @@ namespace UI.Controllers
 {
     public class PersonalController : Controller
     {
+        private readonly IToastNotification _toastNotification;
         private readonly IReadPersonalService _readPersonalService;
         private readonly IWritePersonalService _writePersonalService;
         private readonly IReadBranchService _readBranchService;
         private readonly IReadPositionService _readPositionService;
         private readonly PersonalExcelExport _personalExcelExport;
 
-        public PersonalController(IReadPersonalService readPersonalService, IWritePersonalService writePersonalService, IReadBranchService readBranchService, IReadPositionService readPositionService, PersonalExcelExport personalExcelExport)
+        public PersonalController(IReadPersonalService readPersonalService, IWritePersonalService writePersonalService, IReadBranchService readBranchService, IReadPositionService readPositionService, PersonalExcelExport personalExcelExport, IToastNotification toastNotification)
         {
             _readPersonalService = readPersonalService;
             _writePersonalService = writePersonalService;
             _readBranchService = readBranchService;
             _readPositionService = readPositionService;
             _personalExcelExport = personalExcelExport;
+            _toastNotification = toastNotification;
         }
 
         #region PageActions
@@ -31,6 +34,10 @@ namespace UI.Controllers
         {
             
             var personals = await _readPersonalService.GetPersonalListService(query);
+            if (!personals.IsSuccess)
+            {
+                _toastNotification.AddErrorToastMessage(personals.Message, new ToastrOptions { Title = "Hata" });
+            }
             ViewBag.Positions = await _readPositionService.GetAllJustNames();
             ViewBag.Branches = await _readBranchService.GetAllJustNames();
             return View(personals);
@@ -54,15 +61,19 @@ namespace UI.Controllers
                 await response.Body.WriteAsync(excelData, 0, excelData.Length);
                 return new EmptyResult();
             }
+            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
             return Redirect("/personeller"+returnUrl);
         }
         [HttpPost]
         public async Task<IActionResult> GetBranchAndPositions()
         {
+            var branches = await _readBranchService.GetAllJustNames();
+            var positions = await _readPositionService.GetAllJustNames();
+            
             var dto = new ReadCreatePersonalBranchesPositionsDto
             {
-                Branches = await _readBranchService.GetAllJustNames(),
-                Positions = await _readPositionService.GetAllJustNames()
+                Branches = branches,
+                Positions = positions 
             };
             return Ok(dto);
         }
@@ -72,7 +83,11 @@ namespace UI.Controllers
             var result = await _writePersonalService.AddAsync(dto);
             if (!result.IsSuccess)
             {
-                //Error Page TODO
+                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+            }
+            else
+            {
+                _toastNotification.AddSuccessToastMessage("Personel Başarılı Bir Şekilde Eklendi", new ToastrOptions { Title = "Başarılı" }); 
             }
             return Ok(result);
         }

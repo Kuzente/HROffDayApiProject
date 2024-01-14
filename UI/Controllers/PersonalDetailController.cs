@@ -1,5 +1,6 @@
 ﻿using Core.DTOs.PersonalDTOs.WriteDtos;
 using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using Services.Abstract.BranchServices;
 using Services.Abstract.PersonalServices;
 using Services.Abstract.PositionServices;
@@ -8,17 +9,19 @@ namespace UI.Controllers;
 
 public class PersonalDetailController : Controller
 {
+    private readonly IToastNotification _toastNotification;
     private readonly IReadPositionService _readPositionService;
     private readonly IReadBranchService _readBranchService;
     private readonly IReadPersonalService _readPersonalService;
     private readonly IWritePersonalService _writePersonalService;
 
-    public PersonalDetailController(IReadBranchService readBranchService, IReadPositionService readPositionService, IReadPersonalService readPersonalService, IWritePersonalService writePersonalService)
+    public PersonalDetailController(IReadBranchService readBranchService, IReadPositionService readPositionService, IReadPersonalService readPersonalService, IWritePersonalService writePersonalService, IToastNotification toastNotification)
     {
         _readBranchService = readBranchService;
         _readPositionService = readPositionService;
         _readPersonalService = readPersonalService;
         _writePersonalService = writePersonalService;
+        _toastNotification = toastNotification;
     }
 
     #region PageActions
@@ -34,6 +37,10 @@ public class PersonalDetailController : Controller
     public async Task<IActionResult> EditAjax(Guid id)
     {
         var result = await _readPersonalService.GetUpdatePersonalService(id);
+        if (!result.IsSuccess)
+        {
+            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+        }
         return Ok(result);
     }
     [HttpPost]
@@ -42,10 +49,14 @@ public class PersonalDetailController : Controller
         var result = await _writePersonalService.UpdateAsync(dto);
         if (!result.IsSuccess)
         {
-            //Error Page Yönlendir TODO
+            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+        }
+        else
+        {
+            _toastNotification.AddSuccessToastMessage("Personel Başarılı Bir Şekilde Güncellendi", new ToastrOptions { Title = "Başarılı" }); 
         }
 
-        return RedirectToAction("Index", "Personal");
+        return Redirect("/personel-detayları?" + dto.ID);
     }
     [HttpPost]
     public async Task<IActionResult> ArchivePersonal(Guid id)
@@ -53,7 +64,11 @@ public class PersonalDetailController : Controller
         var result = await _writePersonalService.DeleteAsync(id);
         if (!result.IsSuccess)
         {
-            //Error Page Yönlendir TODO
+            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+        }
+        else
+        {
+            _toastNotification.AddSuccessToastMessage("Personel Başarılı Bir Şekilde Silindi", new ToastrOptions { Title = "Başarılı" }); 
         }
 
         return Ok(result);
@@ -62,10 +77,6 @@ public class PersonalDetailController : Controller
     public async Task<IActionResult> ChangeStatus(Guid id)
     {
         var result = await _writePersonalService.ChangeStatus(id);
-        if (!result.IsSuccess)
-        {
-            //Error Page Yönlendir TODO
-        }
         return Ok(result);
     }
 

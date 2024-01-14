@@ -39,6 +39,8 @@ public class ReadPersonalService : IReadPersonalService
 						.Include(b=>b.Position),
 					orderBy: p => p.OrderBy(a => a.NameSurname),
 					predicate: a => (a.Status == EntityStatusEnum.Online) && 
+					                (a.Branch.Status == EntityStatusEnum.Online || a.Branch.Status == EntityStatusEnum.Offline)&&
+					                (a.Position.Status == EntityStatusEnum.Online || a.Position.Status == EntityStatusEnum.Offline)&&
 					                (string.IsNullOrEmpty(query.search) || a.NameSurname.Contains(query.search))&& 
 					                (string.IsNullOrEmpty(query.gender) || a.Gender.Contains(query.gender))&& 
 					                (string.IsNullOrEmpty(query.branch) || a.Branch_Id.ToString().Contains(query.branch))&& 
@@ -71,6 +73,8 @@ public class ReadPersonalService : IReadPersonalService
 						.Include(b=>b.Position),
 					orderBy: p => p.OrderBy(a => a.NameSurname),
 					predicate: a => (a.Status == EntityStatusEnum.Offline) && 
+					                (a.Branch.Status == EntityStatusEnum.Online || a.Branch.Status == EntityStatusEnum.Offline)&&
+					                (a.Position.Status == EntityStatusEnum.Online || a.Position.Status == EntityStatusEnum.Offline)&&
 					                (string.IsNullOrEmpty(query.search) || a.NameSurname.Contains(query.search))&& 
 					                (string.IsNullOrEmpty(query.gender) || a.Gender.Contains(query.gender))&& 
 					                (string.IsNullOrEmpty(query.branch) || a.Branch_Id.ToString().Contains(query.branch))&& 
@@ -102,13 +106,13 @@ public class ReadPersonalService : IReadPersonalService
 			);
 			var mapData = _mapper.Map<ReadUpdatePersonalDto>(resultData);
 			mapData.Positions = await Task.Run(() => _unitOfWork.ReadPositionRepository
-				.GetAll(predicate: p=> p.Status == EntityStatusEnum.Online,
+				.GetAll(predicate: p=> p.Status == EntityStatusEnum.Online || p.Status == EntityStatusEnum.Offline,
 					orderBy: o=> o.OrderBy(p=> p.Name))
 				.Select(p => new PositionNameDto{ ID = p.ID, Name = p.Name })
 				.ToList()
 			);
 			mapData.Branches = await Task.Run(() => _unitOfWork.ReadBranchRepository
-				.GetAll(predicate: p=> p.Status == EntityStatusEnum.Online,
+				.GetAll(predicate: p=> p.Status == EntityStatusEnum.Online || p.Status == EntityStatusEnum.Offline,
 					orderBy: o=> o.OrderBy(p=> p.Name))
 				.Select(p => new BranchNameDto{ ID = p.ID, Name = p.Name })
 				.ToList()
@@ -135,6 +139,8 @@ public class ReadPersonalService : IReadPersonalService
 						.Include(b=>b.Position),
 					orderBy: p => p.OrderBy(a => a.NameSurname),
 					predicate: a => (a.Status == EntityStatusEnum.Online) && 
+					                (a.Branch.Status == EntityStatusEnum.Online || a.Branch.Status == EntityStatusEnum.Offline)&&
+					                (a.Position.Status == EntityStatusEnum.Online || a.Position.Status == EntityStatusEnum.Offline)&&
 					                (string.IsNullOrEmpty(query.search) || a.NameSurname.Contains(query.search))&& 
 					                (string.IsNullOrEmpty(query.gender) || a.Gender.Contains(query.gender))&& 
 					                (string.IsNullOrEmpty(query.branch) || a.Branch_Id.ToString().Contains(query.branch))&& 
@@ -170,6 +176,8 @@ public class ReadPersonalService : IReadPersonalService
 						.Include(b=>b.Position),
 					orderBy: p => p.OrderBy(a => a.NameSurname),
 					predicate: a => (a.Status == EntityStatusEnum.Offline) && 
+					                (a.Branch.Status == EntityStatusEnum.Online || a.Branch.Status == EntityStatusEnum.Offline)&&
+					                (a.Position.Status == EntityStatusEnum.Online || a.Position.Status == EntityStatusEnum.Offline)&&
 					                (string.IsNullOrEmpty(query.search) || a.NameSurname.Contains(query.search))&& 
 					                (string.IsNullOrEmpty(query.gender) || a.Gender.Contains(query.gender))&& 
 					                (string.IsNullOrEmpty(query.branch) || a.Branch_Id.ToString().Contains(query.branch))&& 
@@ -232,6 +240,8 @@ public class ReadPersonalService : IReadPersonalService
 						.Include(b=>b.Position),
 					orderBy: p => p.OrderBy(a => a.NameSurname),
 					predicate: a => (a.Status == EntityStatusEnum.Online) && 
+					                (a.Branch.Status == EntityStatusEnum.Online || a.Branch.Status == EntityStatusEnum.Offline)&&
+					                (a.Position.Status == EntityStatusEnum.Online || a.Position.Status == EntityStatusEnum.Offline)&&
 					                (a.Branch_Id == branchId)
 				)
 			);   

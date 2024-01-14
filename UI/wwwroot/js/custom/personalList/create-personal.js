@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let MaritalStatusSelect = new TomSelect($("#MaritalStatusSelect"));
     let BodySizeSelect = new TomSelect($("#BodySizeSelect"));
     let BloodGroupSelect =   new TomSelect($("#BloodGroupSelect"));
-   $.ajax({
+   $.ajax({ //TODO
        type: "POST",
        url : "/get-select-items"
    }).done(function (res) {

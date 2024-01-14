@@ -74,7 +74,6 @@ public class WritePersonalService : IWritePersonalService
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-			var mapResult = _mapper.Map<WritePersonalDto>(resultData);
 		}
 		catch (Exception ex)
 		{

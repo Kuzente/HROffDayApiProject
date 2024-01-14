@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NToastNotify;
 using Services.Abstract.BranchServices;
 using Services.Abstract.PersonalServices;
 using Services.Abstract.PositionServices;
@@ -9,19 +10,21 @@ namespace UI.Controllers;
 
 public class MultipleUploadController : Controller
 {
+    private readonly IToastNotification _toastNotification;
     private readonly ExcelPersonalAddrange _excelPersonalAddrange;
     private readonly IWritePersonalService _writePersonalService;
     private readonly IReadBranchService _readBranchService;
     private readonly IReadPositionService _readPositionService;
     private readonly ExcelUploadScheme _excelUploadScheme;
 
-    public MultipleUploadController(ExcelPersonalAddrange excelPersonalAddrange, IWritePersonalService writePersonalService, IReadPositionService readPositionService, IReadBranchService readBranchService, ExcelUploadScheme excelUploadScheme)
+    public MultipleUploadController(ExcelPersonalAddrange excelPersonalAddrange, IWritePersonalService writePersonalService, IReadPositionService readPositionService, IReadBranchService readBranchService, ExcelUploadScheme excelUploadScheme, IToastNotification toastNotification)
     {
         _excelPersonalAddrange = excelPersonalAddrange;
         _writePersonalService = writePersonalService;
         _readPositionService = readPositionService;
         _readBranchService = readBranchService;
         _excelUploadScheme = excelUploadScheme;
+        _toastNotification = toastNotification;
     }
 
     [HttpGet]
@@ -36,7 +39,11 @@ public class MultipleUploadController : Controller
         var result = await _writePersonalService.AddRangeAsync(list);
         if (!result.IsSuccess)
         {
-            //Error Sayfası Yönlendir TODO
+            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+        }
+        else
+        {
+            _toastNotification.AddSuccessToastMessage("Toplu Yükleme Başarılı.", new ToastrOptions { Title = "Başarılı" }); 
         }
         return View();
     }

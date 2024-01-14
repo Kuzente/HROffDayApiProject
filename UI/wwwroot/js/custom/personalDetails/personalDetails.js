@@ -6,12 +6,11 @@ document.addEventListener('DOMContentLoaded', function () {
     let MaritalStatusSelect= $('#MaritalStatusSelect');
     let BodySizeSelect= $('#BodySizeSelect');
     let BloodGroupSelect= $('#BloodGroupSelect');
-    $.ajax({ //TODO RETURN CONTROL
+    $.ajax({ 
         type: "GET", 
         url: `/get-personel-detayları${window.location.search}`
     }).done(function (res) {
         if (res.isSuccess) {
-            console.log(res.data);
             $('#HeaderPersonalNameSurname').text(res.data.nameSurname);
             if (res.data.status === 0) { // Online
                 $('#headerButton').addClass("btn-secondary").removeClass("btn-orange");
@@ -22,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             fillpersonalDetailsInputs(res.data);
         } else {
-            console.log("ajax false dondu");
+            
         }
     });
     function fillpersonalDetailsInputs(data) {
@@ -149,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //
         //İşten Çıkar veya İşe Geri Al Butonu Tıklandığında
         $('#headerButton').on("click", function () {
-           $.ajax({ //TODO RETURN CONTROL
+           $.ajax({ 
                type: "POST",
                url: `/personel-durumu${window.location.search}`
            }).done(function (res) {
@@ -171,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
             //Formun id'sini kullanarak formu gönder
-            $.ajax({ //TODO RETURN CONTROL
+            $.ajax({
                 type: "POST",
                 url: "/personel-detayları",
                 data: formData // Form verilerini al
