@@ -158,6 +158,8 @@ document.addEventListener('DOMContentLoaded', function () {
                }else{
                    console.log("Başarısız");
                }
+           }).then(function () {
+               window.location = window.location;
            });
         });
         //Personeli Güncelle Butonu Tıklandığında
