@@ -1,25 +1,118 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "title";
     Layout = "_Layout";
 }
-<link href="/dist/libs/dropzone/dist/dropzone.css" rel="stylesheet" />
-<form method="post" asp-controller="MultipleUpload" asp-action="PersonalUpload" class="dropzone" id="dropzone-custom"  enctype="multipart/form-data" >
-  <div class="fallback">
-    <input name="file" type="file" />
-  </div>
-  <div class="dz-message">
-    <h3 class="dropzone-msg-title">Dosyanızı Seçiniz</h3>
-    <span class="dropzone-msg-desc">Dosyanızı Seçiniz veya Sürükleyerek bırakınız</span>
-  </div>
-  <button type="submit" class="btn btn-success"> Kaydet</button>
-</form>
+
+@section Links
+{
+    <link href="/dist/libs/dropzone/dist/dropzone.css" rel="stylesheet"/>
+}
+
+<!--Heading Area-->
+<div class="page-header d-print-none" xmlns="http://www.w3.org/1999/html">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                    Toplu İşlemler
+                </div>
+                <h2 class="page-title">
+                    Toplu Personel Ekle
+                </h2>
+            </div>
+            <!-- Page title actions -->
+            <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <span class="d-none d-sm-inline">
+                        <a href="/download-scheme" class="btn btn-green">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-spreadsheet" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                                <path d="M8 11h8v7h-8z"></path>
+                                <path d="M8 15h8"></path>
+                                <path d="M11 11v7"></path>
+                            </svg>
+                            Taslak Excel Raporu
+                        </a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Heading Area-->
+<div class="card container-xl mt-3">
+
+    <div class="card-body">
+        <div class="card-title">
+            <div class="alert alert-important alert-info alert-dismissible" role="alert">
+                <div class="d-flex">
+                    <div>
+                        <!-- Download SVG icon from http://tabler-icons.io/i/info-circle -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"></path><path d="M12 9h.01"></path><path d="M11 12h1v4h1"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        Lütfen toplu ekleme işlemine başlamadan önce taslak excel raporunu indiriniz. Ve oradaki talimatlara uygun bir şekilde yükleyiniz.Aksi takdirde toplu ekleme yapamazsınız!
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-important alert-warning alert-dismissible" role="alert">
+                <div class="d-flex">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 9v4"></path><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"></path><path d="M12 16h.01"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 class="alert-title text-white">Uyarılar!</h4>
+                        <div>1- Öncelikle toplu veri yüklerken farklı bir excel dosyası kullanmayınız. İndirmiş olduğunuz taslak excel raporu içerisinde bulunan Veri Sayfası üzerinde tanımlayınız!</div>
+                        <div >2- Veriyi yüklemeden önce sistem üzerinde şube ve ünvanlarınızın eksiksiz olduğundan emin olunuz!</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="alert alert-important alert-success alert-dismissible" role="alert">
+                <div class="d-flex">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 12l5 5l10 -10"></path></svg>
+                    </div>
+                    <div>
+                        <h4 class="alert-title text-white">Adımlar!</h4>
+                        <div>1- Sistem üzerinde tanımlamış olduğunuz şube ve ünvanların listesini aşağıdaki ilgili sayfalarda bulabilirsiniz. Veri sayfası üzerine ilgili personellerin şube ve ünvanları tanımlanırken bu sayfalar üzerinde bulunan şube ve unvan kodlarını kullanınız.</div>
+                        <div >2- Cinsiyet tanımlamalarında "Erkek" ve "Kadın" olarak kullanınız!</div>
+                        <div >3- Emekli veya Engelli olan personellere Evet yazmanız yeterlidir!</div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <form method="post" asp-controller="MultipleUpload" asp-action="PersonalUpload" id="dropzone-custom" enctype="multipart/form-data">
+            <div class="dropzone dz-clickable border-info">
+                <div class="fallback">
+                    <input name="file" type="file"/>
+                </div>
+                <div class="dz-message">
+                    <h3 class="dropzone-msg-title">Dosyanızı Seçiniz</h3>
+                    <span class="dropzone-msg-desc">Dosyanızı Seçiniz veya Sürükleyerek bırakınız</span>
+                </div>
+            </div>
+            <button type="submit" class="m-3 btn btn-info float-end"> Yükle</button>
+        </form>
+    </div>
+</div>
 
 
-<script src="/dist/libs/dropzone/dist/dropzone-min.js"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    new Dropzone("#dropzone-custom")
-  })
-</script>
-
+@section Scripts
+{
+    <script src="/dist/libs/dropzone/dist/dropzone-min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        new Dropzone("#dropzone-custom")
+      })
+    </script>
+}

@@ -4,11 +4,7 @@
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
-    var pageNumber = Convert.ToInt32(Context.Request.Query["pageNumber"]);
-    if (pageNumber == 0)
-    {
-        pageNumber = 1;
-    }
+    
 }
 @if (!Model.IsSuccess)
 {
@@ -20,7 +16,7 @@
 }
 else
 {
-    <form method="post" asp-controller="Position" asp-action="UpdatePosition">
+    <form method="post" action="unvan-duzenle">
         <div class="page-header d-print-none">
             <div class="container-xl">
                 <div class="row g-2 align-items-center">
@@ -63,7 +59,7 @@ else
                     <td>
                         <input class="form-control" asp-for="Data.Name"/>
                         <input type="hidden" asp-for="Data.ID"/>
-                        <input type="hidden" name="pageNumber" value="@pageNumber"/>
+                        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]"/>
                         
                     </td>
                     <td>

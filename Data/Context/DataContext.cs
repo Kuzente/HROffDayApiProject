@@ -8,6 +8,7 @@ public class DataContext : DbContext
 	public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
 	public DbSet<Personal> Personals => Set<Personal>();
+	public DbSet<PersonalDetails> PersonalDetails => Set<PersonalDetails>();
 	public DbSet<Branch> Branches => Set<Branch>();
 	public DbSet<Position> Positions => Set<Position>();
 	public DbSet<OffDay> OffDays => Set<OffDay>();
@@ -34,5 +35,6 @@ public class DataContext : DbContext
 		}
 		return base.SaveChanges();
 	}
+	
 
 }

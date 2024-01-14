@@ -17,18 +17,16 @@ namespace Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.13")
+                .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Core.Entities.Branch", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -53,11 +51,9 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Core.Entities.OffDay", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CountLeave")
                         .HasColumnType("int");
@@ -107,8 +103,8 @@ namespace Data.Migrations
                     b.Property<int>("OffDayStatus")
                         .HasColumnType("int");
 
-                    b.Property<int>("Personal_Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Personal_Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -125,17 +121,15 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Core.Entities.Personal", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Branch_Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Branch_Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -161,11 +155,14 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("PersonalDetails_Id")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Phonenumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Position_Id")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Position_Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("RegistirationNumber")
                         .IsRequired()
@@ -195,13 +192,90 @@ namespace Data.Migrations
                     b.ToTable("Personals");
                 });
 
-            modelBuilder.Entity("Core.Entities.Position", b =>
+            modelBuilder.Entity("Core.Entities.PersonalDetails", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankAccount")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BirthPlace")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BloodGroup")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BodySize")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EducationStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FatherName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GraduatedSchool")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Handicapped")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IBAN")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MaritalStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MotherName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("Personal_Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double?>("Salary")
+                        .HasColumnType("float");
+
+                    b.Property<string>("SgkCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SskNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    b.Property<string>("WorkingPlace")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("Personal_Id")
+                        .IsUnique();
+
+                    b.ToTable("PersonalDetails");
+                });
+
+            modelBuilder.Entity("Core.Entities.Position", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -254,6 +328,17 @@ namespace Data.Migrations
                     b.Navigation("Position");
                 });
 
+            modelBuilder.Entity("Core.Entities.PersonalDetails", b =>
+                {
+                    b.HasOne("Core.Entities.Personal", "Personal")
+                        .WithOne("PersonalDetails")
+                        .HasForeignKey("Core.Entities.PersonalDetails", "Personal_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Personal");
+                });
+
             modelBuilder.Entity("Core.Entities.Branch", b =>
                 {
                     b.Navigation("Personals");
@@ -262,6 +347,9 @@ namespace Data.Migrations
             modelBuilder.Entity("Core.Entities.Personal", b =>
                 {
                     b.Navigation("OffDays");
+
+                    b.Navigation("PersonalDetails")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Core.Entities.Position", b =>

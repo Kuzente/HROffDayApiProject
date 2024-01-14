@@ -1,0 +1,29 @@
+﻿using Core.DTOs.BranchDTOs;
+using Core.DTOs.PersonalDetailDto.ReadDtos;
+using Core.DTOs.PositionDTOs;
+using Core.Enums;
+
+namespace Core.DTOs.PersonalDTOs.ReadDtos;
+
+public class ReadUpdatePersonalDto
+{
+    public Guid ID { get; set; }
+    public string NameSurname { get; set; }
+    public DateTime BirthDate { get; set; }
+    public DateTime StartJobDate { get; set; }
+    public DateTime? EndJobDate { get; set; } 
+    public string IdentificationNumber { get; set; }
+    public string RegistirationNumber { get; set; }
+    public string Phonenumber { get; set; }
+    public bool RetiredOrOld { get; set; }
+        
+    public string Gender { get; set; }
+    public int TotalYearLeave { get; set; }
+    public int UsedYearLeave { get; set; } 
+    public Guid Branch_Id { get; set; }
+    public Guid Position_Id { get; set; }
+    public List<BranchNameDto> Branches { get; set; }
+    public List<PositionNameDto> Positions { get; set; }
+    public ReadUpdatePersonalDetailsDto PersonalDetails { get; set; }
+    public EntityStatusEnum Status { get; set; }
+}

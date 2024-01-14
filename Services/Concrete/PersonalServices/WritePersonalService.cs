@@ -2,6 +2,7 @@
 using Core;
 using Core.DTOs;
 using Core.DTOs.PersonalDTOs;
+using Core.DTOs.PersonalDTOs.WriteDtos;
 using Core.Entities;
 using Core.Enums;
 using Core.Interfaces;
@@ -58,33 +59,32 @@ public class WritePersonalService : IWritePersonalService
 		return res;
 	}
 
-	public async Task<IResultWithDataDto<WritePersonalDto>> UpdateAsync(WritePersonalDto writePersonalDto)
+	public async Task<IResultDto> UpdateAsync(WriteUpdatePersonalDto writeDto)
 	{
-		IResultWithDataDto<WritePersonalDto> res = new ResultWithDataDto<WritePersonalDto>();
+		IResultDto result = new ResultDto();
 		try
 		{
-			var getDataQuery = await _unitOfWork.ReadPersonalRepository.GetByIdAsync(writePersonalDto.ID);
-			var getData = await getDataQuery.FirstOrDefaultAsync();
-			if (getData is null)
-				return res.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Veri Bulunamadı!!!");
-			var mapSet = _mapper.Map<Personal>(writePersonalDto);
-			mapSet.ID = getData.ID;
-			mapSet.CreatedAt = getData.CreatedAt;
+			var getPersonal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate:p=> p.ID == writeDto.ID);
+			if (getPersonal is null)
+				return result.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Veri Bulunamadı!!!");
+			var mapSet = _mapper.Map<Personal>(writeDto);
+			mapSet.ID = getPersonal.ID;
+			mapSet.CreatedAt = getPersonal.CreatedAt;
 			var resultData = await _unitOfWork.WritePersonalRepository.Update(mapSet);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
-				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
 			var mapResult = _mapper.Map<WritePersonalDto>(resultData);
-			res.SetData(mapResult);
 		}
 		catch (Exception ex)
 		{
-			res.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+			result.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
 		}
-		return res;
+		return result;
 	}
+	
 
-	public async Task<IResultDto> DeleteAsync(int id)
+	public async Task<IResultDto> DeleteAsync(Guid id)
 	{
 		IResultDto res = new ResultDto();
 		try
@@ -104,12 +104,12 @@ public class WritePersonalService : IWritePersonalService
 		return res;
 	}
 
-	public Task<bool> RemoveAsync(int id)
+	public Task<bool> RemoveAsync(Guid id)
 	{
 		throw new NotImplementedException(); //TODO
 	}
 
-	public async Task<IResultDto> ChangeStatus(int id)
+	public async Task<IResultDto> ChangeStatus(Guid id)
 	{
 		IResultDto res = new ResultDto();
 		try
@@ -121,11 +121,14 @@ public class WritePersonalService : IWritePersonalService
 			{
 				// Eğer "online" ise "offline" yapın
 				data.Status = EntityStatusEnum.Offline;
+				data.EndJobDate = DateTime.Now;
 			}
 			else if (data.Status == EntityStatusEnum.Offline)
 			{
 				// Eğer "offline" ise "online" yapın
 				data.Status = EntityStatusEnum.Online;
+				data.StartJobDate = DateTime.Now;
+				data.EndJobDate = null;
 			}
 
 			await _unitOfWork.WritePersonalRepository.Update(data);
@@ -141,7 +144,7 @@ public class WritePersonalService : IWritePersonalService
 		return res;
 	}
 
-	public async Task<IResultDto> RecoverAsync(int id)
+	public async Task<IResultDto> RecoverAsync(Guid id)
 	{
 		IResultDto res = new ResultDto();
 		try
@@ -150,6 +153,7 @@ public class WritePersonalService : IWritePersonalService
 			if (!result)
 				res.SetStatus(false).SetErr("Data Layer Error")
 					.SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+			
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return res.SetStatus(false).SetErr("Commit Fail")

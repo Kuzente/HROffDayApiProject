@@ -8,7 +8,7 @@ namespace Core.Entities;
 public class BaseEntity : IBaseEntity
 {
 	[Key, Required, DisplayName("ID")]
-	public int ID { get; set; }
+	public Guid ID { get; set; }
 	[Required, DisplayName("Oluşturulma Tarihi")]
 	public DateTime CreatedAt { get; set; }
 	[Required, DisplayName("Düzenlenme Tarihi")]

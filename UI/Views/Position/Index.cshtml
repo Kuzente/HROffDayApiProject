@@ -3,11 +3,12 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var pageNumber = Convert.ToInt32(Context.Request.Query["pageNumber"]);
-    if (pageNumber == 0)
-    {
-        pageNumber = 1;
-    }
+    var sayfa = Convert.ToInt32(Context.Request.Query["sayfa"]);
+    var returnUrl = Context.Request.QueryString.ToString();
+    var maxVisiblePages = 5;
+    var startPage = Math.Max(1, Model.PageNumber - (maxVisiblePages / 2));
+    var endPage = Math.Min(Model.TotalPages, startPage + (maxVisiblePages - 1));
+    
 }
 <!--Heading Area-->
 <div class="page-header d-print-none">
@@ -16,7 +17,7 @@
             <div class="col">
                 <!-- Page pre-title -->
                 <div class="page-pretitle">
-                    Overview
+                    Iyaş Cms
                 </div>
                 <h2 class="page-title">
                     Tüm Ünvanlar
@@ -26,7 +27,7 @@
             <div class="col-auto ms-auto d-print-none">
                 <div class="btn-list">
                     <span class="d-none d-sm-inline">
-                        <a asp-controller="Position" asp-action="ExportExcel" class="btn btn-green">
+                        <a href="/unvanlar-excel?returnUrl=@returnUrl" class="btn btn-green">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-spreadsheet" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
@@ -38,17 +39,21 @@
                             Excel Raporu
                         </a>
                     </span>
-                    
+
                     <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#addModal">
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path>
+                        </svg>
                         Ünvan Ekle
                     </a>
                     <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal" data-bs-target="#addModal" aria-label="Create new report">
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path>
+                        </svg>
                     </a>
-                    
+
                 </div>
             </div>
         </div>
@@ -57,10 +62,12 @@
 <!--Heading Area-->
 @if (!Model.IsSuccess)
 {
-    <div class="text-center">
-        <h1 class="display-4">Üzgünüz</h1>
-        <p>@Model.Message</p>
-        <p>@Model.Err</p>
+    <div class="card container-xl mt-3">
+        <div class="text-center p-5">
+            <h1 class="display-4">Üzgünüz</h1>
+            <p>@Model.Message</p>
+            <p>@Model.Err</p>
+        </div>
     </div>
 }
 else
@@ -71,7 +78,7 @@ else
                 <!-- Data Filter-->
                 <div class="row">
                     <div class="col-md-6">
-                        <form class="d-flex" asp-controller="Position" asp-action="Index" method="get">
+                        <form class="d-flex" action="/unvanlar" method="get">
                             <input class="form-control me-2" type="search" placeholder="Ara" name="search" aria-label="Search">
                             <button class="btn btn-outline-primary" type="submit">Ara</button>
                         </form>
@@ -106,10 +113,9 @@ else
                     </div>
                     <!--Temizle Butonu-->
                     <div class="col-md-5">
-                        @if (Context.Request.Query.Any(kvp => kvp.Key != "pageNumber" && !string.IsNullOrEmpty(kvp.Value)))
+                        @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && !string.IsNullOrEmpty(kvp.Value)))
                         {
-                            <a asp-route-search="" asp-route-pageNumber="1" class="btn btn-outline-secondary ms-3">Temizle</a>
-                            
+                            <a href="/unvanlar" class="btn btn-outline-secondary ms-3">Temizle</a>
                         }
                     </div>
                     <!--Temizle Butonu-->
@@ -118,15 +124,17 @@ else
             </div>
             <div class="col-2"></div>
             <div class="col-4 p-3 text-end">
-                @if (Context.Request.Query.Any(kvp => kvp.Key != "pageNumber" && !string.IsNullOrEmpty(kvp.Value)))
+                @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && !string.IsNullOrEmpty(kvp.Value)))
                 {
-                    <button type="button" class="btn">Filtrelenen Ünvan
+                    <button type="button" class="btn">
+                        Filtrelenen Ünvan
                         <span class="badge bg-green ms-2">@Model.TotalRecords</span>
                     </button>
                 }
                 else
                 {
-                    <button type="button" class="btn">Toplam Ünvan
+                    <button type="button" class="btn">
+                        Toplam Ünvan
                         <span class="badge bg-green ms-2">@Model.TotalRecords</span>
                     </button>
                 }
@@ -134,109 +142,177 @@ else
         </div>
         <table class="table">
             <thead>
-                <tr>
-                    <th>Ünvan Adı</th>
-                    <th>Durum</th>
-                    <th>Oluşturulma Tarihi</th>
-                    <th>Güncellenme Tarihi</th>
-                    <th>Düzenle</th>
-                    <th>Sil</th>
+            <tr>
+                <th>Ünvan Adı</th>
+                <th>Durum</th>
+                <th>Oluşturulma Tarihi</th>
+                <th>Güncellenme Tarihi</th>
+                <th>Düzenle</th>
+                <th>Sil</th>
 
 
-                </tr>
+            </tr>
             </thead>
             <tbody class="table-border-bottom-0">
-                @foreach (var data in Model.Data)
-                {
-                    <tr>
-                        <td>@data.Name</td>
-                        <td>
-                            @{
-                                if (data.Status == EntityStatusEnum.Online)
-                                {
-                                    <span class="badge bg-success">Aktif</span>
-                                }
-                                else if (data.Status == EntityStatusEnum.Archive)
-                                {
-                                    <span class="badge bg-danger">Arşivlenmiş</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-secondary">Pasif</span>
-                                }
+            @foreach (var data in Model.Data)
+            {
+                <tr>
+                    <td>@data.Name</td>
+                    <td>
+                        @{
+                            if (data.Status == EntityStatusEnum.Online)
+                            {
+                                <span class="badge bg-success">Aktif</span>
                             }
-                        </td>
-                        <td>
-                            @data.CreatedAt.ToString("dd/MM/yyyy")
-                        </td>
-                        <td>
-                            @data.ModifiedAt.ToString("dd/MM/yyyy")
-                        </td>
-                        <td>
-                            <a asp-controller="Position" asp-action="UpdatePosition" asp-route-pageNumber="@pageNumber" asp-route-id="@data.ID" class="btn btn-warning btn-sm text-white btn-pill w-50">Düzenle</a>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger archive-button btn-sm btn-pill w-50" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID"data-item-personal="@data.Name">Sil</button>
-                        </td>
-                    </tr>
-
-                }
+                            else if (data.Status == EntityStatusEnum.Archive)
+                            {
+                                <span class="badge bg-danger">Arşivlenmiş</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Pasif</span>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @data.CreatedAt.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @data.ModifiedAt.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        <a href="/unvan-duzenle?id=@data.ID&returnUrl=@returnUrl" class="btn btn-warning btn-sm text-white btn-pill w-50">Düzenle</a>
+                    </td>
+                    <td>
+                        <button data-deleteButton type="button" class="btn btn-danger archive-button btn-sm btn-pill w-50" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID"data-item-personal="@data.Name">Sil</button>
+                    </td>
+                </tr>
+            }
             </tbody>
 
         </table>
+         <!--Pagination-->
         <div class="border-top pt-3 mx-3">
-            @await Component.InvokeAsync("PositionPagination")
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li class="page-item first @(Model.PageNumber <= 1 ? "disabled" : "")">
+                        <a data-firstButton class="w-33 h-px-30 page-link cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-bar-to-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M10 12l10 0"></path>
+                                <path d="M10 12l4 4"></path>
+                                <path d="M10 12l4 -4"></path>
+                                <path d="M4 4l0 16"></path>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="page-item prev @(Model.PageNumber <= 1 ? "disabled" : "")">
+                        <a data-prevButton class="w-33 h-px-30 page-link cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M5 12l14 0"></path>
+                                <path d="M5 12l6 6"></path>
+                                <path d="M5 12l6 -6"></path>
+                            </svg>
+                        </a>
+                    </li>
+                    @for (int i = startPage; i <= endPage; i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a data-paginationButton="@Model.PageNumber" class="w-33 h-px-30 page-link cursor-pointer" >@i</a>
+                        </li>
+                    }
+                    <li class="page-item next @(Model.PageNumber >= Model.TotalPages ? "disabled" : "")">
+                        <a data-nextButton class="w-33 h-px-30 page-link cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M5 12l14 0"></path>
+                                <path d="M13 18l6 -6"></path>
+                                <path d="M13 6l6 6"></path>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="page-item last @(Model.PageNumber >= Model.TotalPages ? "disabled" : "")">
+                        <a data-lastButton="@Model.TotalPages" class="w-33 h-px-30 page-link cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-bar-to-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M14 12l-10 0"></path>
+                                <path d="M14 12l-4 4"></path>
+                                <path d="M14 12l-4 -4"></path>
+                                <path d="M20 4l0 16"></path>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
-
-    @await Component.InvokeAsync("AddPosition")
+    <form action="/unvan-ekle " method="post">
+        <div class="modal modal-blur fade" id="addModal" tabindex="-1" style=" padding-left: 0;" aria-hidden="true" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel1">Ünvan Ekle</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="nameBasic" class="form-label">Ünvan Adı</label>
+                                <input type="text" name="Name" id="nameBasic" class="form-control" placeholder="Ünvan Adını Giriniz!">
+                                <input type="hidden" name="returnUrl" value="@returnUrl">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            Kapat
+                        </button>
+                        <button type="submit" class="btn btn-primary">Ünvan Ekle</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
     <!--ArchiveModal-->
-    <form asp-controller="Position" asp-action="ArchivePosition" method="post">
+    <form action="/unvan-sil" method="post">
         <div class="modal modal-blur fade" id="archiveModal" tabindex="-1" role="dialog" aria-hidden="true">
-                   <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-                       <div class="modal-content">
-                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                           <div class="modal-status bg-danger"></div>
-                           <div class="modal-body text-center py-4">
-                               <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
-                               <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg>
-                               <h3>Emin Misiniz?</h3>
-                               <div class="text-muted">
-                                   Seçmiş Olduğunuz <span class="badge badge-pill" id="personalNamePlaceholder">Personel</span> Adlı Ünvan Kayıtlardan Silinecektir!!!.
-                               </div>
-                           </div>
-                           <div class="modal-footer">
-                               <div class="w-100">
-                                   <div class="row">
-                                       <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
-                                           İptal
-                                       </a>
-                                           </div>
-                                       <div class="col">
-                                           <input type="hidden" id="itemIdInput" name="id">
-                                           <input type="hidden" name="pageNumber" value="@pageNumber">
-                                           <button type="submit" class="btn btn-danger w-100" data-bs-dismiss="modal">Ünvanı Sil</button>
-                                       </div>
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-               </div>
+            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-status bg-danger"></div>
+                    <div class="modal-body text-center py-4">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>
+                        </svg>
+                        <h3>Emin Misiniz?</h3>
+                        <div class="text-muted">
+                            Seçmiş Olduğunuz <span class="badge badge-pill" id="personalNamePlaceholder">Personel</span> Adlı Ünvan Kayıtlardan Silinecektir!!!.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="w-100">
+                            <div class="row">
+                                <div class="col">
+                                    <a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                        İptal
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <input type="hidden" id="itemIdInput" name="id">
+                                    <input type="hidden" name="returnUrl" value="@returnUrl">
+                                    <button type="submit" class="btn btn-danger w-100" data-bs-dismiss="modal">Ünvanı Sil</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 
-    <script>
-            // Sil butonuna tıklanınca
-            document.querySelectorAll(".btn-danger.btn-sm").forEach(function (button) {
-                button.addEventListener("click", function () {
-                    var itemId = button.getAttribute("data-item-id"); // data-item-id değerini alın
-                    var personalName = button.getAttribute("data-item-personal");
-                    document.getElementById("itemIdInput").value = itemId; // inputa taşıyın
-                    document.getElementById("personalNamePlaceholder").textContent = personalName; // inputa taşıyın
-                });
-            });
-        
-        
-        </script>
+    @section Scripts {
+        <script src="/js/custom/position/positionList.js"></script>
+    }
 }
-

@@ -20,46 +20,50 @@ namespace UI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string search, bool passive, int pageNumber = 1)
+        public async Task<IActionResult> Index(string search, bool passive, int sayfa = 1)
         {
-            var resultSearch = await _readPositionService.GetAllPagingOrderByAsync(pageNumber, search, passive);
+            var resultSearch = await _readPositionService.GetAllPagingOrderByAsync(sayfa, search, passive);
             return View(resultSearch);
         }
         [HttpPost]
-        public async Task<IActionResult> AddPosition(PositionDto dto, int pageNumber)
+        public async Task<IActionResult> AddPosition(PositionDto dto, string returnUrl)
         {
             var result = await _writePositionService.AddAsync(dto);
+            if (!result.IsSuccess)
+            {
+                //Error Page TODO
+            }
 
-            return RedirectToAction("Index", new { pageNumber = pageNumber });
+            return Redirect("/unvanlar"+returnUrl);
         }
         [HttpGet]
-        public async Task<IActionResult> UpdatePosition(int id, int pageNumber)
+        public async Task<IActionResult> UpdatePosition(Guid id, string returnUrl)
         {
             var result = await _readPositionService.GetByIdUpdate(id);
-
+            ViewData["ReturnUrl"] = returnUrl; 
             return View(result);
         }
         [HttpPost]
-        public async Task<IActionResult> UpdatePosition(ResultWithDataDto<PositionDto> dto, int pageNumber = 1)
+        public async Task<IActionResult> UpdatePosition(ResultWithDataDto<PositionDto> dto, string returnUrl)
         {
             var result = await _writePositionService.UpdateAsync(dto.Data);
 
-            return RedirectToAction("Index", new { pageNumber = pageNumber });
+            return Redirect("/unvanlar"+returnUrl);
         }
         [HttpPost]
-        public async Task<IActionResult> ArchivePosition(int id, int pageNumber = 1)
+        public async Task<IActionResult> ArchivePosition(Guid id, string returnUrl)
         {
             var result = await _writePositionService.DeleteAsync(id);
             if (!result.IsSuccess)
             {
                 //Error Page TODO
             }
-            return RedirectToAction("Index", new { pageNumber = pageNumber });
+            return Redirect("/unvanlar"+returnUrl);
         }
         [HttpGet]
-        public async Task<IActionResult> ExportExcel()
+        public async Task<IActionResult> ExportExcel(string returnUrl)
         {
-            
+           
             var result = await _readPositionService.GetAllOrderByAsync();
             if (result.IsSuccess)
             {
@@ -71,7 +75,7 @@ namespace UI.Controllers
                 await response.Body.WriteAsync(excelData, 0, excelData.Length);
                 return new EmptyResult();
             }
-            return RedirectToAction("Index");
+            return Redirect("/unvanlar"+returnUrl);
         }
     }
 }

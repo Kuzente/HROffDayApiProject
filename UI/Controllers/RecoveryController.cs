@@ -24,51 +24,52 @@ public class RecoveryController : Controller
         _writePersonalService = writePersonalService;
     }
     [HttpGet]
-    public async Task<IActionResult> DeletedBranch(string search, int pageNumber = 1)
+    public async Task<IActionResult> DeletedBranch(string search, int sayfa = 1)
     {
-        var result = await _readBranchService.GetAllDeletedBranchPagingOrderByAsync(pageNumber, search);
+        var result = await _readBranchService.GetAllDeletedBranchPagingOrderByAsync(sayfa, search);
         return View(result);
     }
     [HttpGet]
-    public async Task<IActionResult> DeletedPosition(string search, int pageNumber = 1)
+    public async Task<IActionResult> DeletedPosition(string search, int sayfa = 1)
     {
-        var result = await _readPositionService.GetAllDeletedPositionPagingOrderByAsync(pageNumber, search);
+        var result = await _readPositionService.GetAllDeletedPositionPagingOrderByAsync(sayfa, search);
         return View(result);
     }
     [HttpGet]
-    public async Task<IActionResult> DeletedPersonal(string search, int pageNumber = 1)
+    public async Task<IActionResult> DeletedPersonal(string search, int sayfa = 1)
     {
-        var result = await _readPersonalService.GetAllDeletedPersonalPagingOrderByAsync(pageNumber, search);
+        var result = await _readPersonalService.GetAllDeletedPersonalPagingOrderByAsync(sayfa, search);
         return View(result);
     }
     [HttpGet]
-    public async Task<IActionResult> RecoverBranch(int id, int pageNumber = 1)
+    public async Task<IActionResult> RecoverBranch(Guid id,  string returnUrl) 
     {
         var result = await _writeBranchService.RecoverAsync(id);
         if (!result.IsSuccess)
         {
             // Error Page Yönlendir TODO
         }
-        return RedirectToAction("DeletedBranch",new { pageNumber = pageNumber });
+
+        return Redirect("/silinen-subeler" + returnUrl);
     }
     [HttpGet]
-    public async Task<IActionResult> RecoverPosition(int id, int pageNumber = 1)
+    public async Task<IActionResult> RecoverPosition(Guid id, string returnUrl)
     {
         var result = await _writePositionService.RecoverAsync(id);
         if (!result.IsSuccess)
         {
             // Error Page Yönlendir TODO
         }
-        return RedirectToAction("DeletedPosition",new { pageNumber = pageNumber });
+        return Redirect("/silinen-unvanlar" + returnUrl);
     }
     [HttpGet]
-    public async Task<IActionResult> RecoverPersonal(int id, int pageNumber = 1)
+    public async Task<IActionResult> RecoverPersonal(Guid id, string returnUrl)
     {
         var result = await _writePersonalService.RecoverAsync(id);
         if (!result.IsSuccess)
         {
             // Error Page Yönlendir TODO
         }
-        return RedirectToAction("DeletedPersonal",new { pageNumber = pageNumber });
+        return Redirect("/silinen-personeller" + returnUrl);
     }
 }

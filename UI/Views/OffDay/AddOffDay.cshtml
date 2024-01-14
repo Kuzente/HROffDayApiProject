@@ -1,0 +1,292 @@
+﻿@model AddOffdayDto
+
+@{
+    Layout = null;
+   
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+      
+<head>
+     <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>İzin Formu</title>
+        <!-- CSS files -->
+        <link href="/dist/css/tabler.min.css?1684106062" rel="stylesheet" />
+        <link href="/dist/css/tabler-flags.min.css?1684106062" rel="stylesheet" />
+        <link href="/dist/css/tabler-payments.min.css?1684106062" rel="stylesheet" />
+        <link href="/dist/css/tabler-vendors.min.css?1684106062" rel="stylesheet" />
+        <link href="/dist/css/demo.min.css?1684106062" rel="stylesheet" />
+        
+        <link href="/css/site.css" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- Content -->
+    <input type="hidden" name="branchId" value="@Context.Request.Query["id"]" />
+    <input id="leaveYear" type="hidden" value="" />
+    <div class="container-xxl">
+        <div class=" authentication-basic container-p-y">
+            <div class="">
+                <!-- Register Card -->
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Logo -->
+                        <div class="d-flex row text-center">
+                            <div class="col justify-content-center mb-3">
+                                <img style="width:120px;height:auto;" src="/0013478_LOGO1.jpeg" alt="Iyas Market" />
+                            </div>
+                            <!-- /Logo -->
+                        </div>
+                        <div class="d-flex row text-center">
+                            <div class="col justify-content-center mb-3">
+                                                                                
+                                <h4 class="mb-2">İzin Giriş Formu 🚀</h4>
+                                                                                                            
+                            </div>
+                        </div>
+
+                        <form id="formAuthentication" class="mb-3" asp-controller="" asp-action="" method="POST">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Adı Soyadı *</label>
+                                        <div class="input-group input-group-merge">                               
+                                            <span class="input-group-text">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                                                    <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                                                </svg>
+                                            </span>
+                                            <select asp-for="Personal_Id" id="personalSelect" class="form-select selectListTom" >
+                                                <option value="">Personel Seçiniz...</option>
+                                                @foreach (var item in Model.PersonalOffDayDtos)
+                                                {
+                                                    <option value="@item.ID">@item.NameSurname</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Şube *</label>
+                                        <div class="input-group input-group-merge">
+                                            <span class="input-group-text">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-bank" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <path d="M3 21l18 0"></path>
+                                                    <path d="M3 10l18 0"></path>
+                                                    <path d="M5 6l7 -3l7 3"></path>
+                                                    <path d="M4 10l0 11"></path>
+                                                    <path d="M20 10l0 11"></path>
+                                                    <path d="M8 14l0 3"></path>
+                                                    <path d="M12 14l0 3"></path>
+                                                    <path d="M16 14l0 3"></path>
+                                                </svg>
+                                            </span>
+                                            <input id="branchInput" asp-for="BranchName" disabled class="form-control" placeholder="">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Ünvan *</label>
+                                        <div class="input-group input-group-merge">
+                                            <span class="input-group-text">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-award" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <path d="M12 9m-6 0a6 6 0 1 0 12 0a6 6 0 1 0 -12 0"></path>
+                                                    <path d="M12 15l3.4 5.89l1.598 -3.233l3.598 .232l-3.4 -5.889"></path>
+                                                    <path d="M6.802 12l-3.4 5.89l3.598 -.233l1.598 3.232l3.4 -5.889"></path>
+                                                </svg>
+                                            </span>
+                                            <input id="positionInput" asp-for="PositionName" disabled type="text" class="form-control" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">İzin Başlangıç Tarihi</label>
+                                        <input asp-for="StartDate" class="form-control" type="date" required />
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">İzin Bitiş Tarihi</label>
+                                        <input asp-for="EndDate" class="form-control" type="date" required />
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Textarea <span class="form-label-description">56/100</span></label>
+                                        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Açıklama(Zorunlu Değil)"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">İzin Detayları</label>
+                                        <button class="btn btn-dark me-1 collapsed form-control" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                            İzin Detaylarını Gör
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="collapse" id="collapseExample" style="">
+                                        <div class="d-grid d-sm-grid p-3 border">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <label asp-for="LeaveByYear" class="form-label input-group">Yıllık İzin</label>
+                                                    <input asp-for="LeaveByYear" class="form-control" type="number" value="0" />
+                                                </div>
+                                                <div class="col-4">
+                                                    <label asp-for="LeaveByWeek" class="form-label input-group">Haftalık İzin</label>
+                                                    <input asp-for="LeaveByWeek" class="form-control" type="number" value="0" />
+                                                </div>
+                                                <div class="col-4">
+                                                    <label asp-for="LeaveByTaken" class="form-label input-group">Alacak İzin</label>
+                                                    <input asp-for="LeaveByTaken" class="form-control" type="number" value="0" />
+                                                </div>
+
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-4">
+                                                    <label asp-for="LeaveByPublicHoliday" class="form-label input-group">Resmi İzin</label>
+                                                    <input asp-for="LeaveByPublicHoliday" class="form-control" type="number" value="0" />
+                                                </div>
+                                                <div class="col-4">
+                                                    <label asp-for="LeaveByFreeDay" class="form-label input-group">Ücretsiz İzin</label>
+                                                    <input asp-for="LeaveByFreeDay" class="form-control" type="number" value="0" />
+                                                </div>
+                                                <div class="col-4">
+                                                    <label asp-for="LeaveByTravel" class="form-label input-group">Seyahat İzin</label>
+                                                    <input asp-for="LeaveByTravel" class="form-control" type="number" value="0" />
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-4">
+                                                    <label asp-for="LeaveByMarried" class="form-label input-group">Evlenme İzin</label>
+                                                    <input asp-for="LeaveByMarried" class="form-control" type="number" value="0" />
+                                                </div>
+                                                <div class="col-4">
+                                                    <label asp-for="LeaveByFather" class="form-label input-group">Babalık İzin</label>
+                                                    <input asp-for="LeaveByFather" class="form-control" type="number" value="0" />
+                                                </div>
+                                                <div class="col-4">
+                                                    <label asp-for="LeaveByDead" class="form-label input-group">Ölüm İzin</label>
+                                                    <input asp-for="LeaveByDead" class="form-control" type="number" value="0" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="d-grid w-100 mt-3">
+                                    <div id="error-message" class="alert alert-danger mt-3 text-center" style="display: none;">
+                                        Bitiş tarihi başlangıç tarihinden önce olamaz!
+                                    </div>
+                                </div>                                                                                             
+                            </div>
+                            <div class="mb-3">                               
+                            </div>                            
+                            <button type="submit" class="btn btn-primary d-grid w-100 mt-3">İzin Gir</button>                            
+                        </form>
+                    </div>
+                </div>
+                <!-- Register Card -->
+            </div>
+        </div>
+    </div>
+
+       <script src="/dist/libs/apexcharts/dist/apexcharts.min.js?1684106062" defer></script>
+       <script src="/dist/libs/jsvectormap/dist/js/jsvectormap.min.js?1684106062" defer></script>
+       <script src="/dist/libs/jsvectormap/dist/maps/world.js?1684106062" defer></script>
+       <script src="/dist/libs/jsvectormap/dist/maps/world-merc.js?1684106062" defer></script>
+       
+   <!-- Tabler Core -->
+   <script src="/dist/js/demo-theme.min.js?1684106062"></script>
+   <script src="/dist/js/tabler.min.js?1684106062" defer></script>
+   <script src="/js/tom-select.js"></script>
+<script src="/dist/js/demo.min.js?1684106062" defer></script>
+   
+<script defer>
+   document.querySelectorAll('.selectListTom').forEach((el)=>{
+   	let settings = {
+           allowEmptyOption: true,
+           plugins: ['dropdown_input']
+         
+   	};
+    	new TomSelect(el,settings);
+   });
+   </script>
+
+   
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Formu seçin
+            var form = document.getElementById("formAuthentication");
+
+            // İzin Gir butonunu seçin
+            var submitButton = form.querySelector("button[type='submit']");
+            var errorMessage = document.getElementById("error-message");
+            
+            // İzin Gir butonuna tıklanınca kontrolü yapın
+            submitButton.addEventListener("click", function (event) {
+                // Başlangıç ve bitiş tarihlerini seçin
+                var startDateInput = form.querySelector("input[name='StartDate']");
+                var endDateInput = form.querySelector("input[name='EndDate']");
+                var leaveyearInput = form.getElementById("leaveYear");
+                // Tarih değerlerini alın
+                var startDate = new Date(startDateInput.value);
+                var endDate = new Date(endDateInput.value);
+                var yearValue = leaveyearInput.Value;
+                // Tarih kontrolü yapın
+                if (endDate < startDate) {
+                    // Eğer bitiş tarihi başlangıç tarihinden önceyse uyarı verin
+                    errorMessage.style.display = "block";
+                    event.preventDefault(); // Formun gönderilmesini engelleyin
+                }
+                else if (kalanyil < yearValue) {
+                    errorMessage.style.display = "block";
+                    event.preventDefault();
+                }
+                else {
+                    // Eğer tarihler uygunsa, uyarıyı gizleyin
+                    errorMessage.style.display = "none";
+                }
+            });
+        });
+    </script>
+<script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        let kalanyil;
+        var data = @Html.Raw(Json.Serialize(Model.PersonalOffDayDtos));
+        $('#personalSelect').change(function () {
+            var selectedId = $(this).val();
+            data.forEach(function (user) {
+                if (user.id == selectedId) {
+                    // burda totalyear - usedyear işlemi yapılıp kalanyil a eşitlenecek
+                    $('#branchInput').attr('value', user.branch.name);
+                    $('#positionInput').attr('value', user.position.name);
+                    if ((user.totalyearleave - user.usedyearleave) < 1) {
+                        $('#leaveYear').attr('disabled', user.position.name);
+                    }
+                    
+                } 
+            });
+       
+        });
+    </script>
+    
+</body>
+</html>

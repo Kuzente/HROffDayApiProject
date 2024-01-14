@@ -21,9 +21,9 @@ public class WritePositionService : IWritePositionService
 		_mapper = mapper;
 		_unitOfWork = unitOfWork;
 	}
-	public async Task<IResultWithDataDto<PositionDto>> AddAsync(PositionDto writePositionDto)
+	public async Task<IResultDto> AddAsync(PositionDto writePositionDto)
 	{
-		IResultWithDataDto<PositionDto> res = new ResultWithDataDto<PositionDto>();
+        IResultDto res = new ResultDto();
 		try
 		{
 			var mapSet = _mapper.Map<Position>(writePositionDto);
@@ -31,8 +31,7 @@ public class WritePositionService : IWritePositionService
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-			var mapResult = _mapper.Map<PositionDto>(resultData);
-			res.SetData(mapResult);
+			
 		}
 		catch (Exception ex)
 		{
@@ -41,7 +40,7 @@ public class WritePositionService : IWritePositionService
 		return res;
 	}
 
-	public async Task<IResultDto> DeleteAsync(int id)
+	public async Task<IResultDto> DeleteAsync(Guid id)
 	{
 		IResultDto res = new ResultDto();
 		try
@@ -62,7 +61,7 @@ public class WritePositionService : IWritePositionService
 		return res;
 	}
 
-	public async Task<IResultDto> RecoverAsync(int id)
+	public async Task<IResultDto> RecoverAsync(Guid id)
 	{
 		IResultDto res = new ResultDto();
 		try
@@ -83,7 +82,7 @@ public class WritePositionService : IWritePositionService
 		return res;
 	}
 
-	public async Task<IResultDto> RemoveAsync(int id)
+	public async Task<IResultDto> RemoveAsync(Guid id)
 	{
 		IResultDto res = new ResultDto();
 		

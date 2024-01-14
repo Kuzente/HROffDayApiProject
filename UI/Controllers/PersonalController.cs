@@ -1,4 +1,5 @@
 ﻿using Core.DTOs.PersonalDTOs;
+using Core.DTOs.PersonalDTOs.ReadDtos;
 using Core.Querys;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.BranchServices;
@@ -25,7 +26,7 @@ namespace UI.Controllers
             _personalExcelExport = personalExcelExport;
         }
 
-        [HttpGet]
+        #region PageActions
         public async Task<IActionResult> Index([FromQuery] PersonalQuery query)
         {
             
@@ -34,22 +35,16 @@ namespace UI.Controllers
             ViewBag.Branches = await _readBranchService.GetAllJustNames();
             return View(personals);
         }
+        
+
+        #endregion
+
+        #region GET/POST Actions
         [HttpPost]
-        public async Task<IActionResult> AddPersonal(AddPersonalDto dto, int pageNumber)
+        public async Task<IActionResult> ExportExcel(PersonalQuery query, string returnUrl)
         {
-            var result = await _writePersonalService.AddAsync(dto);
-            if (!result.IsSuccess)
-            {
-                //Error Page TODO
-            }
-            return RedirectToAction("Index", new { pageNumber = pageNumber });
-        }
-        [HttpGet]
-        public async Task<IActionResult> ExportExcel([FromQuery] string query)
-        {
-          
-            PersonalQuery queryGet = System.Text.Json.JsonSerializer.Deserialize<PersonalQuery>(query);
-            var result = await _readPersonalService.GetAllWithFilterAsync(queryGet);
+            //PersonalQuery queryGet = System.Text.Json.JsonSerializer.Deserialize<PersonalQuery>(query);
+            var result = await _readPersonalService.GetAllWithFilterAsync(query);
             if (result.IsSuccess)
             {
                 byte[] excelData = _personalExcelExport.ExportToExcel(result.Data); // Entity listesini Excel verisi olarak alın.
@@ -60,8 +55,31 @@ namespace UI.Controllers
                 await response.Body.WriteAsync(excelData, 0, excelData.Length);
                 return new EmptyResult();
             }
-            return RedirectToAction("Index");
+            return Redirect("/personeller"+returnUrl);
         }
+        [HttpPost]
+        public async Task<IActionResult> GetBranchAndPositions()
+        {
+            var dto = new ReadCreatePersonalBranchesPositionsDto
+            {
+                Branches = await _readBranchService.GetAllJustNames(),
+                Positions = await _readPositionService.GetAllJustNames()
+            };
+            return Ok(dto);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddPersonal(AddPersonalDto dto)
+        {
+            var result = await _writePersonalService.AddAsync(dto);
+            if (!result.IsSuccess)
+            {
+                //Error Page TODO
+            }
+            return Ok(result);
+        }
+        #endregion
+        
+      
         
     }
 }

@@ -8,7 +8,7 @@ public interface IReadRepository<T> : IRepository<T> where T : BaseEntity
 {
 	IQueryable<T> GetAll(bool disableTracking = true, Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null);
 	Task<T> GetSingleAsync(bool disableTracking = true, Expression<Func<T, bool>>? predicate = null, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null);
-	Task<IQueryable<T>> GetByIdAsync(int id, bool disableTracking = true,
+	Task<IQueryable<T>> GetByIdAsync(Guid id, bool disableTracking = true,
 		Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null);
 	Task<bool> GetAny(Expression<Func<T, bool>>? predicate = null);
 }

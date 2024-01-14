@@ -1,7 +1,10 @@
 ﻿using System.Linq.Expressions;
 using AutoMapper;
 using Core.DTOs;
+using Core.DTOs.BaseDTOs;
 using Core.DTOs.BranchDTOs;
+using Core.DTOs.BranchDTOs.ReadDtos;
+using Core.Entities;
 using Core.Enums;
 using Core.Interfaces;
 using Data.Abstract;
@@ -36,6 +39,33 @@ public class ReadBranchService : IReadBranchService
 		throw new NotImplementedException();
 	}
 
+	public async Task<IResultWithDataDto<List<ReadBranchListDto>>> GetBranchListService(FilterDto filter)
+	{
+		IResultWithDataDto<List<ReadBranchListDto>> res = new ResultWithDataDto<List<ReadBranchListDto>>();
+		try
+		{
+			var branchQuery = _unitOfWork.ReadBranchRepository.GetAll(
+				predicate:p=> 
+					!string.IsNullOrWhiteSpace(filter.SearchTerm) 
+						? p.Name.Contains(filter.SearchTerm) && p.Status == EntityStatusEnum.Online && p.Status == EntityStatusEnum.Offline
+						: p.Status == EntityStatusEnum.Online  || p.Status == EntityStatusEnum.Offline,
+				orderBy: p=> p.OrderBy(a=>a.Name)
+				);
+			var branchesPagingList =  branchQuery.Skip((filter.PageNumber - 1) * filter.PageSize)
+				.Take(filter.PageSize).ToList();
+			var mapperResult = _mapper.Map<List<ReadBranchListDto>>(branchesPagingList);
+			res.SetData(mapperResult);
+			res.SetTotalRecords( branchQuery.Count());
+			res.SetTotalPages(Convert.ToInt32(Math.Ceiling((double)res.TotalRecords / (double)filter.PageSize)));
+		}
+		catch (Exception e)
+		{
+			res.SetStatus(false).SetErr(e.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+
+		return res;
+	}
+
 	public async Task<IResultWithDataDto<List<BranchDto>>> GetAllOrderByAsync()
 	{
 		IResultWithDataDto<List<BranchDto>> res = new ResultWithDataDto<List<BranchDto>>();
@@ -47,6 +77,7 @@ public class ReadBranchService : IReadBranchService
 				));
 			var mapData = _mapper.Map<List<BranchDto>>(resultData.ToList());
 			res.SetData(mapData);
+			res.SetTotalRecords(resultData.Count());
 		}
 		catch (Exception ex)
 		{
@@ -112,7 +143,7 @@ public class ReadBranchService : IReadBranchService
 		return res;
 	}
 
-	public async Task<IResultWithDataDto<BranchDto>> GetByIdUpdate(int id)
+	public async Task<IResultWithDataDto<BranchDto>> GetByIdUpdate(Guid id)
     {
         IResultWithDataDto<BranchDto> res = new ResultWithDataDto<BranchDto>();
         try
@@ -136,5 +167,13 @@ public class ReadBranchService : IReadBranchService
 		);
         return entities.ToList();
 
+    }
+
+    public async Task<IQueryable> GetBranchesOdataService()
+    {
+	    var query = _unitOfWork.ReadBranchRepository.GetAll(predicate: p =>
+		    p.Status == EntityStatusEnum.Online || p.Status == EntityStatusEnum.Offline);
+	    
+	    return query;
     }
 }

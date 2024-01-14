@@ -51,7 +51,7 @@ public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
 		}
 	}
 
-	public async Task<bool> DeleteByIdAsync(int id)
+	public async Task<bool> DeleteByIdAsync(Guid id)
 	{
 		try
 		{ 
@@ -99,7 +99,7 @@ public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
 		}
 	}
 
-	public async Task<bool> RemoveByIdAsync(int id)
+	public async Task<bool> RemoveByIdAsync(Guid id)
 	{
 		try
 		{
@@ -128,14 +128,14 @@ public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
 		}
 	}
 
-	public async Task<bool> RecoverAsync(int id)
+	public async Task<bool> RecoverAsync(Guid id)
 	{
 		try
 		{ 
 			var entity = await _context.FindAsync<T>(id);
 			if (entity != null)
 			{
-				entity.Status = Core.Enums.EntityStatusEnum.Online;
+				entity.Status = Core.Enums.EntityStatusEnum.Offline;
 				entity.DeletedAt = DateTime.MinValue;
 				entity.ModifiedAt = DateTime.Now;
 				_ = await Task.Run(()=> _context.Update(entity));

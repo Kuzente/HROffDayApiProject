@@ -8,7 +8,7 @@ namespace Core.DTOs.BranchDTOs
 {
     public class BranchNameDto
     {
-        public int ID { get; set; }
+        public Guid ID { get; set; }
         public string Name { get; set; }
     }
 }

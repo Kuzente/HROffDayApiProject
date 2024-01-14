@@ -36,18 +36,35 @@ public class ExcelPersonalAddrange
                 {
                     Personal personel = new Personal();
 
-            
-                    personel.NameSurname = worksheet.Cells[row, 1].GetValue<string>();
-                    personel.Branch_Id = worksheet.Cells[row, 2].GetValue<int>();
-                    personel.RegistirationNumber = worksheet.Cells[row, 3].GetValue<string>();
-                    personel.Position_Id = worksheet.Cells[row, 4].GetValue<int>();
-                    personel.StartJobDate = worksheet.Cells[row, 5].GetValue<DateTime>();
-                    personel.Gender = worksheet.Cells[row, 6].GetValue<string>();
-                    personel.BirthDate = worksheet.Cells[row, 7].GetValue<DateTime>();
-                    personel.IdentificationNumber = worksheet.Cells[row, 8].GetValue<string>();
-                    personel.TotalYearLeave = worksheet.Cells[row, 9].GetValue<int>();
-                    personel.UsedYearLeave = worksheet.Cells[row, 10].GetValue<int>();
+                    personel.Branch_Id = worksheet.Cells[row, 1].GetValue<Guid>();
+                    personel.Position_Id = worksheet.Cells[row, 2].GetValue<Guid>();
+                    personel.NameSurname = worksheet.Cells[row, 3].GetValue<string>();
+                    personel.StartJobDate = worksheet.Cells[row, 4].GetValue<DateTime>();
+                    personel.BirthDate = worksheet.Cells[row, 5].GetValue<DateTime>();
+                    personel.PersonalDetails.BirthPlace = worksheet.Cells[row, 6].GetValue<string>();
+                    personel.IdentificationNumber = worksheet.Cells[row, 7].GetValue<string>();
+                    personel.RegistirationNumber = worksheet.Cells[row, 8].GetValue<string>();
+                    personel.PersonalDetails.SskNumber = worksheet.Cells[row, 9].GetValue<string>();
+                    personel.PersonalDetails.SgkCode = worksheet.Cells[row, 10].GetValue<string>();
                     personel.RetiredOrOld = worksheet.Cells[row, 11].GetValue<bool>();
+                    personel.PersonalDetails.Handicapped = worksheet.Cells[row, 12].GetValue<bool>();
+                    personel.Gender = worksheet.Cells[row, 13].GetValue<string>();
+                    personel.PersonalDetails.Salary = worksheet.Cells[row, 14].GetValue<double>();
+                    personel.PersonalDetails.MotherName = worksheet.Cells[row, 15].GetValue<string>();
+                    personel.PersonalDetails.FatherName = worksheet.Cells[row, 16].GetValue<string>();
+                    personel.PersonalDetails.EducationStatus = worksheet.Cells[row, 17].GetValue<string>();
+                    personel.PersonalDetails.GraduatedSchool = worksheet.Cells[row, 18].GetValue<string>();
+                    personel.Phonenumber = worksheet.Cells[row, 19].GetValue<string>();
+                    personel.PersonalDetails.MaritalStatus = worksheet.Cells[row, 20].GetValue<string>();
+                    personel.PersonalDetails.BodySize = worksheet.Cells[row, 21].GetValue<string>();
+                    personel.PersonalDetails.BloodGroup = worksheet.Cells[row, 22].GetValue<string>();
+                    personel.PersonalDetails.BankAccount = worksheet.Cells[row, 23].GetValue<string>();
+                    personel.PersonalDetails.IBAN = worksheet.Cells[row, 24].GetValue<string>();
+                    personel.PersonalDetails.Address = worksheet.Cells[row, 25].GetValue<string>();
+                    
+                    
+                    personel.TotalYearLeave = worksheet.Cells[row, 26].GetValue<int>();
+                    personel.UsedYearLeave = worksheet.Cells[row, 27].GetValue<int>();
                     personelListesi.Add(personel);
                 }
                 stream.Dispose();

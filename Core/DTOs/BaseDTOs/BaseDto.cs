@@ -6,7 +6,7 @@ namespace Core.DTOs.BaseDTOs;
 
 public class BaseDto : IBaseDto
 {
-    public int ID { get; set; }
+    public Guid ID { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime ModifiedAt { get; set; }
     public DateTime DeletedAt { get; set; }

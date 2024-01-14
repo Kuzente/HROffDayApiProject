@@ -1,6 +1,10 @@
 ﻿using System.Linq.Expressions;
 using AutoMapper;
+using Core.DTOs;
 using Core.DTOs.OffDayDTOs;
+using Core.DTOs.PassivePersonalDtos;
+using Core.Enums;
+using Core.Interfaces;
 using Data.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Services.Abstract.OffDayServices;

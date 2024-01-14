@@ -4,23 +4,20 @@
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
-    var pageNumber = Convert.ToInt32(Context.Request.Query["pageNumber"]);
-    if (pageNumber == 0)
-    {
-        pageNumber = 1;
-    }
 }
 @if (!Model.IsSuccess)
 {
-    <div class="text-center">
-        <h1 class="display-4">Üzgünüz</h1>
-        <p>@Model.Message</p>
-        <p>@Model.Err</p>
+    <div class="card container-xl mt-3">
+        <div class="text-center p-5">
+            <h1 class="display-4">Üzgünüz</h1>
+            <p>@Model.Message</p>
+            <p>@Model.Err</p>
+        </div>
     </div>
 }
 else
 {
-    <form method="post" asp-controller="Branch" asp-action="UpdateBranch">
+    <form method="post" action="/sube-duzenle">
         <div class="page-header d-print-none">
             <div class="container-xl">
                 <div class="row g-2 align-items-center">
@@ -29,7 +26,7 @@ else
                         <div class="page-pretitle">
                             Düzenleme Sayfası
                         </div>
-                        
+
                     </div>
                     <!-- Page title actions -->
                     <div class="col-auto ms-auto d-print-none">
@@ -39,10 +36,13 @@ else
                                     Boş Kutu
                                 </a>
                             </span>
-                            
+
                             <button type="submit" class="btn btn-warning text-white">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path></svg>
-                                Şubeyi Düzenle</button>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path>
+                                </svg>
+                                Şubeyi Düzenle
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -63,37 +63,37 @@ else
                     <td>
                         <input class="form-control" asp-for="Data.Name"/>
                         <input type="hidden" asp-for="Data.ID"/>
-                        <input type="hidden" name="pageNumber" value="@pageNumber"/>
-                        
+                        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]"/>
+
                     </td>
                     <td>
                         <div class="btn-group w-100" role="group">
-                                <div class="form-selectgroup form-selectgroup-boxes d-flex">
-                                    <label class="form-selectgroup-item flex-fill">
-                                        <input type="radio" value="1" asp-for="Data.Status" class="form-selectgroup-input" checked="@(Model.Data.Status == EntityStatusEnum.Offline)">
-                                        <div class="form-selectgroup-label d-flex align-items-center p-3">
-                                            <div class="me-3">
-                                                <span class="form-selectgroup-check"></span>
-                                            </div>
-                                            <div>
-                                                <strong>Pasif</strong>
-                                            </div>
+                            <div class="form-selectgroup form-selectgroup-boxes d-flex">
+                                <label class="form-selectgroup-item flex-fill">
+                                    <input type="radio" value="1" asp-for="Data.Status" class="form-selectgroup-input" checked="@(Model.Data.Status == EntityStatusEnum.Offline)">
+                                    <div class="form-selectgroup-label d-flex align-items-center p-3">
+                                        <div class="me-3">
+                                            <span class="form-selectgroup-check"></span>
                                         </div>
-                                    </label>
-                                    <label class="form-selectgroup-item flex-fill">
-                                        <input type="radio"  value="0" asp-for="Data.Status" class="form-selectgroup-input"
-                                               checked="@(Model.Data.Status == EntityStatusEnum.Online)">
-                                        <div class="form-selectgroup-label d-flex align-items-center p-3">
-                                            <div class="me-3">
-                                                <span class="form-selectgroup-check"></span>
-                                            </div>
-                                            <div>
-                                                <strong>Aktif</strong>
-                                            </div>
+                                        <div>
+                                            <strong>Pasif</strong>
                                         </div>
-                                    </label>
-                                </div>
+                                    </div>
+                                </label>
+                                <label class="form-selectgroup-item flex-fill">
+                                    <input type="radio" value="0" asp-for="Data.Status" class="form-selectgroup-input"
+                                           checked="@(Model.Data.Status == EntityStatusEnum.Online)">
+                                    <div class="form-selectgroup-label d-flex align-items-center p-3">
+                                        <div class="me-3">
+                                            <span class="form-selectgroup-check"></span>
+                                        </div>
+                                        <div>
+                                            <strong>Aktif</strong>
+                                        </div>
+                                    </div>
+                                </label>
                             </div>
+                        </div>
                     </td>
                     <td>
                         @Model.Data.CreatedAt.ToString("dd/MM/yyyy")

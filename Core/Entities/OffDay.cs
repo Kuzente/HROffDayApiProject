@@ -40,7 +40,7 @@ public partial class OffDay : BaseEntity
 public partial class OffDay
 {
 	[Required]
-	public int Personal_Id { get; set; }
+	public Guid Personal_Id { get; set; }
 	[ForeignKey(nameof(Personal_Id)),Required]
 	public Personal Personal { get; set; }
 }

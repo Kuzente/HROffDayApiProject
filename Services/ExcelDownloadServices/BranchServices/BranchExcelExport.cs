@@ -18,7 +18,7 @@ public class BranchExcelExport
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Subeler");
 
                 // Sütun başlıklarını ekleyin.
-                worksheet.Cells[1, 1].Value = "Sql ID";
+                worksheet.Cells[1, 1].Value = "Şube Kodu";
                 worksheet.Cells[1, 2].Value = "Şube Adı";
                 
                 

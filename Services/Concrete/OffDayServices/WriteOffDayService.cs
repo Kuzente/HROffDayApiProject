@@ -21,9 +21,9 @@ public class WriteOffDayService : IWriteOffDayService
 		_mapper = mapper;
 	}
 
-	public async Task<IResultWithDataDto<ReadOffDayDto>> AddAsync(WriteOffDayDto writeDto)
+	public async Task<IResultDto> AddAsync(AddOffdayDto writeDto)
 	{
-		IResultWithDataDto<ReadOffDayDto> res = new ResultWithDataDto<ReadOffDayDto>();
+        IResultDto res = new ResultDto();
 		try
 		{
 			var mapSet = _mapper.Map<OffDay>(writeDto);
@@ -32,8 +32,7 @@ public class WriteOffDayService : IWriteOffDayService
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-			var mapResult = _mapper.Map<ReadOffDayDto>(resultData);
-			res.SetData(mapResult);
+			
 		}
 		catch (Exception ex)
 		{
@@ -42,7 +41,7 @@ public class WriteOffDayService : IWriteOffDayService
 		return res;
 	}
 
-	public async Task<IResultDto> DeleteAsync(int id)
+	public async Task<IResultDto> DeleteAsync(Guid id)
 	{
 		IResultDto res = new ResultDto();
 		
@@ -64,12 +63,12 @@ public class WriteOffDayService : IWriteOffDayService
 		return res;
 	}
 
-	public Task<IResultDto> RecoverAsync(int id)
+	public Task<IResultDto> RecoverAsync(Guid id)
 	{
 		throw new NotImplementedException();
 	}
 
-	public async Task<IResultDto> RemoveAsync(int id)
+	public async Task<IResultDto> RemoveAsync(Guid id)
 	{
 		IResultDto res = new ResultDto();
 		
@@ -91,7 +90,7 @@ public class WriteOffDayService : IWriteOffDayService
 		return res;
 	}
 
-	public async Task<bool> ChangeOffDayStatus(int id,bool isApproved)
+	public async Task<bool> ChangeOffDayStatus(Guid id,bool isApproved)
 	{
 		var findData = await _unitOfWork.ReadOffDayRepository.GetByIdAsync(id);
 		if (findData.FirstOrDefault() is null) return false;

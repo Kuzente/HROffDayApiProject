@@ -4,19 +4,15 @@ using Core.DTOs.PositionDTOs;
 
 namespace Core.DTOs.PersonalDTOs;
 
-public class PersonalDto : ReadBaseDto
+public class PersonalDto : BaseDto
 {
-		
 	public string NameSurname { get; set; }
-		
 	public DateTime StartJobDate { get; set; }
 	public bool RetiredOrOld { get; set; }
-	
 	public string Gender { get; set; }
-	
 	public string RegistirationNumber { get; set; } 
-	public int Branch_Id { get; set; }
-	public int Position_Id { get; set; }
+	public Guid Branch_Id { get; set; }
+	public Guid Position_Id { get; set; }
 	public BranchNameDto Branch { get; set; }
 	public PositionNameDto Position { get; set; }
 	public int TotalYearLeave { get; set; } 

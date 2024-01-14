@@ -117,7 +117,7 @@ public class ReadPositionService : IReadPositionService
 	    return res;
     }
 
-    public async Task<IResultWithDataDto<PositionDto>> GetByIdUpdate(int id)
+    public async Task<IResultWithDataDto<PositionDto>> GetByIdUpdate(Guid id)
     {
         IResultWithDataDto<PositionDto> res = new ResultWithDataDto<PositionDto>();
         try
@@ -139,7 +139,7 @@ public class ReadPositionService : IReadPositionService
 	        .GetAll(predicate: p=> p.Status == EntityStatusEnum.Online,
 		        orderBy: o=> o.OrderBy(p=> p.Name))
          .Select(p => new PositionNameDto { ID = p.ID, Name = p.Name })
-        );       
+        );
         return entities.ToList();
        
     }

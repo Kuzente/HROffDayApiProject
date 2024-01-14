@@ -21,9 +21,9 @@ public class WriteBranchService : IWriteBranchService
 		_unitOfWork = unitOfWork;
 	}
 
-	public async Task<IResultWithDataDto<BranchDto>> AddAsync(BranchDto writeBranchDto)
+	public async Task<IResultDto> AddAsync(BranchDto writeBranchDto)
 	{
-		IResultWithDataDto<BranchDto> res = new ResultWithDataDto<BranchDto>();
+        IResultDto res = new ResultDto();
 		try
 		{
 			var mapSet = _mapper.Map<Branch>(writeBranchDto);
@@ -32,8 +32,7 @@ public class WriteBranchService : IWriteBranchService
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-			var mapResult = _mapper.Map<BranchDto>(resultData);
-			res.SetData(mapResult);
+			
 
 		}
 		catch (Exception ex)
@@ -44,7 +43,7 @@ public class WriteBranchService : IWriteBranchService
 		return res;
 	}
 
-	public async Task<IResultDto> DeleteAsync(int id)
+	public async Task<IResultDto> DeleteAsync(Guid id)
 	{
 		IResultDto res = new ResultDto();
 		
@@ -66,7 +65,7 @@ public class WriteBranchService : IWriteBranchService
 		return res;
 	}
 
-	public async Task<IResultDto> RecoverAsync(int id)
+	public async Task<IResultDto> RecoverAsync(Guid id)
 	{
 		IResultDto res = new ResultDto();
 		try
@@ -87,7 +86,7 @@ public class WriteBranchService : IWriteBranchService
 		return res;
 	}
 
-	public async Task<IResultDto> RemoveAsync(int id)
+	public async Task<IResultDto> RemoveAsync(Guid id)
 	{
 		IResultDto res = new ResultDto();
 		

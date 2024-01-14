@@ -3,10 +3,10 @@ using Core.Enums;
 
 namespace Core.DTOs.OffDayDTOs;
 
-public class WriteOffDayDto :  WriteBaseDto
+public  class WriteOffDayDto : BaseDto
 {
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public OffDayStatusEnum OffDayStatus { get; set; }
-    public int Personal_Id { get; set; }
+    public Guid Personal_Id { get; set; }
 }

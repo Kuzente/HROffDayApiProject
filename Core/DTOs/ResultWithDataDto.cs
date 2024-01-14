@@ -8,6 +8,8 @@ public class ResultWithDataDto<T> : IResultWithDataDto<T>
 	public string Err { get; set; } = "OK";
 	public string Message { get; set; } = "OK";
 	public T Data { get; set; }
+	public int TotalRecords { get; set; } 
+	public int TotalPages { get; set; }
 	public IResultWithDataDto<T> SetData(T data)
 	{
 		Data = data;
@@ -26,6 +28,17 @@ public class ResultWithDataDto<T> : IResultWithDataDto<T>
 	public IResultWithDataDto<T> SetStatus(bool statusValue = true)
 	{
 		IsSuccess = statusValue;
+		return this;
+	}
+	public IResultWithDataDto<T> SetTotalRecords(int totalRecords = 0)
+	{
+		TotalRecords = totalRecords;
+		return this;
+	}
+
+	public IResultWithDataDto<T> SetTotalPages(int totalPages = 0)
+	{
+		TotalPages = totalPages;
 		return this;
 	}
 }

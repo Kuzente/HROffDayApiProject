@@ -33,7 +33,7 @@ public class ReadRepository<T> : IReadRepository<T> where T : BaseEntity
 		return await Task.Run(() => query.Any(predicate));
 	}
 
-	public async Task<IQueryable<T>> GetByIdAsync(int id, bool disableTracking = true, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
+	public async Task<IQueryable<T>> GetByIdAsync(Guid id, bool disableTracking = true, Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
 	{
 		IQueryable<T> query = _context.Set<T>();
 		if (disableTracking)

@@ -34,15 +34,17 @@ public partial class Personal : BaseEntity
 public partial class Personal
 {
 	[Required]
-	public int Branch_Id { get; set; }
+	public Guid Branch_Id { get; set; }
 	[ForeignKey(nameof(Branch_Id))]
 	public Branch Branch { get; set; }
 	[Required]
-	public int Position_Id { get; set; }
+	public Guid Position_Id { get; set; }
 	[ForeignKey(nameof(Position_Id))]
 	public Position Position { get; set; }
-	// public int PersonalDetails_Id { get; set; }
-	// [ForeignKey(nameof(PersonalDetails_Id))]
-	// public PersonalDetails PersonalDetails { get; set; }
+	
+	public ICollection<OffDay> OffDays { get; set; }
+	[Required]
+	public Guid PersonalDetails_Id { get; set; }
+	public PersonalDetails PersonalDetails { get; set; }
 	
 }

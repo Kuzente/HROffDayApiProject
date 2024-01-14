@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Core.DTOs.PersonalDTOs.WriteDtos;
+using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.BranchServices;
 using Services.Abstract.PersonalServices;
 using Services.Abstract.PositionServices;
@@ -19,26 +20,26 @@ public class PersonalDetailController : Controller
         _readPersonalService = readPersonalService;
         _writePersonalService = writePersonalService;
     }
-    [HttpGet]
+
+    #region PageActions
     public async Task<IActionResult> Edit(int id)
     {
-        var result = await _readPersonalService.GetByIdDetailedPersonal(id);
-        ViewBag.Positions = await _readPositionService.GetAllJustNames();
-        ViewBag.Branches = await _readBranchService.GetAllJustNames();
-        return View(result);
-    }
-    [HttpPost]
-    public async Task<IActionResult> Edit()
-    {
-        
-        ViewBag.Positions = await _readPositionService.GetAllJustNames();
-        ViewBag.Branches = await _readBranchService.GetAllJustNames();
         return View();
     }
-    [HttpPost]
-    public async Task<IActionResult> ArchivePersonal(int id)
+    
+
+    #endregion
+
+    #region Get/Post Actions
+    public async Task<IActionResult> EditAjax(Guid id)
     {
-        var result = await _writePersonalService.DeleteAsync(id);
+        var result = await _readPersonalService.GetUpdatePersonal(id);
+        return Ok(result);
+    }
+    [HttpPost]
+    public async Task<IActionResult> Edit(WriteUpdatePersonalDto dto)
+    {
+        var result = await _writePersonalService.UpdateAsync(dto);
         if (!result.IsSuccess)
         {
             //Error Page Yönlendir TODO
@@ -47,14 +48,29 @@ public class PersonalDetailController : Controller
         return RedirectToAction("Index", "Personal");
     }
     [HttpPost]
-    public async Task<IActionResult> ChangeStatus(int id)
+    public async Task<IActionResult> ArchivePersonal(Guid id)
+    {
+        var result = await _writePersonalService.DeleteAsync(id);
+        if (!result.IsSuccess)
+        {
+            //Error Page Yönlendir TODO
+        }
+
+        return Ok(result);
+    }
+    [HttpPost]
+    public async Task<IActionResult> ChangeStatus(Guid id)
     {
         var result = await _writePersonalService.ChangeStatus(id);
         if (!result.IsSuccess)
         {
             //Error Page Yönlendir TODO
         }
-
-        return RedirectToAction("Edit",new { id = id });
+        return Ok(result);
     }
+
+    #endregion
+  
+   
+   
 }

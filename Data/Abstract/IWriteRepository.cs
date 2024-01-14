@@ -13,19 +13,19 @@ public interface IWriteRepository<T> : IRepository<T> where T : BaseEntity
 	List<T> UpdateRange(List<T> entities);
 	#endregion
 	#region Kaydı durum değerini silindi olarak İşaretleme işlemleri
-	Task<bool> DeleteByIdAsync(int id);
+	Task<bool> DeleteByIdAsync(Guid id);
 	Task<bool> DeleteAsync(T entity);
 	Task<bool> DeleteRangeAsync(List<T> entities);
 	#endregion
 	#region Kalıcı olarak silme işlemleri
-	Task<bool> RemoveByIdAsync(int id);
+	Task<bool> RemoveByIdAsync(Guid id);
 	Task<bool> RemoveAsync(T entity);
 	Task<bool> RemoveRangeAsync(List<T> entities);
 	#endregion
 
 	#region Silinen değeri geri döndürme İşlemi
 
-	Task<bool> RecoverAsync(int id);
+	Task<bool> RecoverAsync(Guid id);
 
 	#endregion
 }
