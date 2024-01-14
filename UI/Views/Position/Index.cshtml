@@ -192,7 +192,7 @@ else
 
         </table>
          <!--Pagination-->
-        <div class="border-top pt-3 mx-3">
+        <div class="border-top pt-3 mx-3 d-flex justify-content-end">
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li class="page-item first @(Model.PageNumber <= 1 ? "disabled" : "")">
@@ -247,7 +247,7 @@ else
             </nav>
         </div>
     </div>
-    <form action="/unvan-ekle " method="post">
+    <form id="addPositionForm" action="/unvan-ekle " method="post">
         <div class="modal modal-blur fade" id="addModal" tabindex="-1" style=" padding-left: 0;" aria-hidden="true" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">

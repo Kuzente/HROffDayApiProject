@@ -1,4 +1,8 @@
 ﻿document.addEventListener('DOMContentLoaded',function () {
+    $('#addModal').on('hidden.bs.modal', function (e) {
+        // Form alanınızı resetleme
+        $('#addPositionForm')[0].reset();
+    });
     // Sil butonuna tıklanınca
     $('[data-deleteButton]').on('click',function () {
         $('#itemIdInput').val($(this).data("item-id"));

@@ -22,6 +22,9 @@ public class PassivePersonalController : Controller
         _readPositionService = readPositionService;
         _passivePersonalExcelExport = passivePersonalExcelExport;
     }
+
+    #region PageActions
+
     [HttpGet]
     public async Task<IActionResult> Index([FromQuery] PersonalQuery query)
     {
@@ -31,10 +34,14 @@ public class PassivePersonalController : Controller
         ViewBag.Branches = await _readBranchService.GetAllJustNames();
         return View(personals);
     }
+
+    #endregion
+
+    #region Get/Post Actions
+
     [HttpPost]
     public async Task<IActionResult> ExportExcel(PersonalQuery query,string returnUrl)
     {
-          
         
         var result = await _readPersonalService.PassiveGetAllWithFilterAsync(query);
         if (result.IsSuccess)
@@ -50,4 +57,6 @@ public class PassivePersonalController : Controller
 
         return Redirect("cikarilan-personeller" + returnUrl);
     }
+
+    #endregion
 }
