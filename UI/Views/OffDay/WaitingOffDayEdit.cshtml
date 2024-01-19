@@ -1,0 +1,222 @@
+﻿@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IResultWithDataDto<ReadWaitingOffDayEditDto>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+@if (!Model.IsSuccess)
+{
+    <div class="card container-xl mt-3">
+        <div class="text-center p-5">
+            <h1 class="display-4">Üzgünüz</h1>
+            <p>@Model.Message</p>
+            <p>@Model.Err</p>
+        </div>
+    </div>
+}
+else
+{
+    <form id="formAuthentication" action="/izin-duzenle" method="post">
+        <div class="page-header d-print-none">
+            <div class="container-xl">
+                <div class="row g-2 align-items-center">
+                    <div class="col">
+                        <!-- Page pre-title -->
+                        <h2 class="page-title">
+                            Bekleyen İzni Düzenle
+                        </h2>
+                    </div>
+                    <!-- Page title actions -->
+                    <div class="col-auto ms-auto d-print-none">
+                        <div class="btn-list">
+                            <span class="d-none d-sm-inline">
+                                <a href="#" class="btn">
+                                    Boş Kutu
+                                </a>
+                            </span>
+
+                            <button data-id="submitButton" type="button" class="btn btn-warning text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path>
+                                </svg>
+                                İzni Düzenle
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-xl mt-3">
+            <div class="authentication-basic container">
+                <div class="card p-5">
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label class="form-label required">Adı Soyadı</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                                        </svg>
+                                    </span>
+                                    @* <select name="ID" id="personalSelect" class="form-select"> *@
+                                    @*     <option data-positionName="" value="">Personel Seçiniz...</option> *@
+                                    @*     @foreach (var item in Model.Data) *@
+                                    @*     { *@
+                                    @*         <option data-YearLeave="@(item.TotalYearLeave - item.UsedYearLeave)" data-usedYearLeave="@item.UsedYearLeave" data-positionName="@item.PositionName" value="@item.ID">@item.NameSurname</option> *@
+                                    @*     } *@
+                                    @* </select> *@
+                                    <input class="form-control" type="text" disabled value="@Model.Data.Personal.NameSurname"/>
+                                    <input type="hidden" name="Personal_Id" value="@Model.Data.Personal_Id">
+                                    <input type="hidden" name="CountLeave" >
+                                    <input type="hidden" name="CreatedAt" value="@Model.Data.CreatedAt" >
+                                    <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" >
+                                    <input type="hidden" name="ID" value="@Model.Data.ID" >
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label required">Mevcut Yıllık İzin Miktarı</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-123" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 10l2 -2v8"/><path d="M9 8h3a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 0 -1 1v2a1 1 0 0 0 1 1h3"/><path d="M17 8h2.5a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1 -1.5 1.5h-1.5h1.5a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1 -1.5 1.5h-2.5"/>
+                                        </svg>
+                                    </span>
+                                    <input id="personalTotalYearLeaveCount" value="@(Model.Data.Personal.TotalYearLeave - Model.Data.Personal.UsedYearLeave)" disabled type="number" class="form-control" placeholder="">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label class="form-label required">Şube</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-bank" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M3 21l18 0"></path>
+                                            <path d="M3 10l18 0"></path>
+                                            <path d="M5 6l7 -3l7 3"></path>
+                                            <path d="M4 10l0 11"></path>
+                                            <path d="M20 10l0 11"></path>
+                                            <path d="M8 14l0 3"></path>
+                                            <path d="M12 14l0 3"></path>
+                                            <path d="M16 14l0 3"></path>
+                                        </svg>
+                                    </span>
+                                    <input id="branchInput" name="BranchName" value="@Model.Data.Personal.Branch.Name" disabled class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label required">Ünvan</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-award" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M12 9m-6 0a6 6 0 1 0 12 0a6 6 0 1 0 -12 0"></path>
+                                            <path d="M12 15l3.4 5.89l1.598 -3.233l3.598 .232l-3.4 -5.889"></path>
+                                            <path d="M6.802 12l-3.4 5.89l3.598 -.233l1.598 3.232l3.4 -5.889"></path>
+                                        </svg>
+                                    </span>
+                                    <input id="positionInput" name="PositionName" value="@Model.Data.Personal.Position.Name" disabled type="text" class="form-control" placeholder="">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label class="form-label required">İzin Başlangıç Tarihi</label>
+                                <input name="StartDate" value="@Model.Data.StartDate.ToString("yyyy-M-d", new CultureInfo("tr-TR"))" class="form-control" type="date" placeholder="İzin Başlangıç Tarihini Seçiniz" required/>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label required">İzin Bitiş Tarihi</label>
+                                <input name="EndDate" value="@Model.Data.EndDate.ToString("yyyy-M-d", new CultureInfo("tr-TR"))" class="form-control" type="date" placeholder="İzin Bitiş Tarihini Seçiniz" required/>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-12">
+
+                                <label class="form-label">Açıklama <span class="form-label-description">56/100</span></label>
+                                <textarea name="Description" class="form-control" rows="3" placeholder="Açıklama(Zorunlu Değil)">@Model.Data.Description</textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="form-label required">İzin Detayları</label>
+
+                            <div class="col-12">
+                                <div id="offDayDetails" class="d-grid d-sm-grid p-3 border">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <label class="form-label input-group">
+                                                Yıllık İzin
+                                            </label>
+                                            <input max="" name="LeaveByYear" class="form-control" type="number" value="@Model.Data.LeaveByYear"/>
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="form-label input-group">Haftalık İzin</label>
+                                            <input name="LeaveByWeek" class="form-control" type="number" value="@Model.Data.LeaveByWeek"/>
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="form-label input-group">Alacak İzin</label>
+                                            <input name="LeaveByTaken" class="form-control" type="number" value="@Model.Data.LeaveByTaken"/>
+                                        </div>
+
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-4">
+                                            <label class="form-label input-group">Resmi İzin</label>
+                                            <input name="LeaveByPublicHoliday" class="form-control" type="number" value="@Model.Data.LeaveByPublicHoliday"/>
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="form-label input-group">Ücretsiz İzin</label>
+                                            <input name="LeaveByFreeDay" class="form-control" type="number" value="@Model.Data.LeaveByFreeDay"/>
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="form-label input-group">Seyahat İzin</label>
+                                            <input name="LeaveByTravel" class="form-control" type="number" value="@Model.Data.LeaveByTravel"/>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col">
+                                            <label class="form-label input-group">Evlenme / Babalık / Ölüm İzni</label>
+                                            <select data-married="@Model.Data.LeaveByMarried" data-father="@Model.Data.LeaveByFather" data-dead="@Model.Data.LeaveByDead" name="LeaveByMarriedFatherDead" id="LeaveByMarriedFatherDead" multiple placeholder="Evlenme / Babalık / Ölüm İzni İçin Seçiniz." class="form-select">
+                                                <option value="LeaveByMarried">Evlenme İzni (3 Gün)</option>
+                                                <option value="LeaveByFather">Babalık İzni (5 Gün)</option>
+                                                <option value="LeaveByDead">Ölüm İzni (3 Gün)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div class="d-grid w-100">
+                                    <div id="error-message" class="alert alert-danger mt-3 text-center d-none">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button data-id="submitButton" type="button" class="btn btn-warning text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path>
+                            </svg>
+                            İzni Düzenle
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </form>
+    @section Scripts {
+        <script src="/js/custom/offday/editOffDay.js"></script>
+    }
+}

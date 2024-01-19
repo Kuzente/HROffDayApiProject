@@ -24,6 +24,10 @@ namespace UI.Controllers
         }
 
         #region PageActions
+        /// <summary>
+        /// Ünvanlar Listesi Sayfası
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index(string search, bool passive, int sayfa = 1)
         {
             var resultSearch = await _readPositionService.GetPositionListService(sayfa, search, passive);
@@ -33,7 +37,10 @@ namespace UI.Controllers
             }
             return View(resultSearch);
         }
-        
+        /// <summary>
+        /// Ünvan Düzenle Sayfası 
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> UpdatePosition(Guid id, string returnUrl)
         {
             var result = await _readPositionService.GetUpdatePositionService(id);
@@ -47,24 +54,10 @@ namespace UI.Controllers
         #endregion
 
         #region Get/PostActions
-        public async Task<IActionResult> ExportExcel(PositionQuery query,string returnUrl)
-        {
-           
-            var result = await _readPositionService.GetExcelPositionListService(query);
-            if (result.IsSuccess)
-            {
-                byte[] excelData = _positionExcelExport.ExportToExcel(result.Data); // Entity listesini Excel verisi olarak alın.
-
-                var response = HttpContext.Response;
-                response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                response.Headers.Add("Content-Disposition", "attachment; filename=Unvanlar.xlsx");
-                await response.Body.WriteAsync(excelData, 0, excelData.Length);
-                return new EmptyResult();
-            }
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-            return Redirect("/unvanlar"+returnUrl);
-        }
-        
+        /// <summary>
+        /// Ünvan Ekle Post Metodu
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> AddPosition(PositionDto dto, string returnUrl)
         {
@@ -80,8 +73,10 @@ namespace UI.Controllers
 
             return Redirect("/unvanlar"+returnUrl);
         }
-        
-       
+        /// <summary>
+        /// Ünvan Düzenle Post Metodu
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> UpdatePosition(ResultWithDataDto<PositionDto> dto, string returnUrl)
         {
@@ -96,6 +91,10 @@ namespace UI.Controllers
             }
             return Redirect("/unvanlar"+returnUrl);
         }
+        /// <summary>
+        /// Ünvan Sil Post Metodu
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ArchivePosition(Guid id, string returnUrl)
         {
@@ -108,6 +107,28 @@ namespace UI.Controllers
             {
                 _toastNotification.AddSuccessToastMessage("Ünvan Başarılı Bir Şekilde Silindi", new ToastrOptions { Title = "Başarılı" }); 
             }
+            return Redirect("/unvanlar"+returnUrl);
+        }
+        /// <summary>
+        /// Ünvanlar Listesi Excel Alma Post Metodu
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> ExportExcel(PositionQuery query,string returnUrl)
+        {
+           
+            var result = await _readPositionService.GetExcelPositionListService(query);
+            if (result.IsSuccess)
+            {
+                byte[] excelData = _positionExcelExport.ExportToExcel(result.Data); // Entity listesini Excel verisi olarak alın.
+
+                var response = HttpContext.Response;
+                response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                response.Headers.Add("Content-Disposition", "attachment; filename=Unvanlar.xlsx");
+                await response.Body.WriteAsync(excelData, 0, excelData.Length);
+                return new EmptyResult();
+            }
+            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
             return Redirect("/unvanlar"+returnUrl);
         }
         #endregion

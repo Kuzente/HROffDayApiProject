@@ -1,4 +1,5 @@
 ﻿using Core.DTOs.OffDayDTOs;
+using Core.DTOs.OffDayDTOs.WriteDtos;
 using Core.Interfaces;
 
 namespace Services.Abstract.OffDayServices;
@@ -6,9 +7,12 @@ namespace Services.Abstract.OffDayServices;
 public interface IWriteOffDayService
 {
     Task<bool> ChangeOffDayStatus(Guid id,bool isApproved);
-    Task<IResultDto> AddAsync(AddOffdayDto writeDto);
+    Task<IResultDto> AddOffDayService(WriteAddOffDayDto dto);
+    Task<IResultDto> UpdateWaitingOffDayService(WriteUpdateWatingOffDayDto dto);
+
+    Task<IResultDto> UpdateFirstWaitingStatusOffDayService(Guid id,bool status);
     //Task<IResultWithDataDto<>> UpdateAsync(T writeDto);
     //Task<IResultDto> DeleteAsync(Guid id);
-   // Task<IResultDto> RecoverAsync(Guid id);
+    // Task<IResultDto> RecoverAsync(Guid id);
     //Task<IResultDto> RemoveAsync(Guid id);
 }

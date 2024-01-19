@@ -16,5 +16,5 @@ public interface IReadPersonalService
 	Task<ResultWithPagingDataDto<List<PersonalDto>>> GetPersonalListService(PersonalQuery query); // Aktif Personel Listesi Servisi
 	Task<ResultWithPagingDataDto<List<PassivePersonalDto>>> GetPassivePersonalListService(PersonalQuery query); // Pasif Personel Listesi Servisi
 	Task<ResultWithPagingDataDto<List<PersonalDto>>> GetDeletedPersonalListService(int pageNumber,string search); // Silinen Personel Listesi Servisi
-	Task<IResultWithDataDto<List<PersonalOffDayDto>>> GetAllPersonalByBranchIdService(Guid branchId); // İzin Ekleme Şube ID ye göre personel getiren Servis
+	Task<IResultWithDataDto<List<ReadPersonalsByBranchIdDto>>> GetAllPersonalByBranchIdService(Guid branchId); // İzin Ekleme Şube ID ye göre personel getiren Servis
 }

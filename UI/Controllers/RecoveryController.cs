@@ -26,7 +26,12 @@ public class RecoveryController : Controller
         _writePersonalService = writePersonalService;
         _toastNotification = toastNotification;
     }
-    [HttpGet]
+
+    #region PageActions
+    /// <summary>
+    /// Silinen Şubeler Listesi Sayfası
+    /// </summary>
+    /// <returns></returns>
     public async Task<IActionResult> DeletedBranch(string search, int sayfa = 1)
     {
         var result = await _readBranchService.GetDeletedBranchListService(sayfa, search);
@@ -36,7 +41,10 @@ public class RecoveryController : Controller
         }
         return View(result);
     }
-    [HttpGet]
+    /// <summary>
+    /// Silinen Ünvanlar Listesi Sayfası
+    /// </summary>
+    /// <returns></returns>
     public async Task<IActionResult> DeletedPosition(string search, int sayfa = 1)
     {
         var result = await _readPositionService.GetDeletedPositionListService(sayfa, search);
@@ -46,7 +54,10 @@ public class RecoveryController : Controller
         }
         return View(result);
     }
-    [HttpGet]
+    /// <summary>
+    /// Silinen Personeller Listesi Sayfası
+    /// </summary>
+    /// <returns></returns>
     public async Task<IActionResult> DeletedPersonal(string search, int sayfa = 1)
     {
         var result = await _readPersonalService.GetDeletedPersonalListService(sayfa, search);
@@ -56,7 +67,17 @@ public class RecoveryController : Controller
         }
         return View(result);
     }
-    [HttpGet]
+    
+
+    #endregion
+
+    #region Get/Post Actions
+
+    /// <summary>
+    /// Silinen Şube Geri Döndür Post Metodu
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
     public async Task<IActionResult> RecoverBranch(Guid id,  string returnUrl) 
     {
         var result = await _writeBranchService.RecoverAsync(id);
@@ -71,7 +92,11 @@ public class RecoveryController : Controller
 
         return Redirect("/silinen-subeler" + returnUrl);
     }
-    [HttpGet]
+    /// <summary>
+    /// Silinen Ünvan Geri Döndür Post Metodu
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
     public async Task<IActionResult> RecoverPosition(Guid id, string returnUrl)
     {
         var result = await _writePositionService.RecoverAsync(id);
@@ -85,7 +110,11 @@ public class RecoveryController : Controller
         }
         return Redirect("/silinen-unvanlar" + returnUrl);
     }
-    [HttpGet]
+    /// <summary>
+    /// Silinen Personel Geri Döndür Post Metodu
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
     public async Task<IActionResult> RecoverPersonal(Guid id, string returnUrl)
     {
         var result = await _writePersonalService.RecoverAsync(id);
@@ -99,4 +128,6 @@ public class RecoveryController : Controller
         }
         return Redirect("/silinen-personeller" + returnUrl);
     }
+
+    #endregion
 }

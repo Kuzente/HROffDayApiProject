@@ -25,7 +25,11 @@ public class PersonalDetailController : Controller
     }
 
     #region PageActions
-    public async Task<IActionResult> Edit(int id)
+    /// <summary>
+    /// Personel Detayları Sayfası
+    /// </summary>
+    /// <returns></returns>
+    public IActionResult Edit(int id)
     {
         return View();
     }
@@ -34,6 +38,10 @@ public class PersonalDetailController : Controller
     #endregion
 
     #region Get/Post Actions
+    /// <summary>
+    /// Personel Detayları Ajax Get Metodu
+    /// </summary>
+    /// <returns></returns>
     public async Task<IActionResult> EditAjax(Guid id)
     {
         var result = await _readPersonalService.GetUpdatePersonalService(id);
@@ -43,6 +51,10 @@ public class PersonalDetailController : Controller
         }
         return Ok(result);
     }
+    /// <summary>
+    /// Personel Detayları Güncelleme Post Metodu
+    /// </summary>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> Edit(WriteUpdatePersonalDto dto)
     {
@@ -58,6 +70,10 @@ public class PersonalDetailController : Controller
 
         return Redirect("/personel-detayları?" + dto.ID);
     }
+    /// <summary>
+    /// Personel Sil Post Metodu
+    /// </summary>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> ArchivePersonal(Guid id)
     {
@@ -73,6 +89,10 @@ public class PersonalDetailController : Controller
 
         return Ok(result);
     }
+    /// <summary>
+    /// Personel İşten Çıkar veya İşe Al Post Metodu
+    /// </summary>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> ChangeStatus(Guid id)
     {

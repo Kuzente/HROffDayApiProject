@@ -26,6 +26,10 @@ namespace UI.Controllers
         }
 
         #region PageActions
+        /// <summary>
+        /// Şubeler Listesi Sayfası 
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index(string search, bool passive, int sayfa = 1)
         {
             var resultSearch = await _readBranchService.GetBranchListService(sayfa, search , passive);
@@ -35,6 +39,10 @@ namespace UI.Controllers
             }
             return View(resultSearch);
         }
+        /// <summary>
+        /// Şube Güncelle Sayfası
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> UpdateBranch(Guid id, string returnUrl)
         {
             var result = await _readBranchService.GetUpdateBranchService(id);
@@ -49,6 +57,65 @@ namespace UI.Controllers
         #endregion
 
         #region Get/Post Actions
+        /// <summary>
+        /// Şube Ekleme Post Metodu
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> AddBranch(BranchDto dto, string returnUrl)
+        {
+            var result = await _writeBranchService.AddAsync(dto);
+            if (!result.IsSuccess)
+            {
+                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+            }
+            else
+            {
+                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Eklendi", new ToastrOptions { Title = "Başarılı" }); 
+            }
+            
+            return Redirect("/subeler"+returnUrl);
+        }
+        /// <summary>
+        /// Şube Düzenleme Post Metodu
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> UpdateBranch(ResultWithDataDto<BranchDto> dto, string returnUrl)
+        {
+            var result = await _writeBranchService.UpdateAsync(dto.Data);
+            if (!result.IsSuccess)
+            {
+                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+            }
+            else
+            {
+                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Düzenlendi", new ToastrOptions { Title = "Başarılı" }); 
+            }
+            return Redirect("/subeler"+returnUrl);
+        }
+        /// <summary>
+        /// Şube Silme Post Metodu
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> ArchiveBranch(Guid id, string returnUrl)
+        {
+            var result = await _writeBranchService.DeleteAsync(id);
+            if (!result.IsSuccess)
+            {
+                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+            }
+            else
+            {
+                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Silindi", new ToastrOptions { Title = "Başarılı" }); 
+            }
+            return Redirect("/subeler"+returnUrl);
+        }
+        /// <summary>
+        /// Şube Listesi Excel Alma Post Metodu
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ExportExcel(BranchQuery query,string returnUrl)
         {
@@ -66,50 +133,6 @@ namespace UI.Controllers
             }
 
             _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-            return Redirect("/subeler"+returnUrl);
-        }
-        [HttpPost]
-        public async Task<IActionResult> AddBranch(BranchDto dto, string returnUrl)
-        {
-            var result = await _writeBranchService.AddAsync(dto);
-            if (!result.IsSuccess)
-            {
-                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-            }
-            else
-            {
-                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Eklendi", new ToastrOptions { Title = "Başarılı" }); 
-            }
-            
-            return Redirect("/subeler"+returnUrl);
-        }
-      
-        [HttpPost]
-        public async Task<IActionResult> UpdateBranch(ResultWithDataDto<BranchDto> dto, string returnUrl)
-        {
-            var result = await _writeBranchService.UpdateAsync(dto.Data);
-            if (!result.IsSuccess)
-            {
-                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-            }
-            else
-            {
-                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Düzenlendi", new ToastrOptions { Title = "Başarılı" }); 
-            }
-            return Redirect("/subeler"+returnUrl);
-        }
-        [HttpPost]
-        public async Task<IActionResult> ArchiveBranch(Guid id, string returnUrl)
-        {
-            var result = await _writeBranchService.DeleteAsync(id);
-            if (!result.IsSuccess)
-            {
-                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-            }
-            else
-            {
-                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Silindi", new ToastrOptions { Title = "Başarılı" }); 
-            }
             return Redirect("/subeler"+returnUrl);
         }
         #endregion

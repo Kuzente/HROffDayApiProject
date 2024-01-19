@@ -2,6 +2,7 @@
 using Core;
 using Core.DTOs;
 using Core.DTOs.OffDayDTOs;
+using Core.DTOs.OffDayDTOs.WriteDtos;
 using Core.Entities;
 using Core.Enums;
 using Core.Interfaces;
@@ -21,74 +22,8 @@ public class WriteOffDayService : IWriteOffDayService
 		_mapper = mapper;
 	}
 
-	public async Task<IResultDto> AddAsync(AddOffdayDto writeDto)
-	{
-        IResultDto res = new ResultDto();
-		try
-		{
-			var mapSet = _mapper.Map<OffDay>(writeDto);
-			mapSet.OffDayStatus = OffDayStatusEnum.WaitingForFirst; // make form request waiting first
-			var resultData = await _unitOfWork.WriteOffDayRepository.AddAsync(mapSet);
-			var resultCommit = _unitOfWork.Commit();
-			if (!resultCommit)
-				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-			
-		}
-		catch (Exception ex)
-		{
-			res.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
-		}
-		return res;
-	}
-
-	public async Task<IResultDto> DeleteAsync(Guid id)
-	{
-		IResultDto res = new ResultDto();
-		
-		try
-		{
-			var result = await _unitOfWork.WriteOffDayRepository.DeleteByIdAsync(id);
-			if (!result)
-				res.SetStatus(false).SetErr("Data Layer Error")
-					.SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
-			var resultCommit = _unitOfWork.Commit();
-			if (!resultCommit)
-				return res.SetStatus(false).SetErr("Commit Fail")
-					.SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-		}
-		catch (Exception ex)
-		{
-			res.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
-		}
-		return res;
-	}
-
-	public Task<IResultDto> RecoverAsync(Guid id)
-	{
-		throw new NotImplementedException();
-	}
-
-	public async Task<IResultDto> RemoveAsync(Guid id)
-	{
-		IResultDto res = new ResultDto();
-		
-		try
-		{
-			var result = await _unitOfWork.WriteOffDayRepository.RemoveByIdAsync(id);
-			if (!result)
-				res.SetStatus(false).SetErr("Data Layer Error")
-					.SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
-			var resultCommit = _unitOfWork.Commit();
-			if (!resultCommit)
-				return res.SetStatus(false).SetErr("Commit Fail")
-					.SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-		}
-		catch (Exception ex)
-		{
-			res.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
-		}
-		return res;
-	}
+	
+	
 
 	public async Task<bool> ChangeOffDayStatus(Guid id,bool isApproved)
 	{
@@ -111,36 +46,107 @@ public class WriteOffDayService : IWriteOffDayService
 		}
 	}
 
-	public async Task<IResultWithDataDto<ReadOffDayDto>> UpdateAsync(WriteOffDayDto writeDto)
+	public async Task<IResultDto> AddOffDayService(WriteAddOffDayDto dto)
 	{
-		IResultWithDataDto<ReadOffDayDto> res = new ResultWithDataDto<ReadOffDayDto>();
+		IResultDto result = new ResultDto();
 		try
 		{
-			var getdata = await _unitOfWork.ReadOffDayRepository.GetByIdAsync(writeDto.ID);
-			if (getdata.FirstOrDefault() is null)
-				return res.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Veri Bulunamadı!!!");
-			var mapset = _mapper.Map<OffDay>(writeDto);
-			var resultData = await _unitOfWork.WriteOffDayRepository.Update(mapset);
+			if(dto.StartDate > dto.EndDate)
+				return result.SetStatus(false).SetErr("StartDate is bigger than EndDate").SetMessage("İzin başlangıç tarihi bitişten büyük olamaz!"); 
+			if(dto.CountLeave != ((dto.EndDate - dto.StartDate).Days + 1))
+				return result.SetStatus(false).SetErr("Date and Count not equal").SetMessage("Girdiğiniz Tarih Aralığı İle İzin Günleri Uyuşmuyor."); 
+			var personal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate: p => p.ID == dto.Personal_Id && p.Status == EntityStatusEnum.Online);
+			if(personal is null)
+				return result.SetStatus(false).SetErr("Personal Is Not Found").SetMessage("İlgili Personel Bulunamadı.");
+			if((personal.TotalYearLeave - personal.UsedYearLeave) < dto.LeaveByYear)
+				return result.SetStatus(false).SetErr("Personal Total Year Leave Not Enought").SetMessage("Personelin yıllık izini yetersiz.Lütfen daha küçük bir değer giriniz");
+			var mappedResult = _mapper.Map<OffDay>(dto);
+			if (dto.LeaveByMarriedFatherDead is not null)
+			{
+				dto.LeaveByMarriedFatherDead.ForEach(a =>
+				{
+					if (a.Contains("LeaveByFather"))
+						mappedResult.LeaveByFather = 5;
+					else if (a.Contains("LeaveByDead"))
+						mappedResult.LeaveByDead = 3;
+					else if (a.Contains("LeaveByMarried"))
+						mappedResult.LeaveByMarried = 3;
+				});
+			}
+
+			await _unitOfWork.WriteOffDayRepository.AddAsync(mappedResult);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
-				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-			var mapResult = _mapper.Map<ReadOffDayDto>(resultData);
-			res.SetData(mapResult);
+				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+
 		}
 		catch (Exception ex)
 		{
-			res.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+			result.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
 		}
-		return res;
+
+		return result;
 	}
 
-    public Task<IResultWithDataDto<ReadOffDayDto>> AddAsync(ReadOffDayDto writeDto)
-    {
-        throw new NotImplementedException();
-    }
+	public async Task<IResultDto> UpdateWaitingOffDayService(WriteUpdateWatingOffDayDto dto)
+	{
+		IResultDto result = new ResultDto();
+		try
+		{
+			if(dto.StartDate > dto.EndDate)
+				return result.SetStatus(false).SetErr("StartDate is bigger than EndDate").SetMessage("İzin başlangıç tarihi bitişten büyük olamaz!"); 
+			if(dto.CountLeave != ((dto.EndDate - dto.StartDate).Days + 1))
+				return result.SetStatus(false).SetErr("Date and Count not equal").SetMessage("Girdiğiniz Tarih Aralığı İle İzin Günleri Uyuşmuyor."); 
+			var personal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate: p => p.ID == dto.Personal_Id && p.Status == EntityStatusEnum.Online);
+			if(personal is null)
+				return result.SetStatus(false).SetErr("Personal Is Not Found").SetMessage("İlgili Personel Bulunamadı.");
+			if((personal.TotalYearLeave - personal.UsedYearLeave) < dto.LeaveByYear)
+				return result.SetStatus(false).SetErr("Personal Total Year Leave Not Enought").SetMessage("Personelin yıllık izini yetersiz.Lütfen daha küçük bir değer giriniz");
+			var mappedResult = _mapper.Map<OffDay>(dto);
+			if (dto.LeaveByMarriedFatherDead is not null)
+			{
+				dto.LeaveByMarriedFatherDead.ForEach(a =>
+				{
+					if (a.Contains("LeaveByFather"))
+						mappedResult.LeaveByFather = 5;
+					else if (a.Contains("LeaveByDead"))
+						mappedResult.LeaveByDead = 3;
+					else if (a.Contains("LeaveByMarried"))
+						mappedResult.LeaveByMarried = 3;
+				});
+			}
+			await _unitOfWork.WriteOffDayRepository.Update(mappedResult);
+			var resultCommit = _unitOfWork.Commit();
+			if (!resultCommit)
+				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+		}
+		catch (Exception e)
+		{
+			result.SetStatus(false).SetErr(e.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
 
-    public Task<IResultWithDataDto<ReadOffDayDto>> UpdateAsync(ReadOffDayDto writeDto)
-    {
-        throw new NotImplementedException();
-    }
+		return result;
+	}
+
+	public async Task<IResultDto> UpdateFirstWaitingStatusOffDayService(Guid id,bool status)
+	{
+		IResultDto result = new ResultDto();
+		try
+		{
+			var offday = await _unitOfWork.ReadOffDayRepository.GetSingleAsync(predicate: p => p.ID == id);
+			if(offday is null)
+				return result.SetStatus(false).SetErr("OffDay Is Not Found").SetMessage("İlgili İzin Bulunamadı.");
+			offday.OffDayStatus = status ? OffDayStatusEnum.WaitingForSecond : OffDayStatusEnum.Rejected;
+			await _unitOfWork.WriteOffDayRepository.Update(offday);
+			var resultCommit = _unitOfWork.Commit();
+			if (!resultCommit)
+				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+		}
+		catch (Exception e)
+		{
+			result.SetStatus(false).SetErr(e.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+
+		return result;
+	}
 }

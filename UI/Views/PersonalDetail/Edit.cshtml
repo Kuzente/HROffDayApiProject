@@ -16,15 +16,15 @@
             </div>
             <!-- Page title actions -->
             <div class="col-auto ms-auto d-print-none">
-                    <button id="headerButton" type="submit" class="btn">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
-                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
-                            <path d="M15 19l2 2l4 -4"></path>
-                        </svg>
-                        <span></span>
-                    </button>
+                <button id="headerButton" type="submit" class="btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                        <path d="M6 21v-2a4 4 0 0 1 4 -4h4"></path>
+                        <path d="M15 19l2 2l4 -4"></path>
+                    </svg>
+                    <span></span>
+                </button>
             </div>
         </div>
     </div>
@@ -76,8 +76,8 @@
                         </span>
                     </div>
                     <div class="col">
-                        <div class="text-muted">
-                            Hak Edilen Yıllık İzin Miktarı
+                        <div id="alacak-izin-text" class="text-muted">
+                            Alacak İzin Miktarı 6 Gün / 2 Saat
                         </div>
                     </div>
                 </div>
@@ -180,10 +180,10 @@
         </li>
         <li class="nav-item ms-auto" role="presentation">
             <a href="#tabs-settings-1" class="nav-link" title="Settings" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab">
-                <!-- Download SVG icon from http://tabler-icons.io/i/settings -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
                 </svg>
+                Yıllık ve Alacak İzin Ayarları
             </a>
         </li>
     </ul>
@@ -485,6 +485,7 @@
                     <option value="">Medeni Hali</option>
                     <option value="Bekar">Bekar</option>
                     <option value="Evli">Evli</option>
+                    <option value="Dul">Dul</option>
                 </select>
             </div>
 
@@ -575,8 +576,47 @@
 </div>
 
 <div class="tab-pane" id="tabs-settings-1" role="tabpanel">
-    <h4>Settings tab</h4>
-    <div>Donec ac vitae diam amet vel leo egestas consequat rhoncus in luctus amet, facilisi sit mauris accumsan nibh habitant senectus</div>
+    <div class="hr-text mb-3 text-black">Yıllık ve Alacak İzin Ayarları</div>
+    <div class="row mb-3">
+        <div class="col">
+            <label class="form-label text-center">Yıllık İzin</label>
+
+        </div>
+        <div class="col border-start border-info">
+            <label class="form-label text-center">Toplam Alacak İzin</label>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="input-group input-group-merge">
+                        <span class="input-group-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-woman" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M10 16v5"></path>
+                                <path d="M14 16v5"></path>
+                                <path d="M8 16h8l-2 -7h-4z"></path>
+                                <path d="M5 11c1.667 -1.333 3.333 -2 5 -2"></path>
+                                <path d="M19 11c-1.667 -1.333 -3.333 -2 -5 -2"></path>
+                                <path d="M12 4m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                            </svg>
+                        </span>
+                        <input type="text" data-takenLeave class="form-control disabled"/>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <input type="number" placeholder="Saat Giriniz" disabled class="form-control"/>
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-success">Saat Ekle</button>
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-danger">Saat Çıkart</button>
+                </div>
+                <div class="col-4"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 </div>
@@ -619,37 +659,37 @@
 </div>
 <!-- /Account Delete -->
 <!--ArchiveModal-->
-    <div class="modal modal-blur fade" id="archiveModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                <div class="modal-status bg-danger"></div>
-                <div class="modal-body text-center py-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>
-                    </svg>
-                    <h3>Emin Misiniz?</h3>
-                    <div class="text-muted">
-                        Seçmiş Olduğunuz <span class="badge badge-pill" id="personalNamePlaceholder"></span> Adlı Personel Kayıtlardan Silinecektir!!!.
-                    </div>
+<div class="modal modal-blur fade" id="archiveModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-status bg-danger"></div>
+            <div class="modal-body text-center py-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>
+                </svg>
+                <h3>Emin Misiniz?</h3>
+                <div class="text-muted">
+                    Seçmiş Olduğunuz <span class="badge badge-pill" id="personalNamePlaceholder"></span> Adlı Personel Kayıtlardan Silinecektir!!!.
                 </div>
-                <div class="modal-footer">
-                    <div class="w-100">
-                        <div class="row">
-                            <div class="col">
-                                <a href="#" class="btn w-100" data-bs-dismiss="modal">
-                                    İptal
-                                </a>
-                            </div>
-                            <div class="col">
-                                <button id="deleteSubmitBtn" type="submit" class="btn btn-danger w-100" data-bs-dismiss="modal">Personeli Sil</button>
-                            </div>
+            </div>
+            <div class="modal-footer">
+                <div class="w-100">
+                    <div class="row">
+                        <div class="col">
+                            <a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                İptal
+                            </a>
+                        </div>
+                        <div class="col">
+                            <button id="deleteSubmitBtn" type="submit" class="btn btn-danger w-100" data-bs-dismiss="modal">Personeli Sil</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 <!--ArchiveModal-->
 </div>
 </div>

@@ -70,8 +70,18 @@ document.addEventListener('DOMContentLoaded', function () {
             $('input[name="PersonalDetails.BankAccount"]').val(data.personalDetails.bankAccount);
             $('input[name="PersonalDetails.IBAN"]').val(data.personalDetails.iban);
             $('textarea[name="PersonalDetails.Address"]').val(data.personalDetails.address);
+            $('[data-takenLeave]').val(data.totalYearLeave + " Saat");
+            let deneme = parseInt(data.totalYearLeave / 8,10);
+            $('#alacak-izin-text').text("Alacak İzin Miktarı "+saatleriGunVeSaatlereCevir(data.totalYearLeave) );
         }
+        function saatleriGunVeSaatlereCevir(saat) {
+            // Toplam saatleri gün ve saatlere çevir
+            let gun = Math.floor(saat / 8);
+            let kalanSaat = saat % 8;
 
+            // Sonucu döndür
+            return gun + " gün " + kalanSaat + " saat";
+        }
         // Şube ve pozisyon seçeneklerinin ayarlanması
         function setSelects() {
             branchSelect.empty();
@@ -115,6 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#enableEditButton').on('click',function () {
             let inputs =$('#updatePersonalForm input');
             inputs.prop('disabled', false);
+            $('[data-takenLeave]').prop('disabled',true);
             $('#updatePersonalForm textarea').prop('disabled', false);
             $('#updatePersonalForm select').prop('disabled', false);
             new TomSelect(positionSelect); // Seçilen select'i alın

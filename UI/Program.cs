@@ -75,7 +75,10 @@ app.MapControllerRoute(name: "deletePositionPost", pattern: "unvan-sil", default
 #endregion
 
 #region OffDay
-
+app.MapControllerRoute(name: "offDayCreateGet", pattern: "izin-olustur", defaults: new { controller = "OffDay", action = "AddOffDay" });
+app.MapControllerRoute(name: "offDayWaitingList", pattern: "bekleyen-izinler", defaults: new { controller = "OffDay", action = "WaitingOffDayList" });
+app.MapControllerRoute(name: "offDayWaitingEdit", pattern: "izin-duzenle", defaults: new { controller = "OffDay", action = "WaitingOffDayEdit" });
+app.MapControllerRoute(name: "offDayFirstWaitingChangeStatus", pattern: "bekleyen-izin-guncelle-bir", defaults: new { controller = "OffDay", action = "UpdateFirstWaitingStatus" });
 
 
 #endregion
@@ -91,7 +94,13 @@ app.MapControllerRoute(name: "recoveryPersonal", pattern: "personel-gerigetir", 
 #endregion
 #region MultipleUpload
 app.MapControllerRoute(name: "downloadScheme", pattern: "download-scheme", defaults: new { controller = "MultipleUpload", action = "GetExcelSheme" });
-app.MapControllerRoute(name: "personalUpload", pattern: "personal-upload", defaults: new { controller = "MultipleUpload", action = "PersonalUpload" });
+app.MapControllerRoute(name: "personalUpload", pattern: "toplu-islemler", defaults: new { controller = "MultipleUpload", action = "PersonalUpload" });
+
+
+#endregion
+
+#region QRPages
+app.MapControllerRoute(name: "qrListGet", pattern: "qr-islemleri", defaults: new { controller = "Qr", action = "QRList" });
 
 
 #endregion

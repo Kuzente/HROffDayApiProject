@@ -27,7 +27,10 @@ public class PassivePersonalController : Controller
     }
 
     #region PageActions
-
+    /// <summary>
+    /// İşten Çıkarılan Personel Listelenme Sayfası
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<IActionResult> Index([FromQuery] PersonalQuery query)
     {
@@ -45,7 +48,10 @@ public class PassivePersonalController : Controller
     #endregion
 
     #region Get/Post Actions
-
+    /// <summary>
+    /// İşten Çıkarılan Personel Excel Alma Post Metodu
+    /// </summary>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> ExportExcel(PersonalQuery query,string returnUrl)
     {

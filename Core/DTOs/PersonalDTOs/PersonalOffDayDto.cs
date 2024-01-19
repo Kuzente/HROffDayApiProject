@@ -8,8 +8,8 @@ public class PersonalOffDayDto : BaseDto
 {
     public string NameSurname { get; set; }
     public int TotalYearLeave { get; set; }
-    public int UsedYearLeave { get; set; } 
-    public BranchNameDto Branch { get; set; }
+    public int UsedYearLeave { get; set; }
+    public string BranchName { get; set; }
     public PositionNameDto Position { get; set; }
     
 }

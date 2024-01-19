@@ -12,6 +12,7 @@ using Core.Interfaces;
 using Core.Querys;
 using Data.Abstract;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Services.Abstract.PersonalServices;
 
 namespace Services.Concrete.PersonalServices;
@@ -228,26 +229,37 @@ public class ReadPersonalService : IReadPersonalService
 		return res;
 	}
 
-	public async Task<IResultWithDataDto<List<PersonalOffDayDto>>> GetAllPersonalByBranchIdService(Guid branchId)
+	public async Task<IResultWithDataDto<List<ReadPersonalsByBranchIdDto>>> GetAllPersonalByBranchIdService(Guid branchId)
 	{
-		IResultWithDataDto<List<PersonalOffDayDto>> res = new ResultWithDataDto<List<PersonalOffDayDto>>();
+		IResultWithDataDto<List<ReadPersonalsByBranchIdDto>> res = new ResultWithDataDto<List<ReadPersonalsByBranchIdDto>>();
 		try
 		{
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadPersonalRepository.GetAll(
+					predicate: a => 
+									a.Branch_Id == branchId &&
+									a.Status == EntityStatusEnum.Online && 
+					                a.Branch.Status == EntityStatusEnum.Online&&
+					                a.Position.Status == EntityStatusEnum.Online,
 					include:p=> p
 						.Include(a=>a.Branch)
 						.Include(b=>b.Position),
-					orderBy: p => p.OrderBy(a => a.NameSurname),
-					predicate: a => (a.Status == EntityStatusEnum.Online) && 
-					                (a.Branch.Status == EntityStatusEnum.Online || a.Branch.Status == EntityStatusEnum.Offline)&&
-					                (a.Position.Status == EntityStatusEnum.Online || a.Position.Status == EntityStatusEnum.Offline)&&
-					                (a.Branch_Id == branchId)
+					orderBy: p => p.OrderBy(a => a.NameSurname)
 				)
 			);   
-			var resultData = allData.ToList();
-			var mapData = _mapper.Map<List<PersonalOffDayDto>>(resultData);
-			res.SetData(mapData);
+			if(allData.IsNullOrEmpty()) 
+				res.SetStatus(false).SetErr("Branch Is Not Found").SetMessage("Şubeye ait personeller bulunamadı.Lütfen sistemi kontrol ediniz!");
+				
+			var mappedResult = allData.Select(a => new ReadPersonalsByBranchIdDto
+			{
+				ID = a.ID,
+				NameSurname = a.NameSurname,
+				TotalYearLeave = a.TotalYearLeave,
+				UsedYearLeave = a.UsedYearLeave,
+				PositionName = a.Position.Name,
+				BranchName = a.Branch.Name
+			}).ToList();
+			res.SetData(mappedResult);
 			
 		}
 		catch (Exception ex)

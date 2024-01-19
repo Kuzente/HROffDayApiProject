@@ -27,11 +27,45 @@ public class MultipleUploadController : Controller
         _toastNotification = toastNotification;
     }
 
-    [HttpGet]
+    #region PageActions
+
+    /// <summary>
+    /// Toplu Personel Ekleme Sayfası
+    /// </summary>
+    /// <returns></returns>
     public IActionResult PersonalUpload()
     {
         return View();
     }
+
+    #endregion
+
+    #region Get/Post Methods
+
+    /// <summary>
+    /// Toplu Personel Ekleme Taslak Excel İndirme Metodu
+    /// </summary>
+    /// <returns></returns>
+    public async Task<IActionResult> GetExcelSheme()
+    {
+        // var branches = await _readBranchService.GetAllOrderByAsync();
+        // var positions = await _readPositionService.GetAllOrderByAsync();
+        // if (branches.IsSuccess && positions.IsSuccess)
+        // {
+        //     byte[] excelData = _excelUploadScheme.ExportToExcel(positions.Data,branches.Data); // Entity listesini Excel verisi olarak alın.
+        //
+        //     var response = HttpContext.Response;
+        //     response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        //     response.Headers.Add("Content-Disposition", "attachment; filename=TopluVeriTaslak.xlsx");
+        //     await response.Body.WriteAsync(excelData, 0, excelData.Length);
+        //     return new EmptyResult();
+        // }
+        return Redirect("/toplu-islemler");
+    }
+    /// <summary>
+    /// Toplu Personel Ekleme Post Metodu
+    /// </summary>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> PersonalUpload(IFormFile file)
     {
@@ -47,20 +81,5 @@ public class MultipleUploadController : Controller
         }
         return View();
     }
-    public async Task<IActionResult> GetExcelSheme()
-    {
-        // var branches = await _readBranchService.GetAllOrderByAsync();
-        // var positions = await _readPositionService.GetAllOrderByAsync();
-        // if (branches.IsSuccess && positions.IsSuccess)
-        // {
-        //     byte[] excelData = _excelUploadScheme.ExportToExcel(positions.Data,branches.Data); // Entity listesini Excel verisi olarak alın.
-        //
-        //     var response = HttpContext.Response;
-        //     response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        //     response.Headers.Add("Content-Disposition", "attachment; filename=TopluVeriTaslak.xlsx");
-        //     await response.Body.WriteAsync(excelData, 0, excelData.Length);
-        //     return new EmptyResult();
-        // }
-        return Redirect("/personal-upload");
-    }
+    #endregion
 }

@@ -13,8 +13,6 @@ public class PersonalProfile : Profile
 	{
 		CreateMap<Personal,PersonalDto>().ReverseMap();
 		CreateMap<Personal,PassivePersonalDto>().ReverseMap();
-		CreateMap<Personal,PersonalOffDayDto>().ReverseMap();
-		
 		CreateMap<Personal,ReadUpdatePersonalDto>();
 		CreateMap<AddPersonalDto,Personal>().ReverseMap();
 		CreateMap<AddRangePersonalDto,Personal>().ReverseMap();
