@@ -8,7 +8,7 @@ public partial class Personal : BaseEntity
 {
 	[DisplayName("Personal Adı - Soyadı"), Required]
 	public string NameSurname { get; set; } 
-	[DisplayName("Toplam İzin"), Required]
+	[DisplayName("Toplam Yıllık İzin"), Required]
 	public int TotalYearLeave { get; set; } 
 	[DisplayName("Doğum Tarihi"), Required]
 	public DateTime BirthDate { get; set; }
@@ -28,6 +28,8 @@ public partial class Personal : BaseEntity
 	public string Gender { get; set; }
 	[DisplayName("Kullanılan Yıllık İzin"), Required]
 	public int UsedYearLeave { get; set; } 
+	[DisplayName("Toplam Alacak İzin"), Required]
+	public int TotalTakenLeave { get; set; } 
 
 
 }

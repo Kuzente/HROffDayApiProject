@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using Services.Abstract.BranchServices;
 using Services.ExcelDownloadServices.BranchServices;
-using UI.Models;
+using Word = Microsoft.Office.Interop.Word;
 
 namespace UI.Controllers
 {
@@ -30,9 +30,9 @@ namespace UI.Controllers
         /// Şubeler Listesi Sayfası 
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string search, bool passive, int sayfa = 1)
+        public async Task<IActionResult> Index(string search,bool active, bool passive, int sayfa = 1)
         {
-            var resultSearch = await _readBranchService.GetBranchListService(sayfa, search , passive);
+            var resultSearch = await _readBranchService.GetBranchListService(sayfa, search ,active, passive);
             if (!resultSearch.IsSuccess)
             {
                 _toastNotification.AddErrorToastMessage(resultSearch.Message, new ToastrOptions { Title = "Hata" });
@@ -53,7 +53,13 @@ namespace UI.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             return View(result);
         }
-
+        public async Task<IActionResult> DenemeUrl(string returnUrl)
+        {
+            var wordApp = new Word.Application();
+            wordApp.Visible = true;
+            wordApp.Documents.Add();
+            return Redirect(returnUrl);
+        }
         #endregion
 
         #region Get/Post Actions
@@ -74,7 +80,7 @@ namespace UI.Controllers
                 _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Eklendi", new ToastrOptions { Title = "Başarılı" }); 
             }
             
-            return Redirect("/subeler"+returnUrl);
+            return Redirect(returnUrl);
         }
         /// <summary>
         /// Şube Düzenleme Post Metodu
@@ -92,7 +98,7 @@ namespace UI.Controllers
             {
                 _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Düzenlendi", new ToastrOptions { Title = "Başarılı" }); 
             }
-            return Redirect("/subeler"+returnUrl);
+            return Redirect(returnUrl);
         }
         /// <summary>
         /// Şube Silme Post Metodu
@@ -110,7 +116,7 @@ namespace UI.Controllers
             {
                 _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Silindi", new ToastrOptions { Title = "Başarılı" }); 
             }
-            return Redirect("/subeler"+returnUrl);
+            return Redirect(returnUrl);
         }
         /// <summary>
         /// Şube Listesi Excel Alma Post Metodu
@@ -133,7 +139,7 @@ namespace UI.Controllers
             }
 
             _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-            return Redirect("/subeler"+returnUrl);
+            return Redirect(returnUrl);
         }
         #endregion
       

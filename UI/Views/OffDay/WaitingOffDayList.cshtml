@@ -1,11 +1,10 @@
-﻿@using System.Globalization
-@model ResultWithPagingDataDto<List<ReadWaitingOffDayListDto>>
+﻿@model ResultWithPagingDataDto<List<ReadWaitingOffDayListDto>>
 
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
     var sayfa = Convert.ToInt32(Context.Request.Query["sayfa"]);
-    var returnUrl = Context.Request.QueryString.ToString();
+    var returnUrl = Context.Request.GetDisplayUrl();
     var maxVisiblePages = 5;
     var startPage = Math.Max(1, Model.PageNumber - (maxVisiblePages / 2));
     var endPage = Math.Min(Model.TotalPages, startPage + (maxVisiblePages - 1));
@@ -27,7 +26,7 @@
             <!-- Page title actions -->
 
         </div>
-        
+
     </div>
 </div>
 <!--Heading Area-->
@@ -81,7 +80,7 @@ else
                                                     </select>
                                                 </div>
                                                 <div class="col-6">
-                                                     <label class="form-label">Ay Seçiniz</label>
+                                                    <label class="form-label">Ay Seçiniz</label>
                                                     <select name="filterMonth" class="form-select">
                                                         <option value="">Ay Seçiniz.</option>
                                                         @{
@@ -139,7 +138,7 @@ else
             <tr>
                 <th>İşlemler</th>
                 <th>Personel<br> Adı Soyadı</th>
-                <th>İzin Açıklaması</th>
+                <th>Şube</th>
                 <th>İzin Başlangıç Tarihi /<br> İzin Bitiş Tarihi</th>
 
                 <th>Toplam <br/> Alınan Gün</th>
@@ -154,7 +153,8 @@ else
             {
                 <tr>
                     <td class="col-2">
-                        <form class="d-inline-flex" action="/bekleyen-izin-guncelle-bir" method="post">
+                        @* action="/bekleyen-izin-guncelle-bir" *@
+                        <form class="d-inline-flex" action="/bekleyen-izin-guncelle-iki" method="post">
                             <input type="hidden" name="id" value="@data.ID">
                             <input type="hidden" name="returnUrl" value="@returnUrl">
                             <input type="hidden" name="status" value="true">
@@ -164,8 +164,8 @@ else
                                 </svg>
                             </button>
                         </form>
-
-                        <form class="d-inline-flex" method="post" action="/bekleyen-izin-guncelle-bir">
+                        @* action="/bekleyen-izin-guncelle-bir" *@
+                        <form class="d-inline-flex" method="post" action="/bekleyen-izin-guncelle-iki">
                             <input type="hidden" name="id" value="@data.ID">
                             <input type="hidden" name="returnUrl" value="@returnUrl">
                             <input type="hidden" name="status" value="false">
@@ -181,7 +181,7 @@ else
                         @data.Personal.NameSurname
                     </td>
                     <td class="col-3">
-                        @data.Description
+                        @data.Personal.Branch.Name
                     </td>
                     <td class="col-1">
                         <span class="status status-dark mb-1">@data.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
@@ -201,7 +201,8 @@ else
                                                                                @(data.LeaveByTravel > 0 ? $"Seyahat İzni: {data.LeaveByTravel}</br>" : "") 
                                                                                @(data.LeaveByFather > 0 ? $"Babalık İzni: {data.LeaveByFather}</br>" : "") 
                                                                                @(data.LeaveByMarried > 0 ? $"Evlenme İzni: {data.LeaveByMarried}</br>" : "") 
-                                                                               @(data.LeaveByDead > 0 ? $"Ölüm İzni: {data.LeaveByDead}</br>" : "")">
+                                                                               @(data.LeaveByDead > 0 ? $"Ölüm İzni: {data.LeaveByDead}</br>" : "")
+                                                                               @($"İzin Açıklaması: {data.Description}</br>")">
                             Detaylı Görüntüle
                         </button>
                     </td>
@@ -210,6 +211,7 @@ else
 
                     </td>
                     <td class="col-1">
+                        <!--TODO RETURN URL-->
                         <a href='/izin-duzenle?id=@data.ID&returnUrl=@returnUrl' class="btn btn-warning btn-sm text-white btn-pill">Düzenle</a>
                     </td>
                 </tr>

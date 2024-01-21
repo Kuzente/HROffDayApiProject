@@ -19,6 +19,7 @@ public class ReadUpdatePersonalDto
         
     public string Gender { get; set; }
     public int TotalYearLeave { get; set; }
+    public int TotalTakenLeave { get; set; }
     public int UsedYearLeave { get; set; } 
     public Guid Branch_Id { get; set; }
     public Guid Position_Id { get; set; }

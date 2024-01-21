@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using Services.Abstract.BranchServices;
+using Services.Abstract.OffDayServices;
 using Services.Abstract.PersonalServices;
 using Services.Abstract.PositionServices;
 
@@ -15,8 +16,9 @@ public class RecoveryController : Controller
     private readonly IWritePositionService _writePositionService;
     private readonly IReadPersonalService _readPersonalService;
     private readonly IWritePersonalService _writePersonalService;
+    private readonly IReadOffDayService _readOffDayService;
 
-    public RecoveryController(IReadBranchService readBranchService, IReadPositionService readPositionService, IReadPersonalService readPersonalService, IWriteBranchService writeBranchService, IWritePositionService writePositionService, IWritePersonalService writePersonalService, IToastNotification toastNotification)
+    public RecoveryController(IReadBranchService readBranchService, IReadPositionService readPositionService, IReadPersonalService readPersonalService, IWriteBranchService writeBranchService, IWritePositionService writePositionService, IWritePersonalService writePersonalService, IToastNotification toastNotification, IReadOffDayService readOffDayService)
     {
         _readBranchService = readBranchService;
         _readPositionService = readPositionService;
@@ -25,6 +27,7 @@ public class RecoveryController : Controller
         _writePositionService = writePositionService;
         _writePersonalService = writePersonalService;
         _toastNotification = toastNotification;
+        _readOffDayService = readOffDayService;
     }
 
     #region PageActions
@@ -67,7 +70,19 @@ public class RecoveryController : Controller
         }
         return View(result);
     }
-    
+    /// <summary>
+    /// Silinen İzinler Listesi Sayfası
+    /// </summary>
+    /// <returns></returns>
+    public async Task<IActionResult> DeletedOffDay(string search, int sayfa = 1)
+    {
+        var result = await _readOffDayService.GetDeletedOffDaysListService(sayfa, search);
+        if (!result.IsSuccess)
+        {
+            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+        }
+        return View(result);
+    }
 
     #endregion
 

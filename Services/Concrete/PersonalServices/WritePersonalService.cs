@@ -66,10 +66,14 @@ public class WritePersonalService : IWritePersonalService
 		{
 			var getPersonal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate:p=> p.ID == writeDto.ID);
 			if (getPersonal is null)
-				return result.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Veri Bulunamadı!!!");
+				return result.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Personel Bulunamadı!!!");
+			if(getPersonal.Status != EntityStatusEnum.Online)
+				return result.SetStatus(false).SetErr("Personel is Not Active").SetMessage("İlgili Personel Aktif Olarak Çalışmamaktadır!!!");
 			var mapSet = _mapper.Map<Personal>(writeDto);
 			mapSet.ID = getPersonal.ID;
 			mapSet.CreatedAt = getPersonal.CreatedAt;
+			mapSet.TotalYearLeave = getPersonal.TotalYearLeave;
+			mapSet.UsedYearLeave = getPersonal.UsedYearLeave;
 			var resultData = await _unitOfWork.WritePersonalRepository.Update(mapSet);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)

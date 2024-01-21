@@ -1,10 +1,12 @@
 ﻿@using Core.Enums;
+@using Microsoft.AspNetCore.Http.Extensions
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ResultWithPagingDataDto<List<PositionDto>>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var sayfa = Convert.ToInt32(Context.Request.Query["sayfa"]);
-    var returnUrl = Context.Request.QueryString.ToString();
+    var returnUrl = Context.Request.GetDisplayUrl();
     var maxVisiblePages = 5;
     var startPage = Math.Max(1, Model.PageNumber - (maxVisiblePages / 2));
     var endPage = Math.Min(Model.TotalPages, startPage + (maxVisiblePages - 1));
@@ -185,6 +187,7 @@ else
                         @data.ModifiedAt.ToString("dd/MM/yyyy")
                     </td>
                     <td>
+                        <!--TODO RETURN URL-->
                         <a href="/unvan-duzenle?id=@data.ID&returnUrl=@returnUrl" class="btn btn-warning btn-sm text-white btn-pill w-50">Düzenle</a>
                     </td>
                     <td>

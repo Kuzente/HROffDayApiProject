@@ -11,7 +11,10 @@ document.addEventListener('DOMContentLoaded', function () {
         url: `/get-personel-detayları${window.location.search}`
     }).done(function (res) {
         if (res.isSuccess) {
+            console.log(res.data)
             $('#HeaderPersonalNameSurname').text(res.data.nameSurname);
+            $('#HeaderPersonalBranchPosition').text((res.data.branches.find(p => p.id === res.data.branch_Id) || {}).name + " - " +(res.data.positions.find(p => p.id === res.data.position_Id).name));
+            $('#personelİzinleriPage').attr('href', `/personel-izinleri?id=${res.data.id}`);
             if (res.data.status === 0) { // Online
                 $('#headerButton').addClass("btn-secondary").removeClass("btn-orange");
                 $('#headerButton span').html("İşten Çıkar");
@@ -27,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function fillpersonalDetailsInputs(data) {
         // Avatar ve diğer basit bilgilerin ayarlanması
         $('#personalAvatar').html(data.nameSurname.charAt(0));
+        $('#badgeTotalTakenLeave').html(saatleriGunVeSaatlereCevir(data.totalTakenLeave));
         $('#badgeTotalYearLeave').html(data.totalYearLeave);//TODO
         $('#badgeUsedYearLeave').html(data.usedYearLeave);//TODO
         $('#balanceYearLeave').html(data.totalYearLeave - data.usedYearLeave);//TODO
@@ -70,9 +74,8 @@ document.addEventListener('DOMContentLoaded', function () {
             $('input[name="PersonalDetails.BankAccount"]').val(data.personalDetails.bankAccount);
             $('input[name="PersonalDetails.IBAN"]').val(data.personalDetails.iban);
             $('textarea[name="PersonalDetails.Address"]').val(data.personalDetails.address);
-            $('[data-takenLeave]').val(data.totalYearLeave + " Saat");
-            let deneme = parseInt(data.totalYearLeave / 8,10);
-            $('#alacak-izin-text').text("Alacak İzin Miktarı "+saatleriGunVeSaatlereCevir(data.totalYearLeave) );
+            $('[data-takenLeave]').val(parseInt(data.totalTakenLeave,10));
+            
         }
         function saatleriGunVeSaatlereCevir(saat) {
             // Toplam saatleri gün ve saatlere çevir
@@ -109,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Cinsiyet seçiminin işaretlenmesi
         function setGenderSelection() {
-            data.gender === "Erkek" ? $('input[value="Erkek"]').prop('checked', true) : $('input[value="Kadin"]').prop('checked', true);
+            data.gender === "Erkek" ? $('input[value="Erkek"]').prop('checked', true) : $('input[value="Kadın"]').prop('checked', true);
         }
         
         
@@ -125,7 +128,10 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#enableEditButton').on('click',function () {
             let inputs =$('#updatePersonalForm input');
             inputs.prop('disabled', false);
-            $('[data-takenLeave]').prop('disabled',true);
+            $('[data-hourInput]').prop('disabled',false);
+            $('[data-addHour]').prop('disabled',false);
+            $('[data-removeHour]').prop('disabled',false);
+            
             $('#updatePersonalForm textarea').prop('disabled', false);
             $('#updatePersonalForm select').prop('disabled', false);
             new TomSelect(positionSelect); // Seçilen select'i alın
@@ -136,6 +142,18 @@ document.addEventListener('DOMContentLoaded', function () {
             new TomSelect(BloodGroupSelect); // Seçilen select'i alın
             $('#enableEditButton').prop('disabled', true);
             $('#updatePersonalButton').prop('disabled', false);
+        });
+        $('[data-addHour]').on('click',function () {
+            $('[data-takenLeave]').val(function (index, currentValue) {
+                return parseInt(currentValue,10) + parseInt($('[data-hourInput]').val(),10);
+            });
+            $('[data-hourInput]').val("");
+        });
+        $('[data-removeHour]').on('click',function () {
+            $('[data-takenLeave]').val(function (index, currentValue) {
+                return parseInt(currentValue,10) - parseInt($('[data-hourInput]').val(),10); // TODO FAZLA GİRİLİRSE KONTROL EKLE
+            });
+            $('[data-hourInput]').val("");
         });
         //Personeli Sil Butonu Tıklandığında Butonu Tıklandığında
         $("#deleteButton").on("click", function() {
@@ -156,7 +174,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }); 
         });
-        //
         //İşten Çıkar veya İşe Geri Al Butonu Tıklandığında
         $('#headerButton').on("click", function () {
            $.ajax({ 
@@ -175,6 +192,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //Personeli Güncelle Butonu Tıklandığında
         $('#updatePersonalButton').on('click',function () {
             let formData = $("#updatePersonalForm").serializeArray();
+            console.log(formData);
             formData.forEach(function (f) {
                 if (f.value ==="on"){
                     f.value = true;
@@ -193,7 +211,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.log(res.err);
                 }
             }).then(function () {
-                location.reload();
+                window.location = "/personel-detayları?id=" + $('input[name="ID"]').val();
             });
         });
     }

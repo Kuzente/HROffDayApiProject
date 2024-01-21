@@ -3,7 +3,9 @@ using System.Linq.Expressions;
 using AutoMapper;
 using Core.DTOs;
 using Core.DTOs.BranchDTOs;
+using Core.DTOs.OffDayDTOs.ReadDtos;
 using Core.DTOs.PassivePersonalDtos;
+using Core.DTOs.PersonalDetailDto.ReadDtos;
 using Core.DTOs.PersonalDTOs;
 using Core.DTOs.PersonalDTOs.ReadDtos;
 using Core.DTOs.PositionDTOs;
@@ -267,6 +269,25 @@ public class ReadPersonalService : IReadPersonalService
 			res.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
 		}
 
+		return res;
+	}
+
+	public async Task<IResultWithDataDto<ReadPersonalDetailsHeaderDto>> GetPersonalDetailsHeaderByIdService(Guid id)
+	{
+		IResultWithDataDto<ReadPersonalDetailsHeaderDto> res = new ResultWithDataDto<ReadPersonalDetailsHeaderDto>();
+		try
+		{
+			var personel = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate: p => p.ID == id,
+				include:p=>p.Include(a=>a.Branch).Include(a=>a.Position));
+			if(personel is null)
+				return res.SetStatus(false).SetErr("Personel Is Not Found").SetMessage("İlgili Personel bulunamadı.Lütfen sistemi kontrol ediniz!");
+			var mappedResult = _mapper.Map<ReadPersonalDetailsHeaderDto>(personel);
+			res.SetData(mappedResult);
+		}
+		catch (Exception e)
+		{
+			res.SetStatus(false).SetErr(e.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
 		return res;
 	}
 }

@@ -3,7 +3,7 @@ using Core.Enums;
 
 namespace Core.DTOs.OffDayDTOs.ReadDtos;
 
-public class ReadWaitingOffDayListDto
+public class ReadApprovedOffDayListDto
 {
     public Guid ID { get; set; }
     public DateTime CreatedAt { get; set; }
@@ -22,16 +22,22 @@ public class ReadWaitingOffDayListDto
     public int LeaveByFather { get; set; }
     public int LeaveByMarried { get; set; }
     public Guid Personal_Id { get; set; }
-    public ReadWaitingOffDayListPersonalDto Personal { get; set; }
+    public ReadApprovedOffDayListSubPersonalDto Personal { get; set; }
 }
 
-public class ReadWaitingOffDayListPersonalDto
+public class ReadApprovedOffDayListSubPersonalDto
 {
+    public Guid ID { get; set; }
     public string NameSurname { get; set; }
-    public ReadWaitingOffDayListPersonalBranchDto Branch { get; set; }
+    public ReadApprovedOffDayListSubPersonalBranchDto Branch { get; set; }
+    public ReadApprovedOffDayListSubPersonalPositionDto Position { get; set; }
 }
 
-public class ReadWaitingOffDayListPersonalBranchDto
+public class ReadApprovedOffDayListSubPersonalBranchDto
+{
+    public string Name { get; set; }
+}
+public class ReadApprovedOffDayListSubPersonalPositionDto
 {
     public string Name { get; set; }
 }

@@ -31,6 +31,6 @@ public class WriteUpdateWatingOffDayDto
     public List<string>? LeaveByMarriedFatherDead { get; set; }
     [Required]
     public DateTime CreatedAt { get; set; }
-    [Required]
-    public string returnUrl { get; set; }
+    
+    public string? returnUrl { get; set; }
 }

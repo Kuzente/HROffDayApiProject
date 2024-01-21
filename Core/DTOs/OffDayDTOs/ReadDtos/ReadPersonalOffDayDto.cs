@@ -1,9 +1,8 @@
-﻿using Core.Entities;
-using Core.Enums;
+﻿using Core.Enums;
 
 namespace Core.DTOs.OffDayDTOs.ReadDtos;
 
-public class ReadWaitingOffDayListDto
+public class ReadPersonalOffDayListDto
 {
     public Guid ID { get; set; }
     public DateTime CreatedAt { get; set; }
@@ -22,16 +21,5 @@ public class ReadWaitingOffDayListDto
     public int LeaveByFather { get; set; }
     public int LeaveByMarried { get; set; }
     public Guid Personal_Id { get; set; }
-    public ReadWaitingOffDayListPersonalDto Personal { get; set; }
 }
 
-public class ReadWaitingOffDayListPersonalDto
-{
-    public string NameSurname { get; set; }
-    public ReadWaitingOffDayListPersonalBranchDto Branch { get; set; }
-}
-
-public class ReadWaitingOffDayListPersonalBranchDto
-{
-    public string Name { get; set; }
-}

@@ -30,6 +30,10 @@ namespace UI.Controllers
         }
 
         #region PageActions
+        /// <summary>
+        /// Aktif Personeller Listesi
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index([FromQuery] PersonalQuery query)
         {
             
@@ -46,6 +50,45 @@ namespace UI.Controllers
         #endregion
 
         #region GET/POST Actions
+        
+        /// <summary>
+        /// Aktif Şubeler ve Ünvanlar Select Ajax Get Metodu
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> GetBranchAndPositions()
+        {
+            var branches = await _readBranchService.GetAllJustNames();
+            var positions = await _readPositionService.GetAllJustNames();
+            
+            var dto = new ReadCreatePersonalBranchesPositionsDto
+            {
+                Branches = branches,
+                Positions = positions 
+            };
+            return Ok(dto);
+        }
+        /// <summary>
+        /// Personel Ekle Post Metodu
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> AddPersonal(AddPersonalDto dto)
+        {
+            var result = await _writePersonalService.AddAsync(dto);
+            if (!result.IsSuccess)
+            {
+                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+            }
+            else
+            {
+                _toastNotification.AddSuccessToastMessage("Personel Başarılı Bir Şekilde Eklendi", new ToastrOptions { Title = "Başarılı" }); 
+            }
+            return Ok(result);
+        }
+        /// <summary>
+        /// Aktif Personeller Excel Alma Post Metodu
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ExportExcel(PersonalQuery query, string returnUrl)
         {
@@ -64,36 +107,6 @@ namespace UI.Controllers
             _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
             return Redirect("/personeller"+returnUrl);
         }
-        [HttpPost]
-        public async Task<IActionResult> GetBranchAndPositions()
-        {
-            var branches = await _readBranchService.GetAllJustNames();
-            var positions = await _readPositionService.GetAllJustNames();
-            
-            var dto = new ReadCreatePersonalBranchesPositionsDto
-            {
-                Branches = branches,
-                Positions = positions 
-            };
-            return Ok(dto);
-        }
-        [HttpPost]
-        public async Task<IActionResult> AddPersonal(AddPersonalDto dto)
-        {
-            var result = await _writePersonalService.AddAsync(dto);
-            if (!result.IsSuccess)
-            {
-                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-            }
-            else
-            {
-                _toastNotification.AddSuccessToastMessage("Personel Başarılı Bir Şekilde Eklendi", new ToastrOptions { Title = "Başarılı" }); 
-            }
-            return Ok(result);
-        }
         #endregion
-        
-      
-        
     }
 }

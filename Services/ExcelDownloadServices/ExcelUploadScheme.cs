@@ -7,7 +7,7 @@ namespace Services.ExcelDownloadServices;
 
 public class ExcelUploadScheme
 {
-    public byte[] ExportToExcel(List<PositionDto> positions , List<BranchDto> branches)
+    public byte[] ExportToExcel(List<PositionNameDto> positions , List<BranchNameDto> branches)
     {
         try
         {
@@ -130,6 +130,9 @@ public class ExcelUploadScheme
                 worksheet.Cells[1, 23].Value = "Banka Hesabı";
                 worksheet.Cells[1, 24].Value = "IBAN Adresi";
                 worksheet.Cells[1, 25].Value = "Adres";
+                worksheet.Cells[1, 26].Value = "Toplam Yıllık İzin Miktarı";
+                worksheet.Cells[1, 27].Value = "Kullanılan Yıllık İzin Miktarı";
+                worksheet.Cells[1, 28].Value = "Toplam Alınan İzin Miktarı (SAAT)";
 
                 #endregion
                

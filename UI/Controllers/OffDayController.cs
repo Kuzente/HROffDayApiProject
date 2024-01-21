@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using Services.Abstract.OffDayServices;
 using Services.Abstract.PersonalServices;
+using Services.ExcelDownloadServices.OffDayServices;
 
 namespace UI.Controllers;
 
@@ -15,13 +16,15 @@ public class OffDayController : Controller
     private readonly IReadPersonalService _readPersonalService;
     private readonly IWriteOffDayService _writeOffDayService;
     private readonly IReadOffDayService _readOffDayService;
+    private readonly OffDayExcelExport _offDayExcelExport;
 
-    public OffDayController(IReadPersonalService readPersonalService, IWriteOffDayService writeOffDayService, IToastNotification toastNotification, IReadOffDayService readOffDayService)
+    public OffDayController(IReadPersonalService readPersonalService, IWriteOffDayService writeOffDayService, IToastNotification toastNotification, IReadOffDayService readOffDayService, OffDayExcelExport offDayExcelExport)
     {
         _readPersonalService = readPersonalService;
         _writeOffDayService = writeOffDayService;
         _toastNotification = toastNotification;
         _readOffDayService = readOffDayService;
+        _offDayExcelExport = offDayExcelExport;
     }
 
     #region PageActions
@@ -31,7 +34,10 @@ public class OffDayController : Controller
     /// <returns></returns>
     public async Task<IActionResult> WaitingOffDayList(OffdayQuery query)
     {
-        var result = await _readOffDayService.GetFirstWaitingOffDaysListService(query);
+        //İnsan Kaynakları service
+       //var result = await _readOffDayService.GetFirstWaitingOffDaysListService(query);
+        
+        var result = await _readOffDayService.GetSecondWaitingOffDaysListService(query);
         if (!result.IsSuccess)
             _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
         return View(result);
@@ -57,7 +63,29 @@ public class OffDayController : Controller
         var personalResult = await _readPersonalService.GetAllPersonalByBranchIdService(id);
         if (personalResult.IsSuccess) return View(personalResult);
         _toastNotification.AddErrorToastMessage(personalResult.Message, new ToastrOptions { Title = "Hata" });
-        return Redirect("/subeler" + returnUrl);
+        return Redirect(returnUrl);
+    }
+    /// <summary>
+    /// Reddedilen İzinler Listelenme Sayfası
+    /// </summary>
+    /// <returns></returns>
+    public async Task<IActionResult> RejectedOffDayList(OffdayQuery query)
+    {
+        var result = await _readOffDayService.GetRejectedOffDaysListService(query);
+        if (!result.IsSuccess)
+            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+        return View(result);
+    }
+    /// <summary>
+    /// Onaylanan İzinler Listelenme Sayfası
+    /// </summary>
+    /// <returns></returns>
+    public async Task<IActionResult> ApprovedOffDayList(OffdayQuery query)
+    {
+        var result = await _readOffDayService.GetApprovedOffDaysListService(query);
+        if (!result.IsSuccess)
+            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+        return View(result);
     }
     #endregion
 
@@ -79,7 +107,7 @@ public class OffDayController : Controller
             _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" }); 
         else
             _toastNotification.AddSuccessToastMessage("İzin Talebi Başarılı Bir Şekilde Gönderildi", new ToastrOptions { Title = "Başarılı" }); 
-        return Redirect("/izin-olustur"+ dto.returnUrl);
+        return Redirect(dto.returnUrl);
     }
     /// <summary>
     /// Bekleyen İzinler Düzenleme Post Metodu
@@ -98,7 +126,7 @@ public class OffDayController : Controller
             _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
         else
             _toastNotification.AddSuccessToastMessage("İzin Talebi Başarılı Bir Şekilde Güncellendi", new ToastrOptions { Title = "Başarılı" });
-        return Redirect("/bekleyen-izinler" + dto.returnUrl);
+        return Redirect(dto.returnUrl);
     }
     /// <summary>
     /// İlk Bekleyen İzinler Durum Değiştirme(Onayla/Reddet) Post Metodu
@@ -112,9 +140,61 @@ public class OffDayController : Controller
             _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
         else
             _toastNotification.AddSuccessToastMessage("İşlem Başarılı", new ToastrOptions { Title = "Başarılı" });
-        return Redirect("/bekleyen-izinler" + returnUrl);
+        return Redirect(returnUrl);
     }
+    /// <summary>
+    /// İkinci Bekleyen İzinler Durum Değiştirme(Onayla/Reddet) Post Metodu
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<IActionResult> UpdateSecondWaitingStatus(Guid id , bool status, string returnUrl)
+    {
+        var result = await _writeOffDayService.UpdateSecondWaitingStatusOffDayService(id,status);
+        if (!result.IsSuccess)
+            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+        else
+            _toastNotification.AddSuccessToastMessage("İşlem Başarılı", new ToastrOptions { Title = "Başarılı" });
+        return Redirect(returnUrl);
+    }
+    /// <summary>
+    /// Onaylanan İzinler İptal Etme Post Metodu
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<IActionResult> DeleteOffDay(Guid id, string returnUrl)
+    {
+        var result = await _writeOffDayService.DeleteOffDayService(id);
+        if (!result.IsSuccess)
+        {
+            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+        }
+        else
+        {
+            _toastNotification.AddSuccessToastMessage("İzin Başarılı Bir Şekilde Silindi", new ToastrOptions { Title = "Başarılı" }); 
+        }
+        return Redirect(returnUrl);
+    }
+    /// <summary>
+    /// Bekleyen İzinler Düzenleme Post Metodu
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<IActionResult> ExportExcel(OffdayQuery query , string returnUrl)
+    {
+        var result = await _readOffDayService.GetExcelOffDayListService(query);
+        if (result.IsSuccess)
+        {
+            byte[] excelData = _offDayExcelExport.ExportToExcel(result.Data); // Entity listesini Excel verisi olarak alın.
+            var response = HttpContext.Response;
+            response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            response.Headers.Add("Content-Disposition", "attachment; filename=Izinler.xlsx");
+            await response.Body.WriteAsync(excelData, 0, excelData.Length);
+            return new EmptyResult();
+        }
 
+        _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+        return Redirect(returnUrl);
+    }
     #endregion
   
 }

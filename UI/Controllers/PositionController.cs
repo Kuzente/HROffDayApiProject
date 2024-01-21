@@ -71,7 +71,7 @@ namespace UI.Controllers
                 _toastNotification.AddSuccessToastMessage("Ünvan Başarılı Bir Şekilde Eklendi", new ToastrOptions { Title = "Başarılı" }); 
             }
 
-            return Redirect("/unvanlar"+returnUrl);
+            return Redirect(returnUrl);
         }
         /// <summary>
         /// Ünvan Düzenle Post Metodu
@@ -89,7 +89,7 @@ namespace UI.Controllers
             {
                 _toastNotification.AddSuccessToastMessage("Ünvan Başarılı Bir Şekilde Düzenlendi", new ToastrOptions { Title = "Başarılı" }); 
             }
-            return Redirect("/unvanlar"+returnUrl);
+            return Redirect(returnUrl);
         }
         /// <summary>
         /// Ünvan Sil Post Metodu
@@ -107,7 +107,7 @@ namespace UI.Controllers
             {
                 _toastNotification.AddSuccessToastMessage("Ünvan Başarılı Bir Şekilde Silindi", new ToastrOptions { Title = "Başarılı" }); 
             }
-            return Redirect("/unvanlar"+returnUrl);
+            return Redirect(returnUrl);
         }
         /// <summary>
         /// Ünvanlar Listesi Excel Alma Post Metodu
@@ -129,7 +129,7 @@ namespace UI.Controllers
                 return new EmptyResult();
             }
             _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-            return Redirect("/unvanlar"+returnUrl);
+            return Redirect(returnUrl);
         }
         #endregion
        

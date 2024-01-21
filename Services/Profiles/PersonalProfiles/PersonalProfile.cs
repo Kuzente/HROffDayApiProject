@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.DTOs.PassivePersonalDtos;
+using Core.DTOs.PersonalDetailDto.WriteDtos;
 using Core.DTOs.PersonalDTOs;
 using Core.DTOs.PersonalDTOs.ReadDtos;
 using Core.DTOs.PersonalDTOs.WriteDtos;
@@ -16,6 +17,7 @@ public class PersonalProfile : Profile
 		CreateMap<Personal,ReadUpdatePersonalDto>();
 		CreateMap<AddPersonalDto,Personal>().ReverseMap();
 		CreateMap<AddRangePersonalDto,Personal>().ReverseMap();
+		CreateMap<AddRangePersonalDetailDto,PersonalDetails>().ReverseMap();
 		CreateMap<PersonalDetailDto,Personal>().ReverseMap();
 		
 		CreateMap<WritePersonalDto,Personal>();

@@ -1,4 +1,5 @@
 ﻿using Core.DTOs;
+using Core.DTOs.OffDayDTOs.ReadDtos;
 using Core.DTOs.PassivePersonalDtos;
 using Core.DTOs.PersonalDetailDto.ReadDtos;
 using Core.DTOs.PersonalDTOs;
@@ -17,4 +18,5 @@ public interface IReadPersonalService
 	Task<ResultWithPagingDataDto<List<PassivePersonalDto>>> GetPassivePersonalListService(PersonalQuery query); // Pasif Personel Listesi Servisi
 	Task<ResultWithPagingDataDto<List<PersonalDto>>> GetDeletedPersonalListService(int pageNumber,string search); // Silinen Personel Listesi Servisi
 	Task<IResultWithDataDto<List<ReadPersonalsByBranchIdDto>>> GetAllPersonalByBranchIdService(Guid branchId); // İzin Ekleme Şube ID ye göre personel getiren Servis
+	Task<IResultWithDataDto<ReadPersonalDetailsHeaderDto>> GetPersonalDetailsHeaderByIdService(Guid id); // Personel Detayları Üst Menü Servisi
 }

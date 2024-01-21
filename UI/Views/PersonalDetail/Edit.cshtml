@@ -1,5 +1,6 @@
 ﻿@{
     Layout = "_Layout";
+    var returnUrl = Context.Request.GetDisplayUrl();
 }
 
 <!--Top Header-->
@@ -11,8 +12,10 @@
                 <div class="page-pretitle">
                     Personeller
                 </div>
-                <h2 id="HeaderPersonalNameSurname" class="page-title">
-                </h2>
+                <h2 id="HeaderPersonalNameSurname" class="page-title"></h2>
+                <div id="HeaderPersonalBranchPosition" class="page-pretitle">
+                    
+                </div>
             </div>
             <!-- Page title actions -->
             <div class="col-auto ms-auto d-print-none">
@@ -30,7 +33,7 @@
     </div>
 </div>
 <!--Top Header-->
-<div class="card mt-3">
+<div class="card container-xl mt-3">
 <div class="card-status-top bg-azure"></div>
 <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs flex-row-reverse">
@@ -44,16 +47,14 @@
             <a href="#tabs-home-2" class="nav-link">Avans</a>
         </li>
         <li class="nav-item">
-            <a href="#tabs-home-2" class="nav-link">Personele Ait İzinler</a>
+            <a id="personelİzinleriPage" href="" class="nav-link">Personele Ait İzinler</a>
         </li>
         <li class="nav-item">
             <a class="nav-link active">Personel Detayları</a>
         </li>
     </ul>
 </div>
-<div class="card-body">
-<div class="col-md-12">
-<div class="card mb-4">
+<!--FirstCard-->
 <div class="card-body">
     <!-- Card Header-->
     <div class="d-flex align-items-start align-items-sm-center gap-4">
@@ -76,8 +77,11 @@
                         </span>
                     </div>
                     <div class="col">
+                        <div id="badgeTotalTakenLeave" class="font-weight-medium">
+
+                        </div>
                         <div id="alacak-izin-text" class="text-muted">
-                            Alacak İzin Miktarı 6 Gün / 2 Saat
+                            Alacak İzin Miktarı
                         </div>
                     </div>
                 </div>
@@ -168,8 +172,11 @@
     </div>
     <!-- Card Header-->
 </div>
+<!--FirstCard-->
 <div class="card-body">
 
+
+<!-- /Main Card -->
 <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
         <li class="nav-item" role="presentation">
@@ -191,13 +198,13 @@
 <form id="updatePersonalForm" method="POST" onsubmit="return false">
 <input type="hidden" name="ID">
 <input type="hidden" name="PersonalDetails.ID">
+<input type="hidden" name="returnUrl" value="@returnUrl">
 <div class="card-body">
 <div class="tab-content">
 
 <div class="tab-pane active show" id="tabs-home-1" role="tabpanel">
     <div class="hr-text mb-3 text-black">Personel Bilgileri</div>
     <div class="card-body">
-
         <div class="row">
             <div class="col mb-3">
                 <label class="form-label required">Adı Soyadı</label>
@@ -361,7 +368,7 @@
                         </span>
                     </label>
                     <label class="form-selectgroup-item">
-                        <input type="radio" value="Kadin" name="Gender" class="form-selectgroup-input" disabled>
+                        <input type="radio" value="Kadın" name="Gender" class="form-selectgroup-input" disabled>
                         <span class="form-selectgroup-label">
                             <!-- Download SVG icon from http://tabler-icons.io/i/user -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-gender-female" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -598,20 +605,23 @@
                                 <path d="M12 4m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
                             </svg>
                         </span>
-                        <input type="text" data-takenLeave class="form-control disabled"/>
+                        <input type="number" data-takenLeave name="TotalTakenLeave" class="form-control" readonly/>
+                        <span class="input-group-text">
+                            Saat
+                        </span>
                     </div>
                 </div>
 
             </div>
             <div class="row">
                 <div class="col-4">
-                    <input type="number" placeholder="Saat Giriniz" disabled class="form-control"/>
+                    <input data-hourInput type="number" placeholder="Saat Giriniz" disabled class="form-control"/>
                 </div>
                 <div class="col-2">
-                    <button class="btn btn-success">Saat Ekle</button>
+                    <button data-addHour class="btn btn-success" disabled>Saat Ekle</button>
                 </div>
                 <div class="col-2">
-                    <button class="btn btn-danger">Saat Çıkart</button>
+                    <button data-removeHour class="btn btn-danger" disabled>Saat Çıkart</button>
                 </div>
                 <div class="col-4"></div>
             </div>
@@ -626,14 +636,7 @@
 </div>
 </div>
 </form>
-</div>
-
-
-<!-- Personel Detayları -->
-
-
-<!-- Personel Detayları -->
-</div>
+<!-- /Main Card -->
 <!-- /Account Delete -->
 <div class="card">
     <h3 class="card-header">Personeli Sil</h3>
@@ -658,6 +661,10 @@
     <button style="width: 150px;" id="deleteButton" type="button" class="btn btn-danger m-3" data-bs-toggle="modal" data-bs-target="#archiveModal">Personeli Sil</button>
 </div>
 <!-- /Account Delete -->
+
+
+</div>
+</div>
 <!--ArchiveModal-->
 <div class="modal modal-blur fade" id="archiveModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
@@ -691,9 +698,6 @@
     </div>
 </div>
 <!--ArchiveModal-->
-</div>
-</div>
-</div>
 
 @section Scripts
 {

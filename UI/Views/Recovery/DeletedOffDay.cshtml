@@ -1,17 +1,14 @@
-﻿@using System.Globalization
-@using Microsoft.AspNetCore.Http.Extensions
-@using Microsoft.AspNetCore.Mvc.TagHelpers
-@model ResultWithPagingDataDto<List<ReadRejectedOffDayListDto>>
+﻿@model ResultWithPagingDataDto<List<ReadDeletedOffDayListDto>>
+
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
     var sayfa = Convert.ToInt32(Context.Request.Query["sayfa"]);
-    var returnUrl = Context.Request.GetDisplayUrl();
+    var returnUrl = Context.Request.QueryString.ToString();
     var maxVisiblePages = 5;
     var startPage = Math.Max(1, Model.PageNumber - (maxVisiblePages / 2));
     var endPage = Math.Min(Model.TotalPages, startPage + (maxVisiblePages - 1));
 }
-
 <!--Heading Area-->
 <div class="page-header d-print-none">
     <div class="container-xl">
@@ -19,13 +16,12 @@
             <div class="col">
                 <!-- Page pre-title -->
                 <div class="page-pretitle">
-                    IYAŞ PANEL
+                    İzinler
                 </div>
                 <h2 class="page-title">
-                    Reddedilen İzinler
+                    İptal Edilen Tüm İzinler
                 </h2>
             </div>
-            <!-- Page title actions -->
         </div>
     </div>
 </div>
@@ -45,106 +41,53 @@ else
     <div class="card container-xl mt-3">
         <div class="row">
             <div class="col-6">
-                <div class="p-3">
-                    <!-- Data Filter-->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <form class="d-flex" action="/reddedilen-izinler">
-                                <input class="form-control me-2" type="search" placeholder="Ara" name="search" aria-label="Search">
-                                <button class="btn btn-outline-primary" type="submit">Ara</button>
-                            </form>
-                        </div>
-                        <div class="col-md-1">
-                            <form id="filterForm" class="">
-                                <div class="dropdown filter-dropdown">
-                                    <button class="btn btn-outline-secondary btn-icon" data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter-down" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                            <path d="M12 20l-3 1v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v3"></path>
-                                            <path d="M19 16v6"></path>
-                                            <path d="M22 19l-3 3l-3 -3"></path>
-                                        </svg>
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-start ">
-                                        <div class="dropdown-header" style="width: 500px;">Detaylı Filtre</div>
-                                        <div class="p-4">
-                                            <div class="row mb-2">
-                                                <div class="col-6">
-                                                    <label class="form-label">Yıl Seçiniz</label>
-                                                    <select name="filterYear" class="form-select">
-                                                        <option value="">Yıl Seçiniz.</option>
-                                                        @for (var year = 2017; year <= 2050; year++)
-                                                        {
-                                                            <option value="@year">@year</option>
-                                                        }
-                                                    </select>
-                                                </div>
-                                                <div class="col-6">
-                                                    <label class="form-label">Ay Seçiniz</label>
-                                                    <select name="filterMonth" class="form-select">
-                                                        <option value="">Ay Seçiniz.</option>
-                                                        @{
-                                                            for (int month = 1; month <= 12; month++)
-                                                            {
-                                                                <option value="@month">@(new CultureInfo("tr-TR").DateTimeFormat.GetMonthName(month))</option>
-                                                            }
-                                                        }
-                                                    </select>
-                                                </div>
-                                            </div>
+                <div class="row p-3">
+                    <div class="col-md-6">
+                        <form class="d-flex" action="/silinen-izinler" method="get">
+                            <input class="form-control me-2" type="search" placeholder="Ara" name="search" aria-label="Search">
+                            <button class="btn btn-outline-primary" type="submit">Ara</button>
 
-                                            <div class="d-flex justify-content-end">
-                                                <button class="btn btn-outline-primary" type="submit">Filtrele</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <!--Temizle Butonu-->
-                        <div class="col-md-5">
-                            @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && !string.IsNullOrEmpty(kvp.Value)))
-                            {
-                                <a href="/reddedilen-izinler" class="btn btn-outline-secondary ms-3">Temizle</a>
-                            }
-                        </div>
-                        <!--Temizle Butonu-->
+                        </form>
                     </div>
-                    <!-- Data Filter-->
+                    <div class="col-md-6">
+                        @if (!string.IsNullOrEmpty(Context.Request.Query["search"]))
+                        {
+                            <a href="/silinen-izinler" class="btn btn-outline-secondary">Temizle</a>
+                        }
+                    </div>
                 </div>
             </div>
-            <div class="col-2">
-            </div>
+            <div class="col-2"></div>
             <div class="col-4 p-3 text-end">
                 @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && !string.IsNullOrEmpty(kvp.Value)))
                 {
                     <button type="button" class="btn">
-                        Filtrelenen Reddedilen İzin
-                        <span class="badge bg-green ms-2">@Model.TotalRecords</span>
+                        Filtrelenen Silinen Şube
+                        <span class="badge bg-danger ms-2">@Model.TotalRecords</span>
                     </button>
                 }
                 else
                 {
                     <button type="button" class="btn">
-                        Toplam Reddedilen İzin
-                        <span class="badge bg-green ms-2">@Model.TotalRecords</span>
+                        Toplam Silinen Şube
+                        <span class="badge bg-danger ms-2">@Model.TotalRecords</span>
                     </button>
                 }
             </div>
 
         </div>
-        <table class="table table-responsive">
+        <table class="table">
             <thead>
             <tr>
                 <th>Personel<br> Adı Soyadı</th>
                 <th>Şube</th>
+                <th>Ünvan</th>
                 <th>İzin Başlangıç Tarihi</th>
                 <th>İzin Bitiş Tarihi</th>
 
                 <th>Toplam <br/> Alınan Gün</th>
                 <th>Detaylı <br/>İzin Günleri</th>
-                <th>Form <br>Oluşturulma Tarihi</th>
-
+                <th>Silinme Zamanı</th>
             </tr>
             </thead>
             <tbody class="table-border-bottom-0">
@@ -154,11 +97,15 @@ else
                     <td class="col-2">
                         @data.Personal.NameSurname
                     </td>
-                    <td class="col-3">
+                    <td class="col-1">
                         @data.Personal.Branch.Name
                     </td>
                     <td class="col-2">
+                        @data.Personal.Position.Name
+                    </td>
+                    <td class="col-2">
                         <span class="status status-dark mb-1">@data.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
+                        
                     </td>
                     <td class="col-2">
                         <span class="status status-github">@data.EndDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
@@ -170,20 +117,20 @@ else
                     <td class="col-1">
                         <button type="button" class="btn btn-teal btn-sm btn-pill" data-bs-trigger="hover" data-bs-html="true" data-bs-toggle="popover"
                                 title="Detaylı İzin Sayıları" data-bs-content="@(data.LeaveByYear > 0 ? $"Yıllık İzni: {data.LeaveByYear}</br>" : "") 
-                                                                               @(data.LeaveByWeek > 0 ? $"Haftalık İzni: {data.LeaveByWeek}</br>" : "") 
-                                                                               @(data.LeaveByTaken > 0 ? $"Alacak İzni: {data.LeaveByTaken}</br>" : "") 
-                                                                               @(data.LeaveByPublicHoliday > 0 ? $"Resmi İzni: {data.LeaveByPublicHoliday}</br>" : "") 
-                                                                               @(data.LeaveByFreeDay > 0 ? $"Ücretsiz İzni: {data.LeaveByFreeDay}</br>" : "") 
-                                                                               @(data.LeaveByTravel > 0 ? $"Seyahat İzni: {data.LeaveByTravel}</br>" : "") 
-                                                                               @(data.LeaveByFather > 0 ? $"Babalık İzni: {data.LeaveByFather}</br>" : "") 
-                                                                               @(data.LeaveByMarried > 0 ? $"Evlenme İzni: {data.LeaveByMarried}</br>" : "") 
-                                                                               @(data.LeaveByDead > 0 ? $"Ölüm İzni: {data.LeaveByDead}</br>" : "")
-                                                                               @($"İzin Açıklaması: {data.Description}</br>")">
+                                                                                               @(data.LeaveByWeek > 0 ? $"Haftalık İzni: {data.LeaveByWeek}</br>" : "") 
+                                                                                               @(data.LeaveByTaken > 0 ? $"Alacak İzni: {data.LeaveByTaken}</br>" : "") 
+                                                                                               @(data.LeaveByPublicHoliday > 0 ? $"Resmi İzni: {data.LeaveByPublicHoliday}</br>" : "") 
+                                                                                               @(data.LeaveByFreeDay > 0 ? $"Ücretsiz İzni: {data.LeaveByFreeDay}</br>" : "") 
+                                                                                               @(data.LeaveByTravel > 0 ? $"Seyahat İzni: {data.LeaveByTravel}</br>" : "") 
+                                                                                               @(data.LeaveByFather > 0 ? $"Babalık İzni: {data.LeaveByFather}</br>" : "") 
+                                                                                               @(data.LeaveByMarried > 0 ? $"Evlenme İzni: {data.LeaveByMarried}</br>" : "") 
+                                                                                               @(data.LeaveByDead > 0 ? $"Ölüm İzni: {data.LeaveByDead}</br>" : "")
+                                                                                               @($"İzin Açıklaması: {data.Description}</br>")">
                             Detaylı Görüntüle
                         </button>
                     </td>
                     <td class="col-1">
-                        <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
+                        <span class="badge bg-danger">@data.DeletedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
 
                     </td>
                 </tr>
@@ -191,8 +138,8 @@ else
             </tbody>
 
         </table>
-
         <!--Pagination-->
+
         <div class="border-top pt-3 mx-3 d-flex justify-content-end">
             <nav aria-label="Page navigation">
                 <ul class="pagination">
@@ -249,9 +196,9 @@ else
 
         </div>
     </div>
-    @section Scripts{
-        <script src="/js/custom/offday/rejectedOffDayList.js"></script>
+    @section Scripts
+    {
+        <script src="/js/custom/recovery/recover.js"></script>
+
     }
 }
-
-

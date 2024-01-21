@@ -7,6 +7,7 @@ using Core.Entities;
 using Core.Enums;
 using Core.Interfaces;
 using Data.Abstract;
+using Microsoft.EntityFrameworkCore;
 using Services.Abstract.OffDayServices;
 
 namespace Services.Concrete.OffDayServices;
@@ -138,6 +139,70 @@ public class WriteOffDayService : IWriteOffDayService
 				return result.SetStatus(false).SetErr("OffDay Is Not Found").SetMessage("İlgili İzin Bulunamadı.");
 			offday.OffDayStatus = status ? OffDayStatusEnum.WaitingForSecond : OffDayStatusEnum.Rejected;
 			await _unitOfWork.WriteOffDayRepository.Update(offday);
+			var resultCommit = _unitOfWork.Commit();
+			if (!resultCommit)
+				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+		}
+		catch (Exception e)
+		{
+			result.SetStatus(false).SetErr(e.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+
+		return result;
+	}
+
+	public async Task<IResultDto> UpdateSecondWaitingStatusOffDayService(Guid id, bool status)
+	{
+		IResultDto result = new ResultDto();
+		try
+		{
+			var offday = await _unitOfWork.ReadOffDayRepository.GetSingleAsync(
+				predicate: p => p.ID == id,
+				include: p=> p.Include(a=>a.Personal)
+				);
+			if(offday is null)
+				return result.SetStatus(false).SetErr("OffDay Is Not Found").SetMessage("İlgili İzin Bulunamadı.");
+			if (status)
+			{
+				if (offday.LeaveByYear > 0)
+					offday.Personal.UsedYearLeave += offday.LeaveByYear;
+				if (offday.LeaveByTaken > 0)
+					offday.Personal.TotalTakenLeave -= (offday.LeaveByTaken * 8);
+				offday.OffDayStatus = OffDayStatusEnum.Approved;
+			}
+			else
+				offday.OffDayStatus = OffDayStatusEnum.Rejected;
+			await _unitOfWork.WriteOffDayRepository.Update(offday);
+			var resultCommit = _unitOfWork.Commit();
+			if (!resultCommit)
+				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+		}
+		catch (Exception e)
+		{
+			result.SetStatus(false).SetErr(e.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+
+		return result;
+	}
+
+	public async Task<IResultDto> DeleteOffDayService(Guid id)
+	{
+		IResultDto result = new ResultDto();
+		try
+		{
+			var offDay = await _unitOfWork.ReadOffDayRepository.GetSingleAsync(
+				predicate:p=> p.ID == id && p.Status == EntityStatusEnum.Online,
+				include: p=> p.Include(a=> a.Personal)
+			);
+			if(offDay is null)
+				return result.SetStatus(false).SetErr("OffDay Is Not Found").SetMessage("İlgili İzin Bulunamadı.");
+			if (offDay.LeaveByYear > 0) // Alınan yıllık izini geri ata
+				offDay.Personal.UsedYearLeave -= offDay.LeaveByYear;
+			if (offDay.LeaveByTaken > 0) // Alınan alacak iznini geri ata
+				offDay.Personal.TotalTakenLeave += (offDay.LeaveByTaken * 8);
+			offDay.Status = EntityStatusEnum.Deleted;
+			offDay.DeletedAt = DateTime.Now;
+			await _unitOfWork.WriteOffDayRepository.Update(offDay);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");

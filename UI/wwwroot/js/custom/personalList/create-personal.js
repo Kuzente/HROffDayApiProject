@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let BodySizeSelect = new TomSelect($("#BodySizeSelect"));
     let BloodGroupSelect =   new TomSelect($("#BloodGroupSelect"));
    $.ajax({ //TODO
-       type: "POST",
+       type: "GET",
        url : "/get-select-items"
    }).done(function (res) {
            $('#branchSelectModal').empty();

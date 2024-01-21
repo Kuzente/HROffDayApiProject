@@ -29,20 +29,12 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 app.UseNToastNotify();
 app.UseAuthorization();
-
-#region PersonalDetails
-app.MapControllerRoute(name: "personalDetailPage", pattern: "get-personel-detayları", defaults: new { controller = "PersonalDetail", action = "EditAjax" });
-app.MapControllerRoute(name: "personalDetailPage", pattern: "personel-detayları", defaults: new { controller = "PersonalDetail", action = "Edit" });
-app.MapControllerRoute(name: "personalDetailPageStatusPost", pattern: "personel-durumu", defaults: new { controller = "PersonalDetail", action = "ChangeStatus" });
-app.MapControllerRoute(name: "personalDeletePost", pattern: "personel-sil", defaults: new { controller = "PersonalDetail", action = "ArchivePersonal" });
-#endregion
-
 #region PersonalList
 app.MapControllerRoute(name: "personalListGet", pattern: "personeller", defaults: new { controller = "Personal", action = "Index" });
 app.MapControllerRoute(name: "personalListCreate", pattern: "create-personal", defaults: new { controller = "Personal", action = "AddPersonal" });
@@ -54,6 +46,14 @@ app.MapControllerRoute(name: "passivePersonalListGet", pattern: "cikarilan-perso
 app.MapControllerRoute(name: "downloadPassivePersonelExcelListGet", pattern: "cikarilan-personeller-excel", defaults: new { controller = "PassivePersonal", action = "ExportExcel" });
 
 #endregion
+#region PersonalDetails
+app.MapControllerRoute(name: "personalDetailPage", pattern: "get-personel-detayları", defaults: new { controller = "PersonalDetail", action = "EditAjax" });
+app.MapControllerRoute(name: "personalDetailPage", pattern: "personel-detayları", defaults: new { controller = "PersonalDetail", action = "Edit" });
+app.MapControllerRoute(name: "personalDetailPageStatusPost", pattern: "personel-durumu", defaults: new { controller = "PersonalDetail", action = "ChangeStatus" });
+app.MapControllerRoute(name: "personalDeletePost", pattern: "personel-sil", defaults: new { controller = "PersonalDetail", action = "ArchivePersonal" });
+app.MapControllerRoute(name: "personalOffDays", pattern: "personel-izinleri", defaults: new { controller = "PersonalDetail", action = "PersonalOffDayList" });
+app.MapControllerRoute(name: "personalHeader", pattern: "personel-header", defaults: new { controller = "PersonalDetail", action = "PersonelDetailsHeader" });
+#endregion
 
 #region BranchList
 app.MapControllerRoute(name: "branchListGet", pattern: "subeler", defaults: new { controller = "Branch", action = "Index" });
@@ -61,6 +61,7 @@ app.MapControllerRoute(name: "downloadBranchExcelListGet", pattern: "subeler-exc
 app.MapControllerRoute(name: "updateBranchGetPost", pattern: "sube-duzenle", defaults: new { controller = "Branch", action = "UpdateBranch" });
 app.MapControllerRoute(name: "addBranchPost", pattern: "sube-ekle", defaults: new { controller = "Branch", action = "AddBranch" });
 app.MapControllerRoute(name: "deleteBranchPost", pattern: "sube-sil", defaults: new { controller = "Branch", action = "ArchiveBranch" });
+app.MapControllerRoute(name: "deleteBranchPost", pattern: "deneme-url", defaults: new { controller = "Branch", action = "ArchiveBranch" });
 
 
 #endregion
@@ -77,8 +78,13 @@ app.MapControllerRoute(name: "deletePositionPost", pattern: "unvan-sil", default
 #region OffDay
 app.MapControllerRoute(name: "offDayCreateGet", pattern: "izin-olustur", defaults: new { controller = "OffDay", action = "AddOffDay" });
 app.MapControllerRoute(name: "offDayWaitingList", pattern: "bekleyen-izinler", defaults: new { controller = "OffDay", action = "WaitingOffDayList" });
-app.MapControllerRoute(name: "offDayWaitingEdit", pattern: "izin-duzenle", defaults: new { controller = "OffDay", action = "WaitingOffDayEdit" });
 app.MapControllerRoute(name: "offDayFirstWaitingChangeStatus", pattern: "bekleyen-izin-guncelle-bir", defaults: new { controller = "OffDay", action = "UpdateFirstWaitingStatus" });
+app.MapControllerRoute(name: "offDaySecondWaitingChangeStatus", pattern: "bekleyen-izin-guncelle-iki", defaults: new { controller = "OffDay", action = "UpdateSecondWaitingStatus" });
+app.MapControllerRoute(name: "offDayWaitingEdit", pattern: "izin-duzenle", defaults: new { controller = "OffDay", action = "WaitingOffDayEdit" });
+app.MapControllerRoute(name: "offDayRejectedList", pattern: "reddedilen-izinler", defaults: new { controller = "OffDay", action = "RejectedOffDayList" });
+app.MapControllerRoute(name: "offDayApprovedList", pattern: "onaylanan-izinler", defaults: new { controller = "OffDay", action = "ApprovedOffDayList" });
+app.MapControllerRoute(name: "offDayWaitingList", pattern: "izin-sil", defaults: new { controller = "OffDay", action = "DeleteOffDay" });
+app.MapControllerRoute(name: "offDayExcel", pattern: "izin-excel", defaults: new { controller = "OffDay", action = "ExportExcel" });
 
 
 #endregion
@@ -86,6 +92,7 @@ app.MapControllerRoute(name: "offDayFirstWaitingChangeStatus", pattern: "bekleye
 app.MapControllerRoute(name: "recoveryBranchList", pattern: "silinen-subeler", defaults: new { controller = "Recovery", action = "DeletedBranch" });
 app.MapControllerRoute(name: "recoveryPositionList", pattern: "silinen-unvanlar", defaults: new { controller = "Recovery", action = "DeletedPosition" });
 app.MapControllerRoute(name: "recoveryPersonalList", pattern: "silinen-personeller", defaults: new { controller = "Recovery", action = "DeletedPersonal" });
+app.MapControllerRoute(name: "recoveryOffDayList", pattern: "silinen-izinler", defaults: new { controller = "Recovery", action = "DeletedOffDay" });
 app.MapControllerRoute(name: "recoveryBranch", pattern: "sube-gerigetir", defaults: new { controller = "Recovery", action = "RecoverBranch" });
 app.MapControllerRoute(name: "recoveryPosition", pattern: "unvan-gerigetir", defaults: new { controller = "Recovery", action = "RecoverPosition" });
 app.MapControllerRoute(name: "recoveryPersonal", pattern: "personel-gerigetir", defaults: new { controller = "Recovery", action = "RecoverPersonal" });

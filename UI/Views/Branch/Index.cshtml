@@ -1,10 +1,12 @@
 ﻿@using Core.Enums
+@using Microsoft.AspNetCore.Http.Extensions
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ResultWithPagingDataDto<List<BranchDto>>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var sayfa = Convert.ToInt32(Context.Request.Query["sayfa"]);
-    var returnUrl = Context.Request.QueryString.ToString();
+    var returnUrl = Context.Request.GetDisplayUrl();
     var maxVisiblePages = 5;
     var startPage = Math.Max(1, Model.PageNumber - (maxVisiblePages / 2));
     var endPage = Math.Min(Model.TotalPages, startPage + (maxVisiblePages - 1));
@@ -30,6 +32,7 @@
                             <button type="submit" class="btn btn-green">
                                 <input type="hidden" name="search" value="@Context.Request.Query["search"]">
                                 <input type="hidden" name="passive" value="@Context.Request.Query["passive"]">
+                                <input type="hidden" name="active" value="@Context.Request.Query["active"]">
                                 <input type="hidden" name="ReturnUrl" value="@returnUrl">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-spreadsheet" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -107,6 +110,10 @@ else
                                                     <input name="passive" value="true" class="form-check-input" type="checkbox" id="checkbox3">
                                                     <label class="form-check-label" for="checkbox3">Pasif</label>
                                                 </div>
+                                                <div class="form-check col-6">
+                                                    <input name="active" value="true" class="form-check-input" type="checkbox" id="checkbox4">
+                                                    <label class="form-check-label" for="checkbox4">Aktif</label>
+                                                </div>
                                             </div>
                                             <div class="d-flex justify-content-end">
                                                 <button class="btn btn-outline-primary me-4 " type="submit">Filtrele</button>
@@ -164,6 +171,7 @@ else
             {
                 <tr>
                     <td>
+                        <!--TODO RETURN URL-->
                         <a href="/izin-olustur?id=@data.ID&returnUrl=@returnUrl">@data.Name</a>
                     </td>
                     <td>
@@ -189,6 +197,7 @@ else
                         @data.ModifiedAt.ToString("dd/MM/yyyy")
                     </td>
                     <td>
+                        <!--TODO RETURN URL-->
                         <a href="/sube-duzenle?id=@data.ID&returnUrl=@returnUrl" class="btn btn-warning btn-sm text-white btn-pill w-50">Düzenle</a>
                     </td>
                     <td>

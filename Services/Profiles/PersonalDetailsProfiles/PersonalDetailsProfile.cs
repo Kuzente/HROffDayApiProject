@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.DTOs.OffDayDTOs.ReadDtos;
 using Core.DTOs.PersonalDetailDto.ReadDtos;
 using Core.DTOs.PersonalDetailDto.WriteDtos;
 using Core.Entities;
@@ -13,5 +14,15 @@ public class PersonalDetailsProfile : Profile
         CreateMap<PersonalDetails, ReadUpdatePersonalDetailsDto>();
         CreateMap<AddRangePersonalDetailDto, PersonalDetails>().ReverseMap();
         CreateMap<WriteUpdatePersonalDetailDto, PersonalDetails>();
+
+        #region Personel İzinleri
+
+        CreateMap<OffDay, ReadPersonalOffDayListDto>();
+        CreateMap<Personal, ReadPersonalDetailsHeaderDto>();
+        CreateMap<Branch, ReadPersonalDetailsHeaderSubBranchDto>();
+        CreateMap<Position, ReadPersonalDetailsHeaderSubPositionDto>();
+        
+
+        #endregion
     }
 }
