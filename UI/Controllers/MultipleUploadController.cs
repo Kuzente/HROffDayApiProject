@@ -62,7 +62,7 @@ public class MultipleUploadController : Controller
         return Redirect("/toplu-islemler");
     }
     /// <summary>
-    /// Toplu Personel Ekleme Post Metodu
+    /// Toplu Personel Ekleme Post Metodu 
     /// </summary>
     /// <returns></returns>
     [HttpPost]

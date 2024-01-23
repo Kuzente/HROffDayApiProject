@@ -1,11 +1,12 @@
-﻿using Core.DTOs.OffDayDTOs;
+﻿
 using Core.DTOs.OffDayDTOs.WriteDtos;
-using Core.DTOs.PersonalDTOs;
+
 using Core.Querys;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using Services.Abstract.OffDayServices;
 using Services.Abstract.PersonalServices;
+using Services.ExcelDownloadServices;
 using Services.ExcelDownloadServices.OffDayServices;
 
 namespace UI.Controllers;
@@ -17,14 +18,16 @@ public class OffDayController : Controller
     private readonly IWriteOffDayService _writeOffDayService;
     private readonly IReadOffDayService _readOffDayService;
     private readonly OffDayExcelExport _offDayExcelExport;
+    private readonly ExcelPdfScheme _excelPdfScheme;
 
-    public OffDayController(IReadPersonalService readPersonalService, IWriteOffDayService writeOffDayService, IToastNotification toastNotification, IReadOffDayService readOffDayService, OffDayExcelExport offDayExcelExport)
+    public OffDayController(IReadPersonalService readPersonalService, IWriteOffDayService writeOffDayService, IToastNotification toastNotification, IReadOffDayService readOffDayService, OffDayExcelExport offDayExcelExport, ExcelPdfScheme excelPdfScheme)
     {
         _readPersonalService = readPersonalService;
         _writeOffDayService = writeOffDayService;
         _toastNotification = toastNotification;
         _readOffDayService = readOffDayService;
         _offDayExcelExport = offDayExcelExport;
+        _excelPdfScheme = excelPdfScheme;
     }
 
     #region PageActions
@@ -86,6 +89,11 @@ public class OffDayController : Controller
         if (!result.IsSuccess)
             _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
         return View(result);
+    }
+    public async Task<IActionResult> createpdf()
+    {
+        _excelPdfScheme.CreateScheme(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "excel.html"));
+        return Ok();
     }
     #endregion
 

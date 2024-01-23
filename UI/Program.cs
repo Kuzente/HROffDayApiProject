@@ -61,7 +61,6 @@ app.MapControllerRoute(name: "downloadBranchExcelListGet", pattern: "subeler-exc
 app.MapControllerRoute(name: "updateBranchGetPost", pattern: "sube-duzenle", defaults: new { controller = "Branch", action = "UpdateBranch" });
 app.MapControllerRoute(name: "addBranchPost", pattern: "sube-ekle", defaults: new { controller = "Branch", action = "AddBranch" });
 app.MapControllerRoute(name: "deleteBranchPost", pattern: "sube-sil", defaults: new { controller = "Branch", action = "ArchiveBranch" });
-app.MapControllerRoute(name: "deleteBranchPost", pattern: "deneme-url", defaults: new { controller = "Branch", action = "ArchiveBranch" });
 
 
 #endregion
@@ -108,6 +107,12 @@ app.MapControllerRoute(name: "personalUpload", pattern: "toplu-islemler", defaul
 
 #region QRPages
 app.MapControllerRoute(name: "qrListGet", pattern: "qr-islemleri", defaults: new { controller = "Qr", action = "QRList" });
+
+#endregion
+
+#region Authentication
+app.MapControllerRoute(name: "loginPage", pattern: "giris-yap", defaults: new { controller = "Authentication", action = "Login" });
+app.MapControllerRoute(name: "loginPage", pattern: "/create-pdf", defaults: new { controller = "OffDay", action = "createpdf" });
 
 
 #endregion

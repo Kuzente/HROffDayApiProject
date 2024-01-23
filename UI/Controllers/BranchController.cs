@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using Services.Abstract.BranchServices;
 using Services.ExcelDownloadServices.BranchServices;
-using Word = Microsoft.Office.Interop.Word;
 
 namespace UI.Controllers
 {
@@ -53,13 +52,7 @@ namespace UI.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             return View(result);
         }
-        public async Task<IActionResult> DenemeUrl(string returnUrl)
-        {
-            var wordApp = new Word.Application();
-            wordApp.Visible = true;
-            wordApp.Documents.Add();
-            return Redirect(returnUrl);
-        }
+        
         #endregion
 
         #region Get/Post Actions

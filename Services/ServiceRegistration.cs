@@ -40,5 +40,6 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(PositionExcelExport));
 		services.AddScoped(typeof(OffDayExcelExport));
 		services.AddScoped(typeof(ExcelUploadScheme));
+		services.AddScoped(typeof(ExcelPdfScheme));
 	}
 }

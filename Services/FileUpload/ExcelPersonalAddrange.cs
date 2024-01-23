@@ -32,12 +32,12 @@ public class ExcelPersonalAddrange
                 List<Personal> personelListesi = new List<Personal>();
                 
                 // Excel'deki verileri `List<Personal>` nesnesine ekleyelim
-                for (int row = 2; row <= worksheet.Dimension.Rows; row++)
+                for (int row = 2; row < worksheet.Dimension.Rows -1 ; row++)
                 {
                     Personal personel = new Personal();
-
-                    personel.Branch_Id = worksheet.Cells[row, 1].GetValue<Guid>();
-                    personel.Position_Id = worksheet.Cells[row, 2].GetValue<Guid>();
+                    personel.PersonalDetails = new PersonalDetails();
+                    personel.Branch_Id = Guid.Parse(worksheet.Cells[row, 1].GetValue<string>());
+                    personel.Position_Id = Guid.Parse(worksheet.Cells[row, 2].GetValue<string>());
                     personel.NameSurname = worksheet.Cells[row, 3].GetValue<string>();
                     personel.StartJobDate = worksheet.Cells[row, 4].GetValue<DateTime>();
                     personel.BirthDate = worksheet.Cells[row, 5].GetValue<DateTime>();
