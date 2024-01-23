@@ -265,4 +265,26 @@ public class ReadOffDayService : IReadOffDayService
 
 		return res;
 	}
+
+	public async Task<IResultWithDataDto<ReadApprovedOffDayFormExcelExportDto>> GetApprovedOffDayExcelFormService(Guid id)
+	{
+		IResultWithDataDto<ReadApprovedOffDayFormExcelExportDto> res = new ResultWithDataDto<ReadApprovedOffDayFormExcelExportDto>();
+		try
+		{
+			var offday = await _unitOfWork.ReadOffDayRepository.GetSingleAsync(
+					predicate:p=> p.ID == id && p.OffDayStatus == OffDayStatusEnum.Approved,
+					include: p=> p.Include(a=> a.Personal).Include(a=>a.Personal.Branch).Include(a=>a.Personal.Position)
+			);
+			if (offday is null)
+				return res.SetStatus(false).SetErr("Offday is not find").SetMessage("İlgili izin bulunamadı!");
+			var mapData = _mapper.Map<ReadApprovedOffDayFormExcelExportDto>(offday);
+			res.SetData(mapData);
+		}
+		catch (Exception e)
+		{
+			res.SetStatus(false).SetErr(e.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+
+		return res;
+	}
 }

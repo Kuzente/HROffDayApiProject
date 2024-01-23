@@ -18,16 +18,16 @@ public class OffDayController : Controller
     private readonly IWriteOffDayService _writeOffDayService;
     private readonly IReadOffDayService _readOffDayService;
     private readonly OffDayExcelExport _offDayExcelExport;
-    private readonly ExcelPdfScheme _excelPdfScheme;
+    private readonly ApprovedOffdayFormExcelExport _formExcelExport;
 
-    public OffDayController(IReadPersonalService readPersonalService, IWriteOffDayService writeOffDayService, IToastNotification toastNotification, IReadOffDayService readOffDayService, OffDayExcelExport offDayExcelExport, ExcelPdfScheme excelPdfScheme)
+    public OffDayController(IReadPersonalService readPersonalService, IWriteOffDayService writeOffDayService, IToastNotification toastNotification, IReadOffDayService readOffDayService, OffDayExcelExport offDayExcelExport, ApprovedOffdayFormExcelExport formExcelExport)
     {
         _readPersonalService = readPersonalService;
         _writeOffDayService = writeOffDayService;
         _toastNotification = toastNotification;
         _readOffDayService = readOffDayService;
         _offDayExcelExport = offDayExcelExport;
-        _excelPdfScheme = excelPdfScheme;
+        _formExcelExport = formExcelExport;
     }
 
     #region PageActions
@@ -90,10 +90,23 @@ public class OffDayController : Controller
             _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
         return View(result);
     }
-    public async Task<IActionResult> createpdf()
+    [HttpPost]
+    public async Task<IActionResult> createpdf(Guid id,string returnUrl)
     {
-        _excelPdfScheme.CreateScheme(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "excel.html"));
-        return Ok();
+        var result = await _readOffDayService.GetApprovedOffDayExcelFormService(id);
+        if(!result.IsSuccess)
+            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+        else
+        {
+            var excelFormPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "offdayForm.xlsx");
+            byte[] excelFile = _formExcelExport.ExportToExcel(result.Data , excelFormPath);
+            var response = HttpContext.Response;
+            response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            response.Headers.Add("Content-Disposition", "attachment; filename=IzinFormu.xlsx");
+            await response.Body.WriteAsync(excelFile, 0, excelFile.Length);
+            return new EmptyResult();
+        }
+        return Redirect(returnUrl);
     }
     #endregion
 

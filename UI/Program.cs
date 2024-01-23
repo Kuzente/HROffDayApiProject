@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using Data.Context;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.OData;
 using NToastNotify;
 using Services;
@@ -11,6 +13,12 @@ builder.Services.AddControllersWithViews().AddNToastNotifyToastr(new ToastrOptio
     PositionClass = ToastPositions.TopRight,
     
 });
+// builder.Services.AddIdentity<IdentityUser, IdentityRole>(p=>
+// {
+//     p.Password.RequiredUniqueChars = 0;
+//     p.Password.RequireUppercase = false;
+//     p.Password.RequireNonAlphanumeric = false;
+// }).AddEntityFrameworkStores<DataContext>();
 builder.Services.AddControllers().AddJsonOptions(opt =>
 {
     opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -35,6 +43,12 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseNToastNotify();
 app.UseAuthorization();
+
+#region Dashboard
+
+
+
+#endregion
 #region PersonalList
 app.MapControllerRoute(name: "personalListGet", pattern: "personeller", defaults: new { controller = "Personal", action = "Index" });
 app.MapControllerRoute(name: "personalListCreate", pattern: "create-personal", defaults: new { controller = "Personal", action = "AddPersonal" });

@@ -40,6 +40,11 @@ public class OffDayProfile : Profile
 		CreateMap<Branch, ReadApprovedOffDayListSubPersonalBranchDto>();
 		CreateMap<Position, ReadApprovedOffDayListSubPersonalPositionDto>();
 
+
+		CreateMap<OffDay, ReadApprovedOffDayFormExcelExportDto>();
+		CreateMap<Personal, ReadApprovedOffDayFormExcelExportSubPersonalDto>();
+		CreateMap<Branch, ReadApprovedOffDayFormExcelExportSubPersonalSubBranchDto>();
+		CreateMap<Position, ReadApprovedOffDayFormExcelExportSubPersonalSubPositionDto>();
 		#endregion
 
 		#region Silinen İzinler

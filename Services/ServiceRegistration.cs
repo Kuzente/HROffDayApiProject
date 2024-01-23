@@ -7,7 +7,9 @@ using Services.Concrete.BranchServices;
 using Services.Concrete.PersonalServices;
 using Services.Concrete.PositionServices;
 using System.Reflection;
+using Services.Abstract.DashboardServices;
 using Services.Abstract.OffDayServices;
+using Services.Concrete.DashboardServices;
 using Services.Concrete.OffDayServices;
 using Services.ExcelDownloadServices;
 using Services.ExcelDownloadServices.BranchServices;
@@ -40,6 +42,7 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(PositionExcelExport));
 		services.AddScoped(typeof(OffDayExcelExport));
 		services.AddScoped(typeof(ExcelUploadScheme));
-		services.AddScoped(typeof(ExcelPdfScheme));
+		services.AddScoped(typeof(ApprovedOffdayFormExcelExport));
+		services.AddScoped(typeof(IReadOdataService), typeof(ReadOdataService));
 	}
 }

@@ -132,13 +132,7 @@ public class ReadBranchService : IReadBranchService
 
     }
 
-    public async Task<IQueryable> GetBranchesOdataService()
-    {
-	    var query = _unitOfWork.ReadBranchRepository.GetAll(predicate: p =>
-		    p.Status == EntityStatusEnum.Online || p.Status == EntityStatusEnum.Offline);
-	    
-	    return query;
-    }
+    
 
    
 }

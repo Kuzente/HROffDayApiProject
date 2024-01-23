@@ -7,19 +7,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Services.Abstract.BranchServices;
+using Services.Abstract.DashboardServices;
 
 namespace UI.Controllers;
 [Route("query")]
 [ApiController]
 public class QueryController : ODataController
 {
-    private readonly IReadBranchService _readBranchService;
+    private readonly IReadOdataService _readOdataService;
     private readonly IMapper _mapper;
 
-    public QueryController(IReadBranchService readBranchService, IMapper mapper)
+    public QueryController(IMapper mapper, IReadOdataService readOdataService)
     {
-        _readBranchService = readBranchService;
         _mapper = mapper;
+        _readOdataService = readOdataService;
     }
     // GET
     // public IActionResult Index()
@@ -28,12 +29,28 @@ public class QueryController : ODataController
     // }
     [HttpGet]
     [EnableQuery]
-    [Route("sube-listesi")]
-    public async Task<IActionResult> Get()
+    [Route("sube-sayisi")]
+    public async Task<IActionResult> GetBranchCount()
     {
-        var result = await _readBranchService.GetBranchesOdataService();
+        var result = await _readOdataService.GetBranchesOdataService();
         var mappedResult = _mapper.Map<List<BranchDto>>(result);
         mappedResult.ForEach(a=> a.Count = mappedResult.Count);
         return Ok(mappedResult);
+    }
+    [HttpGet]
+    [EnableQuery]
+    [Route("unvan-sayisi")]
+    public async Task<IActionResult> GetPositionCount()
+    {
+        var result = await _readOdataService.GetPositionOdataService();
+        return Ok(result);
+    }
+    [HttpGet]
+    [EnableQuery]
+    [Route("personel-sayisi")]
+    public async Task<IActionResult> GetPersonalCount()
+    {
+        var result = await _readOdataService.GetPersonalOdataService();
+        return Ok(result);
     }
 }
