@@ -3,17 +3,8 @@
     let kadinSayisi = 0;
     let SalaryCount = 0;
     let PersonalCount = 0;
-    let educationIlkOkul = 0;
-    let educationOrtaOkul = 0;
-    let educationLisans = 0;
-    let educationOnLisans = 0;
-    let educationYuksekLisans = 0;
-    let educationFakulte = 0;
-    let educationLise = 0;
-    let educationMeslekLise = 0;
-    let educationMeslekTekLise = 0;
-    let educationMeslekYukLise = 0;
-    let educationYok = 0;
+    let educationCounts= {};
+    
     const today = new Date();
     const birthList = document.getElementById('birthList');
     let personalResponse ;
@@ -97,6 +88,129 @@
             }
         });
     }
+    function PersonalCountSec(PersonalCount) {
+        $('#personalCount').text(PersonalCount);
+    }
+    function SalarySum(SalaryCount) {
+        const formattedSalary = SalaryCount.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        });
+        $('#salarySum').text(formattedSalary);
+    }
+    function genderPie(menLength, womenLenght) {
+        let options = {
+            series: [menLength, womenLenght],
+            title: {
+                text: 'Personel Cinsiyet Dağılımı'
+            },
+            chart: {
+                type: 'pie',
+            },
+            legend: {
+                position: 'bottom'
+            },
+            dataLabels: {
+                enabled: true,
+                textAnchor: 'start',
+                style: {
+                    fontSize: '18px',
+                    color: '#ffffff'
+                },
+            },
+            colors: ['#0052cc', '#d63939'],
+            labels: ['Erkek', 'Kadın'],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+
+        }
+        let chart = new ApexCharts(document.getElementById("genderGraph"), options);
+        chart.render();
+    }
+    function educationPie(educationCounts) {
+        let seriesData = [];
+        let labels = [];
+        for (const [key, value] of Object.entries(educationCounts)) {
+            labels.push(key);
+            seriesData.push(value.count);
+        }
+        let options = {
+            series: seriesData,
+            title: {
+                text: 'Personel Eğitim Dağılımı'
+            },
+            chart: {
+                type: 'donut',
+            },
+            legend: {
+                position: 'bottom' // Taşıma işlemi burada gerçekleşiyor
+            },
+            dataLabels: {
+                enabled: true,
+
+                style: {
+                    fontSize: '18px',
+                    colors: ['#ffffff']
+                },
+            },
+            labels: labels,
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+
+        }
+        let chart = new ApexCharts(document.getElementById("educationGraph"), options);
+        chart.render();
+    }
+    function birthSection(birthDate,kalanGunSayisi,personalName) {
+        let listItem = document.createElement('div');
+        listItem.className = 'list-group-item';
+        let row = document.createElement('div');
+        row.className = 'row';
+        let avatarCol = document.createElement('div');
+        avatarCol.className = 'col-auto';
+        avatarCol.innerHTML = `<span class="avatar">${personalName.charAt(0)}</span>`;
+        let infoCol = document.createElement('div');
+        infoCol.className = 'col';
+        let remainingText = (birthDate.getDate() - today.getDate() === 0) ? "Bugün" :
+            (birthDate.getDate() - today.getDate() === 1) ? "Yarın" :
+                `${kalanGunSayisi} Gün Sonra`;
+        infoCol.innerHTML = `
+                <div class="text-truncate">
+                    <strong>${personalName}</strong> doğum günü yaklaşıyor.
+                </div>
+                <div class="text-secondary">${birthDate.toLocaleDateString('tr-TR', {
+            day: 'numeric',
+            month: 'long'
+        })} - ${remainingText}</div>
+            `;
+        let badgeCol = document.createElement('div');
+        badgeCol.className = 'col-auto align-self-center';
+        badgeCol.innerHTML = '<div class="badge bg-primary"></div>';
+
+        row.appendChild(avatarCol);
+        row.appendChild(infoCol);
+        row.appendChild(badgeCol);
+        listItem.appendChild(row);
+        birthList.appendChild(listItem);
+    }
     $.ajax({
         type: "GET",
         url: "/query/personel-sayisi?expand=PersonalDetails($select=Salary,educationStatus)&$select=id,PersonalDetails,gender,birthDate,nameSurname,StartJobDate,EndJobDate,Status"
@@ -111,175 +225,38 @@
         });
         res.forEach(function (p) {
 
-            if (p.Status === 0) {
+            if (p.Status === 0) { 
                 PersonalCount++;
-            }
-            if (p.PersonalDetails && p.PersonalDetails.Salary && p.Status === 0) {
+            }// Personel Sayısı Alanı
+            if (p.PersonalDetails && p.PersonalDetails.Salary && p.Status === 0) { 
                 SalaryCount += parseFloat(p.PersonalDetails.Salary);
-            }
+            }// Maaş Alanı
             if (p.Gender === 'Erkek' && p.Status === 0) {
                 erkekSayisi++;
-            } else if (p.Gender === 'Kadın' && p.Status === 0) {
+            }else if (p.Gender === 'Kadın' && p.Status === 0) { // Cinsiyet Alanı
                 kadinSayisi++;
-            }
-            if (p.PersonalDetails.EducationStatus && p.Status === 0) {
-                if (p.PersonalDetails.EducationStatus === "İlkokul") {
-                    educationIlkOkul++;
-                } else if (p.PersonalDetails.EducationStatus === "Ortaokul") {
-                    educationOrtaOkul++;
-                } else if (p.PersonalDetails.EducationStatus === "Lise") {
-                    educationLise++;
-                } else if (p.PersonalDetails.EducationStatus === "Meslek Lisesi") {
-                    educationMeslekLise++;
-                } else if (p.PersonalDetails.EducationStatus === "Mes. Tek. Lisesi") {
-                    educationMeslekTekLise++;
-                } else if (p.PersonalDetails.EducationStatus === "Ön Lisans") {
-                    educationOnLisans++;
-                } else if (p.PersonalDetails.EducationStatus === "Lisans") {
-                    educationLisans++;
-                } else if (p.PersonalDetails.EducationStatus === "Yüksek Lisans") {
-                    educationYuksekLisans++;
-                } else {
-                    educationYok++;
-                }
             }
             if (p.BirthDate && p.Status === 0) {
                 let birthDate = new Date(p.BirthDate);
                 let dogumgununtarihi = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
                 let kalanGunSayisi = Math.ceil((dogumgununtarihi - today) / (1000 * 60 * 60 * 24));
-                //birthDate.getDate() >= today.getDate() && birthDate.getDate() <= today.getDate() + 10 && today.getMonth() === birthDate.getMonth() //TODO
                 if (kalanGunSayisi <= 10 && kalanGunSayisi >= 0) {
-                    let listItem = document.createElement('div');
-                    listItem.className = 'list-group-item';
-                    let row = document.createElement('div');
-                    row.className = 'row';
-                    let avatarCol = document.createElement('div');
-                    avatarCol.className = 'col-auto';
-                    avatarCol.innerHTML = `<span class="avatar">${p.NameSurname.charAt(0)}</span>`;
-                    let infoCol = document.createElement('div');
-                    infoCol.className = 'col';
-                    let remainingText = (birthDate.getDate() - today.getDate() === 0) ? "Bugün" :
-                        (birthDate.getDate() - today.getDate() === 1) ? "Yarın" :
-                            `${kalanGunSayisi} Gün Sonra`;
-                    infoCol.innerHTML = `
-                <div class="text-truncate">
-                    <strong>${p.NameSurname}</strong> doğum günü yaklaşıyor.
-                </div>
-                <div class="text-secondary">${birthDate.toLocaleDateString('tr-TR', {
-                        day: 'numeric',
-                        month: 'long'
-                    })} - ${remainingText}</div>
-            `;
-                    let badgeCol = document.createElement('div');
-                    badgeCol.className = 'col-auto align-self-center';
-                    badgeCol.innerHTML = '<div class="badge bg-primary"></div>';
-
-                    row.appendChild(avatarCol);
-                    row.appendChild(infoCol);
-                    row.appendChild(badgeCol);
-                    listItem.appendChild(row);
-                    birthList.appendChild(listItem);
+                    birthSection(birthDate,kalanGunSayisi,p.NameSurname);
                 }
+            } //Doğum gunu alanı 
+            //Eğitim Durumu Alanı Dinamik
+            let educationStatus = p.PersonalDetails.EducationStatus ? p.PersonalDetails.EducationStatus : 'Yok';
+            if (!educationCounts[educationStatus]) {
+                educationCounts[educationStatus] = { count: 0};
             }
-           
+            educationCounts[educationStatus].count++;
+            //Eğitim Durumu Alanı Dinamik
         });
-        
-        WorkPowerTable(res);
         PersonalCountSec(PersonalCount);
         SalarySum(SalaryCount);
+        WorkPowerTable(res);
         genderPie(erkekSayisi, kadinSayisi)
-        educationPie(educationIlkOkul, educationOrtaOkul, educationLise, educationMeslekLise, educationMeslekTekLise, educationOnLisans, educationLisans, educationYuksekLisans, educationYok);
-
-        function PersonalCountSec(PersonalCount) {
-            $('#personalCount').text(PersonalCount);
-        }
-
-        function SalarySum(SalaryCount) {
-            const formattedSalary = SalaryCount.toLocaleString('en-US', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-            });
-            $('#salarySum').text(formattedSalary);
-        }
-
-        function genderPie(menLength, womenLenght) {
-            let options = {
-                series: [menLength, womenLenght],
-                title: {
-                    text: 'Personel Cinsiyet Dağılımı'
-                },
-                chart: {
-                    type: 'pie',
-                },
-                legend: {
-                    position: 'bottom' // Taşıma işlemi burada gerçekleşiyor
-                },
-                dataLabels: {
-                    enabled: true,
-                    textAnchor: 'start',
-                    style: {
-                        fontSize: '18px',
-                        color: '#ffffff'
-                    },
-                },
-                colors: ['#0052cc', '#d63939'],
-                labels: ['Erkek', 'Kadın'],
-                responsive: [{
-                    breakpoint: 480,
-                    options: {
-                        chart: {
-                            width: 200
-                        },
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }]
-
-            }
-            let chart = new ApexCharts(document.getElementById("genderGraph"), options);
-            chart.render();
-        }
-
-        function educationPie(educationIlkOkul, educationOrtaOkul, educationLise, educationMeslekLise, educationMeslekTekLise, educationOnLisans, educationLisans, educationYuksekLisans, educationYok) {
-            let options = {
-                series: [educationIlkOkul, educationOrtaOkul, educationLise, educationMeslekLise, educationMeslekTekLise, educationOnLisans, educationLisans, educationYuksekLisans, educationYok],
-                title: {
-                    text: 'Personel Eğitim Dağılımı'
-                },
-                chart: {
-                    type: 'donut',
-                },
-                legend: {
-                    position: 'bottom' // Taşıma işlemi burada gerçekleşiyor
-                },
-                dataLabels: {
-                    enabled: true,
-                    
-                    style: {
-                        fontSize: '18px',
-                        colors: ['#ffffff']
-                    },
-                },
-
-                labels: ['İlkokul', 'Ortaokul', 'Lise', 'Meslek Lise', 'Mes.Tek.Lise', 'Ön Lisans', 'Lisans', 'Yüksek Lisans', 'Yok'],
-                responsive: [{
-                    breakpoint: 480,
-                    options: {
-                        chart: {
-                            width: 200
-                        },
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }]
-
-            }
-            let chart = new ApexCharts(document.getElementById("educationGraph"), options);
-            chart.render();
-        }
-
+        educationPie(educationCounts);
         
     });
     $.ajax({
@@ -297,7 +274,7 @@
     $('#yearButton').on('click',function () {
         $('#tableBody').empty();
         $('.dropdown-menu').removeClass('show');
-        var selectedYearInput = parseInt($("select[name='filterYear']").val(),10); 
+        let selectedYearInput = parseInt($("select[name='filterYear']").val(),10); 
         WorkPowerTable(personalResponse,selectedYearInput);
     });
 });
