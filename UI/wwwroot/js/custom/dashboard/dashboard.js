@@ -102,6 +102,13 @@
         url: "/query/personel-sayisi?expand=PersonalDetails($select=Salary,educationStatus)&$select=id,PersonalDetails,gender,birthDate,nameSurname,StartJobDate,EndJobDate,Status"
     }).done(function (res) {
         personalResponse = res;
+        // Tüm kişileri doğum tarihine göre sırala
+        res.sort(function(a, b) {
+            let dateA = new Date(2000, new Date(a.BirthDate).getMonth(), new Date(a.BirthDate).getDate());
+            let dateB = new Date(2000, new Date(b.BirthDate).getMonth(), new Date(b.BirthDate).getDate());
+
+            return dateA - dateB;
+        });
         res.forEach(function (p) {
 
             if (p.Status === 0) {
@@ -138,10 +145,10 @@
             }
             if (p.BirthDate && p.Status === 0) {
                 let birthDate = new Date(p.BirthDate);
-                let tenDaysLater = new Date();
-                tenDaysLater.setDate(today.getDate() + 10);
+                let dogumgununtarihi = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+                let kalanGunSayisi = Math.ceil((dogumgununtarihi - today) / (1000 * 60 * 60 * 24));
                 //birthDate.getDate() >= today.getDate() && birthDate.getDate() <= today.getDate() + 10 && today.getMonth() === birthDate.getMonth() //TODO
-                if (birthDate >= today && birthDate <= tenDaysLater) {
+                if (kalanGunSayisi <= 10 && kalanGunSayisi >= 0) {
                     let listItem = document.createElement('div');
                     listItem.className = 'list-group-item';
                     let row = document.createElement('div');
@@ -153,7 +160,7 @@
                     infoCol.className = 'col';
                     let remainingText = (birthDate.getDate() - today.getDate() === 0) ? "Bugün" :
                         (birthDate.getDate() - today.getDate() === 1) ? "Yarın" :
-                            `${birthDate.getDate() - today.getDate()} Gün Sonra`;
+                            `${kalanGunSayisi} Gün Sonra`;
                     infoCol.innerHTML = `
                 <div class="text-truncate">
                     <strong>${p.NameSurname}</strong> doğum günü yaklaşıyor.
