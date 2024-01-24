@@ -46,7 +46,9 @@ public class WritePersonalService : IWritePersonalService
 		IResultDto res = new ResultDto();
 		try
 		{
-			var mapSet = _mapper.Map<List<Personal>>(writeDto);
+			if(writeDto == null || writeDto.Count <= 0)
+                return res.SetStatus(false).SetErr("Not Found").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+            var mapSet = _mapper.Map<List<Personal>>(writeDto);
 			var resultData = await _unitOfWork.WritePersonalRepository.AddRangeAsync(mapSet);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)

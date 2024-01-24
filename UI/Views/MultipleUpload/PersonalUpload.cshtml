@@ -91,7 +91,7 @@
             </div>
 
         </div>
-        <form method="post" asp-controller="MultipleUpload" asp-action="PersonalUpload" id="dropzone-custom" enctype="multipart/form-data">
+        <form method="post" action="/toplu-islemler" id="dropzone-custom" enctype="multipart/form-data">
             <div class="dropzone dz-clickable border-info">
                 <div class="fallback">
                     <input name="file" type="file"/>
@@ -111,8 +111,42 @@
 {
     <script src="/dist/libs/dropzone/dist/dropzone-min.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        new Dropzone("#dropzone-custom")
-      })
+        document.addEventListener("DOMContentLoaded", function () {
+
+            let dropzone = new Dropzone('#dropzone-custom', {
+                acceptedFiles: ".xlsx, .xls",
+                uploadMultiple: false,
+                autoProcessQueue: false, // Yükleme işlemini otomatik olarak başlatma
+                accept: function (file, done) {
+                    // Sadece belirli bir dosya adını kabul et
+                    var allowedFileName = "TopluVeriTaslak.xlsx"; // Değiştirmeniz gereken dosya adı
+                    if (file.name === allowedFileName) {
+                        done();
+                    } else {
+                        alert("Lütfen doğru dosyayı seçin: " + allowedFileName);
+                        done("Dosya kabul edilmedi.");
+                    }
+                },
+                init: function () {
+                    var myDropzone = this;
+
+                    this.on("addedfile", function (file) {
+                        // Dosya eklendiğinde çalışan işlev
+                        var submitButton = document.querySelector("#dropzone-custom button[type=submit]");
+                        submitButton.addEventListener("click", function (e) {
+                            e.preventDefault();
+
+                            if (myDropzone.files.length > 0) {
+                                myDropzone.processQueue();
+                            } else {
+                                alert("Lütfen belirli bir dosyayı seçin.");
+                            }
+                        });
+                    });
+
+                    // Diğer Dropzone özellikleri buraya eklenebilir
+                }
+            });
+        });
     </script>
 }

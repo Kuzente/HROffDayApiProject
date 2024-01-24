@@ -38,7 +38,7 @@ public class ReadOffDayService : IReadOffDayService
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth)&&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search)),
-					include: p=>p.Include(a=>a.Personal).ThenInclude(a=>a.Branch),
+					include: p=>p.Include(a=>a.Personal).Include(a=>a.Personal.Branch).Include(a=> a.Personal.Position),
 					orderBy: p => p.OrderByDescending(a => a.CreatedAt)
 				));
 			var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)
@@ -101,7 +101,7 @@ public class ReadOffDayService : IReadOffDayService
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth)&&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search)),
-					include: p=>p.Include(a=>a.Personal).ThenInclude(a=> a.Branch),
+					include: p=>p.Include(a=>a.Personal).Include(a=> a.Personal.Branch).Include(a=>a.Personal.Position),
 					orderBy: p => p.OrderByDescending(a => a.CreatedAt)
 				));
 			var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)

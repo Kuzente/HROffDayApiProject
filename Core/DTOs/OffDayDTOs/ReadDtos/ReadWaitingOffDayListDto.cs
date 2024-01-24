@@ -29,9 +29,14 @@ public class ReadWaitingOffDayListPersonalDto
 {
     public string NameSurname { get; set; }
     public ReadWaitingOffDayListPersonalBranchDto Branch { get; set; }
+    public ReadWaitingOffDayListPersonalPositionDto Position { get; set; }
 }
 
 public class ReadWaitingOffDayListPersonalBranchDto
+{
+    public string Name { get; set; }
+}
+public class ReadWaitingOffDayListPersonalPositionDto
 {
     public string Name { get; set; }
 }

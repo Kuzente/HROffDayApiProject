@@ -8,6 +8,5 @@ public class PersonalQuery
     public string position { get; set; } 
     public string retired { get; set; } 
     public int sayfa { get; set; } = 1;
-    public string passive { get; set; } 
     
 }

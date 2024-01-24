@@ -13,10 +13,10 @@ public class OffDayProfile : Profile
 		#region Bekleyen İzinler
 
 		CreateMap<OffDay, ReadWaitingOffDayListDto>();
-
-		
 		CreateMap<Personal, ReadWaitingOffDayListPersonalDto>();
 		CreateMap<Branch, ReadWaitingOffDayListPersonalBranchDto>();
+		CreateMap<Position, ReadWaitingOffDayListPersonalPositionDto>();
+
 		CreateMap<OffDay, ReadWaitingOffDayEditDto>();
 		CreateMap<Personal, ReadWaitingOffDayEditSubPersonalDto>();
 		CreateMap<Branch, ReadWaitingOffDayEditSubPersonalSubBranchDto>();
@@ -29,6 +29,7 @@ public class OffDayProfile : Profile
 		CreateMap<OffDay, ReadRejectedOffDayListDto>();
 		CreateMap<Personal, ReadRejectedOffDayListPersonelDto>();
 		CreateMap<Branch, ReadRejectedOffDayListPersonelBranchDto>();
+		CreateMap<Position, ReadRejectedOffDayListPersonelPositionDto>();
 		
 
 		#endregion

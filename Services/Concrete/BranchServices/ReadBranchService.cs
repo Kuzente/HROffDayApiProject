@@ -34,10 +34,10 @@ public class ReadBranchService : IReadBranchService
 				_unitOfWork.ReadBranchRepository.GetAll(
 				orderBy: p=> p.OrderBy(a=>a.Name),
 				predicate: p=> (p.Status == EntityStatusEnum.Online || p.Status == EntityStatusEnum.Offline) &&
-				               (string.IsNullOrWhiteSpace(query.search) || p.Name.Contains(query.search))&& 
-				               (string.IsNullOrEmpty(query.passive) || p.Status == EntityStatusEnum.Offline)&&
-				               (string.IsNullOrEmpty(query.active) || p.Status == EntityStatusEnum.Online)
-				));
+				               (string.IsNullOrWhiteSpace(query.search) || p.Name.Contains(query.search))&&
+                               (!query.active.HasValue || (query.active.Value && p.Status == EntityStatusEnum.Online)) &&
+                               (!query.passive.HasValue || (query.passive.Value && p.Status == EntityStatusEnum.Offline))
+                ));
 			var mapData = _mapper.Map<List<BranchDto>>(resultData.ToList());
 			res.SetData(mapData);
 		}
@@ -49,9 +49,9 @@ public class ReadBranchService : IReadBranchService
 		
 	}
 
-	public async Task<ResultWithPagingDataDto<List<BranchDto>>> GetBranchListService(int pageNumber,string search,bool active,bool passive)
+	public async Task<ResultWithPagingDataDto<List<BranchDto>>> GetBranchListService(BranchQuery query)
 	{
-		ResultWithPagingDataDto<List<BranchDto>> res = new ResultWithPagingDataDto<List<BranchDto>>(pageNumber,search);
+		ResultWithPagingDataDto<List<BranchDto>> res = new ResultWithPagingDataDto<List<BranchDto>>(query.sayfa,query.search);
 		try
 		//String.IsNullOrEmpty(search) ? null : a => a.Name.Contains(search)
 		{
@@ -59,9 +59,9 @@ public class ReadBranchService : IReadBranchService
                 _unitOfWork.ReadBranchRepository.GetAll(
                     orderBy: p => p.OrderBy(a => a.Name),
                     predicate: a => (a.Status == EntityStatusEnum.Online || a.Status == EntityStatusEnum.Offline) && 
-                                    (string.IsNullOrEmpty(search) || a.Name.Contains(search))&& 
-                                    (passive == false || passive ==  (a.Status == EntityStatusEnum.Offline))&&
-                                    (active == false || active ==  (a.Status == EntityStatusEnum.Online))
+                                    (string.IsNullOrEmpty(query.search) || a.Name.Contains(query.search))&&
+                                    (!query.active.HasValue || (query.active.Value && a.Status == EntityStatusEnum.Online)) &&
+									(!query.passive.HasValue || (query.passive.Value && a.Status == EntityStatusEnum.Offline))
                     ));   
             var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)
 				.Take(res.PageSize).ToList();
@@ -79,16 +79,16 @@ public class ReadBranchService : IReadBranchService
 		return res;
 	}
 
-	public async Task<ResultWithPagingDataDto<List<BranchDto>>> GetDeletedBranchListService(int pageNumber, string search)
+	public async Task<ResultWithPagingDataDto<List<BranchDto>>> GetDeletedBranchListService(BranchQuery query)
 	{
-		ResultWithPagingDataDto<List<BranchDto>> res = new ResultWithPagingDataDto<List<BranchDto>>(pageNumber,search);
+		ResultWithPagingDataDto<List<BranchDto>> res = new ResultWithPagingDataDto<List<BranchDto>>(query.sayfa, query.search);
 		try
 		{
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadBranchRepository.GetAll(
 					orderBy: p => p.OrderByDescending(a => a.DeletedAt),
 					predicate: a => (a.Status == EntityStatusEnum.Archive ) && 
-					                (string.IsNullOrEmpty(search) || a.Name.Contains(search))
+					                (string.IsNullOrEmpty(query.search) || a.Name.Contains(query.search))
 				));   
 			var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)
 				.Take(res.PageSize).ToList();

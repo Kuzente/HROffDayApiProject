@@ -1,6 +1,5 @@
-﻿using Core.DTOs.BranchDTOs;
-using Core.DTOs;
-using Core.DTOs.BaseDTOs;
+﻿using Core.DTOs;
+using Core.DTOs.BranchDTOs;
 using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,9 +30,10 @@ namespace UI.Controllers
         /// Şubeler Listesi Sayfası 
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string search,bool active, bool passive, int sayfa = 1)
+        public async Task<IActionResult> Index(BranchQuery query)
         {
-            var resultSearch = await _readBranchService.GetBranchListService(sayfa, search ,active, passive);
+           
+            var resultSearch = await _readBranchService.GetBranchListService(query);
             if (!resultSearch.IsSuccess)
             {
                 _toastNotification.AddErrorToastMessage(resultSearch.Message, new ToastrOptions { Title = "Hata" });
@@ -54,7 +54,7 @@ namespace UI.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             return View(result);
         }
-        
+
         #endregion
 
         #region Get/Post Actions
@@ -72,9 +72,9 @@ namespace UI.Controllers
             }
             else
             {
-                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Eklendi", new ToastrOptions { Title = "Başarılı" }); 
+                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Eklendi", new ToastrOptions { Title = "Başarılı" });
             }
-            
+
             return Redirect(returnUrl);
         }
         /// <summary>
@@ -91,7 +91,7 @@ namespace UI.Controllers
             }
             else
             {
-                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Düzenlendi", new ToastrOptions { Title = "Başarılı" }); 
+                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Düzenlendi", new ToastrOptions { Title = "Başarılı" });
             }
             return Redirect(returnUrl);
         }
@@ -109,7 +109,7 @@ namespace UI.Controllers
             }
             else
             {
-                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Silindi", new ToastrOptions { Title = "Başarılı" }); 
+                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Silindi", new ToastrOptions { Title = "Başarılı" });
             }
             return Redirect(returnUrl);
         }
@@ -118,14 +118,14 @@ namespace UI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> ExportExcel(BranchQuery query,string returnUrl)
+        public async Task<IActionResult> ExportExcel(BranchQuery query, string returnUrl)
         {
-            
+
             var result = await _readBranchService.GetExcelBranchListService(query);
             if (result.IsSuccess)
             {
                 byte[] excelData = _branchExcelExport.ExportToExcel(result.Data); // Entity listesini Excel verisi olarak alın.
-            
+
                 var response = HttpContext.Response;
                 response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 response.Headers.Add("Content-Disposition", "attachment; filename=Subeler.xlsx");
@@ -137,7 +137,7 @@ namespace UI.Controllers
             return Redirect(returnUrl);
         }
         #endregion
-      
-      
+
+
     }
 }

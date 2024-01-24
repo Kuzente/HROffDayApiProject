@@ -1,4 +1,5 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
+    const spinner = $(".spinner-border");
     let erkekSayisi = 0;
     let kadinSayisi = 0;
     let SalaryCount = 0;
@@ -213,8 +214,9 @@
     }
     $.ajax({
         type: "GET",
-        url: "/query/personel-sayisi?expand=PersonalDetails($select=Salary,educationStatus)&$select=id,PersonalDetails,gender,birthDate,nameSurname,StartJobDate,EndJobDate,Status"
+        url: "/query/personel-sayisi?expand=PersonalDetails($select=Salary,educationStatus)&$select=id,PersonalDetails,gender,birthDate,nameSurname,StartJobDate,EndJobDate,Status",
     }).done(function (res) {
+        spinner.hide();
         personalResponse = res;
         // Tüm kişileri doğum tarihine göre sırala
         res.sort(function(a, b) {

@@ -8,7 +8,7 @@
     var startPage = Math.Max(1, Model.PageNumber - (maxVisiblePages / 2));
     var endPage = Math.Min(Model.TotalPages, startPage + (maxVisiblePages - 1));
 
-    // PersonalQuery nesnesini JSON formatına çevirerek URL içinde kullanmak için hazırlayın
+
 }
 <!--Heading Area-->
 <div class="page-header d-print-none" xmlns="http://www.w3.org/1999/html">
@@ -51,14 +51,18 @@
                     <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#addModal">
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path>
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 5l0 14"></path>
+                            <path d="M5 12l14 0"></path>
                         </svg>
                         Personel Ekle
                     </a>
                     <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal" data-bs-target="#addModal" aria-label="Create new report">
                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path>
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 5l0 14"></path>
+                            <path d="M5 12l14 0"></path>
                         </svg>
                     </a>
                 </div>
@@ -69,13 +73,13 @@
 <!--Heading Area-->
 @if (!Model.IsSuccess)
 {
-     <div class="card container-xl mt-3">
-            <div class="text-center p-5">
-                <h1 class="display-4">Üzgünüz</h1>
-                <p>@Model.Message</p>
-                <p>@Model.Err</p>
-            </div>
+    <div class="card container-xl mt-3">
+        <div class="text-center p-5">
+            <h1 class="display-4">Üzgünüz</h1>
+            <p>@Model.Message</p>
+            <p>@Model.Err</p>
         </div>
+    </div>
 }
 else
 {
@@ -102,41 +106,50 @@ else
                                             <path d="M22 19l-3 3l-3 -3"></path>
                                         </svg>
                                     </button>
-                                    <div class="dropdown-menu dropdown-menu-end ">
-                                        <div class="dropdown-header" style="width: 250px;">Detaylı Filtre</div>
-                                        <div class="p-3">
-                                            <div class="form-group">
-                                                <label class="form-label">Şube *</label>
-                                                <select name="branch" id="branchSelect" class="form-select selectListTom" asp-items="@(new SelectList(ViewBag.Branches, "ID", "Name"))">
-                                                    <option value=""></option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group mt-2">
-                                                <label class="form-label">Ünvan *</label>
-                                                <select name="position" id="positionSelect" type="text" class="form-select selectListTom"
-                                                        asp-items="@(new SelectList(ViewBag.Positions, "ID", "Name"))">
-                                                    <option value=""></option>
-                                                </select>
+                                    <div class="dropdown-menu dropdown-menu-start ">
+                                        <div class="dropdown-header" style="width: 500px;">Detaylı Filtre</div>
+                                        <div class="p-4">
+                                            <div class="row mb-2">
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Şube</label>
+                                                        <select name="branch" id="branchSelect" class="form-select selectListTom" asp-items="@(new SelectList(ViewBag.Branches, "ID", "Name"))">
+                                                            <option value=""></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label">Ünvan</label>
+                                                        <select name="position" id="positionSelect" type="text" class="form-select selectListTom"
+                                                                asp-items="@(new SelectList(ViewBag.Positions, "ID", "Name"))">
+                                                            <option value=""></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="row mt-2">
+                                                        <div class="form-check col-6">
+                                                            <input name="gender" value="erkek" class="form-check-input" type="radio" id="checkbox1">
+                                                            <label class="form-check-label" for="checkbox1">Erkek</label>
+                                                        </div>
+                                                        <div class="form-check col-6">
+                                                            <input name="gender" value="kadın" class="form-check-input" type="radio" id="checkbox2">
+                                                            <label class="form-check-label" for="checkbox2">Kadın</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                            </div>
-                                            <div class="row mt-2">
-                                                <div class="form-check col-6">
-                                                    <input name="gender" value="erkek" class="form-check-input" type="radio" id="checkbox1">
-                                                    <label class="form-check-label" for="checkbox1">Erkek</label>
+                                                <div class="row mt-2">
+                                                    <div class="form-check col-6">
+                                                        <input name="retired" value="true" class="form-check-input" type="checkbox" id="checkbox3">
+                                                        <label class="form-check-label" for="checkbox3">Emekli</label>
+                                                    </div>
                                                 </div>
-                                                <div class="form-check col-6">
-                                                    <input name="gender" value="kadın" class="form-check-input" type="radio" id="checkbox2">
-                                                    <label class="form-check-label" for="checkbox2">Kadın</label>
+
+                                                <div class="d-flex justify-content-end">
+                                                    <button class="btn btn-outline-primary me-4 " type="submit">Filtrele</button>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="form-check col-6">
-                                                    <input name="retired" value="true" class="form-check-input" type="checkbox" id="checkbox3">
-                                                    <label class="form-check-label" for="checkbox3">Emekli</label>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                <button class="btn btn-outline-primary me-4 " type="submit">Filtrele</button>
                                             </div>
                                         </div>
                                     </div>
@@ -178,64 +191,64 @@ else
         </div>
         <table class="table mt-3">
             <thead>
-            <tr>
-                <th>Sicil No</th>
-                <th>Adı Soyadı</th>
-                <th>Şube</th>
-                <th>Ünvan</th>
-                <th>Cinsiyet</th>
-                <th>İşe Giriş Tarihi</th>
-                <th>EYT</th>
-                <th>Hak Ettiği izin</th>
-                <th>Kullandığı İzin</th>
-                <th>Kalan İzin</th>
+                <tr>
+                    <th>Sicil No</th>
+                    <th>Adı Soyadı</th>
+                    <th>Şube</th>
+                    <th>Ünvan</th>
+                    <th>Cinsiyet</th>
+                    <th>İşe Giriş Tarihi</th>
+                    <th>EYT</th>
+                    <th>Hak Ettiği izin</th>
+                    <th>Kullandığı İzin</th>
+                    <th>Kalan İzin</th>
 
-            </tr>
+                </tr>
             </thead>
             <tbody class="table-border-bottom-0">
-            @foreach (var data in Model.Data)
-            {
-                <tr>
-                    <td>@data.RegistirationNumber</td>
-                    <td>
-                        <a href="/personel-detayları?id=@data.ID">@data.NameSurname</a>
-                    </td>
-                    <td>@data.Branch.Name</td>
-                    <td>@data.Position.Name</td>
-                    <td>
-                        @if (@data.Gender == "Erkek")
-                        {
-                            <span class="badge bg-cyan">Erkek</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-pink">Kadın</span>
-                        }
-                    </td>
-                    <td>@data.StartJobDate.ToString("dd/MM/yyyy")</td>
-                    <td>
-                        @{
-                            if (data.RetiredOrOld)
+                @foreach (var data in Model.Data)
+                {
+                    <tr>
+                        <td>@data.RegistirationNumber</td>
+                        <td>
+                            <a href="/personel-detayları?id=@data.ID">@data.NameSurname</a>
+                        </td>
+                        <td>@data.Branch.Name</td>
+                        <td>@data.Position.Name</td>
+                        <td>
+                            @if (@data.Gender == "Erkek")
                             {
-                                <span class="badge bg-purple">EYTli</span>
+                                <span class="badge bg-cyan">Erkek</span>
                             }
                             else
                             {
-                                <span class="badge bg-secondary">EYTli Değil</span>
+                                <span class="badge bg-pink">Kadın</span>
                             }
-                        }
-                    </td>
-                    <td>
-                        @data.TotalYearLeave
-                    </td>
-                    <td>
-                        @data.UsedYearLeave
-                    </td>
-                    <td>
-                        @(data.TotalYearLeave - data.UsedYearLeave)
-                    </td>
-                </tr>
-            }
+                        </td>
+                        <td>@data.StartJobDate.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @{
+                                if (data.RetiredOrOld)
+                                {
+                                    <span class="badge bg-purple">Emekli</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Emekli Değil</span>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @data.TotalYearLeave
+                        </td>
+                        <td>
+                            @data.UsedYearLeave
+                        </td>
+                        <td>
+                            @(data.TotalYearLeave - data.UsedYearLeave)
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
         <!--Pagination-->
@@ -299,400 +312,468 @@ else
 
     <!--AddModal-->
     <form id="addPersonalForm" action="/create-personal" method="post">
-    <div class="modal modal-blur fade" id="addModal" tabindex="-1" aria-hidden="true" role="dialog">
-    <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel1">Personel Ekle</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div class="modal-body">
-    <div data-step1>
-        <div class="row">
-            <div class="col mb-3">
-                <label class="form-label required">Adı Soyadı</label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
-                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
-                        </svg>
-                    </span>
-                    <input type="text" name="NameSurname" class="form-control" placeholder="Personal Ad-Soyadını Giriniz!">
-                </div>
-            </div>
-            <div class="col mb-3">
-                <label class="form-label required">İşe Başlama Tarihi</label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
-                            <path d="M16 3v4"></path>
-                            <path d="M8 3v4"></path>
-                            <path d="M4 11h16"></path>
-                            <path d="M11 15h1"></path>
-                            <path d="M12 15v3"></path>
-                        </svg>
-                    </span>
-                    <input type="date" name="StartJobDate" class="form-control" placeholder="Personal İşe başlangıç Tarihi!">
-                </div>
-            </div>
+        <div class="modal modal-blur fade" id="addModal" tabindex="-1" aria-hidden="true" role="dialog">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel1">Personel Ekle</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div data-step1>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label class="form-label required">Adı Soyadı</label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                                                <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                                            </svg>
+                                        </span>
+                                        <input type="text" name="NameSurname" class="form-control" placeholder="Personal Ad-Soyadını Giriniz!">
+                                    </div>
+                                </div>
+                                <div class="col mb-3">
+                                    <label class="form-label required">İşe Başlama Tarihi</label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
+                                                <path d="M16 3v4"></path>
+                                                <path d="M8 3v4"></path>
+                                                <path d="M4 11h16"></path>
+                                                <path d="M11 15h1"></path>
+                                                <path d="M12 15v3"></path>
+                                            </svg>
+                                        </span>
+                                        <input type="date" name="StartJobDate" class="form-control" placeholder="Personal İşe başlangıç Tarihi!">
+                                    </div>
+                                </div>
 
+                            </div>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label class="form-label required">Doğum Tarihi</label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cake" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M3 20h18v-8a3 3 0 0 0 -3 -3h-12a3 3 0 0 0 -3 3v8z"></path>
+                                                <path d="M3 14.803c.312 .135 .654 .204 1 .197a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1c.35 .007 .692 -.062 1 -.197"></path>
+                                                <path d="M12 4l1.465 1.638a2 2 0 1 1 -3.015 .099l1.55 -1.737z"></path>
+                                            </svg>
+                                        </span>
+                                        <input type="date" name="BirthDate" class="form-control" placeholder="Personal Doğum Tarihi!">
+                                    </div>
+                                </div>
+                                <div class="col mb-3">
+                                    <label class="form-label required">Doğum Yeri </label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-baby-carriage" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M8 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                <path d="M18 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                <path d="M2 5h2.5l1.632 4.897a6 6 0 0 0 5.693 4.103h2.675a5.5 5.5 0 0 0 0 -11h-.5v6" />
+                                                <path d="M6 9h14" />
+                                                <path d="M9 17l1 -3" />
+                                                <path d="M16 14l1 3" />
+                                            </svg>
+                                        </span>
+                                        <input type="text" name="PersonalDetails.BirthPlace" class="form-control" placeholder="Personal Doğum Yeri Giriniz!">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col mb-3">
+                                    <label class="form-label required">TC Kimlik No </label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z"></path>
+                                                <path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                                <path d="M15 8l2 0"></path>
+                                                <path d="M15 12l2 0"></path>
+                                                <path d="M7 16l10 0"></path>
+                                            </svg>
+                                        </span>
+                                        <input type="text" name="IdentificationNumber" class="form-control" placeholder="Personal Tc Kimlik Giriniz!">
+                                    </div>
+                                </div>
+                                <div class="col mb-3">
+                                    <label class="form-label required">Sicil No </label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id-badge-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M7 12h3v4h-3z"></path>
+                                                <path d="M10 6h-6a1 1 0 0 0 -1 1v12a1 1 0 0 0 1 1h16a1 1 0 0 0 1 -1v-12a1 1 0 0 0 -1 -1h-6"></path>
+                                                <path d="M10 3m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"></path>
+                                                <path d="M14 16h2"></path>
+                                                <path d="M14 12h4"></path>
+                                            </svg>
+                                        </span>
+                                        <input type="text" name="RegistirationNumber" class="form-control" placeholder="Personal Sicil No Giriniz!">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label class="form-label required">SSK Numarası </label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id-badge" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M5 3m0 3a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-8a3 3 0 0 1 -3 -3z" />
+                                                <path d="M12 13m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                <path d="M10 6h4" />
+                                                <path d="M9 18h6" />
+                                            </svg>
+                                        </span>
+                                        <input type="text" name="PersonalDetails.SskNumber" class="form-control" placeholder="Personal SSK No Giriniz!">
+                                    </div>
+                                </div>
+                                <div class="col mb-3">
+                                    <label class="form-label required">SGK Kodu </label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-scan" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M10 9a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                <path d="M4 8v-2a2 2 0 0 1 2 -2h2" />
+                                                <path d="M4 16v2a2 2 0 0 0 2 2h2" />
+                                                <path d="M16 4h2a2 2 0 0 1 2 2v2" />
+                                                <path d="M16 20h2a2 2 0 0 0 2 -2v-2" />
+                                                <path d="M8 16a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2" />
+                                            </svg>
+                                        </span>
+                                        <input type="text" name="PersonalDetails.SgkCode" class="form-control" placeholder="Personal SGK Kodunu Giriniz!">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label class="form-label required">Ünvan / Görev</label>
+                                    <select id="positionSelectModal" class="form-select" name="Position_Id">
+                                    </select>
+                                </div>
+                                <div class="col mb-3">
+                                    <label class="form-label required">Şube</label>
+                                    <select id="branchSelectModal" class="form-select" name="Branch_Id">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 mb-3 form-check form-switch mb-3 border">
+                                    <div class="d-flex flex-column justify-content-center align-items-center">
+                                        <label class="form-label required" for="RetiredOrOldInput">Emeklilik Durumu</label>
+                                        <input class="form-check-input" name="RetiredOrOld" type="checkbox" id="RetiredOrOldInput">
+                                    </div>
+                                </div>
+                                <div class="col-3 mb-3 form-check form-switch mb-3 border ">
+                                    <div class="d-flex flex-column justify-content-center align-items-center">
+                                        <label class="form-label required" for="PersonalDetails.HandicappedInput">Engelli Personel</label>
+                                        <input class="form-check-input" name="PersonalDetails.Handicapped" type="checkbox" id="PersonalDetails.HandicappedInput">
+                                    </div>
+                                </div>
+
+                                <div class="col-3 mb-3">
+                                    <div class="d-flex justify-content-center">
+                                        <label class="form-label required">Cinsiyet</label>
+                                    </div>
+
+                                    <div class="d-flex justify-content-evenly">
+                                        <label class="form-selectgroup-item">
+                                            <input type="radio" value="Erkek" name="Gender" class="form-selectgroup-input" checked>
+                                            <span class="form-selectgroup-label">
+                                                <!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-gender-male" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path d="M10 14m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" />
+                                                    <path d="M19 5l-5.4 5.4" />
+                                                    <path d="M19 5h-5" />
+                                                    <path d="M19 5v5" />
+                                                </svg>
+                                                Erkek
+                                            </span>
+                                        </label>
+                                        <label class="form-selectgroup-item">
+                                            <input type="radio" value="Kadın" name="Gender" class="form-selectgroup-input">
+                                            <span class="form-selectgroup-label">
+                                                <!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-gender-female" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path d="M12 9m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" />
+                                                    <path d="M12 14v7" />
+                                                    <path d="M9 18h6" />
+                                                </svg>
+                                                Kadın
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-3 mb-3">
+                                    <label class="form-label required">Maaş</label>
+                                    <div class="input-group">
+                                        <input class="form-control" name="PersonalDetails.Salary" placeholder="Örn: 12350.45" type="text">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-currency-lira" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M10 5v15a7 7 0 0 0 7 -7" />
+                                                <path d="M6 15l8 -4" />
+                                                <path d="M14 7l-8 4" />
+                                            </svg>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div data-step2 class="d-none">
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label class="form-label">Anne Adı</label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-woman" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M10 16v5"></path>
+                                                <path d="M14 16v5"></path>
+                                                <path d="M8 16h8l-2 -7h-4z"></path>
+                                                <path d="M5 11c1.667 -1.333 3.333 -2 5 -2"></path>
+                                                <path d="M19 11c-1.667 -1.333 -3.333 -2 -5 -2"></path>
+                                                <path d="M12 4m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                            </svg>
+                                        </span>
+                                        <input type="text" name="PersonalDetails.MotherName" class="form-control" placeholder="Anne Adını Giriniz!">
+                                    </div>
+                                </div>
+                                <div class="col mb-3">
+                                    <label class="form-label">Baba Adı</label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-man" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M10 16v5"></path>
+                                                <path d="M14 16v5"></path>
+                                                <path d="M9 9h6l-1 7h-4z"></path>
+                                                <path d="M5 11c1.333 -1.333 2.667 -2 4 -2"></path>
+                                                <path d="M19 11c-1.333 -1.333 -2.667 -2 -4 -2"></path>
+                                                <path d="M12 4m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                            </svg>
+                                        </span>
+                                        <input type="text" name="PersonalDetails.FatherName" class="form-control" placeholder="Baba Adını Giriniz!">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label class="form-label">Eğitim Durumu</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-school" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M22 9l-10 -4l-10 4l10 4l10 -4v6" />
+                                                <path d="M6 10.6v5.4a6 3 0 0 0 12 0v-5.4" />
+                                            </svg>
+                                        </span>
+                                        <select id="EducationStatusSelect" class="form-select" name="PersonalDetails.EducationStatus">
+                                            <option value="">Eğitim Durumu</option>
+                                            <option value="İlkokul">İlkokul</option>
+                                            <option value="Ortaokul">Ortaokul</option>
+                                            <option value="Lise">Lise</option>
+                                            <option value="Meslek Lisesi">Meslek Lisesi</option>
+                                            <option value="Mes. Tek. Lisesi">Mes. Tek. Lisesi</option>
+                                            <option value="Ön Lisans">Ön Lisans</option>
+                                            <option value="Lisans">Lisans</option>
+                                            <option value="Yüksek Lisans">Yüksek Lisans</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col mb-3">
+                                    <label class="form-label">Mezun Olduğu Okul</label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-books" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M5 4m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+                                                <path d="M9 4m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+                                                <path d="M5 8h4" />
+                                                <path d="M9 16h4" />
+                                                <path d="M13.803 4.56l2.184 -.53c.562 -.135 1.133 .19 1.282 .732l3.695 13.418a1.02 1.02 0 0 1 -.634 1.219l-.133 .041l-2.184 .53c-.562 .135 -1.133 -.19 -1.282 -.732l-3.695 -13.418a1.02 1.02 0 0 1 .634 -1.219l.133 -.041z" />
+                                                <path d="M14 9l4 -1" />
+                                                <path d="M16 16l3.923 -.98" />
+                                            </svg>
+                                        </span>
+                                        <input type="text" name="PersonalDetails.GraduatedSchool" class="form-control" placeholder="Varsa Mezun Olduğu Okulu Giriniz!">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label class="form-label">Telefon No </label>
+                                    <div class="input-group input-group-merge">
+                                        <span id="basic-icon-default-phone2" class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-phone" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2"></path>
+                                            </svg>
+                                        </span>
+                                        <input type="tel" name="Phonenumber" class="form-control" data-mask="000-000-00-00" data-mask-visible="true" placeholder="000-000-00-00" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-2 mb-3">
+                                    <label class="form-label">Medeni Durumu</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hand-ring-finger" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M8 13v-2.5a1.5 1.5 0 0 1 3 0v1.5" />
+                                                <path d="M17 11.5a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1 -6 6h-2h.208a6 6 0 0 1 -5.012 -2.7a69.74 69.74 0 0 1 -.196 -.3c-.312 -.479 -1.407 -2.388 -3.286 -5.728a1.5 1.5 0 0 1 .536 -2.022a1.867 1.867 0 0 1 2.28 .28l1.47 1.47" />
+                                                <path d="M11 11.5v-2a1.5 1.5 0 1 1 3 0v2.5" />
+                                                <path d="M14 12v-6.5a1.5 1.5 0 0 1 3 0v6.5" />
+                                            </svg>
+                                        </span>
+                                        <select id="MaritalStatusSelect" class="form-select" name="PersonalDetails.MaritalStatus">
+                                            <option value="">Medeni Hali</option>
+                                            <option value="Bekar">Bekar</option>
+                                            <option value="Evli">Evli</option>
+                                            <option value="Dul">Dul</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-2 mb-3">
+                                    <label class="form-label">Beden Ölçüsü</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-ruler-3" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M19.875 8c.621 0 1.125 .512 1.125 1.143v5.714c0 .631 -.504 1.143 -1.125 1.143h-15.875a1 1 0 0 1 -1 -1v-5.857c0 -.631 .504 -1.143 1.125 -1.143h15.75z" />
+                                                <path d="M9 8v2" />
+                                                <path d="M6 8v3" />
+                                                <path d="M12 8v3" />
+                                                <path d="M18 8v3" />
+                                                <path d="M15 8v2" />
+                                            </svg>
+                                        </span>
+                                        <select id="BodySizeSelect" class="form-select" name="PersonalDetails.BodySize">
+                                            <option value="">Beden Ölçüsü</option>
+                                            <option value="XS">XS</option>
+                                            <option value="S">S</option>
+                                            <option value="M">M</option>
+                                            <option value="L">L</option>
+                                            <option value="XL">XL</option>
+                                            <option value="XXL">XXL</option>
+                                            <option value="3XL">3XL</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-2 mb-3">
+                                    <label class="form-label">Kan Grubu</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-vaccine" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M17 3l4 4" />
+                                                <path d="M19 5l-4.5 4.5" />
+                                                <path d="M11.5 6.5l6 6" />
+                                                <path d="M16.5 11.5l-6.5 6.5h-4v-4l6.5 -6.5" />
+                                                <path d="M7.5 12.5l1.5 1.5" />
+                                                <path d="M10.5 9.5l1.5 1.5" />
+                                                <path d="M3 21l3 -3" />
+                                            </svg>
+                                        </span>
+                                        <select id="BloodGroupSelect" class="form-select" name="PersonalDetails.BloodGroup">
+                                            <option value="">Kan Grubu</option>
+                                            <option value="A Rh+">A Rh+</option>
+                                            <option value="A Rh-">A Rh-</option>
+                                            <option value="B Rh+">B Rh+</option>
+                                            <option value="B Rh-">B Rh-</option>
+                                            <option value="AB Rh+">AB Rh+</option>
+                                            <option value="AB Rh-">AB Rh-</option>
+                                            <option value="0 Rh+">0 Rh+</option>
+                                            <option value="0 Rh-">0 Rh-</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label class="form-label">Banka Hesap No</label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-bank" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M3 21l18 0" />
+                                                <path d="M3 10l18 0" />
+                                                <path d="M5 6l7 -3l7 3" />
+                                                <path d="M4 10l0 11" />
+                                                <path d="M20 10l0 11" />
+                                                <path d="M8 14l0 3" />
+                                                <path d="M12 14l0 3" />
+                                                <path d="M16 14l0 3" />
+                                            </svg>
+                                        </span>
+                                        <input type="text" name="PersonalDetails.BankAccount" class="form-control" placeholder="Banka Hesap No Giriniz">
+                                    </div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label class="form-label">IBAN Adresi </label>
+                                    <div class="input-group input-group-merge">
+                                        <span id="basic-icon-default-phone2" class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-wallet" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12" />
+                                                <path d="M20 12v4h-4a2 2 0 0 1 0 -4h4" />
+                                            </svg>
+                                        </span>
+                                        <input type="text" name="PersonalDetails.IBAN" class="form-control" data-mask="TR00-0000-0000-0000-0000-0000-00" data-mask-visible="true" placeholder="TR00-0000-0000-0000-0000-0000-00" autocomplete="off">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label class="form-label">Adres </label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-address-book" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M20 6v12a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2z" />
+                                                <path d="M10 16h6" />
+                                                <path d="M13 11m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                <path d="M4 8h3" />
+                                                <path d="M4 12h3" />
+                                                <path d="M4 16h3" />
+                                            </svg>
+                                        </span>
+                                        <textarea name="PersonalDetails.Address" class="form-control" data-bs-toggle="autosize" placeholder="Personel Adresini Giriniz!!!" style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 59.6px;"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="previousButton" type="button" class="btn btn-outline-secondary d-none">
+                            Geri Dön
+                        </button>
+                        <button id="nextButton" type="button" class="btn btn-primary">Devam Et</button>
+                        <button id="personalAddButton" type="submit" class="btn btn-primary d-none">Personeli Ekle</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <div class="col mb-3">
-                <label class="form-label required">Doğum Tarihi</label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cake" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M3 20h18v-8a3 3 0 0 0 -3 -3h-12a3 3 0 0 0 -3 3v8z"></path>
-                            <path d="M3 14.803c.312 .135 .654 .204 1 .197a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1c.35 .007 .692 -.062 1 -.197"></path>
-                            <path d="M12 4l1.465 1.638a2 2 0 1 1 -3.015 .099l1.55 -1.737z"></path>
-                        </svg>
-                    </span>
-                    <input type="date" name="BirthDate" class="form-control" placeholder="Personal Doğum Tarihi!">
-                </div>
-            </div>
-            <div class="col mb-3">
-                <label class="form-label required">Doğum Yeri </label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-baby-carriage" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M18 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M2 5h2.5l1.632 4.897a6 6 0 0 0 5.693 4.103h2.675a5.5 5.5 0 0 0 0 -11h-.5v6"/><path d="M6 9h14"/><path d="M9 17l1 -3"/><path d="M16 14l1 3"/>
-                        </svg>
-                    </span>
-                    <input type="text" name="PersonalDetails.BirthPlace" class="form-control" placeholder="Personal Doğum Yeri Giriniz!">
-                </div>
-            </div>
-        </div>
-        <div class="row">
-
-            <div class="col mb-3">
-                <label class="form-label required">TC Kimlik No </label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z"></path>
-                            <path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                            <path d="M15 8l2 0"></path>
-                            <path d="M15 12l2 0"></path>
-                            <path d="M7 16l10 0"></path>
-                        </svg>
-                    </span>
-                    <input type="text" name="IdentificationNumber" class="form-control" placeholder="Personal Tc Kimlik Giriniz!">
-                </div>
-            </div>
-            <div class="col mb-3">
-                <label class="form-label required">Sicil No </label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id-badge-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M7 12h3v4h-3z"></path>
-                            <path d="M10 6h-6a1 1 0 0 0 -1 1v12a1 1 0 0 0 1 1h16a1 1 0 0 0 1 -1v-12a1 1 0 0 0 -1 -1h-6"></path>
-                            <path d="M10 3m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"></path>
-                            <path d="M14 16h2"></path>
-                            <path d="M14 12h4"></path>
-                        </svg>
-                    </span>
-                    <input type="text" name="RegistirationNumber" class="form-control" placeholder="Personal Sicil No Giriniz!">
-                </div>
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col mb-3">
-                <label class="form-label required">SSK Numarası </label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id-badge" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 3m0 3a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-8a3 3 0 0 1 -3 -3z"/><path d="M12 13m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M10 6h4"/><path d="M9 18h6"/>
-                        </svg>
-                    </span>
-                    <input type="text" name="PersonalDetails.SskNumber" class="form-control" placeholder="Personal SSK No Giriniz!">
-                </div>
-            </div>
-            <div class="col mb-3">
-                <label class="form-label required">SGK Kodu </label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-scan" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 9a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M4 8v-2a2 2 0 0 1 2 -2h2"/><path d="M4 16v2a2 2 0 0 0 2 2h2"/><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M16 20h2a2 2 0 0 0 2 -2v-2"/><path d="M8 16a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2"/>
-                        </svg>
-                    </span>
-                    <input type="text" name="PersonalDetails.SgkCode" class="form-control" placeholder="Personal SGK Kodunu Giriniz!">
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col mb-3">
-                <label class="form-label required">Ünvan / Görev</label>
-                <select id="positionSelectModal" class="form-select" name="Position_Id">
-                </select>
-            </div>
-            <div class="col mb-3">
-                <label class="form-label required">Şube</label>
-                <select id="branchSelectModal" class="form-select" name="Branch_Id">
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-3 mb-3 form-check form-switch mb-3 border">
-                <div class="d-flex flex-column justify-content-center align-items-center">
-                    <label class="form-label required" for="RetiredOrOldInput">Emeklilik Durumu</label>
-                    <input class="form-check-input" name="RetiredOrOld" type="checkbox" id="RetiredOrOldInput">
-                </div>
-            </div>
-            <div class="col-3 mb-3 form-check form-switch mb-3 border ">
-                <div class="d-flex flex-column justify-content-center align-items-center">
-                    <label class="form-label required" for="PersonalDetails.HandicappedInput">Engelli Personel</label>
-                    <input class="form-check-input" name="PersonalDetails.Handicapped" type="checkbox" id="PersonalDetails.HandicappedInput">
-                </div>
-            </div>
-
-            <div class="col-3 mb-3">
-                <div class="d-flex justify-content-center">
-                    <label class="form-label required">Cinsiyet</label>
-                </div>
-
-                <div class="d-flex justify-content-evenly">
-                    <label class="form-selectgroup-item">
-                        <input type="radio" value="Erkek" name="Gender" class="form-selectgroup-input" checked>
-                        <span class="form-selectgroup-label">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-gender-male" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 14m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0"/><path d="M19 5l-5.4 5.4"/><path d="M19 5h-5"/><path d="M19 5v5"/>
-                            </svg>
-                            Erkek
-                        </span>
-                    </label>
-                    <label class="form-selectgroup-item">
-                        <input type="radio" value="Kadın" name="Gender" class="form-selectgroup-input">
-                        <span class="form-selectgroup-label">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-gender-female" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0"/><path d="M12 14v7"/><path d="M9 18h6"/>
-                            </svg>
-                            Kadın
-                        </span>
-                    </label>
-                </div>
-            </div>
-            <div class="col-3 mb-3">
-                <label class="form-label required">Maaş</label>
-                <div class="input-group">
-                    <input class="form-control" name="PersonalDetails.Salary" placeholder="Örn: 12350.45" type="text">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-currency-lira" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 5v15a7 7 0 0 0 7 -7"/><path d="M6 15l8 -4"/><path d="M14 7l-8 4"/>
-                        </svg>
-                    </span>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <div data-step2 class="d-none">
-        <div class="row">
-            <div class="col mb-3">
-                <label class="form-label">Anne Adı</label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-woman" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M10 16v5"></path>
-                            <path d="M14 16v5"></path>
-                            <path d="M8 16h8l-2 -7h-4z"></path>
-                            <path d="M5 11c1.667 -1.333 3.333 -2 5 -2"></path>
-                            <path d="M19 11c-1.667 -1.333 -3.333 -2 -5 -2"></path>
-                            <path d="M12 4m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                        </svg>
-                    </span>
-                    <input type="text" name="PersonalDetails.MotherName" class="form-control" placeholder="Anne Adını Giriniz!">
-                </div>
-            </div>
-            <div class="col mb-3">
-                <label class="form-label">Baba Adı</label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-man" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M10 16v5"></path>
-                            <path d="M14 16v5"></path>
-                            <path d="M9 9h6l-1 7h-4z"></path>
-                            <path d="M5 11c1.333 -1.333 2.667 -2 4 -2"></path>
-                            <path d="M19 11c-1.333 -1.333 -2.667 -2 -4 -2"></path>
-                            <path d="M12 4m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                        </svg>
-                    </span>
-                    <input type="text" name="PersonalDetails.FatherName" class="form-control" placeholder="Baba Adını Giriniz!">
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col mb-3">
-                <label class="form-label">Eğitim Durumu</label>
-                <div class="input-group">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-school" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 9l-10 -4l-10 4l10 4l10 -4v6"/><path d="M6 10.6v5.4a6 3 0 0 0 12 0v-5.4"/>
-                        </svg>
-                    </span>
-                    <select id="EducationStatusSelect" class="form-select" name="PersonalDetails.EducationStatus">
-                        <option value="">Eğitim Durumu</option>
-                        <option value="İlkokul">İlkokul</option>
-                        <option value="Ortaokul">Ortaokul</option>
-                        <option value="Lise">Lise</option>
-                        <option value="Meslek Lisesi">Meslek Lisesi</option>
-                        <option value="Mes. Tek. Lisesi">Mes. Tek. Lisesi</option>
-                        <option value="Ön Lisans">Ön Lisans</option>
-                        <option value="Lisans">Lisans</option>
-                        <option value="Yüksek Lisans">Yüksek Lisans</option>
-                    </select>
-                </div>
-
-            </div>
-            <div class="col mb-3">
-                <label class="form-label">Mezun Olduğu Okul</label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-books" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 4m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"/><path d="M9 4m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"/><path d="M5 8h4"/><path d="M9 16h4"/><path d="M13.803 4.56l2.184 -.53c.562 -.135 1.133 .19 1.282 .732l3.695 13.418a1.02 1.02 0 0 1 -.634 1.219l-.133 .041l-2.184 .53c-.562 .135 -1.133 -.19 -1.282 -.732l-3.695 -13.418a1.02 1.02 0 0 1 .634 -1.219l.133 -.041z"/><path d="M14 9l4 -1"/><path d="M16 16l3.923 -.98"/>
-                        </svg>
-                    </span>
-                    <input type="text" name="PersonalDetails.GraduatedSchool" class="form-control" placeholder="Varsa Mezun Olduğu Okulu Giriniz!">
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-6 mb-3">
-                <label class="form-label">Telefon No </label>
-                <div class="input-group input-group-merge">
-                    <span id="basic-icon-default-phone2" class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-phone" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2"></path>
-                        </svg>
-                    </span>
-                    <input type="tel" name="Phonenumber" class="form-control" data-mask="000-000-00-00" data-mask-visible="true" placeholder="000-000-00-00" autocomplete="off">
-                </div>
-            </div>
-            <div class="col-2 mb-3">
-                <label class="form-label">Medeni Durumu</label>
-                <div class="input-group">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hand-ring-finger" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 13v-2.5a1.5 1.5 0 0 1 3 0v1.5"/><path d="M17 11.5a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1 -6 6h-2h.208a6 6 0 0 1 -5.012 -2.7a69.74 69.74 0 0 1 -.196 -.3c-.312 -.479 -1.407 -2.388 -3.286 -5.728a1.5 1.5 0 0 1 .536 -2.022a1.867 1.867 0 0 1 2.28 .28l1.47 1.47"/><path d="M11 11.5v-2a1.5 1.5 0 1 1 3 0v2.5"/><path d="M14 12v-6.5a1.5 1.5 0 0 1 3 0v6.5"/>
-                        </svg>
-                    </span>
-                    <select id="MaritalStatusSelect" class="form-select" name="PersonalDetails.MaritalStatus">
-                        <option value="">Medeni Hali</option>
-                        <option value="Bekar">Bekar</option>
-                        <option value="Evli">Evli</option>
-                        <option value="Dul">Dul</option>
-                    </select>
-                </div>
-
-            </div>
-            <div class="col-2 mb-3">
-                <label class="form-label">Beden Ölçüsü</label>
-                <div class="input-group">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-ruler-3" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.875 8c.621 0 1.125 .512 1.125 1.143v5.714c0 .631 -.504 1.143 -1.125 1.143h-15.875a1 1 0 0 1 -1 -1v-5.857c0 -.631 .504 -1.143 1.125 -1.143h15.75z"/><path d="M9 8v2"/><path d="M6 8v3"/><path d="M12 8v3"/><path d="M18 8v3"/><path d="M15 8v2"/>
-                        </svg>
-                    </span>
-                    <select id="BodySizeSelect" class="form-select" name="PersonalDetails.BodySize">
-                        <option value="">Beden Ölçüsü</option>
-                        <option value="XS">XS</option>
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                        <option value="XL">XL</option>
-                        <option value="XXL">XXL</option>
-                        <option value="3XL">3XL</option>
-                    </select>
-                </div>
-
-            </div>
-            <div class="col-2 mb-3">
-                <label class="form-label">Kan Grubu</label>
-                <div class="input-group">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-vaccine" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 3l4 4"/><path d="M19 5l-4.5 4.5"/><path d="M11.5 6.5l6 6"/><path d="M16.5 11.5l-6.5 6.5h-4v-4l6.5 -6.5"/><path d="M7.5 12.5l1.5 1.5"/><path d="M10.5 9.5l1.5 1.5"/><path d="M3 21l3 -3"/>
-                        </svg>
-                    </span>
-                    <select id="BloodGroupSelect" class="form-select" name="PersonalDetails.BloodGroup">
-                        <option value="">Kan Grubu</option>
-                        <option value="A Rh+">A Rh+</option>
-                        <option value="A Rh-">A Rh-</option>
-                        <option value="B Rh+">B Rh+</option>
-                        <option value="B Rh-">B Rh-</option>
-                        <option value="AB Rh+">AB Rh+</option>
-                        <option value="AB Rh-">AB Rh-</option>
-                        <option value="0 Rh+">0 Rh+</option>
-                        <option value="0 Rh-">0 Rh-</option>
-                    </select>
-                </div>
-
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col mb-3">
-                <label class="form-label">Banka Hesap No</label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-bank" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l18 0"/><path d="M3 10l18 0"/><path d="M5 6l7 -3l7 3"/><path d="M4 10l0 11"/><path d="M20 10l0 11"/><path d="M8 14l0 3"/><path d="M12 14l0 3"/><path d="M16 14l0 3"/>
-                        </svg>
-                    </span>
-                    <input type="text" name="PersonalDetails.BankAccount" class="form-control" placeholder="Banka Hesap No Giriniz">
-                </div>
-            </div>
-            <div class="col-6 mb-3">
-                <label class="form-label">IBAN Adresi </label>
-                <div class="input-group input-group-merge">
-                    <span id="basic-icon-default-phone2" class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-wallet" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12"/><path d="M20 12v4h-4a2 2 0 0 1 0 -4h4"/>
-                        </svg>
-                    </span>
-                    <input type="text" name="PersonalDetails.IBAN" class="form-control" data-mask="TR00-0000-0000-0000-0000-0000-00" data-mask-visible="true" placeholder="TR00-0000-0000-0000-0000-0000-00" autocomplete="off">
-                </div>
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col mb-3">
-                <label class="form-label">Adres </label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-address-book" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 6v12a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2z"/><path d="M10 16h6"/><path d="M13 11m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 8h3"/><path d="M4 12h3"/><path d="M4 16h3"/>
-                        </svg>
-                    </span>
-                    <textarea name="PersonalDetails.Address" class="form-control" data-bs-toggle="autosize" placeholder="Personel Adresini Giriniz!!!" style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 59.6px;"></textarea>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-    <div class="modal-footer">
-        <button id="previousButton" type="button" class="btn btn-outline-secondary d-none">
-            Geri Dön
-        </button>
-        <button id="nextButton" type="button" class="btn btn-primary">Devam Et</button>
-        <button id="personalAddButton" type="submit" class="btn btn-primary d-none">Personeli Ekle</button>
-    </div>
-    </div>
-    </div>
-    </div>
     </form>
     @section Scripts
     {
@@ -700,5 +781,5 @@ else
         <script src="/js/custom/personalList/personalList.js"></script>
 
     }
-  
+
 }

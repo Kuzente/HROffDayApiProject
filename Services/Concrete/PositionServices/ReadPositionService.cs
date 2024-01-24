@@ -37,9 +37,10 @@ public class ReadPositionService : IReadPositionService
 			var resultData = await Task.Run(() => _unitOfWork.ReadPositionRepository.GetAll(
 				orderBy: p=> p.OrderBy(a=>a.Name),
 				predicate: p=> (p.Status == EntityStatusEnum.Online || p.Status == EntityStatusEnum.Offline) &&
-				               (string.IsNullOrWhiteSpace(query.search) || p.Name.Contains(query.search))&& 
-				               (string.IsNullOrEmpty(query.passive) || p.Status == EntityStatusEnum.Offline)
-			));
+				               (string.IsNullOrWhiteSpace(query.search) || p.Name.Contains(query.search))&&
+                               (!query.active.HasValue || (query.active.Value && p.Status == EntityStatusEnum.Online)) &&
+                                (!query.passive.HasValue || (query.passive.Value && p.Status == EntityStatusEnum.Offline))
+            ));
 			var mapData = _mapper.Map<List<PositionDto>>(resultData.ToList());
 			res.SetData(mapData);
 		}
@@ -50,17 +51,18 @@ public class ReadPositionService : IReadPositionService
 		return res;
 	}
 
-	public async Task<ResultWithPagingDataDto<List<PositionDto>>> GetPositionListService(int pageNumber, string search, bool  passive)
+	public async Task<ResultWithPagingDataDto<List<PositionDto>>> GetPositionListService(PositionQuery query)
     {
-        ResultWithPagingDataDto<List<PositionDto>> res = new ResultWithPagingDataDto<List<PositionDto>>(pageNumber, search);
+        ResultWithPagingDataDto<List<PositionDto>> res = new ResultWithPagingDataDto<List<PositionDto>>(query.sayfa, query.search);
         try
         {
             var allData = await Task.Run(() =>
             _unitOfWork.ReadPositionRepository.GetAll(
                 orderBy: p => p.OrderBy(a => a.Name),
                 predicate: a => (a.Status == EntityStatusEnum.Online || a.Status == EntityStatusEnum.Offline) && 
-                                (string.IsNullOrEmpty(search) || a.Name.Contains(search))&& 
-                                (passive == false || passive ==  (a.Status == EntityStatusEnum.Offline))
+                                (string.IsNullOrEmpty(query.search) || a.Name.Contains(query.search))&&
+                                (!query.active.HasValue || (query.active.Value && a.Status == EntityStatusEnum.Online)) &&
+                                (!query.passive.HasValue || (query.passive.Value && a.Status == EntityStatusEnum.Offline))
                 ));
             var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)
                 .Take(res.PageSize).ToList();
@@ -78,16 +80,16 @@ public class ReadPositionService : IReadPositionService
         return res;
     }
 
-    public async Task<ResultWithPagingDataDto<List<PositionDto>>> GetDeletedPositionListService(int pageNumber, string search)
+    public async Task<ResultWithPagingDataDto<List<PositionDto>>> GetDeletedPositionListService(PositionQuery query)
     {
-	    ResultWithPagingDataDto<List<PositionDto>> res = new ResultWithPagingDataDto<List<PositionDto>>(pageNumber, search);
+	    ResultWithPagingDataDto<List<PositionDto>> res = new ResultWithPagingDataDto<List<PositionDto>>(query.sayfa, query.search);
 	    try
 	    {
 		    var allData = await Task.Run(() =>
 			    _unitOfWork.ReadPositionRepository.GetAll(
 				    orderBy: p => p.OrderByDescending(a => a.DeletedAt),
 				    predicate: a => (a.Status == EntityStatusEnum.Archive) && 
-				                    (string.IsNullOrEmpty(search) || a.Name.Contains(search))
+				                    (string.IsNullOrEmpty(query.search) || a.Name.Contains(query.search))
 			    ));
 		    var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)
 			    .Take(res.PageSize).ToList();

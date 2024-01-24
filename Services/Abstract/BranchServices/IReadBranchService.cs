@@ -10,8 +10,8 @@ namespace Services.Abstract.BranchServices;
 public interface IReadBranchService
 {
 	Task<IResultWithDataDto<List<BranchDto>>> GetExcelBranchListService(BranchQuery query); // Aktif Şubeler Excel Servisi
-	Task<ResultWithPagingDataDto<List<BranchDto>>> GetBranchListService(int pageNumber,string search,bool active, bool passive); // Şube Listesi Servisi
-	Task<ResultWithPagingDataDto<List<BranchDto>>> GetDeletedBranchListService(int pageNumber,string search); // Silinen Şubeler Listesi Servisi
+	Task<ResultWithPagingDataDto<List<BranchDto>>> GetBranchListService(BranchQuery query); // Şube Listesi Servisi
+	Task<ResultWithPagingDataDto<List<BranchDto>>> GetDeletedBranchListService(BranchQuery query); // Silinen Şubeler Listesi Servisi
 	Task<IResultWithDataDto<BranchDto>> GetUpdateBranchService(Guid id); // Şube Güncelleme Get Servisi
     Task<List<BranchNameDto>> GetAllJustNames();
     

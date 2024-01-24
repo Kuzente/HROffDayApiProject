@@ -138,9 +138,8 @@ else
             <tr>
                 <th>Personel<br> Adı Soyadı</th>
                 <th>Şube</th>
-                <th>İzin Başlangıç Tarihi</th>
-                <th>İzin Bitiş Tarihi</th>
-
+                <th>Ünvan</th>
+                <th>İzin Başlangıç Tarihi<br />İzin Bitiş Tarihi</th>
                 <th>Toplam <br/> Alınan Gün</th>
                 <th>Detaylı <br/>İzin Günleri</th>
                 <th>Form <br>Oluşturulma Tarihi</th>
@@ -154,29 +153,29 @@ else
                     <td class="col-2">
                         @data.Personal.NameSurname
                     </td>
-                    <td class="col-3">
+                    <td class="col-2">
                         @data.Personal.Branch.Name
                     </td>
                     <td class="col-2">
-                        <span class="status status-dark mb-1">@data.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
+                        @data.Personal.Position.Name
                     </td>
                     <td class="col-2">
+                        <span class="status status-dark mb-1">@data.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
                         <span class="status status-github">@data.EndDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
                     </td>
-
                     <td class="col-1">
                         @data.CountLeave
                     </td>
                     <td class="col-1">
                         <button type="button" class="btn btn-teal btn-sm btn-pill" data-bs-trigger="hover" data-bs-html="true" data-bs-toggle="popover"
-                                title="Detaylı İzin Sayıları" data-bs-content="@(data.LeaveByYear > 0 ? $"Yıllık İzni: {data.LeaveByYear}</br>" : "") 
-                                                                               @(data.LeaveByWeek > 0 ? $"Haftalık İzni: {data.LeaveByWeek}</br>" : "") 
-                                                                               @(data.LeaveByTaken > 0 ? $"Alacak İzni: {data.LeaveByTaken}</br>" : "") 
-                                                                               @(data.LeaveByPublicHoliday > 0 ? $"Resmi İzni: {data.LeaveByPublicHoliday}</br>" : "") 
-                                                                               @(data.LeaveByFreeDay > 0 ? $"Ücretsiz İzni: {data.LeaveByFreeDay}</br>" : "") 
-                                                                               @(data.LeaveByTravel > 0 ? $"Seyahat İzni: {data.LeaveByTravel}</br>" : "") 
-                                                                               @(data.LeaveByFather > 0 ? $"Babalık İzni: {data.LeaveByFather}</br>" : "") 
-                                                                               @(data.LeaveByMarried > 0 ? $"Evlenme İzni: {data.LeaveByMarried}</br>" : "") 
+                                title="Detaylı İzin Sayıları" data-bs-content="@(data.LeaveByYear > 0 ? $"Yıllık İzni: {data.LeaveByYear}</br>" : "")
+                                                                               @(data.LeaveByWeek > 0 ? $"Haftalık İzni: {data.LeaveByWeek}</br>" : "")
+                                                                               @(data.LeaveByTaken > 0 ? $"Alacak İzni: {data.LeaveByTaken}</br>" : "")
+                                                                               @(data.LeaveByPublicHoliday > 0 ? $"Resmi İzni: {data.LeaveByPublicHoliday}</br>" : "")
+                                                                               @(data.LeaveByFreeDay > 0 ? $"Ücretsiz İzni: {data.LeaveByFreeDay}</br>" : "")
+                                                                               @(data.LeaveByTravel > 0 ? $"Seyahat İzni: {data.LeaveByTravel}</br>" : "")
+                                                                               @(data.LeaveByFather > 0 ? $"Babalık İzni: {data.LeaveByFather}</br>" : "")
+                                                                               @(data.LeaveByMarried > 0 ? $"Evlenme İzni: {data.LeaveByMarried}</br>" : "")
                                                                                @(data.LeaveByDead > 0 ? $"Ölüm İzni: {data.LeaveByDead}</br>" : "")
                                                                                @($"İzin Açıklaması: {data.Description}</br>")">
                             Detaylı Görüntüle

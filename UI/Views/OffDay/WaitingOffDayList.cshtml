@@ -152,8 +152,8 @@ else
                 <th>İşlemler</th>
                 <th>Personel<br> Adı Soyadı</th>
                 <th>Şube</th>
+                <th>Ünvan</th>
                 <th>İzin Başlangıç Tarihi /<br> İzin Bitiş Tarihi</th>
-
                 <th>Toplam <br/> Alınan Gün</th>
                 <th>Detaylı <br/>İzin Günleri</th>
                 <th>Form <br>Oluşturulma Tarihi</th>
@@ -177,7 +177,8 @@ else
                             <input type="hidden" name="status" value="true">
                             <button class="btn btn-success btn-icon" aria-label="Button">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10"/>
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M5 12l5 5l10 -10" />
                                 </svg>
                             </button>
                         </form>
@@ -188,7 +189,9 @@ else
                             <input type="hidden" name="status" value="false">
                             <button class="btn btn-danger btn-icon" aria-label="Button">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12"/><path d="M6 6l12 12"/>
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M18 6l-12 12" />
+                                    <path d="M6 6l12 12" />
                                 </svg>
                             </button>
                         </form>
@@ -197,10 +200,13 @@ else
                     <td class="col-2">
                         @data.Personal.NameSurname
                     </td>
-                    <td class="col-3">
+                    <td class="col-1">
                         @data.Personal.Branch.Name
                     </td>
                     <td class="col-1">
+                        @data.Personal.Position.Name
+                    </td>
+                    <td class="col-2">
                         <span class="status status-dark mb-1">@data.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
                         <span class="status status-github">@data.EndDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
                     </td>
@@ -210,14 +216,14 @@ else
                     </td>
                     <td class="col-1">
                         <button type="button" class="btn btn-teal btn-sm btn-pill" data-bs-trigger="hover" data-bs-html="true" data-bs-toggle="popover"
-                                title="Detaylı İzin Sayıları" data-bs-content="@(data.LeaveByYear > 0 ? $"Yıllık İzni: {data.LeaveByYear}</br>" : "") 
-                                                                               @(data.LeaveByWeek > 0 ? $"Haftalık İzni: {data.LeaveByWeek}</br>" : "") 
-                                                                               @(data.LeaveByTaken > 0 ? $"Alacak İzni: {data.LeaveByTaken}</br>" : "") 
-                                                                               @(data.LeaveByPublicHoliday > 0 ? $"Resmi İzni: {data.LeaveByPublicHoliday}</br>" : "") 
-                                                                               @(data.LeaveByFreeDay > 0 ? $"Ücretsiz İzni: {data.LeaveByFreeDay}</br>" : "") 
-                                                                               @(data.LeaveByTravel > 0 ? $"Seyahat İzni: {data.LeaveByTravel}</br>" : "") 
-                                                                               @(data.LeaveByFather > 0 ? $"Babalık İzni: {data.LeaveByFather}</br>" : "") 
-                                                                               @(data.LeaveByMarried > 0 ? $"Evlenme İzni: {data.LeaveByMarried}</br>" : "") 
+                                title="Detaylı İzin Sayıları" data-bs-content="@(data.LeaveByYear > 0 ? $"Yıllık İzni: {data.LeaveByYear}</br>" : "")
+                                                                               @(data.LeaveByWeek > 0 ? $"Haftalık İzni: {data.LeaveByWeek}</br>" : "")
+                                                                               @(data.LeaveByTaken > 0 ? $"Alacak İzni: {data.LeaveByTaken}</br>" : "")
+                                                                               @(data.LeaveByPublicHoliday > 0 ? $"Resmi İzni: {data.LeaveByPublicHoliday}</br>" : "")
+                                                                               @(data.LeaveByFreeDay > 0 ? $"Ücretsiz İzni: {data.LeaveByFreeDay}</br>" : "")
+                                                                               @(data.LeaveByTravel > 0 ? $"Seyahat İzni: {data.LeaveByTravel}</br>" : "")
+                                                                               @(data.LeaveByFather > 0 ? $"Babalık İzni: {data.LeaveByFather}</br>" : "")
+                                                                               @(data.LeaveByMarried > 0 ? $"Evlenme İzni: {data.LeaveByMarried}</br>" : "")
                                                                                @(data.LeaveByDead > 0 ? $"Ölüm İzni: {data.LeaveByDead}</br>" : "")
                                                                                @($"İzin Açıklaması: {data.Description}</br>")">
                             Detaylı Görüntüle
@@ -231,7 +237,9 @@ else
                     {
                         <td class="col-1">
                             <!--TODO RETURN URL-->
-                            <a href='/izin-duzenle?id=@data.ID&returnUrl=@returnUrl' class="btn btn-warning btn-sm text-white btn-pill">Düzenle</a>
+                            <a href='/izin-duzenle?id=@data.ID&returnUrl=@returnUrl' class="btn btn-warning btn-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
+                            </a>
                         </td>
                     }
                 </tr>

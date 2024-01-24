@@ -30,9 +30,9 @@ namespace UI.Controllers
         /// Ünvanlar Listesi Sayfası
         /// </summary>
         /// <returns></returns>
-        public async Task<IActionResult> Index(string search, bool passive, int sayfa = 1)
+        public async Task<IActionResult> Index(PositionQuery query)
         {
-            var resultSearch = await _readPositionService.GetPositionListService(sayfa, search, passive);
+            var resultSearch = await _readPositionService.GetPositionListService(query);
             if (!resultSearch.IsSuccess)
             {
                 _toastNotification.AddErrorToastMessage(resultSearch.Message, new ToastrOptions { Title = "Hata" });

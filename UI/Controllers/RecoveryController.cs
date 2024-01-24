@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Core.Querys;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using Services.Abstract.BranchServices;
@@ -36,9 +37,9 @@ public class RecoveryController : Controller
     /// Silinen Şubeler Listesi Sayfası
     /// </summary>
     /// <returns></returns>
-    public async Task<IActionResult> DeletedBranch(string search, int sayfa = 1)
+    public async Task<IActionResult> DeletedBranch(BranchQuery query)
     {
-        var result = await _readBranchService.GetDeletedBranchListService(sayfa, search);
+        var result = await _readBranchService.GetDeletedBranchListService(query);
         if (!result.IsSuccess)
         {
             _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
@@ -49,9 +50,9 @@ public class RecoveryController : Controller
     /// Silinen Ünvanlar Listesi Sayfası
     /// </summary>
     /// <returns></returns>
-    public async Task<IActionResult> DeletedPosition(string search, int sayfa = 1)
+    public async Task<IActionResult> DeletedPosition(PositionQuery query)
     {
-        var result = await _readPositionService.GetDeletedPositionListService(sayfa, search);
+        var result = await _readPositionService.GetDeletedPositionListService(query);
         if (!result.IsSuccess)
         {
             _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
