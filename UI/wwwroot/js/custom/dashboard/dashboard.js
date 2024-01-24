@@ -138,8 +138,10 @@
             }
             if (p.BirthDate && p.Status === 0) {
                 let birthDate = new Date(p.BirthDate);
+                let tenDaysLater = new Date();
+                tenDaysLater.setDate(today.getDate() + 10);
                 //birthDate.getDate() >= today.getDate() && birthDate.getDate() <= today.getDate() + 10 && today.getMonth() === birthDate.getMonth() //TODO
-                if (birthDate.getDate() >= today.getDate() && birthDate.getDate() <= today.getDate() + 10) {
+                if (birthDate >= today && birthDate <= tenDaysLater) {
                     let listItem = document.createElement('div');
                     listItem.className = 'list-group-item';
                     let row = document.createElement('div');
