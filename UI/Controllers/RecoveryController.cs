@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using Services.Abstract.BranchServices;
 using Services.Abstract.OffDayServices;
@@ -6,7 +7,7 @@ using Services.Abstract.PersonalServices;
 using Services.Abstract.PositionServices;
 
 namespace UI.Controllers;
-
+[Authorize]
 public class RecoveryController : Controller
 {
     private readonly IToastNotification _toastNotification;

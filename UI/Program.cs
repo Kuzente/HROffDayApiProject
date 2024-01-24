@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Data.Context;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.OData;
 using NToastNotify;
@@ -13,6 +14,15 @@ builder.Services.AddControllersWithViews().AddNToastNotifyToastr(new ToastrOptio
     PositionClass = ToastPositions.TopRight,
     
 });
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.SlidingExpiration = true;
+        options.LoginPath = "/giris-yap";
+        options.Cookie.Name = "user";
+
+    });
 // builder.Services.AddIdentity<IdentityUser, IdentityRole>(p=>
 // {
 //     p.Password.RequiredUniqueChars = 0;
@@ -126,6 +136,7 @@ app.MapControllerRoute(name: "qrListGet", pattern: "qr-islemleri", defaults: new
 
 #region Authentication
 app.MapControllerRoute(name: "loginPage", pattern: "giris-yap", defaults: new { controller = "Authentication", action = "Login" });
+app.MapControllerRoute(name: "loginPage", pattern: "cikis-yap", defaults: new { controller = "Authentication", action = "Logout" });
 app.MapControllerRoute(name: "loginPage", pattern: "/create-pdf", defaults: new { controller = "OffDay", action = "createpdf" });
 
 

@@ -2,6 +2,7 @@
 using Core.DTOs;
 using Core.DTOs.BaseDTOs;
 using Core.Querys;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using Services.Abstract.BranchServices;
@@ -9,6 +10,7 @@ using Services.ExcelDownloadServices.BranchServices;
 
 namespace UI.Controllers
 {
+    [Authorize]
     public class BranchController : Controller
     {
         private readonly IToastNotification _toastNotification;

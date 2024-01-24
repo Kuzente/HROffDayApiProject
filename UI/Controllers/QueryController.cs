@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Core.DTOs;
 using Core.DTOs.BranchDTOs;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
@@ -10,6 +11,7 @@ using Services.Abstract.BranchServices;
 using Services.Abstract.DashboardServices;
 
 namespace UI.Controllers;
+[Authorize]
 [Route("query")]
 [ApiController]
 public class QueryController : ODataController

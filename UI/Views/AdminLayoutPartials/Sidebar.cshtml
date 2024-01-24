@@ -1,4 +1,6 @@
-﻿<aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+<aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
 <div class="container-fluid">
 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -22,8 +24,9 @@
         </span>
     </a>
 </li>
-
-<li class="nav-item dropdown">
+@if (User.FindFirst(ClaimTypes.Name).Value == "samicangulcan")
+{
+    <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="true" role="button" aria-expanded="true">
         <span class="nav-link-icon d-md-none d-lg-inline-block">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -106,6 +109,8 @@
         </span>
     </a>
 </li>
+}
+
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="true" role="button" aria-expanded="true">
         <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -156,7 +161,9 @@
         </div>
     </div>
 </li>
-<li class="nav-item dropdown">
+@if (User.FindFirst(ClaimTypes.Name).Value == "samicangulcan")
+{
+   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="true" role="button" aria-expanded="true">
         <span class="nav-link-icon d-md-none d-lg-inline-block">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -237,26 +244,6 @@
     </div>
 </li>
 <li class="nav-item ">
-    <a class="nav-link" asp-controller="OffDay" asp-action="AddOffDay">
-        <span class="nav-link-icon d-md-none d-lg-inline-block">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-bank" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M3 21l18 0"></path>
-                <path d="M3 10l18 0"></path>
-                <path d="M5 6l7 -3l7 3"></path>
-                <path d="M4 10l0 11"></path>
-                <path d="M20 10l0 11"></path>
-                <path d="M8 14l0 3"></path>
-                <path d="M12 14l0 3"></path>
-                <path d="M16 14l0 3"></path>
-            </svg>
-        </span>
-        <span class="nav-link-title">
-            İzin Formu
-        </span>
-    </a>
-</li>
-<li class="nav-item ">
     <a class="nav-link" href="/toplu-islemler">
         <span class="nav-link-icon d-md-none d-lg-inline-block">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-bank" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -287,7 +274,30 @@
             QR İşlemleri
         </span>
     </a>
-</li>
+</li> 
+}
+
+@* <li class="nav-item "> *@
+@*     <a class="nav-link" asp-controller="OffDay" asp-action="AddOffDay"> *@
+@*         <span class="nav-link-icon d-md-none d-lg-inline-block"> *@
+@*             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-bank" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> *@
+@*                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path> *@
+@*                 <path d="M3 21l18 0"></path> *@
+@*                 <path d="M3 10l18 0"></path> *@
+@*                 <path d="M5 6l7 -3l7 3"></path> *@
+@*                 <path d="M4 10l0 11"></path> *@
+@*                 <path d="M20 10l0 11"></path> *@
+@*                 <path d="M8 14l0 3"></path> *@
+@*                 <path d="M12 14l0 3"></path> *@
+@*                 <path d="M16 14l0 3"></path> *@
+@*             </svg> *@
+@*         </span> *@
+@*         <span class="nav-link-title"> *@
+@*             İzin Formu *@
+@*         </span> *@
+@*     </a> *@
+@* </li> *@
+
 </ul>
 </div>
 </div>

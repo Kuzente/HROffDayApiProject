@@ -1,6 +1,7 @@
 ﻿using Core.DTOs.PositionDTOs;
 using Core.DTOs;
 using Core.Querys;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using Services.Abstract.PositionServices;
@@ -8,6 +9,7 @@ using Services.ExcelDownloadServices.PositionServices;
 
 namespace UI.Controllers
 {
+    [Authorize]
     public class PositionController : Controller
     {
         private readonly IToastNotification _toastNotification;

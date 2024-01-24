@@ -1,4 +1,7 @@
-﻿@model ResultWithPagingDataDto<List<ReadWaitingOffDayListDto>>
+﻿
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Security.Claims
+@model ResultWithPagingDataDto<List<ReadWaitingOffDayListDto>>
 
 @{
     ViewBag.Title = "title";
@@ -8,6 +11,16 @@
     var maxVisiblePages = 5;
     var startPage = Math.Max(1, Model.PageNumber - (maxVisiblePages / 2));
     var endPage = Math.Min(Model.TotalPages, startPage + (maxVisiblePages - 1));
+    string actionUrl;
+    var username = User.FindFirst(ClaimTypes.Name).Value;
+    if (username == "samicangulcan")
+    {
+        actionUrl = "/bekleyen-izin-guncelle-bir";
+    }
+    else
+    {
+        actionUrl = "/bekleyen-izin-guncelle-iki";
+    }
 }
 
 <!--Heading Area-->
@@ -144,7 +157,11 @@ else
                 <th>Toplam <br/> Alınan Gün</th>
                 <th>Detaylı <br/>İzin Günleri</th>
                 <th>Form <br>Oluşturulma Tarihi</th>
-                <th>Düzenle</th>
+                @if (username == "samicangulcan")
+                {
+                    <th>Düzenle</th> 
+                }
+                
 
             </tr>
             </thead>
@@ -154,7 +171,7 @@ else
                 <tr>
                     <td class="col-2">
                         @* action="/bekleyen-izin-guncelle-bir" *@
-                        <form class="d-inline-flex" action="/bekleyen-izin-guncelle-iki" method="post">
+                        <form class="d-inline-flex" action=@actionUrl method="post">
                             <input type="hidden" name="id" value="@data.ID">
                             <input type="hidden" name="returnUrl" value="@returnUrl">
                             <input type="hidden" name="status" value="true">
@@ -165,7 +182,7 @@ else
                             </button>
                         </form>
                         @* action="/bekleyen-izin-guncelle-bir" *@
-                        <form class="d-inline-flex" method="post" action="/bekleyen-izin-guncelle-iki">
+                        <form class="d-inline-flex" method="post" action=@actionUrl>
                             <input type="hidden" name="id" value="@data.ID">
                             <input type="hidden" name="returnUrl" value="@returnUrl">
                             <input type="hidden" name="status" value="false">
@@ -210,10 +227,13 @@ else
                         <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
 
                     </td>
-                    <td class="col-1">
-                        <!--TODO RETURN URL-->
-                        <a href='/izin-duzenle?id=@data.ID&returnUrl=@returnUrl' class="btn btn-warning btn-sm text-white btn-pill">Düzenle</a>
-                    </td>
+                    @if (username == "samicangulcan")
+                    {
+                        <td class="col-1">
+                            <!--TODO RETURN URL-->
+                            <a href='/izin-duzenle?id=@data.ID&returnUrl=@returnUrl' class="btn btn-warning btn-sm text-white btn-pill">Düzenle</a>
+                        </td>
+                    }
                 </tr>
             }
             </tbody>

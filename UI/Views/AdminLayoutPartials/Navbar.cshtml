@@ -1,4 +1,6 @@
-﻿<header class="navbar navbar-expand-md d-none d-lg-flex d-print-none">
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+<header class="navbar navbar-expand-md d-none d-lg-flex d-print-none">
     <div class="container-xl">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -13,17 +15,12 @@
                         </svg>
                     </span>
                     <div class="d-none d-xl-block ps-2">
-                        <div>Sami Can Gülcan</div>
+                        <div>@User.FindFirst(ClaimTypes.Name).Value</div>
                         <div class="mt-1 small text-muted">İnsan Kaynakları</div>
                     </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <a href="#" class="dropdown-item">Status</a>
-                    <a href="./profile.html" class="dropdown-item">Profile</a>
-                    <a href="#" class="dropdown-item">Feedback</a>
-                    <div class="dropdown-divider"></div>
-                    <a href="./settings.html" class="dropdown-item">Settings</a>
-                    <a href="./sign-in.html" class="dropdown-item">Çıkış Yap</a>
+                    <a href="/cikis-yap" class="dropdown-item">Çıkış Yap</a>
                 </div>
             </div>
         </div>

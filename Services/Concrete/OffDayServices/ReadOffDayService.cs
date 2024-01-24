@@ -68,6 +68,7 @@ public class ReadOffDayService : IReadOffDayService
 						a.Personal.Status == EntityStatusEnum.Online &&
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth)&&
+						(string.IsNullOrEmpty(query.branchName) ? a.Personal.Branch.Name != "Iyaş Park" : a.Personal.Branch.Name == query.branchName)&&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search)),
 					include: p=>p.Include(a=>a.Personal).ThenInclude(a=>a.Branch),
 					orderBy: p => p.OrderByDescending(a => a.CreatedAt)

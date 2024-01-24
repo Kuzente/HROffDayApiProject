@@ -1,7 +1,9 @@
 ﻿
+using System.Security.Claims;
 using Core.DTOs.OffDayDTOs.WriteDtos;
 
 using Core.Querys;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using Services.Abstract.OffDayServices;
@@ -10,7 +12,7 @@ using Services.ExcelDownloadServices;
 using Services.ExcelDownloadServices.OffDayServices;
 
 namespace UI.Controllers;
-
+[Authorize]
 public class OffDayController : Controller
 {
     private readonly IToastNotification _toastNotification;
@@ -19,7 +21,7 @@ public class OffDayController : Controller
     private readonly IReadOffDayService _readOffDayService;
     private readonly OffDayExcelExport _offDayExcelExport;
     private readonly ApprovedOffdayFormExcelExport _formExcelExport;
-
+    
     public OffDayController(IReadPersonalService readPersonalService, IWriteOffDayService writeOffDayService, IToastNotification toastNotification, IReadOffDayService readOffDayService, OffDayExcelExport offDayExcelExport, ApprovedOffdayFormExcelExport formExcelExport)
     {
         _readPersonalService = readPersonalService;
@@ -28,6 +30,7 @@ public class OffDayController : Controller
         _readOffDayService = readOffDayService;
         _offDayExcelExport = offDayExcelExport;
         _formExcelExport = formExcelExport;
+        
     }
 
     #region PageActions
@@ -37,13 +40,31 @@ public class OffDayController : Controller
     /// <returns></returns>
     public async Task<IActionResult> WaitingOffDayList(OffdayQuery query)
     {
+        var userCookie = User.FindFirst(ClaimTypes.Name).Value;
+        if (!string.IsNullOrEmpty(userCookie) && userCookie == "samicangulcan")
+        {
+            var result = await _readOffDayService.GetFirstWaitingOffDaysListService(query);
+            if (!result.IsSuccess)
+                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+            return View(result);
+        }
         //İnsan Kaynakları service
-       //var result = await _readOffDayService.GetFirstWaitingOffDaysListService(query);
+       else if (!string.IsNullOrEmpty(userCookie) && userCookie == "azimyilmaz")
+       {
+           var result = await _readOffDayService.GetSecondWaitingOffDaysListService(query); 
+           if (!result.IsSuccess)
+               _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+           return View(result);
+       }
+       else
+       {
+           query.branchName = "Iyaş Park";
+           var result = await _readOffDayService.GetSecondWaitingOffDaysListService(query); 
+           if (!result.IsSuccess)
+               _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+           return View(result);   
+       }
         
-        var result = await _readOffDayService.GetSecondWaitingOffDaysListService(query);
-        if (!result.IsSuccess)
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-        return View(result);
     }
     /// <summary>
     /// Bekleyen İzinler Düzenle Sayfası

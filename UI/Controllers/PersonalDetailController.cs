@@ -1,5 +1,6 @@
 ﻿using Core.DTOs.PersonalDTOs.WriteDtos;
 using Core.Querys;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using Services.Abstract.BranchServices;
@@ -9,6 +10,7 @@ using Services.Abstract.PositionServices;
 
 namespace UI.Controllers;
 
+[Authorize]
 public class PersonalDetailController : Controller
 {
     private readonly IToastNotification _toastNotification;

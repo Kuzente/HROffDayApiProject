@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using Services.Abstract.BranchServices;
 using Services.Abstract.PersonalServices;
@@ -8,6 +9,7 @@ using Services.FileUpload;
 
 namespace UI.Controllers;
 
+[Authorize]
 public class MultipleUploadController : Controller
 {
     private readonly IToastNotification _toastNotification;

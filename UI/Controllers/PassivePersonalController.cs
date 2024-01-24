@@ -1,4 +1,5 @@
 ﻿using Core.Querys;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using Services.Abstract.BranchServices;
@@ -8,6 +9,7 @@ using Services.ExcelDownloadServices.PersonalServices;
 
 namespace UI.Controllers;
 
+[Authorize]
 public class PassivePersonalController : Controller
 {
     private readonly IToastNotification _toastNotification;
