@@ -139,7 +139,7 @@
             if (p.BirthDate && p.Status === 0) {
                 let birthDate = new Date(p.BirthDate);
                 //birthDate.getDate() >= today.getDate() && birthDate.getDate() <= today.getDate() + 10 && today.getMonth() === birthDate.getMonth() //TODO
-                if (birthDate.getDate() >= today.getDate() && birthDate.getDate() <= today.getDate() + 10 && today.getMonth() === birthDate.getMonth()) {
+                if (birthDate.getDate() >= today.getDate() && birthDate.getDate() <= today.getDate() + 10 && (today.getMonth() === birthDate.getMonth()|| today.getMonth() +1 === birthDate.getMonth())) {
                     let listItem = document.createElement('div');
                     listItem.className = 'list-group-item';
                     let row = document.createElement('div');
