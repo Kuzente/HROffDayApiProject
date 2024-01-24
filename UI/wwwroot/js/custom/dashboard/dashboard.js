@@ -217,6 +217,7 @@
         url: "/query/personel-sayisi?expand=PersonalDetails($select=Salary,educationStatus)&$select=id,PersonalDetails,gender,birthDate,nameSurname,StartJobDate,EndJobDate,Status",
     }).done(function (res) {
         spinner.hide();
+        
         personalResponse = res;
         // Tüm kişileri doğum tarihine göre sırala
         res.sort(function(a, b) {
