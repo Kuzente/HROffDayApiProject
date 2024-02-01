@@ -129,10 +129,7 @@ app.MapControllerRoute(name: "personalUpload", pattern: "toplu-islemler", defaul
 
 #endregion
 
-#region QRPages
-app.MapControllerRoute(name: "qrListGet", pattern: "qr-islemleri", defaults: new { controller = "Qr", action = "QRList" });
 
-#endregion
 
 #region Authentication
 app.MapControllerRoute(name: "loginPage", pattern: "giris-yap", defaults: new { controller = "Authentication", action = "Login" });

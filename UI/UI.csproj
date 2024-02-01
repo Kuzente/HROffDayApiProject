@@ -552,6 +552,7 @@
     <_ContentIncludedByDefault Remove="Views\Shared\Components\DeletedBranchPagination\Default.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Shared\Components\DeletedPersonalPagination\Default.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Shared\Components\DeletedPositionPagination\Default.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Qr\QRList.cshtml" />
   </ItemGroup>
 
 </Project>

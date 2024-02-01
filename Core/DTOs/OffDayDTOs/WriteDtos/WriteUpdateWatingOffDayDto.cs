@@ -33,4 +33,13 @@ public class WriteUpdateWatingOffDayDto
     public DateTime CreatedAt { get; set; }
     
     public string? returnUrl { get; set; }
+    public WriteUpdateWatingOffDaySubPersonalDto? Personal { get; set; }
+}
+
+public class WriteUpdateWatingOffDaySubPersonalDto
+{
+    public Guid ID { get; set; }
+    public int TotalYearLeave { get; set; }
+    public int UsedYearLeave { get; set; }
+    public int TotalTakenLeave { get; set; }
 }

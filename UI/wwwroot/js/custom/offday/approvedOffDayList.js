@@ -3,17 +3,18 @@
     let selectMonth = new TomSelect($("#filterMonth"));
     let selectBranch;
     let selectPosition;
-    setFilterOptions();
+    
     //Filtre Ayarları
     function setFilterOptions() {
         let urlParams = new URLSearchParams(window.location.search);
         let filterYear = urlParams.get('filterYear');
         let filterMonth = urlParams.get('filterMonth');
+        let filterPosition = urlParams.get('positionName');
         if (filterYear) {
-            console.log(selectYear)
             selectYear.setValue([filterYear]);
         }
         if (filterMonth) {
+            
             selectMonth.setValue([filterMonth]);
         }
         $.ajax({ //TODO
@@ -30,10 +31,13 @@
             });
             selectBranch = new TomSelect($("#branchSelect"));
             selectPosition = new TomSelect($("#positionSelect"));
-            selectBranch.clear();
             selectPosition.clear();
+            selectBranch.clear();
         });
+        
+       
     }
+    setFilterOptions();
     // Sil butonuna tıklanınca
     $('[data-deleteButton]').on('click',function () {
         $('#itemIdInput').val($(this).data("item-id"));

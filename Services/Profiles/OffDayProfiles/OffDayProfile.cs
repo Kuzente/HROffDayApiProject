@@ -23,6 +23,7 @@ public class OffDayProfile : Profile
 		CreateMap<Position, ReadWaitingOffDayEditSubPersonalSubPositionDto>();
 		
 		CreateMap<WriteUpdateWatingOffDayDto, OffDay>();
+		CreateMap<WriteUpdateWatingOffDaySubPersonalDto, Personal>();
 		#endregion
 
 		#region Reddedilen İzinler

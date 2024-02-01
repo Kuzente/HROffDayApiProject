@@ -98,12 +98,37 @@ public class WriteOffDayService : IWriteOffDayService
 				return result.SetStatus(false).SetErr("StartDate is bigger than EndDate").SetMessage("İzin başlangıç tarihi bitişten büyük olamaz!"); 
 			if(dto.CountLeave != ((dto.EndDate - dto.StartDate).Days + 1))
 				return result.SetStatus(false).SetErr("Date and Count not equal").SetMessage("Girdiğiniz Tarih Aralığı İle İzin Günleri Uyuşmuyor."); 
-			var personal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate: p => p.ID == dto.Personal_Id && p.Status == EntityStatusEnum.Online);
-			if(personal is null)
+			var offDay = await _unitOfWork.ReadOffDayRepository.GetSingleAsync(predicate: p => p.ID == dto.ID && p.Personal_Id == dto.Personal_Id && p.Personal.Status == EntityStatusEnum.Online,
+				include:p=>p.Include(a=>a.Personal));
+			if(offDay.Personal is null)
 				return result.SetStatus(false).SetErr("Personal Is Not Found").SetMessage("İlgili Personel Bulunamadı.");
-			if((personal.TotalYearLeave - personal.UsedYearLeave) < dto.LeaveByYear)
+			if((offDay.Personal.TotalYearLeave - offDay.Personal.UsedYearLeave) < dto.LeaveByYear)
 				return result.SetStatus(false).SetErr("Personal Total Year Leave Not Enought").SetMessage("Personelin yıllık izini yetersiz.Lütfen daha küçük bir değer giriniz");
+			
+			
 			var mappedResult = _mapper.Map<OffDay>(dto);
+			if (offDay.OffDayStatus == OffDayStatusEnum.Approved)
+			{
+				mappedResult.OffDayStatus = OffDayStatusEnum.Approved;
+				if (dto.LeaveByYear > offDay.LeaveByYear)
+				{
+					mappedResult.Personal.UsedYearLeave += (dto.LeaveByYear - offDay.LeaveByYear);
+				}
+				else if (dto.LeaveByYear < offDay.LeaveByYear)
+				{
+					mappedResult.Personal.UsedYearLeave -= (offDay.LeaveByYear - dto.LeaveByYear);
+				}
+				else if (dto.LeaveByTaken > offDay.LeaveByTaken)
+				{
+					mappedResult.Personal.TotalTakenLeave += ((dto.LeaveByTaken - offDay.LeaveByTaken) * 8);
+				}
+				else if (dto.LeaveByTaken < offDay.LeaveByTaken)
+				{
+					mappedResult.Personal.TotalTakenLeave -= ((offDay.LeaveByTaken - dto.LeaveByTaken) * 8);	
+				}
+				
+			}
+			
 			if (dto.LeaveByMarriedFatherDead is not null)
 			{
 				dto.LeaveByMarriedFatherDead.ForEach(a =>
