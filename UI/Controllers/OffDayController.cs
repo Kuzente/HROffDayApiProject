@@ -21,17 +21,15 @@ public class OffDayController : Controller
     private readonly IWriteOffDayService _writeOffDayService;
     private readonly IReadOffDayService _readOffDayService;
     private readonly OffDayExcelExport _offDayExcelExport;
-    private readonly ApprovedOffdayFormExcelExport _formExcelExport;
     private readonly OffDayFormPdf _offDayFormPdf;
     
-    public OffDayController(IReadPersonalService readPersonalService, IWriteOffDayService writeOffDayService, IToastNotification toastNotification, IReadOffDayService readOffDayService, OffDayExcelExport offDayExcelExport, ApprovedOffdayFormExcelExport formExcelExport, OffDayFormPdf offDayFormPdf)
+    public OffDayController(IReadPersonalService readPersonalService, IWriteOffDayService writeOffDayService, IToastNotification toastNotification, IReadOffDayService readOffDayService, OffDayExcelExport offDayExcelExport, OffDayFormPdf offDayFormPdf)
     {
         _readPersonalService = readPersonalService;
         _writeOffDayService = writeOffDayService;
         _toastNotification = toastNotification;
         _readOffDayService = readOffDayService;
         _offDayExcelExport = offDayExcelExport;
-        _formExcelExport = formExcelExport;
         _offDayFormPdf = offDayFormPdf;
     }
 
