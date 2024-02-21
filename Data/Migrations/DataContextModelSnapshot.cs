@@ -181,6 +181,9 @@ namespace Data.Migrations
                     b.Property<DateTime?>("EndJobDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("FoodAid")
+                        .HasColumnType("int");
+
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

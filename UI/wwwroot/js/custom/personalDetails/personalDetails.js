@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function () {
         url: `/get-personel-detayları${window.location.search}`
     }).done(function (res) {
         if (res.isSuccess) {
-            console.log(res.data)
             $('#HeaderPersonalNameSurname').text(res.data.nameSurname);
             $('#HeaderPersonalBranchPosition').text((res.data.branches.find(p => p.id === res.data.branch_Id) || {}).name + " - " +(res.data.positions.find(p => p.id === res.data.position_Id).name));
             $('#personelİzinleriPage').attr('href', `/personel-izinleri?id=${res.data.id}`);
@@ -31,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Avatar ve diğer basit bilgilerin ayarlanması
         $('#personalAvatar').html(data.nameSurname.charAt(0));
         $('#badgeTotalTakenLeave').html(saatleriGunVeSaatlereCevir(data.totalTakenLeave));
+        $('#badgeFoodAid').html(data.foodAid);
         $('#badgeTotalYearLeave').html(data.totalYearLeave);//TODO
         $('#badgeUsedYearLeave').html(data.usedYearLeave);//TODO
         $('#balanceYearLeave').html(data.totalYearLeave - data.usedYearLeave);//TODO
@@ -192,7 +192,6 @@ document.addEventListener('DOMContentLoaded', function () {
         //Personeli Güncelle Butonu Tıklandığında
         $('#updatePersonalButton').on('click',function () {
             let formData = $("#updatePersonalForm").serializeArray();
-            console.log(formData);
             formData.forEach(function (f) {
                 if (f.value ==="on"){
                     f.value = true;

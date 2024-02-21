@@ -131,6 +131,8 @@ public class ExcelUploadScheme
             worksheet.Cells[1, 26].Value = "Toplam Yıllık İzin Miktarı";
             worksheet.Cells[1, 27].Value = "Kullanılan Yıllık İzin Miktarı";
             worksheet.Cells[1, 28].Value = "Toplam Alınan İzin Miktarı (SAAT)";
+            worksheet.Cells[1, 29].Value = "Gıda Yardımı (TL)";
+            
 
             #endregion
             

@@ -66,6 +66,7 @@ public class ExcelPersonalAddrange
                     personel.TotalYearLeave = worksheet.Cells[row, 26].GetValue<int>();
                     personel.UsedYearLeave = worksheet.Cells[row, 27].GetValue<int>();
                     personel.TotalTakenLeave = worksheet.Cells[row, 28].GetValue<int>();
+                    personel.FoodAid = worksheet.Cells[row, 29].GetValue<int>();
                     personelListesi.Add(personel);
                 }
                 stream.Dispose();
