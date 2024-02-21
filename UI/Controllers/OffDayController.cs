@@ -151,7 +151,7 @@ public class OffDayController : Controller
             _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
         else
             _toastNotification.AddSuccessToastMessage("İzin Talebi Başarılı Bir Şekilde Güncellendi", new ToastrOptions { Title = "Başarılı" });
-        return Redirect(dto.returnUrl);
+        return Redirect(dto.returnUrl ?? "/bekleyen-izinler");
     }
     /// <summary>
     /// İlk Bekleyen İzinler Durum Değiştirme(Onayla/Reddet) Post Metodu

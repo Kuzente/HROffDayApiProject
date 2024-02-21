@@ -7,7 +7,6 @@ using NToastNotify;
 using QuestPDF.Infrastructure;
 using Services;
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddNToastNotifyToastr(new ToastrOptions()
 {
@@ -50,7 +49,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();

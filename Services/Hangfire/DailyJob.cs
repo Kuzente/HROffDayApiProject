@@ -18,7 +18,7 @@ public class DailyJob
         var todayStartPersonals =  _unitOfWork.ReadPersonalRepository.GetAll(
                 predicate: p =>
             p.StartJobDate.Month == DateTime.Today.Month && 
-            p.StartJobDate.Day == 18 &&
+            p.StartJobDate.Day == DateTime.Today.Day &&
             p.Status == EntityStatusEnum.Online).ToList();
         if (!todayStartPersonals.Any())
         {
