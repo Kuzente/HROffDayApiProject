@@ -52,14 +52,14 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(IReadOdataService), typeof(ReadOdataService));
 		services.AddScoped(typeof(IReadDailyCounterService), typeof(ReadDailyCounterService));
 		services.AddScoped( typeof(OffDayFormPdf));
-		services.AddHangfire(x =>
-		{
-			x.UseSqlServerStorage(hangfireConnectionstring);
-			RecurringJob.AddOrUpdate<DailyJob>("YıllıkİzinJobId",j=> j.YearLeaveEnhancer(),"*/5 * * * *",options:new RecurringJobOptions
-			{
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time")
-			});
-		});
-		services.AddHangfireServer();
+		// services.AddHangfire(x =>
+		// {
+		// 	x.UseSqlServerStorage(hangfireConnectionstring);
+		// 	RecurringJob.AddOrUpdate<DailyJob>("YıllıkİzinJobId",j=> j.YearLeaveEnhancer(),"*/5 * * * *",options:new RecurringJobOptions
+		// 	{
+		// 		TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time")
+		// 	});
+		// });
+		// services.AddHangfireServer();
 	}
 }
