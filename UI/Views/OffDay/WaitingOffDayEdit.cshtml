@@ -74,6 +74,10 @@ else
                                     @* </select> *@
                                     <input class="form-control" type="text" disabled value="@Model.Data.Personal.NameSurname"/>
                                     <input type="hidden" name="Personal_Id" value="@Model.Data.Personal_Id">
+                                    <input type="hidden" name="Personal.ID" value="@Model.Data.Personal_Id">
+                                    <input type="hidden" name="Personal.UsedYearLeave" value="@Model.Data.Personal.UsedYearLeave">
+                                    <input type="hidden" name="Personal.TotalTakenLeave" value="@Model.Data.Personal.TotalTakenLeave">
+                                    
                                     <input type="hidden" name="CountLeave" >
                                     <input type="hidden" name="CreatedAt" value="@Model.Data.CreatedAt" >
                                     <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" >

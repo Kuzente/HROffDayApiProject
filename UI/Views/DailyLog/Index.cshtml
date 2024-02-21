@@ -1,0 +1,49 @@
+﻿@model IResultWithDataDto<List<TodayStartPersonalDto>>
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+<!--Heading Area-->
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                    IYAŞ PANEL
+                </div>
+                <h2 class="page-title">
+                    Günlük Loglar
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Heading Area-->
+@if (!Model.IsSuccess)
+{
+    <div class="card container-xl mt-3">
+        <div class="text-center p-5">
+            <h1 class="display-4">Üzgünüz</h1>
+            <p>@Model.Message</p>
+            <p>@Model.Err</p>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card container-xl mt-3">
+        <div class="row mt-3">
+            <pre>
+            @foreach (var log in Model.Data)
+            {
+                 <text>-> @log.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR")) tarihinde - @log.NameSurname personeline - @log.AddedYearLeaveDescription - @log.AddedFoodAidAmountDescription
+</text>
+                
+            }
+            </pre>
+        </div>
+    </div> 
+}
+
+

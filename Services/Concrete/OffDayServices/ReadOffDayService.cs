@@ -68,7 +68,7 @@ public class ReadOffDayService : IReadOffDayService
 						a.Personal.Status == EntityStatusEnum.Online &&
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth)&&
-						(string.IsNullOrEmpty(query.branchName) ? a.Personal.Branch.Name != "Iyaş Park" : a.Personal.Branch.Name == query.branchName)&&
+						(string.IsNullOrEmpty(query.branchName) || a.Personal.Branch.Name.Contains(query.branchName))&&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search)),
 					include: p=>p.Include(a=>a.Personal).Include(a=>a.Personal.Branch).Include(a=> a.Personal.Position),
 					orderBy: p => p.OrderByDescending(a => a.CreatedAt)
@@ -129,8 +129,8 @@ public class ReadOffDayService : IReadOffDayService
 					predicate: a =>
 						(a.Status == EntityStatusEnum.Online && a.OffDayStatus == OffDayStatusEnum.Approved ) &&
 						a.Personal.Status == EntityStatusEnum.Online &&
-						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
-						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth)&&
+						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear || a.EndDate.Year == query.filterYear) &&
+						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth || a.EndDate.Month == query.filterMonth)&&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search))&&
 						(string.IsNullOrEmpty(query.branchName) || a.Personal.Branch.Name.Contains(query.branchName))&&
 						(string.IsNullOrEmpty(query.positionName) || a.Personal.Position.Name.Contains(query.positionName)),
@@ -195,8 +195,8 @@ public class ReadOffDayService : IReadOffDayService
 					predicate: a =>
 						(a.Status == EntityStatusEnum.Online && a.OffDayStatus == OffDayStatusEnum.Approved) &&
 						a.Personal.Status == EntityStatusEnum.Online && a.Personal_Id == query.id &&
-						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
-						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth),
+						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear || a.EndDate.Year == query.filterYear) &&
+						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth || a.EndDate.Month == query.filterMonth),
 					orderBy: p => p.OrderByDescending(a => a.CreatedAt)
 				));
 			var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)
@@ -237,7 +237,7 @@ public class ReadOffDayService : IReadOffDayService
 		return res;
 	}
 
-	public async Task<IResultWithDataDto<List<ReadApprovedOffDayListDto>>> GetExcelOffDayListService(OffdayQuery query)
+	public async Task<IResultWithDataDto<List<ReadApprovedOffDayListDto>>> GetExcelApprovedOffDayListService(OffdayQuery query)
 	{
 		IResultWithDataDto<List<ReadApprovedOffDayListDto>> res = new ResultWithDataDto<List<ReadApprovedOffDayListDto>>();
 		try
@@ -248,8 +248,8 @@ public class ReadOffDayService : IReadOffDayService
 						(a.Status == EntityStatusEnum.Online && a.OffDayStatus == OffDayStatusEnum.Approved ) &&
 						a.Personal.Status == EntityStatusEnum.Online &&
 						(!query.id.HasValue || a.Personal_Id == query.id) &&
-						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
-						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth)&&
+						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear || a.EndDate.Year == query.filterYear) &&
+						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth || a.EndDate.Month == query.filterMonth)&&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search))&&
 						(string.IsNullOrEmpty(query.branchName) || a.Personal.Branch.Name.Contains(query.branchName))&&
 						(string.IsNullOrEmpty(query.positionName) || a.Personal.Position.Name.Contains(query.positionName)),

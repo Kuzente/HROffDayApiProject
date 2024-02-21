@@ -1,4 +1,23 @@
 ﻿document.addEventListener('DOMContentLoaded',function () {
+    const validateAddBranch = new JustValidate('#addBranchForm',
+                {
+                    submitFormAutomatically: true,
+                    validateBeforeSubmitting: true,
+                    errorFieldCssClass: ['invalid'],
+                },
+    );
+    validateAddBranch
+        .addField('#nameBasic',[
+            {
+                rule: 'required',
+                errorMessage: 'Boş Bırakılamaz!',
+            },
+            {
+                rule: 'maxLength',
+                value: 50,
+                errorMessage: '50 Karakterden Fazla Olamaz!'
+            },
+        ]);
     $('#addModal').on('hidden.bs.modal', function (e) {
         // Form alanınızı resetleme
         $('#addBranchForm')[0].reset();

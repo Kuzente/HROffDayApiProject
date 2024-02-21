@@ -14,6 +14,7 @@ public class DataContext : IdentityDbContext
 	public DbSet<Branch> Branches => Set<Branch>();
 	public DbSet<Position> Positions => Set<Position>();
 	public DbSet<OffDay> OffDays => Set<OffDay>();
+	public DbSet<DailyCounter> DailyCounters => Set<DailyCounter>();
 	public override int SaveChanges()
 	{
 		var datas = ChangeTracker.Entries<BaseEntity>();

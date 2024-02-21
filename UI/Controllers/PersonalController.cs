@@ -76,16 +76,26 @@ namespace UI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPersonal(AddPersonalDto dto)
         {
-            var result = await _writePersonalService.AddAsync(dto);
-            if (!result.IsSuccess)
+            if (!ModelState.IsValid)
             {
-                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+                    _toastNotification.AddErrorToastMessage("Zorunlu Alanları Doldurduğunuzdan Emin Olunuz", new ToastrOptions { Title = "Hata" });
             }
             else
             {
-                _toastNotification.AddSuccessToastMessage("Personel Başarılı Bir Şekilde Eklendi", new ToastrOptions { Title = "Başarılı" }); 
+                var result = await _writePersonalService.AddAsync(dto);
+                if (!result.IsSuccess)
+                {
+                    _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+                }
+                else
+                {
+                    _toastNotification.AddSuccessToastMessage("Personel Başarılı Bir Şekilde Eklendi", new ToastrOptions { Title = "Başarılı" }); 
+                }
+
+                return Ok(result);
             }
-            return Ok(result);
+           
+            return Ok();
         }
         /// <summary>
         /// Aktif Personeller Excel Alma Post Metodu

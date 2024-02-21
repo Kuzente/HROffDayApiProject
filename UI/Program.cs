@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.OData;
 using NToastNotify;
+using QuestPDF.Infrastructure;
 using Services;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddControllersWithViews().AddNToastNotifyToastr(new ToastrOptio
     PositionClass = ToastPositions.TopRight,
     
 });
+
+QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -36,7 +39,7 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
 {
     conf.EnableQueryFeatures();
 });
-builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("MssqlSomee"));
+builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("Mssql"),builder.Configuration.GetConnectionString("Hangfire"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -54,11 +57,6 @@ app.UseRouting();
 app.UseNToastNotify();
 app.UseAuthorization();
 
-#region Dashboard
-
-
-
-#endregion
 #region PersonalList
 app.MapControllerRoute(name: "personalListGet", pattern: "personeller", defaults: new { controller = "Personal", action = "Index" });
 app.MapControllerRoute(name: "personalListCreate", pattern: "create-personal", defaults: new { controller = "Personal", action = "AddPersonal" });
@@ -129,12 +127,17 @@ app.MapControllerRoute(name: "personalUpload", pattern: "toplu-islemler", defaul
 
 #endregion
 
+#region DailyLog
+app.MapControllerRoute(name: "dailyLogPage", pattern: "gunluk-takip", defaults: new { controller = "DailyLog", action = "Index" });
+
+
+#endregion
 
 
 #region Authentication
 app.MapControllerRoute(name: "loginPage", pattern: "giris-yap", defaults: new { controller = "Authentication", action = "Login" });
 app.MapControllerRoute(name: "loginPage", pattern: "cikis-yap", defaults: new { controller = "Authentication", action = "Logout" });
-app.MapControllerRoute(name: "loginPage", pattern: "/create-pdf", defaults: new { controller = "OffDay", action = "createpdf" });
+app.MapControllerRoute(name: "loginPage", pattern: "/create-pdf", defaults: new { controller = "OffDay", action = "ExportPdf" });
 
 
 #endregion

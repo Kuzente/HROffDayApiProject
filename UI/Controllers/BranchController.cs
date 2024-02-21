@@ -130,6 +130,7 @@ namespace UI.Controllers
                 response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 response.Headers.Add("Content-Disposition", "attachment; filename=Subeler.xlsx");
                 await response.Body.WriteAsync(excelData, 0, excelData.Length);
+                _toastNotification.AddSuccessToastMessage("Başarılı", new ToastrOptions { Title = "Başarılı" });
                 return new EmptyResult();
             }
 

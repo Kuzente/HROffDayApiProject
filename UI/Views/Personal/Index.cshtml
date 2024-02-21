@@ -311,7 +311,7 @@ else
     </div>
 
     <!--AddModal-->
-    <form id="addPersonalForm" action="/create-personal" method="post">
+    <form id="addPersonalForm" action="/create-personal" method="post" novalidate="novalidate">
         <div class="modal modal-blur fade" id="addModal" tabindex="-1" aria-hidden="true" role="dialog">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
@@ -332,8 +332,9 @@ else
                                                 <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
                                             </svg>
                                         </span>
-                                        <input type="text" name="NameSurname" class="form-control" placeholder="Personal Ad-Soyadını Giriniz!">
+                                        <input id="createNameSurname"  type="text" name="NameSurname" class="form-control" placeholder="Personal Ad-Soyadını Giriniz!">
                                     </div>
+                                    <div class="errorContainer-nameSurname"></div>
                                 </div>
                                 <div class="col mb-3">
                                     <label class="form-label required">İşe Başlama Tarihi</label>
@@ -351,6 +352,7 @@ else
                                         </span>
                                         <input type="date" name="StartJobDate" class="form-control" placeholder="Personal İşe başlangıç Tarihi!">
                                     </div>
+                                    <div class="errorContainer-startJobDate"></div>
                                 </div>
 
                             </div>
@@ -385,6 +387,7 @@ else
                                         </span>
                                         <input type="text" name="PersonalDetails.BirthPlace" class="form-control" placeholder="Personal Doğum Yeri Giriniz!">
                                     </div>
+                                    <div class="errorContainer-birthPlace"></div>
                                 </div>
                             </div>
                             <div class="row">
@@ -404,6 +407,7 @@ else
                                         </span>
                                         <input type="text" name="IdentificationNumber" class="form-control" placeholder="Personal Tc Kimlik Giriniz!">
                                     </div>
+                                    <div class="errorContainer-identificationNumber"></div>
                                 </div>
                                 <div class="col mb-3">
                                     <label class="form-label required">Sicil No </label>
@@ -420,6 +424,7 @@ else
                                         </span>
                                         <input type="text" name="RegistirationNumber" class="form-control" placeholder="Personal Sicil No Giriniz!">
                                     </div>
+                                     <div class="errorContainer-registirationNumber"></div>
                                 </div>
 
                             </div>
@@ -438,6 +443,7 @@ else
                                         </span>
                                         <input type="text" name="PersonalDetails.SskNumber" class="form-control" placeholder="Personal SSK No Giriniz!">
                                     </div>
+                                     <div class="errorContainer-sskNumber"></div>
                                 </div>
                                 <div class="col mb-3">
                                     <label class="form-label required">SGK Kodu </label>
@@ -455,6 +461,7 @@ else
                                         </span>
                                         <input type="text" name="PersonalDetails.SgkCode" class="form-control" placeholder="Personal SGK Kodunu Giriniz!">
                                     </div>
+                                     <div class="errorContainer-sgkCode"></div>
                                 </div>
                             </div>
                             <div class="row">
@@ -531,6 +538,7 @@ else
                                             </svg>
                                         </span>
                                     </div>
+                                     <div class="errorContainer-salary"></div>
                                 </div>
 
                             </div>
@@ -768,8 +776,8 @@ else
                         <button id="previousButton" type="button" class="btn btn-outline-secondary d-none">
                             Geri Dön
                         </button>
-                        <button id="nextButton" type="button" class="btn btn-primary">Devam Et</button>
-                        <button id="personalAddButton" type="submit" class="btn btn-primary d-none">Personeli Ekle</button>
+                        <button id="nextButton" type="button" class="btn btn-primary" data-variant="negative">Devam Et</button>
+                        <button id="personalAddButton" type="button" class="btn btn-primary d-none">Personeli Ekle</button>
                     </div>
                 </div>
             </div>

@@ -104,29 +104,34 @@ public class WriteOffDayService : IWriteOffDayService
 				return result.SetStatus(false).SetErr("Personal Is Not Found").SetMessage("İlgili Personel Bulunamadı.");
 			if((offDay.Personal.TotalYearLeave - offDay.Personal.UsedYearLeave) < dto.LeaveByYear)
 				return result.SetStatus(false).SetErr("Personal Total Year Leave Not Enought").SetMessage("Personelin yıllık izini yetersiz.Lütfen daha küçük bir değer giriniz");
-			
-			
 			var mappedResult = _mapper.Map<OffDay>(dto);
-			if (offDay.OffDayStatus == OffDayStatusEnum.Approved)
+			
+			if (offDay.OffDayStatus == OffDayStatusEnum.Approved) // Eğer İzin Onaylanmış ve Güncelleme Yapılıyor İse
 			{
+				var personal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate: p =>
+					p.ID == dto.Personal_Id && p.Status == EntityStatusEnum.Online);
+				if (personal is null)
+					return result.SetStatus(false).SetErr("Personal Not Found").SetMessage("İlgili Personel Bulunamadı.");
+				
 				mappedResult.OffDayStatus = OffDayStatusEnum.Approved;
 				if (dto.LeaveByYear > offDay.LeaveByYear)
 				{
-					mappedResult.Personal.UsedYearLeave += (dto.LeaveByYear - offDay.LeaveByYear);
+					personal.UsedYearLeave += (dto.LeaveByYear - offDay.LeaveByYear);
 				}
 				else if (dto.LeaveByYear < offDay.LeaveByYear)
 				{
-					mappedResult.Personal.UsedYearLeave -= (offDay.LeaveByYear - dto.LeaveByYear);
+					personal.UsedYearLeave -= (offDay.LeaveByYear - dto.LeaveByYear);
 				}
 				else if (dto.LeaveByTaken > offDay.LeaveByTaken)
 				{
-					mappedResult.Personal.TotalTakenLeave += ((dto.LeaveByTaken - offDay.LeaveByTaken) * 8);
+					personal.TotalTakenLeave -= ((dto.LeaveByTaken - offDay.LeaveByTaken) * 8);
 				}
 				else if (dto.LeaveByTaken < offDay.LeaveByTaken)
 				{
-					mappedResult.Personal.TotalTakenLeave -= ((offDay.LeaveByTaken - dto.LeaveByTaken) * 8);	
+					personal.TotalTakenLeave += ((offDay.LeaveByTaken - dto.LeaveByTaken) * 8);	
 				}
-				
+
+				await _unitOfWork.WritePersonalRepository.Update(personal);
 			}
 			
 			if (dto.LeaveByMarriedFatherDead is not null)

@@ -8,8 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
 using Services.Abstract.OffDayServices;
 using Services.Abstract.PersonalServices;
-using Services.ExcelDownloadServices;
 using Services.ExcelDownloadServices.OffDayServices;
+using Services.PdfDownloadServices;
+
 
 namespace UI.Controllers;
 [Authorize]
@@ -21,8 +22,9 @@ public class OffDayController : Controller
     private readonly IReadOffDayService _readOffDayService;
     private readonly OffDayExcelExport _offDayExcelExport;
     private readonly ApprovedOffdayFormExcelExport _formExcelExport;
+    private readonly OffDayFormPdf _offDayFormPdf;
     
-    public OffDayController(IReadPersonalService readPersonalService, IWriteOffDayService writeOffDayService, IToastNotification toastNotification, IReadOffDayService readOffDayService, OffDayExcelExport offDayExcelExport, ApprovedOffdayFormExcelExport formExcelExport)
+    public OffDayController(IReadPersonalService readPersonalService, IWriteOffDayService writeOffDayService, IToastNotification toastNotification, IReadOffDayService readOffDayService, OffDayExcelExport offDayExcelExport, ApprovedOffdayFormExcelExport formExcelExport, OffDayFormPdf offDayFormPdf)
     {
         _readPersonalService = readPersonalService;
         _writeOffDayService = writeOffDayService;
@@ -30,7 +32,7 @@ public class OffDayController : Controller
         _readOffDayService = readOffDayService;
         _offDayExcelExport = offDayExcelExport;
         _formExcelExport = formExcelExport;
-        
+        _offDayFormPdf = offDayFormPdf;
     }
 
     #region PageActions
@@ -111,24 +113,7 @@ public class OffDayController : Controller
             _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
         return View(result);
     }
-    [HttpPost]
-    public async Task<IActionResult> createpdf(Guid id,string returnUrl)
-    {
-        var result = await _readOffDayService.GetApprovedOffDayExcelFormService(id);
-        if(!result.IsSuccess)
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-        else
-        {
-            var excelFormPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "offdayForm.xlsx");
-            byte[] excelFile = _formExcelExport.ExportToExcel(result.Data , excelFormPath);
-            var response = HttpContext.Response;
-            response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            response.Headers.Add("Content-Disposition", "attachment; filename=IzinFormu.xlsx");
-            await response.Body.WriteAsync(excelFile, 0, excelFile.Length);
-            return new EmptyResult();
-        }
-        return Redirect(returnUrl);
-    }
+    
     #endregion
 
     #region Get/Post Actions
@@ -217,13 +202,13 @@ public class OffDayController : Controller
         return Redirect(returnUrl);
     }
     /// <summary>
-    /// Bekleyen İzinler Düzenleme Post Metodu
+    /// Onaylanan İzinler Excel Raporu Alma
     /// </summary>
     /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> ExportExcel(OffdayQuery query , string returnUrl)
     {
-        var result = await _readOffDayService.GetExcelOffDayListService(query);
+        var result = await _readOffDayService.GetExcelApprovedOffDayListService(query);
         if (result.IsSuccess)
         {
             byte[] excelData = _offDayExcelExport.ExportToExcel(result.Data); // Entity listesini Excel verisi olarak alın.
@@ -235,6 +220,27 @@ public class OffDayController : Controller
         }
 
         _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+        return Redirect(returnUrl);
+    }
+    /// <summary>
+    /// Onaylanan İzinler Pdf Formu Alma
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<IActionResult> ExportPdf(Guid id,string returnUrl)
+    {
+        var result = await _readOffDayService.GetApprovedOffDayExcelFormService(id);
+        if(!result.IsSuccess)
+            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+        else
+        {
+            byte[] pdfFile = _offDayFormPdf.GetOffDayPdfDocument(result.Data);
+            var response = HttpContext.Response;
+            response.ContentType = "application/pdf";
+            response.Headers.Add("Content-Disposition", "attachment; filename=IzinFormu.pdf");
+            await response.Body.WriteAsync(pdfFile, 0, pdfFile.Length);
+            return new EmptyResult();
+        }
         return Redirect(returnUrl);
     }
     #endregion

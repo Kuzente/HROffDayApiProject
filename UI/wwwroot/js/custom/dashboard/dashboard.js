@@ -10,19 +10,19 @@
     const birthList = document.getElementById('birthList');
     let personalResponse ;
     function WorkPowerTable(response , selectedYear = new Date().getFullYear()) {
-        let selectedMonth = new Date(selectedYear).getMonth();
+        let currentMonth = new Date().getMonth();
         let monthNames = [
             "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
         ];
         $('#workPowerTitle').text(selectedYear + " Yılı İş Gücü Verileri");
         let tableBody = document.querySelector('.table-bordered tbody');
         monthNames.forEach(function (month, index) {
-            if (selectedYear === today.getFullYear() && index <= selectedMonth) {
-                let startMonthWorking = 0;
-                let monthGetPersonel = 0;
-                let monthBanPersonel = 0;
-                let firstDayOfMonth = new Date(selectedYear, index, 1);
-                var row = document.createElement('tr');
+            let startMonthWorking = 0;
+            let monthGetPersonel = 0;
+            let monthBanPersonel = 0;
+            let firstDayOfMonth = new Date(selectedYear, index, 1);
+            let row = document.createElement('tr');
+            if (selectedYear === today.getFullYear() && index <= currentMonth) {
                 response.forEach(function (item) {
                     if (item.StartJobDate) { // EĞER İŞE BAŞLAMA TARİHİ VARSA
                         let startJobDate = new Date(item.StartJobDate);
@@ -47,17 +47,12 @@
                          <td>${startMonthWorking}</td>
                          <td>${monthGetPersonel}</td>
                          <td>${monthBanPersonel}</td>
-                         <td>${startMonthWorking + monthGetPersonel - monthBanPersonel}</td>
+                         <td>${startMonthWorking + monthGetPersonel - monthBanPersonel}</td> 
         `;
 
                 // Tabloya satırı ekle
                 tableBody.appendChild(row);
             } else if (selectedYear < today.getFullYear()) {
-                let startMonthWorking = 0;
-                let monthGetPersonel = 0;
-                let monthBanPersonel = 0;
-                let firstDayOfMonth = new Date(selectedYear, index, 1);
-                var row = document.createElement('tr');
                 response.forEach(function (item) {
                     if (item.StartJobDate) { // EĞER İŞE BAŞLAMA TARİHİ VARSA
                         let startJobDate = new Date(item.StartJobDate);
@@ -81,7 +76,7 @@
                         <td>${startMonthWorking}</td>
                         <td>${monthGetPersonel}</td>
                         <td>${monthBanPersonel}</td>
-                        <td>${startMonthWorking - monthGetPersonel + monthBanPersonel}</td>
+                        <td>${startMonthWorking + monthGetPersonel - monthBanPersonel}</td> 
         `;
 
                 // Tabloya satırı ekle
@@ -202,13 +197,17 @@
             month: 'long'
         })} - ${remainingText}</div>
             `;
-        let badgeCol = document.createElement('div');
-        badgeCol.className = 'col-auto align-self-center';
-        badgeCol.innerHTML = '<div class="badge bg-primary"></div>';
+        
 
         row.appendChild(avatarCol);
         row.appendChild(infoCol);
-        row.appendChild(badgeCol);
+        if(birthDate.getDate() - today.getDate() === 0){ // Eğer bugün Doğdu ise mavi tik koy
+            let badgeCol = document.createElement('div');
+            badgeCol.className = 'col-auto align-self-center';
+            badgeCol.innerHTML = '<div class="badge bg-primary"></div>';
+            row.appendChild(badgeCol);
+            listItem.className += " active";
+        }
         listItem.appendChild(row);
         birthList.appendChild(listItem);
     }

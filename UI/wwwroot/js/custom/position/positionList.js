@@ -1,4 +1,21 @@
 ﻿document.addEventListener('DOMContentLoaded',function () {
+    const validateAddPosition = new JustValidate('#addPositionForm',
+        {
+            submitFormAutomatically: true,
+        }
+    );
+    validateAddPosition
+        .addField('#nameBasic',[
+            {
+                rule: 'required',
+                errorMessage: 'Boş Bırakılamaz!',
+            },
+            {
+                rule: 'maxLength',
+                value: 50,
+                errorMessage: '50 Karakterden Fazla Olamaz!'
+            },
+        ]);
     $('#addModal').on('hidden.bs.modal', function (e) {
         // Form alanınızı resetleme
         $('#addPositionForm')[0].reset();

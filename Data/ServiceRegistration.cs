@@ -1,10 +1,12 @@
 ﻿using Data.Abstract;
 using Data.Abstract.BranchRepositories;
+using Data.Abstract.DailyCounterRepositories;
 using Data.Abstract.OffDayRepositories;
 using Data.Abstract.PersonalRepositories;
 using Data.Abstract.PositionRepositories;
 using Data.Concrete;
 using Data.Concrete.BranchRepositories;
+using Data.Concrete.DailyCounterRepositories;
 using Data.Concrete.OffDayRepositories;
 using Data.Concrete.PersonalRepositories;
 using Data.Concrete.PositionRepositories;
@@ -30,6 +32,8 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(IWritePersonalRepository),typeof(WritePersonalRepository));
 		services.AddScoped(typeof(IReadPositionRepository),typeof(ReadPositionRepository));
 		services.AddScoped(typeof(IWritePositionRepository),typeof(WritePositionRepository));
+		services.AddScoped(typeof(IReadDailyCounterRepository),typeof(ReadDailyCounterRepository));
+		services.AddScoped(typeof(IWriteDailyCounterRepository),typeof(WriteDailyCounterRepository));
 
 	}
 }

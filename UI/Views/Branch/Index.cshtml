@@ -90,13 +90,13 @@ else
                     <!-- Data Filter-->
                     <div class="row">
                         <div class="col-md-6">
-                            <form class="d-flex" action="/subeler">
-                                <input class="form-control me-2" type="search" placeholder="Ara" name="search" aria-label="Search">
+                            <form id="searchForm" class="d-flex" action="/subeler">
+                                <input id="searchInput" class="form-control me-2" type="search" placeholder="Ara" name="search" aria-label="Search">
                                 <button class="btn btn-outline-primary" type="submit">Ara</button>
                             </form>
                         </div>
                         <div class="col-md-1">
-                            <form method="get">
+                            <form id="filterForm" method="get">
                                 <div class="dropdown filter-dropdown">
                                     <button class="btn btn-outline-secondary btn-icon" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter-down" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -283,7 +283,7 @@ else
                         <div class="row">
                             <div class="col mb-3">
                                 <label for="nameBasic" class="form-label">Şube Adı</label>
-                                <input type="text" name="Name" id="nameBasic" class="form-control" placeholder="Şube Adını Giriniz!">
+                                <input type="text" name="Name" id="nameBasic" class="form-control just-validate-error-field" placeholder="Şube Adını Giriniz!">
                                 <input type="hidden" name="returnUrL" value="@returnUrl">
                             </div>
                         </div>
