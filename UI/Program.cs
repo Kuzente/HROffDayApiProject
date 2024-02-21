@@ -39,7 +39,7 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
 {
     conf.EnableQueryFeatures();
 });
-builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("Mssql"),builder.Configuration.GetConnectionString("Hangfire"));
+builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("MssqlSomee"),builder.Configuration.GetConnectionString("HangfireSomee"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
