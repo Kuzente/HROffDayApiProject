@@ -46,7 +46,7 @@ public class OffDayFormPdf
             {
                 column.Item().Row(row =>
                 {
-                    row.RelativeItem(9).PaddingTop(10).Text("Sayı:").Style(titleStyle);
+                    row.RelativeItem(9).PaddingTop(10).Text("Sayı: " + Dto.DocumentNumber).Style(titleStyle);
                     row.RelativeItem(3).AlignRight().PaddingTop(10).Text("Tarih: " + Dto.CreatedAt.ToString("dd MMMM yyyy",new CultureInfo("tr-TR"))).Style(titleStyle);
 
                 });

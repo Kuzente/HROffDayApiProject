@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using Core.Enums
 @using Microsoft.AspNetCore.Http.Extensions
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ResultWithPagingDataDto<List<ReadApprovedOffDayListDto>>
@@ -191,7 +192,7 @@ else
             <tbody class="table-border-bottom-0">
                 @foreach (var data in Model.Data)
                 {
-                    <tr>
+                    <tr class="@(data.Personal.Status == EntityStatusEnum.Offline ? "bg-danger-lt" : "")">
                         <td class="col-1">
                             <form action="/create-pdf" method="post">
                                 <input type="hidden" name="id" value="@data.ID">
@@ -248,10 +249,10 @@ else
                         </td>
                         <td class="col-1">
                             <!--TODO RETURN URL-->
-                            <a href='/izin-duzenle?id=@data.ID&returnUrl=@returnUrl' class="btn btn-dark btn-sm text-white btn-pill">Güncelle</a>
+                            <a href='/izin-duzenle?id=@data.ID&returnUrl=@returnUrl' class="btn btn-dark btn-sm text-white btn-pill @(data.Personal.Status == EntityStatusEnum.Offline ? "disabled" : "")" >Güncelle</a>
                         </td>
                         <td class="col-1">
-                            <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="@data.Personal.NameSurname">İptal Et</button>
+                            <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="@data.Personal.NameSurname" @(data.Personal.Status == EntityStatusEnum.Offline ? "disabled" : "")>İptal Et</button>
                         </td>
                     </tr>
                 }

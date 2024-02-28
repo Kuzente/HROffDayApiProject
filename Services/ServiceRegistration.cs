@@ -48,16 +48,20 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(PositionExcelExport));
 		services.AddScoped(typeof(OffDayExcelExport));
 		services.AddScoped(typeof(ExcelUploadScheme));
+		services.AddScoped(typeof(DailyJob));
 		services.AddScoped(typeof(IReadOdataService), typeof(ReadOdataService));
 		services.AddScoped(typeof(IReadDailyCounterService), typeof(ReadDailyCounterService));
+		services.AddScoped(typeof(IWriteDailyCounterService), typeof(WriteDailyCounterService));
 		services.AddScoped( typeof(OffDayFormPdf));
 		services.AddHangfire(x =>
 		{
 			x.UseSqlServerStorage(hangfireConnectionstring);
-			RecurringJob.AddOrUpdate<DailyJob>("YıllıkİzinJobId", j => j.YearLeaveEnhancer(), Cron.Daily, options: new RecurringJobOptions
+			RecurringJob.AddOrUpdate<WriteDailyCounterService>("YıllıkIzinYeniJob", j => j.AddDailyCounterLogService(), "5 12 * * *", options: new RecurringJobOptions
 			{
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time")
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time"),
+				
 			});
+			
 		});
 		services.AddHangfireServer();
 	}

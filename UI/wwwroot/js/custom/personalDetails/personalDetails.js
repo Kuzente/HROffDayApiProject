@@ -31,9 +31,11 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#personalAvatar').html(data.nameSurname.charAt(0));
         $('#badgeTotalTakenLeave').html(saatleriGunVeSaatlereCevir(data.totalTakenLeave));
         $('#badgeFoodAid').html(data.foodAid);
-        $('#badgeTotalYearLeave').html(data.totalYearLeave);//TODO
-        $('#badgeUsedYearLeave').html(data.usedYearLeave);//TODO
-        $('#balanceYearLeave').html(data.totalYearLeave - data.usedYearLeave);//TODO
+        $('#badgeTotalYearLeave').html(data.totalYearLeave);
+        $('#badgeUsedYearLeave').html(data.usedYearLeave);
+        $('#balanceYearLeave').html(data.totalYearLeave - data.usedYearLeave);
+        
+        kalanIzinKumulatif(data.usedYearLeave,new Date(data.startJobDate));
         function initializeFlatpickr(input) {
            return flatpickr(input, {
                 altInput: true,
@@ -103,6 +105,30 @@ document.addEventListener('DOMContentLoaded', function () {
             BodySizeSelect.val(data.personalDetails.bodySize);
             BloodGroupSelect.val(data.personalDetails.bloodGroup);
         }
+        function kalanIzinKumulatif(kullanilanYillikIzin,iseBaslamaTarihi) {
+            let outputDiv = document.getElementById("balanceYearLeaveDetail");
+            let calisilanYil = 0;
+            let kalanGun = 0;
+            for (let year = iseBaslamaTarihi.getFullYear();year <= new Date().getFullYear();year++){
+                console.log(kullanilanYillikIzin)
+                if (calisilanYil === 0){
+                    outputDiv.innerHTML += "Yıl: " + year + ", Hak Edilen: " + kalanGun + "<br>";
+                    calisilanYil++;
+                    continue;
+                }if(calisilanYil <= 5){
+                    kalanGun = Math.max(14 - kullanilanYillikIzin,0);
+                    kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 14 , 0)
+                }else if(calisilanYil < 15){
+                    kalanGun = Math.max(20 - kullanilanYillikIzin,0);
+                    kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 20 , 0)
+                }else{
+                    kalanGun = Math.max(26 - kullanilanYillikIzin,0);
+                    kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 26 , 0) 
+                }
+                outputDiv.innerHTML += "Yıl: " + year + ", Hak Edilen: " + kalanGun + "<br>";
+                calisilanYil++;
+            }
+        }
         
         // Emeklilik ve engellilik durumlarının işaretlenmesi
         function setCheckboxes() {
@@ -144,15 +170,19 @@ document.addEventListener('DOMContentLoaded', function () {
             $('#updatePersonalButton').prop('disabled', false);
         });
         $('[data-addHour]').on('click',function () {
-            $('[data-takenLeave]').val(function (index, currentValue) {
-                return parseInt(currentValue,10) + parseInt($('[data-hourInput]').val(),10);
-            });
+            if($('[data-hourInput]').val() !== ''){
+                $('[data-takenLeave]').val(function (index, currentValue) {
+                    return parseInt(currentValue,10) + parseInt($('[data-hourInput]').val(),10);
+                }); 
+            }
             $('[data-hourInput]').val("");
         });
         $('[data-removeHour]').on('click',function () {
-            $('[data-takenLeave]').val(function (index, currentValue) {
-                return parseInt(currentValue,10) - parseInt($('[data-hourInput]').val(),10); // TODO FAZLA GİRİLİRSE KONTROL EKLE
-            });
+            if ($('[data-hourInput]').val() !== '') {
+                $('[data-takenLeave]').val(function (index, currentValue) {
+                    return parseInt(currentValue, 10) - parseInt($('[data-hourInput]').val(), 10);
+                });
+            } 
             $('[data-hourInput]').val("");
         });
         //Personeli Sil Butonu Tıklandığında Butonu Tıklandığında

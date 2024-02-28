@@ -198,6 +198,11 @@ public class WriteOffDayService : IWriteOffDayService
 					offday.Personal.UsedYearLeave += offday.LeaveByYear;
 				if (offday.LeaveByTaken > 0)
 					offday.Personal.TotalTakenLeave -= (offday.LeaveByTaken * 8);
+				var getMaxDocNumber = _unitOfWork.ReadOffDayRepository
+					.GetAll(orderBy: p => p.OrderByDescending(a => a.DocumentNumber)).FirstOrDefault();
+				if(getMaxDocNumber is null)
+					return result.SetStatus(false).SetErr("OffDay Is Not Found").SetMessage("Belge Sayısı İşlenirken bir hata meydana geldi.");
+				offday.DocumentNumber = getMaxDocNumber.DocumentNumber + 1;
 				offday.OffDayStatus = OffDayStatusEnum.Approved;
 			}
 			else
@@ -221,7 +226,7 @@ public class WriteOffDayService : IWriteOffDayService
 		try
 		{
 			var offDay = await _unitOfWork.ReadOffDayRepository.GetSingleAsync(
-				predicate:p=> p.ID == id && p.Status == EntityStatusEnum.Online,
+				predicate:p=> p.ID == id && p.Status == EntityStatusEnum.Online && p.Personal.Status == EntityStatusEnum.Online,
 				include: p=> p.Include(a=> a.Personal)
 			);
 			if(offDay is null)

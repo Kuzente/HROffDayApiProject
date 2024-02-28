@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Data.Context;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.OData;
@@ -38,7 +39,7 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
 {
     conf.EnableQueryFeatures();
 });
-builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("Mssql"),builder.Configuration.GetConnectionString("Hangfire"));
+builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("Mssql"),builder.Configuration.GetConnectionString("Mssql"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -130,7 +131,6 @@ app.MapControllerRoute(name: "dailyLogPage", pattern: "gunluk-takip", defaults: 
 
 
 #endregion
-
 
 #region Authentication
 app.MapControllerRoute(name: "loginPage", pattern: "giris-yap", defaults: new { controller = "Authentication", action = "Login" });

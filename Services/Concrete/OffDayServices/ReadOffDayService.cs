@@ -128,7 +128,8 @@ public class ReadOffDayService : IReadOffDayService
 				_unitOfWork.ReadOffDayRepository.GetAll(
 					predicate: a =>
 						(a.Status == EntityStatusEnum.Online && a.OffDayStatus == OffDayStatusEnum.Approved ) &&
-						a.Personal.Status == EntityStatusEnum.Online &&
+						(a.Personal.Status == EntityStatusEnum.Online ||
+						 a.Personal.Status == EntityStatusEnum.Offline) &&
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear || a.EndDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth || a.EndDate.Month == query.filterMonth)&&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search))&&
@@ -226,6 +227,8 @@ public class ReadOffDayService : IReadOffDayService
 											.ThenInclude(a=>a.Branch)
 											.Include(a=>a.Personal)
 											.ThenInclude(a=>a.Position));
+			if(resultData is null)
+				return res.SetStatus(false).SetErr("OffDay Not Found").SetMessage("İlgili Personele Ait İzin Bulunamadı!!!");
 			var mapData = _mapper.Map<ReadWaitingOffDayEditDto>(resultData);
 			res.SetData(mapData);
 		}

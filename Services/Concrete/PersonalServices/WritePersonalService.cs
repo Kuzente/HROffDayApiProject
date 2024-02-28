@@ -76,7 +76,8 @@ public class WritePersonalService : IWritePersonalService
 			mapSet.CreatedAt = getPersonal.CreatedAt;
 			mapSet.TotalYearLeave = getPersonal.TotalYearLeave;
 			mapSet.UsedYearLeave = getPersonal.UsedYearLeave;
-			var resultData = await _unitOfWork.WritePersonalRepository.Update(mapSet);
+			mapSet.FoodAid = getPersonal.FoodAid; 
+			await _unitOfWork.WritePersonalRepository.Update(mapSet);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");

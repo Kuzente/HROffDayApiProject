@@ -18,6 +18,7 @@ public class ReadApprovedOffDayFormExcelExportDto
     public DateTime CreatedAt { get; set; }
     public string Description { get; set; }
     public Guid Personal_Id { get; set; }
+    public int DocumentNumber { get; set; }
     public ReadApprovedOffDayFormExcelExportSubPersonalDto Personal { get; set; }
 }
 

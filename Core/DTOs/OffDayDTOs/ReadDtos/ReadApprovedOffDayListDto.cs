@@ -29,6 +29,7 @@ public class ReadApprovedOffDayListSubPersonalDto
 {
     public Guid ID { get; set; }
     public string NameSurname { get; set; }
+    public EntityStatusEnum Status { get; set; }
     public ReadApprovedOffDayListSubPersonalBranchDto Branch { get; set; }
     public ReadApprovedOffDayListSubPersonalPositionDto Position { get; set; }
 }
