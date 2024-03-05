@@ -61,4 +61,50 @@
 
         window.location.href = currentUrl.toString();
     });
+    //İzni Onayla butonuna tıklandığında calısan metod
+    $('[data-approveButton]').on('click',function (e) {
+        e.preventDefault();
+        let actionForm = $(this).closest('form[data-approveForm]').attr("action")
+        let formData = $(this).closest('form[data-approveForm]').serializeArray();
+        $.ajax({
+            type: "POST",
+            url: actionForm,
+            data: formData // Form verilerini al
+        }).done(function (res) {
+            if (res.isSuccess){
+                $('#success-modal-message').text("İzin Onaylandı.")
+                $('#success-modal').modal('show')
+                $('#success-modal-button').click(function () {
+                    window.location.reload();
+                });
+            }
+            else{
+                $('#error-modal-message').text(res.message)
+                $('#error-modal').modal('show')
+            }
+        })
+    });
+    //İzni Reddet butonuna tıklandığında calısan metod
+    $('[data-rejectButton]').on('click',function (e) {
+        e.preventDefault();
+        let actionForm = $(this).closest('form[data-rejectForm]').attr("action")
+        let formData = $(this).closest('form[data-rejectForm]').serializeArray();
+        $.ajax({
+            type: "POST",
+            url: actionForm,
+            data: formData // Form verilerini al
+        }).done(function (res) {
+            if (res.isSuccess){
+                $('#success-modal-message').text("İzin Reddedildi.")
+                $('#success-modal').modal('show')
+                $('#success-modal-button').click(function () {
+                    window.location.reload();
+                });
+            }
+            else{
+                $('#error-modal-message').text(res.message)
+                $('#error-modal').modal('show')
+            }
+        })
+    });
 });

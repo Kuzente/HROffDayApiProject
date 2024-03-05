@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NToastNotify;
 using Services.Abstract.BranchServices;
 using Services.Abstract.PersonalServices;
 using Services.Abstract.PositionServices;
@@ -12,21 +11,19 @@ namespace UI.Controllers;
 [Authorize]
 public class MultipleUploadController : Controller
 {
-    private readonly IToastNotification _toastNotification;
     private readonly ExcelPersonalAddrange _excelPersonalAddrange;
     private readonly IWritePersonalService _writePersonalService;
     private readonly IReadBranchService _readBranchService;
     private readonly IReadPositionService _readPositionService;
     private readonly ExcelUploadScheme _excelUploadScheme;
 
-    public MultipleUploadController(ExcelPersonalAddrange excelPersonalAddrange, IWritePersonalService writePersonalService, IReadPositionService readPositionService, IReadBranchService readBranchService, ExcelUploadScheme excelUploadScheme, IToastNotification toastNotification)
+    public MultipleUploadController(ExcelPersonalAddrange excelPersonalAddrange, IWritePersonalService writePersonalService, IReadPositionService readPositionService, IReadBranchService readBranchService, ExcelUploadScheme excelUploadScheme)
     {
         _excelPersonalAddrange = excelPersonalAddrange;
         _writePersonalService = writePersonalService;
         _readPositionService = readPositionService;
         _readBranchService = readBranchService;
         _excelUploadScheme = excelUploadScheme;
-        _toastNotification = toastNotification;
     }
 
     #region PageActions
@@ -70,16 +67,17 @@ public class MultipleUploadController : Controller
     [HttpPost]
     public async Task<IActionResult> PersonalUpload(IFormFile file)
     {
-        var list =  _excelPersonalAddrange.ImportDataFromExcel(file);
-        var result = await _writePersonalService.AddRangeAsync(list);
-        if (!result.IsSuccess)
+        try
         {
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+            var list = _excelPersonalAddrange.ImportDataFromExcel(file);
+            var result = await _writePersonalService.AddRangeAsync(list);
         }
-        else
+        catch (Exception e)
         {
-            _toastNotification.AddSuccessToastMessage("Toplu Yükleme Başarılı.", new ToastrOptions { Title = "Başarılı" }); 
+            Console.WriteLine(e);
+            throw;
         }
+        
         return View();
     }
     #endregion

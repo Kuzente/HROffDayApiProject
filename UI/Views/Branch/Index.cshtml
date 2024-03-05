@@ -27,13 +27,13 @@
             <!-- Page title actions -->
             <div class="col-auto ms-auto d-print-none">
                 <div class="btn-list">
-                    <form method="post" action="/subeler-excel?returnUrl=@returnUrl">
+                    <form id="branchExcelForm" method="post" action="/subeler-excel?returnUrl=@returnUrl">
                         <span class="d-none d-sm-inline">
                             <input type="hidden" name="search" value="@Context.Request.Query["search"]">
                             <input type="hidden" name="passive" value="@Context.Request.Query["passive"]">
                             <input type="hidden" name="active" value="@Context.Request.Query["active"]">
                             <input type="hidden" name="ReturnUrl" value="@returnUrl">
-                            <button type="submit" class="btn btn-green">
+                            <button id="branchExcelButton" type="button" class="btn btn-green">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-spreadsheet" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                     <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
@@ -292,14 +292,14 @@ else
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                             Kapat
                         </button>
-                        <button type="submit" class="btn btn-primary">Şube Ekle</button>
+                        <button id="addBranchButton" type="button" class="btn btn-primary">Şube Ekle</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
     <!--DeleteModal-->
-    <form action="/sube-sil" method="post">
+    <form id="deleteBranchForm" action="/sube-sil" method="post">
         <div class="modal modal-blur fade" id="archiveModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -329,7 +329,7 @@ else
                                 <div class="col">
                                     <input type="hidden" id="itemIdInput" name="id">
                                     <input type="hidden" name="returnUrl" value="@returnUrl">
-                                    <button type="submit" class="btn btn-danger w-100" data-bs-dismiss="modal">Şubeyi Sil</button>
+                                    <button id="deleteBranchButton" type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">Şubeyi Sil</button>
                                 </div>
                             </div>
                         </div>

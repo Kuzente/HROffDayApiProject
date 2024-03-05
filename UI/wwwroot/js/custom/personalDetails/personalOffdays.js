@@ -43,7 +43,11 @@
                 
             }
             else{
-                console.log("AJAX Basarısız");
+                $('#error-modal-message').text(res.message)
+                $('#error-modal').modal('show');
+                $('#error-modal-button').click(function () {
+                    window.location.href = "/Personal";
+                })
             }
         });
     }

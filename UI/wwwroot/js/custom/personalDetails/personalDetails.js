@@ -2,13 +2,14 @@
 document.addEventListener('DOMContentLoaded', function () {
     let branchSelect = $('#branchSelectModal');
     let positionSelect= $('#positionSelectModal');
+    let PersonalGroupSelect = $('#PersonalGroupSelect');
     let EducationStatusSelect= $('#EducationStatusSelect');
     let MaritalStatusSelect= $('#MaritalStatusSelect');
     let BodySizeSelect= $('#BodySizeSelect');
     let BloodGroupSelect= $('#BloodGroupSelect');
     $.ajax({ 
         type: "GET", 
-        url: `/get-personel-detayları${window.location.search}`
+        url: `/get-personel-detaylari${window.location.search}`
     }).done(function (res) {
         if (res.isSuccess) {
             $('#HeaderPersonalNameSurname').text(res.data.nameSurname);
@@ -23,7 +24,11 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             fillpersonalDetailsInputs(res.data);
         } else {
-            
+            $('#error-modal-message').text(res.message)
+            $('#error-modal').modal('show')
+            $('#error-modal-button').click(function () {
+                window.location.href = "/Personal";
+            })
         }
     });
     function fillpersonalDetailsInputs(data) {
@@ -71,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function () {
             //initializeFlatpickr($('input[name="EndJobDate"]')).setDate(data.endJobDate); //TODO
             $('input[name="PersonalDetails.MotherName"]').val(data.personalDetails.motherName);
             $('input[name="PersonalDetails.FatherName"]').val(data.personalDetails.fatherName);
-            $('input[name="PersonalDetails.GraduatedSchool"]').val(data.personalDetails.graduatedSchool);
             $('input[name="Phonenumber"]').val(data.phonenumber);
             $('input[name="PersonalDetails.BankAccount"]').val(data.personalDetails.bankAccount);
             $('input[name="PersonalDetails.IBAN"]').val(data.personalDetails.iban);
@@ -100,6 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             branchSelect.val(data.branch_Id);
             positionSelect.val(data.position_Id);
+            PersonalGroupSelect.val(data.personalDetails.personalGroup);
             EducationStatusSelect.val(data.personalDetails.educationStatus);
             MaritalStatusSelect.val(data.personalDetails.maritalStatus);
             BodySizeSelect.val(data.personalDetails.bodySize);
@@ -109,13 +114,18 @@ document.addEventListener('DOMContentLoaded', function () {
             let outputDiv = document.getElementById("balanceYearLeaveDetail");
             let calisilanYil = 0;
             let kalanGun = 0;
+            
             for (let year = iseBaslamaTarihi.getFullYear();year <= new Date().getFullYear();year++){
-                console.log(kullanilanYillikIzin)
                 if (calisilanYil === 0){
                     outputDiv.innerHTML += "Yıl: " + year + ", Hak Edilen: " + kalanGun + "<br>";
                     calisilanYil++;
                     continue;
-                }if(calisilanYil <= 5){
+                }
+                //TODO
+                //if (yas >=50) {
+                //    //do something and continue;
+                //}
+                if (calisilanYil <= 5) {
                     kalanGun = Math.max(14 - kullanilanYillikIzin,0);
                     kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 14 , 0)
                 }else if(calisilanYil < 15){
@@ -125,7 +135,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     kalanGun = Math.max(26 - kullanilanYillikIzin,0);
                     kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 26 , 0) 
                 }
-                outputDiv.innerHTML += "Yıl: " + year + ", Hak Edilen: " + kalanGun + "<br>";
+                //TODO
+                if (iseBaslamaTarihi) {
+                    outputDiv.innerHTML += "Yıl: " + year + ", Hak Edilen: " + kalanGun + "<br>";
+                }
+                
                 calisilanYil++;
             }
         }
@@ -133,7 +147,16 @@ document.addEventListener('DOMContentLoaded', function () {
         // Emeklilik ve engellilik durumlarının işaretlenmesi
         function setCheckboxes() {
             data.personalDetails.handicapped ? $('input[name="PersonalDetails.Handicapped"]').prop('checked', true) : "";
-            data.retiredOrOld ? $('input[name="RetiredOrOld"]').prop('checked', true) : "";
+            if(data.retiredOrOld){
+                let emeklilikLabel = $('label[for="RetiredOrOldInput"]');
+                let emeklilikCheckBox = $('input[name="RetiredOrOld"]');
+                emeklilikCheckBox.prop('checked', true)
+                if($(emeklilikCheckBox).is(':checked')){
+                    emeklilikLabel.addClass("required")
+                    $(emeklilikCheckBox).closest('.d-flex.flex-column').append(`<input class="form-control m-2 flatpickr-input" data-required="true" type="date" name="RetiredDate" id="RetiredDateInput" placeholder="Emeklilik Tarihi" disabled>`);
+                    initializeFlatpickr(document.getElementById('RetiredDateInput')).setDate(data.retiredDate);
+                }
+            }
         }
 
         // Cinsiyet seçiminin işaretlenmesi
@@ -162,6 +185,7 @@ document.addEventListener('DOMContentLoaded', function () {
             $('#updatePersonalForm select').prop('disabled', false);
             new TomSelect(positionSelect); // Seçilen select'i alın
             new TomSelect(branchSelect); // Seçilen select'i alın
+            new TomSelect(PersonalGroupSelect);
             new TomSelect(EducationStatusSelect); // Seçilen select'i alın
             new TomSelect(MaritalStatusSelect); // Seçilen select'i alın
             new TomSelect(BodySizeSelect); // Seçilen select'i alın
@@ -169,6 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
             $('#enableEditButton').prop('disabled', true);
             $('#updatePersonalButton').prop('disabled', false);
         });
+        //Alacak İzin Saat Ekle tıklandığında çalışan metod
         $('[data-addHour]').on('click',function () {
             if($('[data-hourInput]').val() !== ''){
                 $('[data-takenLeave]').val(function (index, currentValue) {
@@ -177,6 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             $('[data-hourInput]').val("");
         });
+        //Alacak İzin Saat Çıkart tıklandığında çalışan metod
         $('[data-removeHour]').on('click',function () {
             if ($('[data-hourInput]').val() !== '') {
                 $('[data-takenLeave]').val(function (index, currentValue) {
@@ -192,15 +218,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         //Modal üzerindeki Personeli Sil Butonu Tıklandığında
         $("#deleteSubmitBtn").on('click',function () {
-            $.ajax({ //TODO RETURN CONTROL
+            $.ajax({ 
                 type: "POST",
                 url: `/personel-sil?id=${$('input[name="ID"]').val()}`
             }).done(function (res) {
                 if (res.isSuccess){
-                    window.location.href = "/Personal";
-                    console.log("Başarılı");
+                    $('#success-modal-message').text("Personel Başarılı Bir Şekilde Silindi")
+                    $('#success-modal').modal('show')
+                    $('#success-modal-button').click(function () {
+                        window.location.href = "/Personal";
+                    })
                 }else{
-                    console.log("Başarısız");
+                    $('#error-modal-message').text(res.message)
+                    $('#error-modal').modal('show')
                 }
             }); 
         });
@@ -230,18 +260,52 @@ document.addEventListener('DOMContentLoaded', function () {
             //Formun id'sini kullanarak formu gönder
             $.ajax({
                 type: "POST",
-                url: "/personel-detayları",
+                url: "/personel-detaylari",
                 data: formData // Form verilerini al
             }).done(function (res) {
-                if (res.isSuccess){
-                    console.log("Başarılı");
+                if(res.isSuccess){
+                    $('#success-modal-message').text("Personel Başarılı Bir Şekilde Güncellendi.")
+                    $('#success-modal').modal('show');
+                    $('#success-modal-button').click(function () {
+                        window.location.reload();
+                    })
+                }else{
+                    $('#error-modal-message').text(res.message)
+                    $('#error-modal').modal('show');
                 }
-                else{
-                    console.log(res.err);
-                }
-            }).then(function () {
-                window.location = "/personel-detayları?id=" + $('input[name="ID"]').val();
             });
+        });
+        //Emeklilik durumu aç kapa yapıldığında çalışan metod
+        $('#RetiredOrOldInput').change(function () {
+            let emeklilikLabel = $('label[for="RetiredOrOldInput"]');
+            if($(this).is(':checked')){
+                emeklilikLabel.addClass("required")
+                $(this).closest('.d-flex.flex-column').append(`<input class="form-control m-2 flatpickr-input" data-required="true" type="date" name="RetiredDate" id="RetiredDateInput" placeholder="Emeklilik Tarihi">`);
+                flatpickr(document.getElementById('RetiredDateInput'), {
+                    altInput: true,
+                    altFormat: "d F Y",
+                    dateFormat: "Y-m-d",
+                    locale: {
+                        weekdays: {
+                            longhand: ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'],
+                            shorthand: ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt']
+                        },
+                        months: {
+                            longhand: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
+                            shorthand: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara']
+                        },
+                        today: 'Bugün',
+                        clear: 'Temizle'
+                    }
+                });
+            }
+            else{
+                emeklilikLabel.removeClass("required")
+                let retiredDateInput = document.getElementById('RetiredDateInput');
+                let fpInstance = flatpickr(retiredDateInput);
+                fpInstance.destroy();
+                retiredDateInput.remove();
+            }
         });
     }
     onClickEvents();

@@ -56,7 +56,7 @@ public static class ServiceRegistration
 		services.AddHangfire(x =>
 		{
 			x.UseSqlServerStorage(hangfireConnectionstring);
-			RecurringJob.AddOrUpdate<WriteDailyCounterService>("YıllıkIzinYeniJob", j => j.AddDailyCounterLogService(), "5 12 * * *", options: new RecurringJobOptions
+			RecurringJob.AddOrUpdate<WriteDailyCounterService>("YıllıkIzinYeniJob", j => j.AddDailyCounterLogService(), "36 1 * * *", options: new RecurringJobOptions
 			{
 				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time"),
 				

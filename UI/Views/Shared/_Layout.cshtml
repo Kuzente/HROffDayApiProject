@@ -27,6 +27,64 @@
         <div class="page-wrapper">
             @RenderBody()
         </div>
+        <!--Error Modal-->
+        <div class="modal modal-blur fade" id="error-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-status bg-danger"></div>
+                    <div class="modal-body text-center py-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>
+                        </svg>
+                        <h3>Uyarı?</h3>
+                        <div id="error-modal-message" class="text-muted">
+                            
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="w-100">
+                            <div class="row">
+                                <div class="col">
+                                    <a id="error-modal-button" href="#" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                                        Anladım
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Error Modal-->
+        <!--Success Modal-->
+        <div class="modal modal-blur fade" id="success-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-status bg-success"></div>
+                    <div class="modal-body text-center py-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path><path d="M9 12l2 2l4 -4"></path></svg>
+                        <h3>Başarılı</h3>
+                        <div id="success-modal-message" class="text-muted">
+                            
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="w-100">
+                            <div class="row">
+                                <div class="col">
+                                    <a id="success-modal-button" href="#" class="btn btn-success w-100" data-bs-dismiss="modal">
+                                        Anladım
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Success Modal-->
     </div>
 
     <!-- Libs JS -->
@@ -42,53 +100,10 @@
 
     <script src="/js/tom-select.js"></script>
     <script src="/dist/js/demo.min.js?1684106062"></script>
-    <script src="/js/custom/base/base.js"></script>
+    
     <script src="/js/plugin/flatpicker.js"></script>
-    <script src="/js/plugin/justValidate.js"></script>
-
-    <script defer>
-        //Selectleri Tom Select Yap
-        document.querySelectorAll('.selectListTom').forEach((el) => {
-            let settings = {
-                plugins: ['dropdown_input']
-
-            };
-            new TomSelect(el, settings);
-
-        });
-
-        // Tüm date inputlarını seçin
-        let dateInputs = document.querySelectorAll('input[type="date"]');
-        //Flatpickr ile bootstrap cakısma onleyici yıl secimi yapılamıyordu
-        document.addEventListener('focusin', (e) => {
-            if (e.target.closest(".flatpickr-calendar") !== null) {
-                e.stopImmediatePropagation();
-            }
-        });
-        // Her bir date input için Flatpicker'ı başlatın
-        dateInputs.forEach(function (input) {
-            flatpickr(input, {
-                altInput: true,
-                altFormat: "d F Y",
-                dateFormat: "Y-m-d",
-                locale: {
-                    weekdays: {
-                        longhand: ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'],
-                        shorthand: ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt']
-                    },
-                    months: {
-                        longhand: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
-                        shorthand: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara']
-                    },
-                    today: 'Bugün',
-                    clear: 'Temizle'
-                }
-            });
-        });
-
-
-    </script>
+    <script src="js/custom/base/base.js"></script>
+   
     @await RenderSectionAsync("Scripts", required: false)
-    @await Component.InvokeAsync("NToastNotify")
 </body>
 </html>

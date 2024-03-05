@@ -24,6 +24,8 @@ public partial class Personal : BaseEntity
 	public string? Phonenumber { get; set; }
 	[DisplayName("Özel Durum")]
 	public bool RetiredOrOld { get; set; }
+	[DisplayName("Emeklilik Tarihi")]
+	public DateTime? RetiredDate { get; set; }
 	[DisplayName("Cinsiyet")]
 	public string Gender { get; set; }
 	[DisplayName("Kullanılan Yıllık İzin"), Required]
@@ -32,6 +34,8 @@ public partial class Personal : BaseEntity
 	public int TotalTakenLeave { get; set; } 
 	[DisplayName("Gıda Yardımı"), Required]
 	public int FoodAid { get; set; } 
+	[DisplayName("Gıda Yardımı Tarihi")] 
+	public DateTime FoodAidDate { get; set; }
 
 }
 public partial class Personal

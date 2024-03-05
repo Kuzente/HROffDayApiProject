@@ -120,7 +120,7 @@ public class ExcelUploadScheme
             worksheet.Cells[1, 15].Value = "Anne Adı";
             worksheet.Cells[1, 16].Value = "Baba Adı";
             worksheet.Cells[1, 17].Value = "Eğitim Durumu";
-            worksheet.Cells[1, 18].Value = "Mezun Olduğu Okul";
+            worksheet.Cells[1, 18].Value = "Personelin Grubu";
             worksheet.Cells[1, 19].Value = "Telefon";
             worksheet.Cells[1, 20].Value = "Medeni Durumu";
             worksheet.Cells[1, 21].Value = "Beden Ölçüleri";

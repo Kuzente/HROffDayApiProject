@@ -10,7 +10,7 @@ public class AddPersonalDetailDto
     public string? MaritalStatus { get; set; }
     public bool Handicapped { get; set; }
     public string? EducationStatus { get; set; }
-    public string? GraduatedSchool { get; set; }
+    public string? PersonalGroup { get; set; }
     [Required]
     public double? Salary { get; set; }
     [Required]

@@ -1,9 +1,10 @@
-﻿using Core.DTOs.PersonalDTOs;
+﻿using Core;
+using Core.DTOs.PersonalDTOs;
 using Core.DTOs.PersonalDTOs.ReadDtos;
+using Core.Interfaces;
 using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NToastNotify;
 using Services.Abstract.BranchServices;
 using Services.Abstract.PersonalServices;
 using Services.Abstract.PositionServices;
@@ -14,21 +15,20 @@ namespace UI.Controllers
     [Authorize]
     public class PersonalController : Controller
     {
-        private readonly IToastNotification _toastNotification;
         private readonly IReadPersonalService _readPersonalService;
         private readonly IWritePersonalService _writePersonalService;
         private readonly IReadBranchService _readBranchService;
         private readonly IReadPositionService _readPositionService;
         private readonly PersonalExcelExport _personalExcelExport;
 
-        public PersonalController(IReadPersonalService readPersonalService, IWritePersonalService writePersonalService, IReadBranchService readBranchService, IReadPositionService readPositionService, PersonalExcelExport personalExcelExport, IToastNotification toastNotification)
+        public PersonalController(IReadPersonalService readPersonalService, IWritePersonalService writePersonalService, IReadBranchService readBranchService, IReadPositionService readPositionService, PersonalExcelExport personalExcelExport)
         {
             _readPersonalService = readPersonalService;
             _writePersonalService = writePersonalService;
             _readBranchService = readBranchService;
             _readPositionService = readPositionService;
             _personalExcelExport = personalExcelExport;
-            _toastNotification = toastNotification;
+            
         }
 
         #region PageActions
@@ -40,10 +40,6 @@ namespace UI.Controllers
         {
             
             var personals = await _readPersonalService.GetPersonalListService(query);
-            if (!personals.IsSuccess)
-            {
-                _toastNotification.AddErrorToastMessage(personals.Message, new ToastrOptions { Title = "Hata" });
-            }
             ViewBag.Positions = await _readPositionService.GetAllJustNames();
             ViewBag.Branches = await _readBranchService.GetAllJustNames();
             return View(personals);
@@ -76,26 +72,17 @@ namespace UI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPersonal(AddPersonalDto dto)
         {
+            IResultDto result = new ResultDto();
             if (!ModelState.IsValid)
             {
-                    _toastNotification.AddErrorToastMessage("Zorunlu Alanları Doldurduğunuzdan Emin Olunuz", new ToastrOptions { Title = "Hata" });
+                result.SetStatus(false).SetErr("ModelState is not Valid").SetErr("Zorunlu Alanları Doldurduğunuzdan Emin Olunuz");
             }
             else
-            {
-                var result = await _writePersonalService.AddAsync(dto);
-                if (!result.IsSuccess)
-                {
-                    _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-                }
-                else
-                {
-                    _toastNotification.AddSuccessToastMessage("Personel Başarılı Bir Şekilde Eklendi", new ToastrOptions { Title = "Başarılı" }); 
-                }
-
-                return Ok(result);
+            { 
+                result = await _writePersonalService.AddAsync(dto);
             }
            
-            return Ok();
+            return Ok(result);
         }
         /// <summary>
         /// Aktif Personeller Excel Alma Post Metodu
@@ -116,7 +103,7 @@ namespace UI.Controllers
                 await response.Body.WriteAsync(excelData, 0, excelData.Length);
                 return new EmptyResult();
             }
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+            //_toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
             return Redirect("/personeller"+returnUrl);
         }
         #endregion

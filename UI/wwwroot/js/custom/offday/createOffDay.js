@@ -42,6 +42,7 @@
         });
     });
     let YearLeaveCount ;
+    //Personel seçimi değiştiğinde çalışan metod
     $('#personalSelect').change(function () {
         //Resetleme Alanları
         $('#formAuthentication')[0].reset();
@@ -74,8 +75,8 @@
 
         }
     });
+    //İzin Formu Gönder butonu tıklandığında çalışan metod
     $('#submitButton').on('click',function () {
-        let errorContent = $('#error-message');
         let selectedPersonal = $("#personalSelect").find(":selected").val();
         let selectedFatherDeadMarried = $('#LeaveByMarriedFatherDead').find(":selected").val();
         let form = $("#formAuthentication");
@@ -109,28 +110,49 @@
             else if (element.value === "LeaveByFather")
                 totalValue += 5;
         });
-        errorContent.text();
-        errorContent.addClass('d-none');
         if (!selectedPersonal){
-            errorContent.removeClass('d-none').text("Lütfen Personel Seçtiğinizden Emin Olunuz.");
+            $('#error-modal-message').text("Lütfen Personel Seçtiğinizden Emin Olunuz.")
+            $('#error-modal').modal('show')
         }else if(!startDate || !endDate){
-            errorContent.removeClass('d-none').text("Lütfen Tarih Seçtiğinizden Emin Olunuz.");
+            $('#error-modal-message').text("Lütfen Tarih Seçtiğinizden Emin Olunuz.")
+            $('#error-modal').modal('show')
         }else if(endDate < startDate){
-            errorContent.removeClass('d-none').text("Başlangıç Tarihi Bitiş Tarihinden Sonra Olamaz.");
+            $('#error-modal-message').text("Başlangıç Tarihi Bitiş Tarihinden Sonra Olamaz.")
+            $('#error-modal').modal('show')
         }else if (totalValue <= 0 && !selectedFatherDeadMarried){
-            errorContent.removeClass('d-none').text("Lütfen İzin Günü Giriniz.");
+            $('#error-modal-message').text("Lütfen İzin Günü Giriniz.")
+            $('#error-modal').modal('show')
         }else if (negativeValues){
-            errorContent.removeClass('d-none').text("Lütfen İzin Alanlarını Kontrol Ediniz.Negatif Değer Girilemez.");
+            $('#error-modal-message').text("Lütfen İzin Alanlarını Kontrol Ediniz.Negatif Değer Girilemez.")
+            $('#error-modal').modal('show')
         }  else if (YearLeaveCount < $('[name="LeaveByYear"]').val()){
-            errorContent.removeClass('d-none').text("Personelin Yıllık İzin Günü Yetersiz.Lütfen daha küçük bir değer giriniz.");
+            $('#error-modal-message').text("Personelin Yıllık İzin Günü Yetersiz.Lütfen daha küçük bir değer giriniz.")
+            $('#error-modal').modal('show')
         }else if (totalValue !== differenceInDays){
-            console.log(totalValue);
-            errorContent.removeClass('d-none').text("Girdiğiniz Tarih Aralığı İle İzin Günleri Uyuşmuyor.");
+            $('#error-modal-message').text("Girdiğiniz Tarih Aralığı İle İzin Günleri Uyuşmuyor.")
+            $('#error-modal').modal('show')
         }else{
             $('[data-postID]').val(selectedPersonal);
             $('[data-postCountLeave]').val(totalValue);
-            let formData =form.serializeArray();
-             form.submit();
+            let formData = form.serializeArray();
+            $.ajax({
+                type: "POST",
+                url: "/izin-olustur",
+                data: formData 
+            }).done(function (res) {
+                if (res.isSuccess){
+                    $('#success-modal-message').text("İzin Formu Başarılı Bir Şekilde Gönderildi.")
+                    $('#success-modal').modal('show')
+                    $('#success-modal-button').click(function () {
+                        window.location.reload();
+                    });
+                }
+                else{
+                    $('#error-modal-message').text(res.message)
+                    $('#error-modal').modal('show')
+                }
+            })
+            
         }
     });
     

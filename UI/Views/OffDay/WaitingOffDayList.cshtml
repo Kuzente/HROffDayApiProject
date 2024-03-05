@@ -169,11 +169,11 @@ else
                 <tr>
                     <td class="col-2">
                         @* action="/bekleyen-izin-guncelle-bir" *@
-                        <form class="d-inline-flex" action=@actionUrl method="post">
+                        <form data-approveForm class="d-inline-flex" action=@actionUrl method="post">
                             <input type="hidden" name="id" value="@data.ID">
                             <input type="hidden" name="returnUrl" value="@returnUrl">
                             <input type="hidden" name="status" value="true">
-                            <button class="btn btn-success btn-icon" aria-label="Button">
+                            <button data-approveButton type="button" class="btn btn-success btn-icon" aria-label="Button">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                     <path d="M5 12l5 5l10 -10" />
@@ -181,11 +181,11 @@ else
                             </button>
                         </form>
                         @* action="/bekleyen-izin-guncelle-bir" *@
-                        <form class="d-inline-flex" method="post" action=@actionUrl>
+                        <form data-rejectForm class="d-inline-flex" method="post" action=@actionUrl>
                             <input type="hidden" name="id" value="@data.ID">
                             <input type="hidden" name="returnUrl" value="@returnUrl">
                             <input type="hidden" name="status" value="false">
-                            <button class="btn btn-danger btn-icon" aria-label="Button">
+                            <button data-rejectButton type="button" class="btn btn-danger btn-icon" aria-label="Button">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                     <path d="M18 6l-12 12" />

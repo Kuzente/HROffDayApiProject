@@ -1,9 +1,10 @@
-﻿using Core.DTOs.PositionDTOs;
+﻿using Core;
+using Core.DTOs.PositionDTOs;
 using Core.DTOs;
+using Core.Interfaces;
 using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NToastNotify;
 using Services.Abstract.PositionServices;
 using Services.ExcelDownloadServices.PositionServices;
 
@@ -12,17 +13,15 @@ namespace UI.Controllers
     [Authorize]
     public class PositionController : Controller
     {
-        private readonly IToastNotification _toastNotification;
         private readonly IReadPositionService _readPositionService;
         private readonly IWritePositionService _writePositionService;
         private readonly PositionExcelExport _positionExcelExport;
 
-        public PositionController(IReadPositionService readPositionService, IWritePositionService writePositionService, PositionExcelExport positionExcelExport, IToastNotification toastNotification)
+        public PositionController(IReadPositionService readPositionService, IWritePositionService writePositionService, PositionExcelExport positionExcelExport)
         {
             _readPositionService = readPositionService;
             _writePositionService = writePositionService;
             _positionExcelExport = positionExcelExport;
-            _toastNotification = toastNotification;
         }
 
         #region PageActions
@@ -33,10 +32,6 @@ namespace UI.Controllers
         public async Task<IActionResult> Index(PositionQuery query)
         {
             var resultSearch = await _readPositionService.GetPositionListService(query);
-            if (!resultSearch.IsSuccess)
-            {
-                _toastNotification.AddErrorToastMessage(resultSearch.Message, new ToastrOptions { Title = "Hata" });
-            }
             return View(resultSearch);
         }
         /// <summary>
@@ -46,10 +41,6 @@ namespace UI.Controllers
         public async Task<IActionResult> UpdatePosition(Guid id, string returnUrl)
         {
             var result = await _readPositionService.GetUpdatePositionService(id);
-            if (!result.IsSuccess)
-            {
-                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-            }
             ViewData["ReturnUrl"] = returnUrl; 
             return View(result);
         }
@@ -63,17 +54,16 @@ namespace UI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPosition(PositionDto dto, string returnUrl)
         {
-            var result = await _writePositionService.AddAsync(dto);
-            if (!result.IsSuccess)
+            IResultDto result = new ResultDto();
+            if (!ModelState.IsValid)
             {
-                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+                result.SetStatus(false).SetErr("Modelstate is not valid").SetMessage("Lütfen Zorunlu Alanları Girdiğinize Emin Olunuz.");
             }
             else
             {
-                _toastNotification.AddSuccessToastMessage("Ünvan Başarılı Bir Şekilde Eklendi", new ToastrOptions { Title = "Başarılı" }); 
+                result = await _writePositionService.AddAsync(dto); 
             }
-
-            return Redirect(returnUrl);
+            return Ok(result);
         }
         /// <summary>
         /// Ünvan Düzenle Post Metodu
@@ -82,16 +72,17 @@ namespace UI.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdatePosition(ResultWithDataDto<PositionDto> dto, string returnUrl)
         {
-            var result = await _writePositionService.UpdateAsync(dto.Data);
-            if (!result.IsSuccess)
+            IResultWithDataDto<PositionDto> result = new ResultWithDataDto<PositionDto>();
+            if (!ModelState.IsValid)
             {
-                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+                result.SetStatus(false).SetErr("Modelstate is not valid").SetMessage("Lütfen Zorunlu Alanları Girdiğinize Emin Olunuz.");
             }
             else
             {
-                _toastNotification.AddSuccessToastMessage("Ünvan Başarılı Bir Şekilde Düzenlendi", new ToastrOptions { Title = "Başarılı" }); 
+                result = await _writePositionService.UpdateAsync(dto.Data);
             }
-            return Redirect(returnUrl);
+           
+            return Ok(result);
         }
         /// <summary>
         /// Ünvan Sil Post Metodu
@@ -101,15 +92,7 @@ namespace UI.Controllers
         public async Task<IActionResult> ArchivePosition(Guid id, string returnUrl)
         {
             var result = await _writePositionService.DeleteAsync(id);
-            if (!result.IsSuccess)
-            {
-                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-            }
-            else
-            {
-                _toastNotification.AddSuccessToastMessage("Ünvan Başarılı Bir Şekilde Silindi", new ToastrOptions { Title = "Başarılı" }); 
-            }
-            return Redirect(returnUrl);
+            return Ok(result);
         }
         /// <summary>
         /// Ünvanlar Listesi Excel Alma Post Metodu
@@ -130,7 +113,7 @@ namespace UI.Controllers
                 await response.Body.WriteAsync(excelData, 0, excelData.Length);
                 return new EmptyResult();
             }
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+            //_toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
             return Redirect(returnUrl);
         }
         #endregion

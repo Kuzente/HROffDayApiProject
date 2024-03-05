@@ -58,9 +58,15 @@ public class OffDayExcelExport
                 worksheet.Cells[row, 15].Value = entity.LeaveByDead;
                 worksheet.Cells[row, 16].Value = entity.Description;
                 worksheet.Cells[row, 17].Value = entity.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"));
+                if (entity.Personal.Status == EntityStatusEnum.Offline)
+                {
+                    worksheet.Row(row).Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    worksheet.Row(row).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Red);
+                }
                 worksheet.Cells[row, 18].Value = entity.OffDayStatus == OffDayStatusEnum.Approved ? "Onaylandı" : "Reddedildi";
                 worksheet.Cells[row, 18].Style.Fill.PatternType = ExcelFillStyle.Solid;
                 worksheet.Cells[row, 18].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Green);
+                
 
                 row++;
             }

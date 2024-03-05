@@ -19,34 +19,52 @@
         monthNames.forEach(function (month, index) {
             let startMonthWorking = 0;
             let monthGetPersonel = 0;
+            let monthGetPersonelMan = 0;
+            let monthGetPersonelWoman = 0;
             let monthBanPersonel = 0;
+            let monthBanPersonelMan = 0;
+            let monthBanPersonelWoman = 0;
             let firstDayOfMonth = new Date(selectedYear, index, 1);
             let row = document.createElement('tr');
             if (selectedYear === today.getFullYear() && index <= currentMonth) {
                 response.forEach(function (item) {
                     if (item.StartJobDate) { // EĞER İŞE BAŞLAMA TARİHİ VARSA
                         let startJobDate = new Date(item.StartJobDate);
+                        if (startJobDate.getFullYear() === selectedYear){
+                            console.log(startJobDate.getFullYear())
+                        }
+                        
                         if (startJobDate < firstDayOfMonth) {
                             startMonthWorking++;
-                        }
-                        else if (startJobDate.getMonth() === index && startJobDate.getFullYear() === selectedYear) {
+                        } else if (startJobDate.getMonth() === index && startJobDate.getFullYear() === selectedYear) {
+                            if (item.Gender === "Kadın") {
+                                monthGetPersonelWoman++;
+                            } 
+                            else if (item.Gender === "Erkek"){
+                                monthGetPersonelMan++;
+                            }
                             monthGetPersonel++;
                         }
                     }
                     if (item.EndJobDate) { // EĞER İŞTEN ÇIKIŞ TARİHİ VARSA
                         let endJobDate = new Date(item.EndJobDate);
                         if (endJobDate.getMonth() === index && endJobDate.getFullYear() === selectedYear) {
+                            if (item.Gender === "Kadın") {
+                                monthBanPersonelWoman++;
+                            }
+                            else if (item.Gender === "Erkek"){
+                                monthBanPersonelMan++;
+                            }
                             monthBanPersonel++;
                         }
                     }
                 });
-
                 // Satıra değerleri ekle
                 row.innerHTML = `
                          <td>${month}</td>
                          <td>${startMonthWorking}</td>
-                         <td>${monthGetPersonel}</td>
-                         <td>${monthBanPersonel}</td>
+                         <td>${monthGetPersonelMan > 0 ? `${monthGetPersonelMan} Erkek` : ""}  ${monthGetPersonelWoman > 0 ? `${monthGetPersonelWoman} Kadın` : ""} ${monthGetPersonelMan <= 0 && monthGetPersonelWoman <= 0 ? "Yok" : ""}</td>
+                         <td>${monthBanPersonelMan > 0 ? `${monthBanPersonelMan} Erkek` : ""}  ${monthBanPersonelWoman > 0 ? `${monthBanPersonelWoman} Kadın` : ""} ${monthBanPersonelMan <= 0 && monthBanPersonelWoman <= 0 ? "Yok" : ""}</td>
                          <td>${startMonthWorking + monthGetPersonel - monthBanPersonel}</td> 
         `;
 
@@ -59,12 +77,24 @@
                         if (startJobDate < firstDayOfMonth) {
                             startMonthWorking++;
                         } else if (startJobDate.getMonth() === index && startJobDate.getFullYear() === selectedYear) {
+                            if (item.Gender === "Kadın") {
+                                monthGetPersonelWoman++;
+                            }
+                            else if (item.Gender === "Erkek"){
+                                monthGetPersonelMan++;
+                            }
                             monthGetPersonel++;
                         }
                     }
                     if (item.EndJobDate) { // EĞER İŞTEN ÇIKIŞ TARİHİ VARSA
                         let endJobDate = new Date(item.EndJobDate);
                         if (endJobDate.getMonth() === index && endJobDate.getFullYear() === selectedYear) {
+                            if (item.Gender === "Kadın") {
+                                monthBanPersonelWoman++;
+                            }
+                            else if (item.Gender === "Erkek"){
+                                monthBanPersonelMan++;
+                            }
                             monthBanPersonel++;
                         }
                     }
@@ -74,8 +104,8 @@
                 row.innerHTML = `
                         <td>${month}</td>
                         <td>${startMonthWorking}</td>
-                        <td>${monthGetPersonel}</td>
-                        <td>${monthBanPersonel}</td>
+                       <td>${monthGetPersonelMan > 0 ? `${monthGetPersonelMan} Erkek` : ""}  ${monthGetPersonelWoman > 0 ? `${monthGetPersonelWoman} Kadın` : ""} ${monthGetPersonelMan <= 0 && monthGetPersonelWoman <= 0 ? "Yok" : ""}</td>
+                         <td>${monthBanPersonelMan > 0 ? `${monthBanPersonelMan} Erkek` : ""}  ${monthBanPersonelWoman > 0 ? `${monthBanPersonelWoman} Kadın` : ""} ${monthBanPersonelMan <= 0 && monthBanPersonelWoman <= 0 ? "Yok" : ""}</td>
                         <td>${startMonthWorking + monthGetPersonel - monthBanPersonel}</td> 
         `;
 
@@ -211,6 +241,7 @@
         listItem.appendChild(row);
         birthList.appendChild(listItem);
     }
+    //Personel kısımlerı get metodu
     $.ajax({
         type: "GET",
         url: "/query/personel-sayisi?expand=PersonalDetails($select=Salary,educationStatus)&$select=id,PersonalDetails,gender,birthDate,nameSurname,StartJobDate,EndJobDate,Status",
@@ -261,18 +292,21 @@
         educationPie(educationCounts);
         
     });
+    //Şube sayısı ajax metoddu
     $.ajax({
         type: "GET",
         url: "/query/sube-sayisi?$select=count"
     }).done(function (res) {
         $('#branchCount').text(res.length === 0 ? "Yok" : res.length);
     });
+    //Ünvan sayısı ajax metoddu
     $.ajax({
         type: "GET",
         url: "/query/unvan-sayisi"
     }).done(function (res) {
         $('#positionCount').text(res.length === 0 ? "Yok" : res.length);
     });
+    //İş gücü veri tablosu filtrele butonu tıklandığında calısan metod
     $('#yearButton').on('click',function () {
         $('#tableBody').empty();
         $('.dropdown-menu').removeClass('show');

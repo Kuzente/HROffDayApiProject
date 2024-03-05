@@ -1,21 +1,4 @@
 ﻿document.addEventListener('DOMContentLoaded',function () {
-    const validateAddPosition = new JustValidate('#addPositionForm',
-        {
-            submitFormAutomatically: true,
-        }
-    );
-    validateAddPosition
-        .addField('#nameBasic',[
-            {
-                rule: 'required',
-                errorMessage: 'Boş Bırakılamaz!',
-            },
-            {
-                rule: 'maxLength',
-                value: 50,
-                errorMessage: '50 Karakterden Fazla Olamaz!'
-            },
-        ]);
     $('#addModal').on('hidden.bs.modal', function (e) {
         // Form alanınızı resetleme
         $('#addPositionForm')[0].reset();
@@ -71,5 +54,49 @@
         currentUrl.searchParams.set("sayfa", $(this).text());
 
         window.location.href = currentUrl.toString();
+    });
+    $('#addPositionButton').on('click',function (e) {
+        e.preventDefault();
+        let formData = $("#addPositionForm").serializeArray();
+        $.ajax({
+            type: "POST",
+            url: "/unvan-ekle",
+            data: formData // Form verilerini al
+        }).done(function (res) {
+            if (res.isSuccess){
+                $('#success-modal-message').text("Ünvan Başarılı Bir Şekilde Eklendi.")
+                $('#success-modal').modal('show')
+                $('#success-modal-button').click(function () {
+                    window.location.href = "/unvanlar"
+                });
+            }
+            else{
+                $('#error-modal-message').text(res.message)
+                $('#error-modal').modal('show')
+            }
+        })
+    });
+    //Modal üzerideki Ünvanı Sil Butonuna Tıklandığında
+    $('#deletePositionButton').on('click',function (e) {
+        e.preventDefault();
+        let formData = $("#deletePositionForm").serializeArray();
+        console.log(formData)
+        $.ajax({
+            type: "POST",
+            url: "/unvan-sil",
+            data: formData // Form verilerini al
+        }).done(function (res) {
+            if (res.isSuccess){
+                $('#success-modal-message').text("Ünvan Başarılı Bir Şekilde Silindi.")
+                $('#success-modal').modal('show')
+                $('#success-modal-button').click(function () {
+                    window.location.reload();
+                });
+            }
+            else{
+                $('#error-modal-message').text(res.message)
+                $('#error-modal').modal('show')
+            }
+        })
     });
 });

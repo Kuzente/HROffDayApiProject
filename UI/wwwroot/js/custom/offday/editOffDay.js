@@ -5,10 +5,10 @@
     let LeaveByMarriedFatherDeadSelect = new TomSelect($("#LeaveByMarriedFatherDead"),{
         plugins: {
             remove_button:{
-                title:'Remove this item',
+                title:'Bu izini kaldır',
             },
             clear_button:{
-                'title':'Remove all selected options',
+                'title':'Seçili tüm izinleri kaldır',
             },
             
         },
@@ -27,8 +27,6 @@
     }
        
     $('[data-id="submitButton"]').on('click',function () {
-        let errorContent = $('#error-message');
-        //let selectedPersonal = $("#personalSelect").find(":selected").val();
         let selectedFatherDeadMarried = $('#LeaveByMarriedFatherDead').find(":selected").val();
         let form = $("#formAuthentication");
         let startDate = $('[name="StartDate"]').val();
@@ -62,25 +60,44 @@
             else if (element.value === "LeaveByFather")
                 totalValue += 5;
         });
-        errorContent.text();
-        errorContent.addClass('d-none');
         if(!startDate || !endDate){
-            errorContent.removeClass('d-none').text("Lütfen Tarih Seçtiğinizden Emin Olunuz.");
+            $('#error-modal-message').text("Lütfen Tarih Seçtiğinizden Emin Olunuz.")
+            $('#error-modal').modal('show')
         }else if(endDate < startDate){
-            errorContent.removeClass('d-none').text("Başlangıç Tarihi Bitiş Tarihinden Sonra Olamaz.");
+            $('#error-modal-message').text("Başlangıç Tarihi Bitiş Tarihinden Sonra Olamaz.")
+            $('#error-modal').modal('show')
         }else if (totalValue <= 0 && !selectedFatherDeadMarried){
-            errorContent.removeClass('d-none').text("Lütfen İzin Günü Giriniz.");
+            $('#error-modal-message').text("Lütfen İzin Günü Giriniz.")
+            $('#error-modal').modal('show')
         }else if (negativeValues){
-            errorContent.removeClass('d-none').text("Lütfen İzin Alanlarını Kontrol Ediniz.Negatif Değer Girilemez.");
+            $('#error-modal-message').text("Lütfen İzin Alanlarını Kontrol Ediniz.Negatif Değer Girilemez.")
+            $('#error-modal').modal('show')
         }  else if (YearLeaveCount < yearLeaveInput){
-            errorContent.removeClass('d-none').text("Personelin Yıllık İzin Günü Yetersiz.Lütfen daha küçük bir değer giriniz.");
+            $('#error-modal-message').text("Personelin Yıllık İzin Günü Yetersiz.Lütfen daha küçük bir değer giriniz.")
+            $('#error-modal').modal('show')
         }else if (totalValue !== differenceInDays){
-            errorContent.removeClass('d-none').text("Girdiğiniz Tarih Aralığı İle İzin Günleri Uyuşmuyor.");
+            $('#error-modal-message').text("Girdiğiniz Tarih Aralığı İle İzin Günleri Uyuşmuyor.")
+            $('#error-modal').modal('show')
         }else{
             $('[name="CountLeave"]').val(totalValue);
             let formData = form.serializeArray();
-            console.log(formData);
-           form.submit();
+            $.ajax({
+                type: "POST",
+                url: "/izin-duzenle",
+                data: formData
+            }).done(function (res) {
+                if (res.isSuccess){
+                    $('#success-modal-message').text("İzin Başarılı Bir Şekilde Güncellendi.")
+                    $('#success-modal').modal('show')
+                    $('#success-modal-button').click(function () {
+                        window.location.href = $('input[name="returnUrl"]').val();
+                    });
+                }
+                else{
+                    $('#error-modal-message').text(res.message)
+                    $('#error-modal').modal('show')
+                }
+            })
         }
     });
 });

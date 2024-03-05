@@ -1,18 +1,4 @@
 ﻿document.addEventListener('DOMContentLoaded',function () {
-    $('#addModal').on('hidden.bs.modal', function (e) {
-        // Form alanınızı resetleme
-        $('#addBranchForm')[0].reset();
-    });
-    // Sil butonuna tıklanınca
-    $('[data-deleteButton]').on('click',function () {
-        $('#itemIdInput').val($(this).data("item-id"));
-        $('#personalNamePlaceholder').text($(this).data("item-personal"));
-    });
-    
-    $('#branchExcelButton').on('click',function (e) {
-        e.preventDefault();
-        $("#branchExcelForm").submit();
-    });
     $('[data-firstButton]').on('click',function () {
         let currentUrl = new URL(window.location.href);
         let pageParam = currentUrl.searchParams.get("sayfa");
@@ -60,41 +46,20 @@
 
         window.location.href = currentUrl.toString();
     });
-    $('#addBranchButton').on('click',function (e) {
-        e.preventDefault();
-        let formData = $("#addBranchForm").serializeArray();
+    //Geri Döndür Butonu Tıklandığında
+    $('[data-recoverButton]').on('click',function (e) {
+        e.preventDefault()
+        let formData = $(this).closest('form[data-recoverForm]').serializeArray();
         $.ajax({
             type: "POST",
-            url: "/sube-ekle",
+            url: "/personel-gerigetir",
             data: formData // Form verilerini al
         }).done(function (res) {
             if (res.isSuccess){
-                $('#success-modal-message').text("Şube Başarılı Bir Şekilde Eklendi.")
+                $('#success-modal-message').text("Personel Başarılı Bir Şekilde Geri Eklendi.")
                 $('#success-modal').modal('show')
                 $('#success-modal-button').click(function () {
-                   window.location.href = "/subeler"
-                });
-            }
-            else{
-                $('#error-modal-message').text(res.message)
-                $('#error-modal').modal('show')
-            }
-        })
-    });
-    //Modal üzerideki Şubeyi Sil Butonuna Tıklandığında
-    $('#deleteBranchButton').on('click',function (e) {
-        e.preventDefault();
-        let formData = $("#deleteBranchForm").serializeArray();
-        $.ajax({
-            type: "POST",
-            url: "/sube-sil",
-            data: formData // Form verilerini al
-        }).done(function (res) {
-            if (res.isSuccess){
-                $('#success-modal-message').text("Şube Başarılı Bir Şekilde Silindi.")
-                $('#success-modal').modal('show')
-                $('#success-modal-button').click(function () {
-                    window.location.reload();
+                    window.location.href = "/silinen-personeller"
                 });
             }
             else{

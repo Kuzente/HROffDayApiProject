@@ -53,7 +53,7 @@ public class ExcelPersonalAddrange
                     personel.PersonalDetails.MotherName = worksheet.Cells[row, 15].GetValue<string>();
                     personel.PersonalDetails.FatherName = worksheet.Cells[row, 16].GetValue<string>();
                     personel.PersonalDetails.EducationStatus = worksheet.Cells[row, 17].GetValue<string>();
-                    personel.PersonalDetails.GraduatedSchool = worksheet.Cells[row, 18].GetValue<string>();
+                    personel.PersonalDetails.PersonalGroup = worksheet.Cells[row, 18].GetValue<string>();
                     personel.Phonenumber = worksheet.Cells[row, 19].GetValue<string>();
                     personel.PersonalDetails.MaritalStatus = worksheet.Cells[row, 20].GetValue<string>();
                     personel.PersonalDetails.BodySize = worksheet.Cells[row, 21].GetValue<string>();
@@ -67,6 +67,7 @@ public class ExcelPersonalAddrange
                     personel.UsedYearLeave = worksheet.Cells[row, 27].GetValue<int>();
                     personel.TotalTakenLeave = worksheet.Cells[row, 28].GetValue<int>();
                     personel.FoodAid = worksheet.Cells[row, 29].GetValue<int>();
+                    personel.FoodAidDate = worksheet.Cells[row, 30].GetValue<DateTime>();
                     personelListesi.Add(personel);
                 }
                 stream.Dispose();

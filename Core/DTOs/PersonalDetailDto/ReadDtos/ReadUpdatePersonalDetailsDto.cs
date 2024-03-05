@@ -8,7 +8,7 @@ public class ReadUpdatePersonalDetailsDto
     public string? MaritalStatus { get; set; }
     public bool Handicapped { get; set; }
     public string? EducationStatus { get; set; }
-    public string? GraduatedSchool { get; set; }
+    public string? PersonalGroup { get; set; }
     public double? Salary { get; set; }
     public string? SgkCode { get; set; }
     public string SskNumber { get; set; }

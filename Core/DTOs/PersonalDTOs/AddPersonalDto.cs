@@ -26,6 +26,7 @@ public class AddPersonalDto : BaseDto
     public string RegistirationNumber { get; set; }
     public string Phonenumber { get; set; }
     public bool RetiredOrOld { get; set; }
+    public DateTime? RetiredDate { get; set; }
     [Required]
     public string Gender { get; set; }
     public int TotalYearLeave { get; set; }
@@ -37,3 +38,5 @@ public class AddPersonalDto : BaseDto
     public AddPersonalDetailDto PersonalDetails { get; set; }
        
 }
+
+

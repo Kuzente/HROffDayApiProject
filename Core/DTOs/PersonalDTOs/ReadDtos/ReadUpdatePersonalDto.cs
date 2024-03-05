@@ -16,7 +16,7 @@ public class ReadUpdatePersonalDto
     public string RegistirationNumber { get; set; }
     public string Phonenumber { get; set; }
     public bool RetiredOrOld { get; set; }
-        
+    public DateTime RetiredDate { get; set; }
     public string Gender { get; set; }
     public int TotalYearLeave { get; set; }
     public int TotalTakenLeave { get; set; }

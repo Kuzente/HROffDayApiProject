@@ -46,4 +46,26 @@
 
         window.location.href = currentUrl.toString();
     });
+    //Geri Döndür Butonu Tıklandığında
+    $('[data-recoverButton]').on('click',function (e) {
+        e.preventDefault()
+        let formData = $(this).closest('form[data-recoverForm]').serializeArray();
+        $.ajax({
+            type: "POST",
+            url: "/unvan-gerigetir",
+            data: formData // Form verilerini al
+        }).done(function (res) {
+            if (res.isSuccess){
+                $('#success-modal-message').text("Ünvan Başarılı Bir Şekilde Geri Eklendi.")
+                $('#success-modal').modal('show')
+                $('#success-modal-button').click(function () {
+                    window.location.href = "/silinen-unvanlar"
+                });
+            }
+            else{
+                $('#error-modal-message').text(res.message)
+                $('#error-modal').modal('show')
+            }
+        })
+    });
 });

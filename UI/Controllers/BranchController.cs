@@ -1,9 +1,11 @@
-﻿using Core.DTOs;
+﻿using Core;
+using Core.DTOs;
 using Core.DTOs.BranchDTOs;
+using Core.Interfaces;
 using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using NToastNotify;
 using Services.Abstract.BranchServices;
 using Services.ExcelDownloadServices.BranchServices;
 
@@ -12,17 +14,15 @@ namespace UI.Controllers
     [Authorize]
     public class BranchController : Controller
     {
-        private readonly IToastNotification _toastNotification;
         private readonly IReadBranchService _readBranchService;
         private readonly IWriteBranchService _writeBranchService;
         private readonly BranchExcelExport _branchExcelExport;
 
-        public BranchController(IReadBranchService readBranchService, IWriteBranchService writeBranchService, BranchExcelExport branchExcelExport, IToastNotification toastNotification)
+        public BranchController(IReadBranchService readBranchService, IWriteBranchService writeBranchService, BranchExcelExport branchExcelExport)
         {
             _readBranchService = readBranchService;
             _writeBranchService = writeBranchService;
             _branchExcelExport = branchExcelExport;
-            _toastNotification = toastNotification;
         }
 
         #region PageActions
@@ -32,12 +32,7 @@ namespace UI.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Index(BranchQuery query)
         {
-           
             var resultSearch = await _readBranchService.GetBranchListService(query);
-            if (!resultSearch.IsSuccess)
-            {
-                _toastNotification.AddErrorToastMessage(resultSearch.Message, new ToastrOptions { Title = "Hata" });
-            }
             return View(resultSearch);
         }
         /// <summary>
@@ -47,10 +42,6 @@ namespace UI.Controllers
         public async Task<IActionResult> UpdateBranch(Guid id, string returnUrl)
         {
             var result = await _readBranchService.GetUpdateBranchService(id);
-            if (!result.IsSuccess)
-            {
-                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-            }
             ViewData["ReturnUrl"] = returnUrl;
             return View(result);
         }
@@ -65,17 +56,17 @@ namespace UI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddBranch(BranchDto dto, string returnUrl)
         {
-            var result = await _writeBranchService.AddAsync(dto);
-            if (!result.IsSuccess)
+            IResultDto result = new ResultDto();
+            if (!ModelState.IsValid)
             {
-                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+                result.SetStatus(false).SetErr("Modelstate is not valid").SetMessage("Lütfen Zorunlu Alanların Girildiğinden Emin Olunuz.");
             }
             else
-            {
-                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Eklendi", new ToastrOptions { Title = "Başarılı" });
+            { 
+                result = await _writeBranchService.AddAsync(dto); 
             }
-
-            return Redirect(returnUrl);
+            
+            return Ok(result);
         }
         /// <summary>
         /// Şube Düzenleme Post Metodu
@@ -84,16 +75,17 @@ namespace UI.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateBranch(ResultWithDataDto<BranchDto> dto, string returnUrl)
         {
-            var result = await _writeBranchService.UpdateAsync(dto.Data);
-            if (!result.IsSuccess)
+            IResultWithDataDto<BranchDto> result = new ResultWithDataDto<BranchDto>();
+            if (!ModelState.IsValid)
             {
-                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+                result.SetStatus(false).SetErr("Modelstate is not valid").SetMessage("Lütfen Zorunlu Alanların Girildiğinden Emin Olunuz.");
             }
             else
             {
-                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Düzenlendi", new ToastrOptions { Title = "Başarılı" });
+                result = await _writeBranchService.UpdateAsync(dto.Data);
             }
-            return Redirect(returnUrl);
+           
+            return Ok(result);
         }
         /// <summary>
         /// Şube Silme Post Metodu
@@ -103,38 +95,29 @@ namespace UI.Controllers
         public async Task<IActionResult> ArchiveBranch(Guid id, string returnUrl)
         {
             var result = await _writeBranchService.DeleteAsync(id);
-            if (!result.IsSuccess)
-            {
-                _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-            }
-            else
-            {
-                _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Silindi", new ToastrOptions { Title = "Başarılı" });
-            }
-            return Redirect(returnUrl);
+            return Ok(result);
         }
         /// <summary>
         /// Şube Listesi Excel Alma Post Metodu
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> ExportExcel(BranchQuery query, string returnUrl)
+        public async Task<IActionResult> ExportExcel(BranchQuery query,string returnUrl)
         {
 
             var result = await _readBranchService.GetExcelBranchListService(query);
             if (result.IsSuccess)
             {
                 byte[] excelData = _branchExcelExport.ExportToExcel(result.Data); // Entity listesini Excel verisi olarak alın.
-
                 var response = HttpContext.Response;
                 response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 response.Headers.Add("Content-Disposition", "attachment; filename=Subeler.xlsx");
                 await response.Body.WriteAsync(excelData, 0, excelData.Length);
-                _toastNotification.AddSuccessToastMessage("Başarılı", new ToastrOptions { Title = "Başarılı" });
                 return new EmptyResult();
+                // _toastNotification.AddSuccessToastMessage("Başarılı", new ToastrOptions { Title = "Başarılı" });
             }
-
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+            
+            // _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
             return Redirect(returnUrl);
         }
         #endregion

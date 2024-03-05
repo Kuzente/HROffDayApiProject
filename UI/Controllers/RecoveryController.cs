@@ -1,7 +1,6 @@
 ﻿using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NToastNotify;
 using Services.Abstract.BranchServices;
 using Services.Abstract.OffDayServices;
 using Services.Abstract.PersonalServices;
@@ -11,7 +10,6 @@ namespace UI.Controllers;
 [Authorize]
 public class RecoveryController : Controller
 {
-    private readonly IToastNotification _toastNotification;
     private readonly IReadBranchService _readBranchService;
     private readonly IWriteBranchService _writeBranchService;
     private readonly IReadPositionService _readPositionService;
@@ -20,7 +18,7 @@ public class RecoveryController : Controller
     private readonly IWritePersonalService _writePersonalService;
     private readonly IReadOffDayService _readOffDayService;
 
-    public RecoveryController(IReadBranchService readBranchService, IReadPositionService readPositionService, IReadPersonalService readPersonalService, IWriteBranchService writeBranchService, IWritePositionService writePositionService, IWritePersonalService writePersonalService, IToastNotification toastNotification, IReadOffDayService readOffDayService)
+    public RecoveryController(IReadBranchService readBranchService, IReadPositionService readPositionService, IReadPersonalService readPersonalService, IWriteBranchService writeBranchService, IWritePositionService writePositionService, IWritePersonalService writePersonalService, IReadOffDayService readOffDayService)
     {
         _readBranchService = readBranchService;
         _readPositionService = readPositionService;
@@ -28,7 +26,6 @@ public class RecoveryController : Controller
         _writeBranchService = writeBranchService;
         _writePositionService = writePositionService;
         _writePersonalService = writePersonalService;
-        _toastNotification = toastNotification;
         _readOffDayService = readOffDayService;
     }
 
@@ -40,10 +37,6 @@ public class RecoveryController : Controller
     public async Task<IActionResult> DeletedBranch(BranchQuery query)
     {
         var result = await _readBranchService.GetDeletedBranchListService(query);
-        if (!result.IsSuccess)
-        {
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-        }
         return View(result);
     }
     /// <summary>
@@ -53,10 +46,6 @@ public class RecoveryController : Controller
     public async Task<IActionResult> DeletedPosition(PositionQuery query)
     {
         var result = await _readPositionService.GetDeletedPositionListService(query);
-        if (!result.IsSuccess)
-        {
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-        }
         return View(result);
     }
     /// <summary>
@@ -66,10 +55,6 @@ public class RecoveryController : Controller
     public async Task<IActionResult> DeletedPersonal(string search, int sayfa = 1)
     {
         var result = await _readPersonalService.GetDeletedPersonalListService(sayfa, search);
-        if (!result.IsSuccess)
-        {
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-        }
         return View(result);
     }
     /// <summary>
@@ -79,10 +64,6 @@ public class RecoveryController : Controller
     public async Task<IActionResult> DeletedOffDay(string search, int sayfa = 1)
     {
         var result = await _readOffDayService.GetDeletedOffDaysListService(sayfa, search);
-        if (!result.IsSuccess)
-        {
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-        }
         return View(result);
     }
 
@@ -98,16 +79,7 @@ public class RecoveryController : Controller
     public async Task<IActionResult> RecoverBranch(Guid id,  string returnUrl) 
     {
         var result = await _writeBranchService.RecoverAsync(id);
-        if (!result.IsSuccess)
-        {
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-        }
-        else
-        {
-            _toastNotification.AddSuccessToastMessage("Şube Başarılı Bir Şekilde Geri Döndürüldü.", new ToastrOptions { Title = "Başarılı" }); 
-        }
-
-        return Redirect("/silinen-subeler" + returnUrl);
+        return Ok(result);
     }
     /// <summary>
     /// Silinen Ünvan Geri Döndür Post Metodu
@@ -117,15 +89,8 @@ public class RecoveryController : Controller
     public async Task<IActionResult> RecoverPosition(Guid id, string returnUrl)
     {
         var result = await _writePositionService.RecoverAsync(id);
-        if (!result.IsSuccess)
-        {
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-        }
-        else
-        {
-            _toastNotification.AddSuccessToastMessage("Ünvan Başarılı Bir Şekilde Geri Döndürüldü.", new ToastrOptions { Title = "Başarılı" }); 
-        }
-        return Redirect("/silinen-unvanlar" + returnUrl);
+       
+        return Ok(result);
     }
     /// <summary>
     /// Silinen Personel Geri Döndür Post Metodu
@@ -135,15 +100,8 @@ public class RecoveryController : Controller
     public async Task<IActionResult> RecoverPersonal(Guid id, string returnUrl)
     {
         var result = await _writePersonalService.RecoverAsync(id);
-        if (!result.IsSuccess)
-        {
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-        }
-        else
-        {
-            _toastNotification.AddSuccessToastMessage("Personel Başarılı Bir Şekilde Geri Döndürüldü.", new ToastrOptions { Title = "Başarılı" }); 
-        }
-        return Redirect("/silinen-personeller" + returnUrl);
+        
+        return Ok(result);
     }
 
     #endregion

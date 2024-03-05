@@ -279,14 +279,14 @@ else
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                             Kapat
                         </button>
-                        <button type="submit" class="btn btn-primary">Ünvan Ekle</button>
+                        <button id="addPositionButton" type="button" class="btn btn-primary">Ünvan Ekle</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
     <!--ArchiveModal-->
-    <form action="/unvan-sil" method="post">
+    <form id="deletePositionForm" action="/unvan-sil" method="post">
         <div class="modal modal-blur fade" id="archiveModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -313,7 +313,7 @@ else
                                 <div class="col">
                                     <input type="hidden" id="itemIdInput" name="id">
                                     <input type="hidden" name="returnUrl" value="@returnUrl">
-                                    <button type="submit" class="btn btn-danger w-100" data-bs-dismiss="modal">Ünvanı Sil</button>
+                                    <button id="deletePositionButton" type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">Ünvanı Sil</button>
                                 </div>
                             </div>
                         </div>

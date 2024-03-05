@@ -62,7 +62,7 @@
 {
     <div class="card container-xl mt-3">
         <div class="text-center p-5">
-            <h1 class="display-4">Üzgünüz</h1>
+            <h1 class="display-4 text-danger">Üzgünüz</h1>
             <p>@Model.Message</p>
             <p>@Model.Err</p>
         </div>
@@ -318,7 +318,7 @@ else
         </div>
     </div>
     <!--DeleteModal-->
-    <form action="/izin-sil" method="post">
+    <form id="deleteOffDayForm" action="/izin-sil" method="post">
         <div class="modal modal-blur fade" id="archiveModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -348,7 +348,7 @@ else
                                 <div class="col">
                                     <input type="hidden" id="itemIdInput" name="id">
                                     <input type="hidden" name="returnUrl" value="@returnUrl">
-                                    <button type="submit" class="btn btn-danger w-100" data-bs-dismiss="modal">İzni Sil</button>
+                                    <button id="deleteOffdayButton" type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">İzni Sil</button>
                                 </div>
                             </div>
                         </div>

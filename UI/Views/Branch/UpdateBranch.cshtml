@@ -17,7 +17,7 @@
 }
 else
 {
-    <form method="post" action="/sube-duzenle">
+    <form id="updateForm" method="post" action="/sube-duzenle">
         <div class="page-header d-print-none">
             <div class="container-xl">
                 <div class="row g-2 align-items-center">
@@ -36,7 +36,7 @@ else
                                 </a>
                             </span>
 
-                            <button type="submit" class="btn btn-warning text-white">
+                            <button id="submitButton" type="button" class="btn btn-warning text-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 5l0 14"></path><path d="M5 12l14 0"></path>
                                 </svg>
@@ -105,4 +105,29 @@ else
             </table>
         </div>
     </form>
+    <script>
+        document.addEventListener('DOMContentLoaded',function() {
+           $('#submitButton').on('click',function (e) {
+                  e.preventDefault();
+                  let formData = $("#updateForm").serializeArray();
+                  $.ajax({
+                      type: "POST",
+                      url: "/sube-duzenle",
+                      data: formData // Form verilerini al
+                  }).done(function (res) {
+                      if (res.isSuccess){
+                          $('#success-modal-message').text("Şube Başarılı Bir Şekilde Güncellendi.")
+                          $('#success-modal').modal('show')
+                          $('#success-modal-button').click(function () {
+                             window.location.href = "@ViewData["ReturnUrl"]";
+                          });
+                      }
+                      else{
+                          $('#error-modal-message').text(res.message)
+                          $('#error-modal').modal('show')
+                      }
+                  })
+              });
+        })
+    </script>
 }

@@ -1,8 +1,9 @@
-﻿using Core.DTOs.PersonalDTOs.WriteDtos;
+﻿using Core;
+using Core.DTOs.PersonalDTOs.WriteDtos;
+using Core.Interfaces;
 using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NToastNotify;
 using Services.Abstract.BranchServices;
 using Services.Abstract.OffDayServices;
 using Services.Abstract.PersonalServices;
@@ -13,20 +14,14 @@ namespace UI.Controllers;
 [Authorize]
 public class PersonalDetailController : Controller
 {
-    private readonly IToastNotification _toastNotification;
-    private readonly IReadPositionService _readPositionService;
-    private readonly IReadBranchService _readBranchService;
     private readonly IReadPersonalService _readPersonalService;
     private readonly IReadOffDayService _readOffDayService;
     private readonly IWritePersonalService _writePersonalService;
 
-    public PersonalDetailController(IReadBranchService readBranchService, IReadPositionService readPositionService, IReadPersonalService readPersonalService, IWritePersonalService writePersonalService, IToastNotification toastNotification, IReadOffDayService readOffDayService)
+    public PersonalDetailController(IReadPersonalService readPersonalService, IWritePersonalService writePersonalService,IReadOffDayService readOffDayService)
     {
-        _readBranchService = readBranchService;
-        _readPositionService = readPositionService;
         _readPersonalService = readPersonalService;
         _writePersonalService = writePersonalService;
-        _toastNotification = toastNotification;
         _readOffDayService = readOffDayService;
     }
 
@@ -35,7 +30,7 @@ public class PersonalDetailController : Controller
     /// Personel Detayları Sayfası
     /// </summary>
     /// <returns></returns>
-    public IActionResult Edit(int id)
+    public IActionResult Edit(Guid id)
     {
         return View();
     }
@@ -46,8 +41,6 @@ public class PersonalDetailController : Controller
     public async Task<IActionResult> PersonalOffDayList(OffdayQuery query)
     {
         var result = await _readOffDayService.GetPersonalOffDaysListService(query);
-        if (!result.IsSuccess)
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
         return View(result);
     }
 
@@ -61,10 +54,6 @@ public class PersonalDetailController : Controller
     public async Task<IActionResult> EditAjax(Guid id)
     {
         var result = await _readPersonalService.GetUpdatePersonalService(id);
-        if (!result.IsSuccess)
-        {
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-        }
         return Ok(result);
     }
     
@@ -73,19 +62,19 @@ public class PersonalDetailController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpPost]
-    public async Task<IActionResult> Edit(WriteUpdatePersonalDto dto , string returnUrl)
+    public async Task<IActionResult> Edit(WriteUpdatePersonalDto dto)
     {
-        var result = await _writePersonalService.UpdateAsync(dto);
-        if (!result.IsSuccess)
+        IResultDto result = new ResultDto();
+        if (!ModelState.IsValid)
         {
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
+            result.SetStatus(false).SetErr("ModelState is not Valid").SetMessage("Lütfen Zorunlu Alanları Doğru Girdiğinize Emin Olunuz");
         }
         else
         {
-            _toastNotification.AddSuccessToastMessage("Personel Başarılı Bir Şekilde Güncellendi", new ToastrOptions { Title = "Başarılı" }); 
+            result = await _writePersonalService.UpdateAsync(dto);
         }
-
-        return Redirect(returnUrl);
+        
+        return Ok(result);
     }
     /// <summary>
     /// Personel Sil Post Metodu
@@ -95,15 +84,6 @@ public class PersonalDetailController : Controller
     public async Task<IActionResult> ArchivePersonal(Guid id)
     {
         var result = await _writePersonalService.DeleteAsync(id);
-        if (!result.IsSuccess)
-        {
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-        }
-        else
-        {
-            _toastNotification.AddSuccessToastMessage("Personel Başarılı Bir Şekilde Silindi", new ToastrOptions { Title = "Başarılı" }); 
-        }
-
         return Ok(result);
     }
     /// <summary>
@@ -123,10 +103,6 @@ public class PersonalDetailController : Controller
     public async Task<IActionResult> PersonelDetailsHeader(Guid id)
     {
         var result = await _readPersonalService.GetPersonalDetailsHeaderByIdService(id);
-        if (!result.IsSuccess)
-        {
-            _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
-        }
         return Ok(result);
     }
     #endregion

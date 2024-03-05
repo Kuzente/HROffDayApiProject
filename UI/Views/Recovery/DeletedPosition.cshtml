@@ -106,10 +106,10 @@ else
                         @data.DeletedAt.ToString("dd/MM/yyyy")
                     </td>
                     <td>
-                        <form action="/unvan-gerigetir" method="post">
+                        <form data-recoverForm action="/unvan-gerigetir" method="post">
                             <input type="hidden" name="id" value="@data.ID">
                             <input type="hidden" name="returnUrl" value="@returnUrl">
-                            <button type="submit" class=" btn btn-sm btn-success btn-pill w-50">Geri Döndür</button>
+                            <button data-recoverButton type="submit" class=" btn btn-sm btn-success btn-pill w-50">Geri Döndür</button>
                         </form>
                     </td>
                 </tr>
@@ -177,7 +177,7 @@ else
     </div>
     @section Scripts
     {
-        <script src="/js/custom/recovery/recover.js"></script>
+        <script src="/js/custom/recovery/recoverPosition.js"></script>
 
     }
 }

@@ -1,20 +1,11 @@
 using System.Text.Json.Serialization;
-using Data.Context;
-using Hangfire;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.OData;
-using NToastNotify;
 using QuestPDF.Infrastructure;
 using Services;
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
-builder.Services.AddControllersWithViews().AddNToastNotifyToastr(new ToastrOptions()
-{
-    ProgressBar = true,
-    PositionClass = ToastPositions.TopRight,
-    
-});
+builder.Services.AddControllersWithViews();
 
 QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -54,7 +45,6 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseNToastNotify();
 app.UseAuthorization();
 
 #region PersonalList
@@ -69,8 +59,8 @@ app.MapControllerRoute(name: "downloadPassivePersonelExcelListGet", pattern: "ci
 
 #endregion
 #region PersonalDetails
-app.MapControllerRoute(name: "personalDetailPage", pattern: "get-personel-detayları", defaults: new { controller = "PersonalDetail", action = "EditAjax" });
-app.MapControllerRoute(name: "personalDetailPage", pattern: "personel-detayları", defaults: new { controller = "PersonalDetail", action = "Edit" });
+app.MapControllerRoute(name: "personalDetailPage", pattern: "get-personel-detaylari", defaults: new { controller = "PersonalDetail", action = "EditAjax" });
+app.MapControllerRoute(name: "personalDetailPage", pattern: "personel-detaylari", defaults: new { controller = "PersonalDetail", action = "Edit" });
 app.MapControllerRoute(name: "personalDetailPageStatusPost", pattern: "personel-durumu", defaults: new { controller = "PersonalDetail", action = "ChangeStatus" });
 app.MapControllerRoute(name: "personalDeletePost", pattern: "personel-sil", defaults: new { controller = "PersonalDetail", action = "ArchivePersonal" });
 app.MapControllerRoute(name: "personalOffDays", pattern: "personel-izinleri", defaults: new { controller = "PersonalDetail", action = "PersonalOffDayList" });

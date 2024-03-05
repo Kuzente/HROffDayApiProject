@@ -29,6 +29,7 @@ public class WritePersonalService : IWritePersonalService
 		try
 		{
 			var mapSet = _mapper.Map<Personal>(writePersonalDto);
+			mapSet.FoodAidDate = mapSet.StartJobDate;
 			var resultData = await _unitOfWork.WritePersonalRepository.AddAsync(mapSet);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -48,7 +49,12 @@ public class WritePersonalService : IWritePersonalService
 		{
 			if(writeDto == null || writeDto.Count <= 0)
                 return res.SetStatus(false).SetErr("Not Found").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+			
             var mapSet = _mapper.Map<List<Personal>>(writeDto);
+            mapSet.ForEach(p =>
+            {
+	            p.FoodAidDate = p.StartJobDate;
+            });
 			var resultData = await _unitOfWork.WritePersonalRepository.AddRangeAsync(mapSet);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -67,7 +73,7 @@ public class WritePersonalService : IWritePersonalService
 		try
 		{
 			var getPersonal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate:p=> p.ID == writeDto.ID);
-			if (getPersonal is null)
+			if (getPersonal is  null)
 				return result.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Personel Bulunamadı!!!");
 			if(getPersonal.Status != EntityStatusEnum.Online)
 				return result.SetStatus(false).SetErr("Personel is Not Active").SetMessage("İlgili Personel Aktif Olarak Çalışmamaktadır!!!");

@@ -4,6 +4,7 @@ using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240228161618_offDayAddDocumentNumber")]
+    partial class offDayAddDocumentNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,9 +190,6 @@ namespace Data.Migrations
                     b.Property<int>("FoodAid")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("FoodAidDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -217,9 +217,6 @@ namespace Data.Migrations
                     b.Property<string>("RegistirationNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RetiredDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<bool>("RetiredOrOld")
                         .HasColumnType("bit");
@@ -282,6 +279,9 @@ namespace Data.Migrations
                     b.Property<string>("FatherName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("GraduatedSchool")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("Handicapped")
                         .HasColumnType("bit");
 
@@ -297,13 +297,10 @@ namespace Data.Migrations
                     b.Property<string>("MotherName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PersonalGroup")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("Personal_Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Salary")
+                    b.Property<double?>("Salary")
                         .HasColumnType("float");
 
                     b.Property<string>("SgkCode")
