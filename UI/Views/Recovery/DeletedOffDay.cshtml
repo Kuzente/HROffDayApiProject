@@ -44,7 +44,7 @@ else
                 <div class="row p-3">
                     <div class="col-md-6">
                         <form class="d-flex" action="/silinen-izinler" method="get">
-                            <input class="form-control me-2" type="search" placeholder="Ara" name="search" aria-label="Search">
+                            <input id="searchInput" class="form-control me-2" type="search" placeholder="Ara" name="search" aria-label="Search">
                             <button class="btn btn-outline-primary" type="submit">Ara</button>
 
                         </form>
@@ -59,17 +59,17 @@ else
             </div>
             <div class="col-2"></div>
             <div class="col-4 p-3 text-end">
-                @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && !string.IsNullOrEmpty(kvp.Value)))
+                @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && kvp.Key != "sortName" && kvp.Key != "sortBy" && !string.IsNullOrEmpty(kvp.Value)))
                 {
                     <button type="button" class="btn">
-                        Filtrelenen Silinen Şube
+                        Filtrelenen İptal Edilen İzin
                         <span class="badge bg-danger ms-2">@Model.TotalRecords</span>
                     </button>
                 }
                 else
                 {
                     <button type="button" class="btn">
-                        Toplam Silinen Şube
+                        Toplam İptal Edilen İzin
                         <span class="badge bg-danger ms-2">@Model.TotalRecords</span>
                     </button>
                 }
@@ -79,15 +79,29 @@ else
         <table class="table">
             <thead>
             <tr>
-                <th>Personel<br> Adı Soyadı</th>
-                <th>Şube</th>
-                <th>Ünvan</th>
-                <th>İzin Başlangıç Tarihi</th>
-                <th>İzin Bitiş Tarihi</th>
-
-                <th>Toplam <br/> Alınan Gün</th>
+                <th>
+                    <button class="table-sort" data-sort="sort-nameSurname">Personel<br> Adı Soyadı</button>
+                </th>
+                <th>
+                    <button class="table-sort" data-sort="sort-branchName">Şube</button>
+                </th>
+                <th>
+                    <button class="table-sort" data-sort="sort-positionName">Ünvan</button>
+                </th>
+                <th>
+                    <button class="table-sort" data-sort="sort-startDate">İzin Başlangıç Tarihi</button>
+                </th>
+                <th>
+                    <button class="table-sort" data-sort="sort-endDate">İzin Bitiş Tarihi</button>
+                </th>
+                <th>
+                    <button class="table-sort" data-sort="sort-countLeave">Toplam <br/> Alınan Gün</button>
+                </th>
                 <th>Detaylı <br/>İzin Günleri</th>
-                <th>Silinme Zamanı</th>
+
+                <th>
+                    <button class="table-sort" data-sort="sort-deletedAt">İptal Zamanı</button>
+                </th>
             </tr>
             </thead>
             <tbody class="table-border-bottom-0">
@@ -105,7 +119,7 @@ else
                     </td>
                     <td class="col-2">
                         <span class="status status-dark mb-1">@data.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
-                        
+
                     </td>
                     <td class="col-2">
                         <span class="status status-github">@data.EndDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
@@ -198,7 +212,7 @@ else
     </div>
     @section Scripts
     {
-        <script src="/js/custom/recovery/recover.js"></script>
+        <script src="/js/custom/recovery/recoverOffday.js"></script>
 
     }
 }

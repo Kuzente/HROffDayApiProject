@@ -1,4 +1,29 @@
 ﻿document.addEventListener('DOMContentLoaded',function () {
+    let searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.has("search")){
+        $('#searchInput').val(searchParams.get('search'))
+    }
+
+    if (!searchParams.has('sortName') || !searchParams.has('sortBy') || searchParams.get('sortBy') === '') {
+        $('button[data-sort="sort-nameSurname"]').addClass('asc');
+    } else {
+        if (searchParams.get('sortBy') === 'asc') {
+            $('button[data-sort="sort-' + searchParams.get('sortName') + '"]').addClass('asc');
+        } else {
+            $('button[data-sort="sort-' + searchParams.get('sortName') + '"]').addClass('desc');
+        }
+    }
+    $('button[data-sort]').click(function () {
+        let $btn = $(this)
+        let sortValue = $btn.data('sort').split('-')[1];
+        let sortOrder = 'asc';
+        if ($btn.hasClass('asc')) {
+            sortOrder = 'desc';
+        }
+        searchParams.set('sortName', sortValue);
+        searchParams.set('sortBy', sortOrder);
+        window.location.href = window.location.pathname + '?' + searchParams.toString()
+    })
     $('[data-firstButton]').on('click',function () {
         let currentUrl = new URL(window.location.href);
         let pageParam = currentUrl.searchParams.get("sayfa");

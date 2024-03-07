@@ -31,7 +31,9 @@
                         <form method="post" action="/unvanlar-excel?returnUrl=@returnUrl">
                             <button type="submit" class="btn btn-green">
                                 <input type="hidden" name="search" value="@Context.Request.Query["search"]">
-                                <input type="hidden" name="passive" value="@Context.Request.Query["passive"]">
+                                <input type="hidden" name="isActive" value="@Context.Request.Query["isActive"]">
+                                <input type="hidden" name="sortName" value="@Context.Request.Query["sortName"]">
+                                <input type="hidden" name="sortBy" value="@Context.Request.Query["sortBy"]">
                                 <input type="hidden" name="ReturnUrl" value="@returnUrl">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-spreadsheet" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -85,7 +87,7 @@ else
                 <div class="row">
                     <div class="col-md-6">
                         <form class="d-flex" action="/unvanlar" method="get">
-                            <input class="form-control me-2" type="search" placeholder="Ara" name="search" aria-label="Search">
+                            <input id="searchInput" class="form-control me-2" type="search" placeholder="Ara" name="search" aria-label="Search">
                             <button class="btn btn-outline-primary" type="submit">Ara</button>
                         </form>
                     </div>
@@ -105,11 +107,11 @@ else
                                     <div class="p-3">
                                         <div class="row">
                                             <div class="form-check col-6">
-                                                <input name="passive" value="true" class="form-check-input" type="radio" id="checkbox3">
+                                                <input name="isActive" value="passive" class="form-check-input" type="radio" id="checkbox3">
                                                 <label class="form-check-label" for="checkbox3">Pasif</label>
                                             </div>
                                             <div class="form-check col-6">
-                                                <input name="active" value="true" class="form-check-input" type="radio" id="checkbox4">
+                                                <input name="isActive" value="active" class="form-check-input" type="radio" id="checkbox4">
                                                 <label class="form-check-label" for="checkbox4">Aktif</label>
                                             </div>
                                         </div>
@@ -123,7 +125,7 @@ else
                     </div>
                     <!--Temizle Butonu-->
                     <div class="col-md-5">
-                        @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && !string.IsNullOrEmpty(kvp.Value)))
+                        @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && kvp.Key != "sortName" && kvp.Key != "sortBy" && !string.IsNullOrEmpty(kvp.Value)))
                         {
                             <a href="/unvanlar" class="btn btn-outline-secondary ms-3">Temizle</a>
                         }
@@ -134,7 +136,7 @@ else
             </div>
             <div class="col-2"></div>
             <div class="col-4 p-3 text-end">
-                @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && !string.IsNullOrEmpty(kvp.Value)))
+                @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && kvp.Key != "sortName" && kvp.Key != "sortBy" && !string.IsNullOrEmpty(kvp.Value)))
                 {
                     <button type="button" class="btn">
                         Filtrelenen Ünvan
@@ -153,7 +155,9 @@ else
         <table class="table">
             <thead>
             <tr>
-                <th>Ünvan Adı</th>
+                <th>
+                    <button class="table-sort" data-sort="sort-positionName">Ünvan Adı</button>
+                </th>
                 <th>Durum</th>
                 <th>Oluşturulma Tarihi</th>
                 <th>Güncellenme Tarihi</th>

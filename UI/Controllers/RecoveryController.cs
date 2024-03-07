@@ -52,18 +52,18 @@ public class RecoveryController : Controller
     /// Silinen Personeller Listesi Sayfası
     /// </summary>
     /// <returns></returns>
-    public async Task<IActionResult> DeletedPersonal(string search, int sayfa = 1)
+    public async Task<IActionResult> DeletedPersonal(PersonalQuery query)
     {
-        var result = await _readPersonalService.GetDeletedPersonalListService(sayfa, search);
+        var result = await _readPersonalService.GetDeletedPersonalListService(query);
         return View(result);
     }
     /// <summary>
     /// Silinen İzinler Listesi Sayfası
     /// </summary>
     /// <returns></returns>
-    public async Task<IActionResult> DeletedOffDay(string search, int sayfa = 1)
+    public async Task<IActionResult> DeletedOffDay(OffdayQuery query)
     {
-        var result = await _readOffDayService.GetDeletedOffDaysListService(sayfa, search);
+        var result = await _readOffDayService.GetDeletedOffDaysListService(query);
         return View(result);
     }
 

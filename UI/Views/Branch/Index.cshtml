@@ -30,8 +30,9 @@
                     <form id="branchExcelForm" method="post" action="/subeler-excel?returnUrl=@returnUrl">
                         <span class="d-none d-sm-inline">
                             <input type="hidden" name="search" value="@Context.Request.Query["search"]">
-                            <input type="hidden" name="passive" value="@Context.Request.Query["passive"]">
-                            <input type="hidden" name="active" value="@Context.Request.Query["active"]">
+                            <input type="hidden" name="isActive" value="@Context.Request.Query["isActive"]">
+                            <input type="hidden" name="sortName" value="@Context.Request.Query["sortName"]">
+                            <input type="hidden" name="sortBy" value="@Context.Request.Query["sortBy"]">
                             <input type="hidden" name="ReturnUrl" value="@returnUrl">
                             <button id="branchExcelButton" type="button" class="btn btn-green">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-spreadsheet" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -111,11 +112,11 @@ else
                                         <div class="p-3">
                                             <div class="row">
                                                 <div class="form-check col-6">
-                                                    <input name="passive" value="true" class="form-check-input" type="radio" id="checkbox3">
+                                                    <input name="isActive" value="passive" class="form-check-input" type="radio" id="checkbox3">
                                                     <label class="form-check-label" for="checkbox3">Pasif</label>
                                                 </div>
                                                 <div class="form-check col-6">
-                                                    <input name="active" value="true" class="form-check-input" type="radio" id="checkbox4">
+                                                    <input name="isActive" value="active" class="form-check-input" type="radio" id="checkbox4">
                                                     <label class="form-check-label" for="checkbox4">Aktif</label>
                                                 </div>
                                             </div>
@@ -129,7 +130,7 @@ else
                         </div>
                         <!--Temizle Butonu-->
                         <div class="col-md-5">
-                            @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && !string.IsNullOrEmpty(kvp.Value)))
+                            @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && kvp.Key != "sortName" && kvp.Key != "sortBy" && !string.IsNullOrEmpty(kvp.Value)))
                             {
                                 <a href="/subeler" class="btn btn-outline-secondary ms-3">Temizle</a>
                             }
@@ -142,7 +143,7 @@ else
             <div class="col-2">
             </div>
             <div class="col-4 p-3 text-end">
-                @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && !string.IsNullOrEmpty(kvp.Value)))
+                @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && kvp.Key != "sortName" && kvp.Key != "sortBy" && !string.IsNullOrEmpty(kvp.Value)))
                 {
                     <button type="button" class="btn">
                         Filtrelenen Şube
@@ -161,57 +162,59 @@ else
         </div>
         <table class="table">
             <thead>
-                <tr>
-                    <th>Şube Adı</th>
-                    <th>Durum</th>
-                    <th>Oluşturulma Tarihi</th>
-                    <th>Güncellenme Tarihi</th>
-                    <th>Düzenle</th>
-                    <th>Sil</th>
-                </tr>
+            <tr>
+                <th>
+                    <button class="table-sort" data-sort="sort-branchName">Şube Adı</button>
+                </th>
+                <th>Durum</th>
+                <th>Oluşturulma Tarihi</th>
+                <th>Güncellenme Tarihi</th>
+                <th>Düzenle</th>
+                <th>Sil</th>
+            </tr>
             </thead>
             <tbody class="table-border-bottom-0">
-                @foreach (var data in Model.Data)
-                {
-                    <tr>
-                        <td>
-                            <!--TODO RETURN URL-->
-                            <a href="/izin-olustur?id=@data.ID&returnUrl=@returnUrl">@data.Name</a>
-                        </td>
-                        <td>
-                            @{
-                                if (data.Status == EntityStatusEnum.Online)
-                                {
-                                    <span class="badge bg-success">Aktif</span>
-                                }
-                                else if (data.Status == EntityStatusEnum.Archive)
-                                {
-                                    <span class="badge bg-danger">Arşivlenmiş</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-secondary">Pasif</span>
-                                }
+            @foreach (var data in Model.Data)
+            {
+                <tr>
+                    <td>
+                        <!--TODO RETURN URL-->
+                        <a href="/izin-olustur?id=@data.ID&returnUrl=@returnUrl">@data.Name</a>
+                    </td>
+                    <td>
+                        @{
+                            if (data.Status == EntityStatusEnum.Online)
+                            {
+                                <span class="badge bg-success">Aktif</span>
                             }
-                        </td>
-                        <td>
-                            @data.CreatedAt.ToString("dd/MM/yyyy")
-                        </td>
-                        <td>
-                            @data.ModifiedAt.ToString("dd/MM/yyyy")
-                        </td>
-                        <td>
-                            <!--TODO RETURN URL-->
-                            <a href="/sube-duzenle?id=@data.ID&returnUrl=@returnUrl" class="btn btn-warning btn-sm text-white btn-pill w-50">Düzenle</a>
-                        </td>
-                        <td>
-                            <button data-deleteButton type="button" class="btn btn-danger archive-button btn-sm btn-pill w-50" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="@data.Name">Sil</button>
-                        </td>
-                    </tr>
-                }
+                            else if (data.Status == EntityStatusEnum.Archive)
+                            {
+                                <span class="badge bg-danger">Arşivlenmiş</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Pasif</span>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @data.CreatedAt.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @data.ModifiedAt.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        <!--TODO RETURN URL-->
+                        <a href="/sube-duzenle?id=@data.ID&returnUrl=@returnUrl" class="btn btn-warning btn-sm text-white btn-pill w-50">Düzenle</a>
+                    </td>
+                    <td>
+                        <button data-deleteButton type="button" class="btn btn-danger archive-button btn-sm btn-pill w-50" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="@data.Name">Sil</button>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
-        
+
         <!--Pagination-->
         <div class="border-top pt-3 mx-3 d-flex justify-content-end">
             <nav aria-label="Page navigation">
@@ -308,10 +311,10 @@ else
                     <div class="modal-body text-center py-4">
                         <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
-                            <path d="M12 9v4" />
-                            <path d="M12 17h.01" />
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/>
+                            <path d="M12 9v4"/>
+                            <path d="M12 17h.01"/>
                         </svg>
                         <h3>Emin Misiniz?</h3>
                         <div class="text-muted">
@@ -340,7 +343,7 @@ else
     </form>
 
     @section Scripts {
-    <script src="/js/custom/branch/branchList/branchList.js"></script>
+        <script src="/js/custom/branch/branchList/branchList.js"></script>
     }
 
 }

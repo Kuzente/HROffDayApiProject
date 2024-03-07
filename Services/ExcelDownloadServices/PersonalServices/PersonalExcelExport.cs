@@ -30,7 +30,6 @@ public class PersonalExcelExport
             worksheet.Cells[1, 8].Value = "Toplam Yıllık İzin";
             worksheet.Cells[1, 9].Value = "Kullandığı Yıllık İzin";
             worksheet.Cells[1, 10].Value = "Kalan Yıllık İzin";
-            worksheet.Cells[1, 11].Value = "Personel SQL ID";
                 
                 
             // ... Diğer sütun başlıklarını ekleyin.
@@ -49,7 +48,6 @@ public class PersonalExcelExport
                 worksheet.Cells[row, 8].Value = entity.TotalYearLeave.ToString();
                 worksheet.Cells[row, 9].Value = entity.UsedYearLeave.ToString();
                 worksheet.Cells[row, 10].Value = (entity.TotalYearLeave - entity.UsedYearLeave).ToString();
-                worksheet.Cells[row, 11].Value = entity.ID.ToString();
                 // ... Diğer alanları ekleyin.
 
                 row++;

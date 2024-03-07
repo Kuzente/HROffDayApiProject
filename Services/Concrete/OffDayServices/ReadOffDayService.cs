@@ -4,6 +4,7 @@ using Core.DTOs;
 using Core.DTOs.OffDayDTOs;
 using Core.DTOs.OffDayDTOs.ReadDtos;
 using Core.DTOs.PassivePersonalDtos;
+using Core.Entities;
 using Core.Enums;
 using Core.Interfaces;
 using Core.Querys;
@@ -138,7 +139,38 @@ public class ReadOffDayService : IReadOffDayService
 					include: p=>p.Include(a=>a.Personal)
 												.ThenInclude(a=>a.Branch)
 												.Include(a=>a.Personal.Position),
-					orderBy: p => p.OrderByDescending(a => a.CreatedAt)
+					orderBy: p =>
+					{
+						IOrderedQueryable<OffDay> orderedOffdays;
+						if (query.sortName is not null && query.sortBy is not null)
+						{
+							orderedOffdays = query.sortName switch
+							{
+								"nameSurname" => query.sortBy == "asc"
+									? p.OrderBy(a => a.Personal.NameSurname)
+									: p.OrderByDescending(a => a.Personal.NameSurname),
+								"branchName" => query.sortBy == "asc"
+									? p.OrderBy(a => a.Personal.Branch.Name)
+									: p.OrderByDescending(a => a.Personal.Branch.Name),
+								"positionName" => query.sortBy == "asc"
+									? p.OrderBy(a => a.Personal.Position.Name)
+									: p.OrderByDescending(a => a.Personal.Position.Name),
+								"countLeave" => query.sortBy == "asc"
+									? p.OrderBy(a => a.CountLeave)
+									: p.OrderByDescending(a => a.CountLeave),
+								"createdAt" => query.sortBy == "asc"
+									? p.OrderBy(a => a.CreatedAt)
+									: p.OrderByDescending(a => a.CreatedAt),
+								_ => p.OrderByDescending(a=> a.CreatedAt)
+							};
+						}
+						else
+						{
+							orderedOffdays = p.OrderByDescending(a=> a.CreatedAt);
+						}
+
+						return orderedOffdays;
+					}
 				));
 			var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)
 				.Take(res.PageSize).ToList();
@@ -155,9 +187,9 @@ public class ReadOffDayService : IReadOffDayService
 		return res;
 	}
 
-	public async Task<ResultWithPagingDataDto<List<ReadDeletedOffDayListDto>>> GetDeletedOffDaysListService(int sayfa , string search)
+	public async Task<ResultWithPagingDataDto<List<ReadDeletedOffDayListDto>>> GetDeletedOffDaysListService(OffdayQuery query)
 	{
-		ResultWithPagingDataDto<List<ReadDeletedOffDayListDto>> res = new ResultWithPagingDataDto<List<ReadDeletedOffDayListDto>>(sayfa,search);
+		ResultWithPagingDataDto<List<ReadDeletedOffDayListDto>> res = new ResultWithPagingDataDto<List<ReadDeletedOffDayListDto>>(query.sayfa,query.search);
 		try
 		{
 			var allData = await Task.Run(() =>
@@ -165,11 +197,48 @@ public class ReadOffDayService : IReadOffDayService
 					predicate: a =>
 						(a.Status == EntityStatusEnum.Deleted ) &&
 						a.Personal.Status == EntityStatusEnum.Online &&
-						(string.IsNullOrEmpty(search) || a.Personal.NameSurname.Contains(search)),
+						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search)),
 					include: p=>p.Include(a=>a.Personal)
 						.ThenInclude(a=>a.Branch)
 						.Include(a=>a.Personal.Position),
-					orderBy: p => p.OrderByDescending(a => a.CreatedAt)
+					orderBy: p =>
+					{
+						IOrderedQueryable<OffDay> orderedOffdays;
+						if (query.sortName is not null && query.sortBy is not null)
+						{
+							orderedOffdays = query.sortName switch
+							{
+								"nameSurname" => query.sortBy == "asc"
+									? p.OrderBy(a => a.Personal.NameSurname)
+									: p.OrderByDescending(a => a.Personal.NameSurname),
+								"branchName" => query.sortBy == "asc"
+									? p.OrderBy(a => a.Personal.Branch.Name)
+									: p.OrderByDescending(a => a.Personal.Branch.Name),
+								"positionName" => query.sortBy == "asc"
+									? p.OrderBy(a => a.Personal.Position.Name)
+									: p.OrderByDescending(a => a.Personal.Position.Name),
+								"startDate" => query.sortBy == "asc"
+									? p.OrderBy(a => a.StartDate)
+									: p.OrderByDescending(a => a.StartDate),
+								"endDate" => query.sortBy == "asc"
+									? p.OrderBy(a => a.EndDate)
+									: p.OrderByDescending(a => a.EndDate),
+								"countLeave" => query.sortBy == "asc"
+									? p.OrderBy(a => a.CountLeave)
+									: p.OrderByDescending(a => a.CountLeave),
+								"deletedAt" => query.sortBy == "asc"
+									? p.OrderBy(a => a.DeletedAt)
+									: p.OrderByDescending(a => a.DeletedAt),
+								_ => p.OrderByDescending(a=> a.DeletedAt)
+							};
+						}
+						else
+						{
+							orderedOffdays = p.OrderByDescending(a=> a.DeletedAt);
+						}
+
+						return orderedOffdays;
+					}
 				));
 			var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)
 				.Take(res.PageSize).ToList();
@@ -257,7 +326,38 @@ public class ReadOffDayService : IReadOffDayService
 						(string.IsNullOrEmpty(query.branchName) || a.Personal.Branch.Name.Contains(query.branchName))&&
 						(string.IsNullOrEmpty(query.positionName) || a.Personal.Position.Name.Contains(query.positionName)),
 					include: p=>p.Include(a=>a.Personal).ThenInclude(a=>a.Branch).Include(a=>a.Personal.Position),
-					orderBy: p => p.OrderByDescending(a => a.CreatedAt)
+					orderBy: p =>
+					{
+						IOrderedQueryable<OffDay> orderedOffdays;
+						if (query.sortName is not null && query.sortBy is not null)
+						{
+							orderedOffdays = query.sortName switch
+							{
+								"nameSurname" => query.sortBy == "asc"
+									? p.OrderBy(a => a.Personal.NameSurname)
+									: p.OrderByDescending(a => a.Personal.NameSurname),
+								"branchName" => query.sortBy == "asc"
+									? p.OrderBy(a => a.Personal.Branch.Name)
+									: p.OrderByDescending(a => a.Personal.Branch.Name),
+								"positionName" => query.sortBy == "asc"
+									? p.OrderBy(a => a.Personal.Position.Name)
+									: p.OrderByDescending(a => a.Personal.Position.Name),
+								"countLeave" => query.sortBy == "asc"
+									? p.OrderBy(a => a.CountLeave)
+									: p.OrderByDescending(a => a.CountLeave),
+								"createdAt" => query.sortBy == "asc"
+									? p.OrderBy(a => a.CreatedAt)
+									: p.OrderByDescending(a => a.CreatedAt),
+								_ => p.OrderByDescending(a=> a.CreatedAt)
+							};
+						}
+						else
+						{
+							orderedOffdays = p.OrderByDescending(a=> a.CreatedAt);
+						}
+
+						return orderedOffdays;
+					}
 				));
 			var mapData = _mapper.Map<List<ReadApprovedOffDayListDto>>(allData);
 			res.SetData(mapData);

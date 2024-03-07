@@ -44,7 +44,7 @@ else
                 <div class="row p-3">
                     <div class="col-md-6">
                         <form class="d-flex" action="/silinen-subeler" method="get">
-                            <input class="form-control me-2" type="search" placeholder="Ara" name="search" aria-label="Search">
+                            <input id="searchInput" class="form-control me-2" type="search" placeholder="Ara" name="search" aria-label="Search">
                             <button class="btn btn-outline-primary" type="submit">Ara</button>
 
                         </form>
@@ -59,7 +59,7 @@ else
             </div>
             <div class="col-2"></div>
             <div class="col-4 p-3 text-end">
-                @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && !string.IsNullOrEmpty(kvp.Value)))
+                @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && kvp.Key != "sortName" && kvp.Key != "sortBy" && !string.IsNullOrEmpty(kvp.Value)))
                 {
                     <button type="button" class="btn">
                         Filtrelenen Silinen Şube
@@ -79,10 +79,14 @@ else
         <table class="table">
             <thead>
             <tr>
-                <th>Şube Adı</th>
+                <th>
+                    <button class="table-sort" data-sort="sort-branchName">Şube Adı</button>
+                </th>
                 <th>Durum</th>
                 <th>Oluşturulma Tarihi</th>
-                <th>Silinme Tarihi</th>
+                <th>
+                    <button class="table-sort" data-sort="sort-deletedAt">Silinme Tarihi</button>
+                </th>
                 <th>Geri Getir</th>
             </tr>
             </thead>
@@ -176,7 +180,7 @@ else
     </div>
     @section Scripts
     {
-       
+
         <script src="/js/custom/recovery/recoverBranch.js"></script>
 
     }

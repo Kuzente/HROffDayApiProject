@@ -8,5 +8,7 @@ public class PersonalQuery
     public string position { get; set; } 
     public string retired { get; set; } 
     public int sayfa { get; set; } = 1;
+    public string sortName { get; set; }
+    public string sortBy { get; set; }
     
 }
