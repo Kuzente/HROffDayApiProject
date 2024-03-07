@@ -259,7 +259,8 @@ public class ReadPersonalService : IReadPersonalService
 				TotalYearLeave = a.TotalYearLeave,
 				UsedYearLeave = a.UsedYearLeave,
 				PositionName = a.Position.Name,
-				BranchName = a.Branch.Name
+				BranchName = a.Branch.Name,
+				TotalTakenLeave = a.TotalTakenLeave
 			}).ToList();
 			res.SetData(mappedResult);
 			

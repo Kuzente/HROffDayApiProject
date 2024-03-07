@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core;
 using Core.DTOs;
+using Core.DTOs.PersonalDetailDto.WriteDtos;
 using Core.DTOs.PersonalDTOs;
 using Core.DTOs.PersonalDTOs.WriteDtos;
 using Core.Entities;
@@ -81,8 +82,6 @@ public class WritePersonalService : IWritePersonalService
 			mapSet.ID = getPersonal.ID;
 			mapSet.CreatedAt = getPersonal.CreatedAt;
 			mapSet.TotalYearLeave = getPersonal.TotalYearLeave;
-			mapSet.UsedYearLeave = getPersonal.UsedYearLeave;
-			mapSet.FoodAid = getPersonal.FoodAid; 
 			await _unitOfWork.WritePersonalRepository.Update(mapSet);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -116,26 +115,41 @@ public class WritePersonalService : IWritePersonalService
 		return res;
 	}
 	
-	public async Task<IResultDto> ChangeStatus(Guid id)
+	public async Task<IResultDto> ChangeStatus(WritePersonalChangeStatusDto dto)
 	{
 		IResultDto res = new ResultDto();
 		try
 		{
-			var findData = await _unitOfWork.ReadPersonalRepository.GetByIdAsync(id);
+			var findData = await _unitOfWork.ReadPersonalRepository.GetByIdAsync(dto.ID);
 			var data = await findData.FirstOrDefaultAsync();
 			if (data is null) return res.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Veri Bulunamadı!!!");
 			if (data.Status == EntityStatusEnum.Online)
 			{
 				// Eğer "online" ise "offline" yapın
 				data.Status = EntityStatusEnum.Offline;
-				data.EndJobDate = DateTime.Now;
+				data.EndJobDate = dto.EndJobDate;
 			}
 			else if (data.Status == EntityStatusEnum.Offline)
 			{
 				// Eğer "offline" ise "online" yapın
 				data.Status = EntityStatusEnum.Online;
-				data.StartJobDate = DateTime.Now;
+				data.StartJobDate = dto.StartJobDate;
 				data.EndJobDate = null;
+				if (!dto.IsYearLeaveProtected)
+				{
+					data.TotalYearLeave = 0;
+					data.UsedYearLeave = 0;
+				}
+				if (!dto.IsTakenLeaveProtected)
+				{
+					data.TotalTakenLeave = 0;
+				}
+				if (!dto.IsFoodAidProtected)
+				{
+					data.FoodAid = 0;
+				}
+				//Eğer Gıda yardımı girilmediyse işe başlangıç tarihini baz al
+				data.FoodAidDate = dto.FoodAidDate.Year > 1000 ? dto.FoodAidDate : dto.StartJobDate;
 			}
 
 			await _unitOfWork.WritePersonalRepository.Update(data);

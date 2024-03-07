@@ -21,12 +21,15 @@
                 </div>
                 <h2 id="HeaderPersonalNameSurname" class="page-title"></h2>
                 <div id="HeaderPersonalBranchPosition" class="page-pretitle">
-                    
+
                 </div>
             </div>
             <!-- Page title actions -->
+            <div id="istenCikarilmaTarihiDiv" class="col-auto ms-auto d-print-none">
+
+            </div>
             <div class="col-auto ms-auto d-print-none">
-                <button id="headerButton" type="submit" class="btn">
+                <button id="istenCikarButton" type="button" class="btn">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
@@ -45,13 +48,7 @@
 <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs flex-row-reverse">
         <li class="nav-item">
-            <a href="#tabs-home-2" class="nav-link">Rapor</a>
-        </li>
-        <li class="nav-item">
-            <a href="#tabs-home-2" class="nav-link">Eksik İzin</a>
-        </li>
-        <li class="nav-item">
-            <a href="#tabs-home-2" class="nav-link">Avans</a>
+            <a href="#tabs-home-2" class="nav-link">Eksik Gün</a>
         </li>
         <li class="nav-item">
             <a id="personelİzinleriPage" class="nav-link active">Personele Ait İzinler</a>
@@ -66,7 +63,7 @@
 {
     <div class="card container-xl mt-3">
         <div class="text-center p-5">
-            <h1 class="display-4">Üzgünüz</h1>
+            <h1 class="display-4 text-danger">Üzgünüz</h1>
             <p>@Model.Message</p>
             <p>@Model.Err</p>
         </div>
@@ -80,19 +77,13 @@ else
         <div class="d-flex align-items-start align-items-sm-center gap-4">
             <span id="personalAvatar" class="avatar avatar-xl mb-4 rounded bg-primary-lt"></span>
             <div class="col">
-                <div class="border rounded p-3">
+                <div class="border rounded p-3 mb-2">
                     <div class="row align-items-center">
                         <div class="col-auto">
-                            <span class="bg-green-lt avatar">
+                            <span class="bg-yellow-lt avatar">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M12.5 21h-6.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v5"></path>
-                                    <path d="M16 3v4"></path>
-                                    <path d="M8 3v4"></path>
-                                    <path d="M4 11h16"></path>
-                                    <path d="M16 19h6"></path>
-                                    <path d="M19 16v6"></path>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-dollar" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M13 21h-7a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v3"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h12.5"/><path d="M21 15h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5"/><path d="M19 21v1m0 -8v1"/>
                                 </svg>
                             </span>
                         </div>
@@ -102,6 +93,25 @@ else
                             </div>
                             <div id="alacak-izin-text" class="text-muted">
                                 Alacak İzin Miktarı
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="border rounded p-3">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <span class="bg-cyan-lt avatar">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-fish" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.69 7.44a6.973 6.973 0 0 0 -1.69 4.56c0 1.747 .64 3.345 1.699 4.571"/><path d="M2 9.504c7.715 8.647 14.75 10.265 20 2.498c-5.25 -7.761 -12.285 -6.142 -20 2.504"/><path d="M18 11v.01"/><path d="M11.5 10.5c-.667 1 -.667 2 0 3"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="col">
+                            <div id="badgeFoodAid" class="font-weight-medium">
+
+                            </div>
+                            <div id="gida-yardim-text" class="text-muted">
+                                Güncel Gıda Yardımı
                             </div>
                         </div>
                     </div>
@@ -400,7 +410,7 @@ else
 
         </div>
     </div>
-     <!--DeleteModal-->
+    <!--DeleteModal-->
     <form action="/izin-sil" method="post">
         <div class="modal modal-blur fade" id="archiveModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
@@ -437,6 +447,122 @@ else
             </div>
         </div>
     </form>
+    <!--PersonalIstenCikarModal-->
+    <div class="modal modal-blur fade" id="istenCikarModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-status bg-purple"></div>
+                <div class="modal-body py-4">
+                    <div class="text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-purple icon-lg icon-tabler-info-hexagon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M19.875 6.27c.7 .398 1.13 1.143 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033z"/>
+                            <path d="M12 9h.01"/>
+                            <path d="M11 12h1v4h1"/>
+                        </svg>
+                        <h3>Emin Misiniz?</h3>
+                        <div class="text-muted">
+                            Seçmiş Olduğunuz <span class="badge badge-pill" id="istenCikarPersonelAd"></span> Adlı Personel İşten Çıkarılacaktır!!!.
+                        </div>
+                    </div>
+                    <div class="">
+                        <form id="istenCikarForm" method="post">
+                            <input type="hidden" name="ID" value="">
+                            <div id="dateInputDiv" class="m-3 col justify-content-start">
+                                <label class="form-label required" for="istenCikarDateInput">İşten Çıkış Tarihi</label>
+                                <input id="istenCikarDateInput" type="date" name="EndJobDate" class="form-control flatpickr-input" placeholder="Personal İşten Çıkış Tarihi">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="w-100">
+                        <div class="row">
+                            <div class="col">
+                                <a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                    İptal
+                                </a>
+                            </div>
+                            <div class="col">
+                                <button id="istenCikarSubmitButton" type="button" class="btn btn-purple w-100">Personeli İşten Çıkar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PersonalIstenCikarModal-->
+    <!--PersonalIşe Geri Al Modal-->
+    <div class="modal modal-blur fade" id="iseGeriAlModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-status bg-orange"></div>
+                <div class="modal-body py-4">
+                    <div class="text-center">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-orange icon-lg icon-tabler-help-hexagon-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.425 1.414a3.33 3.33 0 0 1 3.026 -.097l.19 .097l6.775 3.995l.096 .063l.092 .077l.107 .075a3.224 3.224 0 0 1 1.266 2.188l.018 .202l.005 .204v7.284c0 1.106 -.57 2.129 -1.454 2.693l-.17 .1l-6.803 4.302c-.918 .504 -2.019 .535 -3.004 .068l-.196 -.1l-6.695 -4.237a3.225 3.225 0 0 1 -1.671 -2.619l-.007 -.207v-7.285c0 -1.106 .57 -2.128 1.476 -2.705l6.95 -4.098zm1.575 13.586a1 1 0 0 0 -.993 .883l-.007 .117l.007 .127a1 1 0 0 0 1.986 0l.007 -.117l-.007 -.127a1 1 0 0 0 -.993 -.883zm1.368 -6.673a2.98 2.98 0 0 0 -3.631 .728a1 1 0 0 0 1.44 1.383l.171 -.18a.98 .98 0 0 1 1.11 -.15a1 1 0 0 1 -.34 1.886l-.232 .012a1 1 0 0 0 .111 1.994a3 3 0 0 0 1.371 -5.673z" stroke-width="0" fill="currentColor"/>
+                        </svg>
+                        <h3>Emin Misiniz?</h3>
+                        <div class="text-muted">
+                            Seçmiş Olduğunuz <span class="badge badge-pill" id="iseGeriAlPersonelAd"></span> Adlı Personel İşe Geri Alınacaktır.
+                        </div>
+                    </div>
+                    <div class="">
+                        <form id="iseGeriAlForm" method="post">
+                            <input type="hidden" name="ID" value="">
+                            <div class="m-3 col justify-content-start">
+                                <div class="mb-3">
+                                    <label class="form-label required" for="StartJobDateModalInput">İşe Giriş Tarihi</label>
+                                    <input id="StartJobDateModalInput" type="date" name="StartJobDate" class="form-control flatpickr-input" placeholder="Personal İşe Giriş Tarihi">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="IsYearLeaveProtected">
+                                        <span class="form-check-label">Yıllık İzin Sayılarını Koru <span class="form-help" data-bs-toggle="tooltip" data-bs-placement="right" title="Hak edilen yıllık izin, kullanılan yıllık izin ve kalan yıllık izin verileri korunsun mu?">?</span></span>
+                                    </label>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="IsTakenLeaveProtected">
+                                        <span class="form-check-label">Alacak İzin Sayısını Koru <span class="form-help" data-bs-toggle="tooltip" data-bs-placement="right" title="Alacak izin verisi korunsun mu?">?</span></span>
+                                    </label>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-check">
+                                        <input type="checkbox" class="form-check-input" name="IsFoodAidProtected">
+                                        <span class="form-check-label">Gıda Yardımı Miktarını Koru <span class="form-help" data-bs-toggle="tooltip" data-bs-placement="right" title="Gıda yardımı miktarı korunsun mu?">?</span></span>
+                                    </label>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="FoodAidDateModalInput">Gıda Yardımı Yenilenme Tarihi <span class="form-help" data-bs-toggle="tooltip" data-bs-placement="right" title="Gıda yardımı yenilenirken baz alınacak tarihtir.Boş bırakmanız durumunda yukarıda girmiş olduğunuz işe giriş tarihi baz alınacaktır.">?</span></label>
+                                    <input id="FoodAidDateModalInput" type="date" name="FoodAidDate" class="form-control flatpickr-input" placeholder="İsteğe Bağlı!">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="w-100">
+                        <div class="row">
+                            <div class="col">
+                                <a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                    İptal
+                                </a>
+                            </div>
+                            <div class="col">
+                                <button id="iseGeriAlSubmitButton" type="button" class="btn btn-orange w-100">Personeli Geri İşe Al</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--PersonalIşe Geri Al Modal-->
     @section Scripts
     {
         <script src="/js/custom/personalDetails/personalOffdays.js"></script>

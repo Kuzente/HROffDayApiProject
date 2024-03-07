@@ -28,6 +28,10 @@ public class WriteUpdatePersonalDto
     public int TotalYearLeave { get; set; }
     [Required]
     public int UsedYearLeave { get; set; } 
+    [Required] 
+    public int FoodAid { get; set; }
+    [Required] 
+    public DateTime FoodAidDate { get; set; }
     [Required]
     public Guid Branch_Id { get; set; }
     [Required]

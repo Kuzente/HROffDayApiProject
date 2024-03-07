@@ -1,8 +1,12 @@
 using System.Text.Json.Serialization;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.OData;
 using QuestPDF.Infrastructure;
 using Services;
+using Services.HangfireFilter;
+
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -30,7 +34,10 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
 {
     conf.EnableQueryFeatures();
 });
+//Test DB
 builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("Mssql"),builder.Configuration.GetConnectionString("Mssql"));
+//Test DB
+//builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("MssqlSomee"),builder.Configuration.GetConnectionString("MssqlSomee"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -46,7 +53,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseAuthorization();
-
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+	Authorization = new[] { new HangfireAuthorizationFilter() }
+});
 #region PersonalList
 app.MapControllerRoute(name: "personalListGet", pattern: "personeller", defaults: new { controller = "Personal", action = "Index" });
 app.MapControllerRoute(name: "personalListCreate", pattern: "create-personal", defaults: new { controller = "Personal", action = "AddPersonal" });
@@ -112,14 +122,12 @@ app.MapControllerRoute(name: "recoveryPersonal", pattern: "personel-gerigetir", 
 #region MultipleUpload
 app.MapControllerRoute(name: "downloadScheme", pattern: "download-scheme", defaults: new { controller = "MultipleUpload", action = "GetExcelSheme" });
 app.MapControllerRoute(name: "personalUpload", pattern: "toplu-islemler", defaults: new { controller = "MultipleUpload", action = "PersonalUpload" });
-
-
 #endregion
 
 #region DailyLog
 app.MapControllerRoute(name: "dailyLogPage", pattern: "gunluk-takip", defaults: new { controller = "DailyLog", action = "Index" });
-
-
+app.MapControllerRoute(name: "dailyYearLog", pattern: "yillik-izin-log", defaults: new { controller = "DailyLog", action = "GetYearLogs" });
+app.MapControllerRoute(name: "dailyFoodLog", pattern: "gida-yardimi-log", defaults: new { controller = "DailyLog", action = "GetFoodLogs" });
 #endregion
 
 #region Authentication
@@ -132,5 +140,6 @@ app.MapControllerRoute(name: "loginPage", pattern: "/create-pdf", defaults: new 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();

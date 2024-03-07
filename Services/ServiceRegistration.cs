@@ -20,9 +20,7 @@ using Services.ExcelDownloadServices.OffDayServices;
 using Services.ExcelDownloadServices.PersonalServices;
 using Services.ExcelDownloadServices.PositionServices;
 using Services.FileUpload;
-using Services.Hangfire;
 using Services.PdfDownloadServices;
-using IDocument = QuestPDF.Infrastructure.IDocument;
 
 namespace Services;
 
@@ -48,7 +46,6 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(PositionExcelExport));
 		services.AddScoped(typeof(OffDayExcelExport));
 		services.AddScoped(typeof(ExcelUploadScheme));
-		services.AddScoped(typeof(DailyJob));
 		services.AddScoped(typeof(IReadOdataService), typeof(ReadOdataService));
 		services.AddScoped(typeof(IReadDailyCounterService), typeof(ReadDailyCounterService));
 		services.AddScoped(typeof(IWriteDailyCounterService), typeof(WriteDailyCounterService));
@@ -56,7 +53,12 @@ public static class ServiceRegistration
 		services.AddHangfire(x =>
 		{
 			x.UseSqlServerStorage(hangfireConnectionstring);
-			RecurringJob.AddOrUpdate<WriteDailyCounterService>("YıllıkIzinYeniJob", j => j.AddDailyCounterLogService(), "36 1 * * *", options: new RecurringJobOptions
+			RecurringJob.AddOrUpdate<WriteDailyCounterService>("GunlukYillikOtomasyon", j => j.AddDailyYearCounterLogService(), "30 01 * * *", options: new RecurringJobOptions
+			{
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time"),
+				
+			});
+			RecurringJob.AddOrUpdate<WriteDailyCounterService>("GunlukGidaOtomasyon", j => j.AddDailyFoodAidCounterLogService(), "30 01 * * *", options: new RecurringJobOptions
 			{
 				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time"),
 				

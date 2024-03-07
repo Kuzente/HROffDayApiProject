@@ -4,5 +4,6 @@ namespace Services.Abstract.DailyCounterServices;
 
 public interface IWriteDailyCounterService
 {
-    Task<IResultDto> AddDailyCounterLogService();
+    Task<IResultDto> AddDailyYearCounterLogService();
+    Task<IResultDto> AddDailyFoodAidCounterLogService();
 }

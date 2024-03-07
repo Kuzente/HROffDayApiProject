@@ -42,6 +42,7 @@
         });
     });
     let YearLeaveCount ;
+    let TakenLeaveCount;
     //Personel seçimi değiştiğinde çalışan metod
     $('#personalSelect').change(function () {
         //Resetleme Alanları
@@ -58,6 +59,7 @@
             let positionName = selectedOption.attr('data-positionName');
             $("#positionInput").val(positionName); // Eğer positionName boşsa, boş bir string ata
             YearLeaveCount = parseInt(selectedOption.attr('data-YearLeave'),10);
+            TakenLeaveCount = parseInt(selectedOption.attr('data-TakenLeave'),10);
             if (YearLeaveCount <= 0){
                 $('[name="LeaveByYear"]').attr('disabled', true);
     
@@ -67,14 +69,24 @@
                 
             }
             $('#personalTotalYearLeaveCount').val(YearLeaveCount);
+            $("#personalTakenLeaveCount").val(`${saatleriGunVeSaatlereCevir(TakenLeaveCount)}`)
         } else {
             $('#submitButton').attr('disabled',true);
             $("#positionInput").val("");
             $("#personalTotalYearLeaveCount").val("");
+            $("#personalTakenLeaveCount").val("");
             
 
         }
     });
+    function saatleriGunVeSaatlereCevir(saat) {
+        // Toplam saatleri gün ve saatlere çevir
+        let gun = Math.floor(saat / 8);
+        let kalanSaat = saat % 8;
+
+        // Sonucu döndür
+        return gun + " gün " + kalanSaat + " saat";
+    }
     //İzin Formu Gönder butonu tıklandığında çalışan metod
     $('#submitButton').on('click',function () {
         let selectedPersonal = $("#personalSelect").find(":selected").val();

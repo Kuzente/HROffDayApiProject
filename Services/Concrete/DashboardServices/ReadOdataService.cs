@@ -17,8 +17,8 @@ public class ReadOdataService : IReadOdataService
     public async Task<IQueryable> GetBranchesOdataService()
     {
         var query = _unitOfWork.ReadBranchRepository.GetAll(predicate: p =>
-            p.Status == EntityStatusEnum.Online || p.Status == EntityStatusEnum.Offline);
-	    
+            p.Status == EntityStatusEnum.Online);
+        
         return query;
     }
 

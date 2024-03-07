@@ -18,8 +18,11 @@
                 </div>
             </div>
             <!-- Page title actions -->
+            <div id="istenCikarilmaTarihiDiv" class="col-auto ms-auto d-print-none">
+
+            </div>
             <div class="col-auto ms-auto d-print-none">
-                <button id="headerButton" type="button" class="btn">
+                <button id="istenCikarButton" type="button" class="btn">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
@@ -38,13 +41,7 @@
 <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs flex-row-reverse">
         <li class="nav-item">
-            <a href="#tabs-home-2" class="nav-link">Rapor</a>
-        </li>
-        <li class="nav-item">
-            <a href="#tabs-home-2" class="nav-link">Eksik İzin</a>
-        </li>
-        <li class="nav-item">
-            <a href="#tabs-home-2" class="nav-link">Avans</a>
+            <a href="#tabs-home-2" class="nav-link">Eksik Gün</a>
         </li>
         <li class="nav-item">
             <a id="personelİzinleriPage" href="" class="nav-link">Personele Ait İzinler</a>
@@ -256,7 +253,7 @@
                             <path d="M12 15v3"></path>
                         </svg>
                     </span>
-                    <input type="date" name="StartJobDate" class="form-control" placeholder="Personal İşe başlangıç Tarihi!" disabled>
+                    <input id="StartJobDateInput" type="date" name="StartJobDate" class="form-control" placeholder="Personal İşe başlangıç Tarihi!" disabled>
                 </div>
             </div>
 
@@ -617,8 +614,56 @@
     <div class="hr-text mb-3 text-black">Yıllık ve Alacak İzin Ayarları</div>
     <div class="row mb-3">
         <div class="col">
-            <label class="form-label text-center">Yıllık İzin</label>
-
+            <label class="form-label text-center">Yıllık İzin ve Gıda Yardımı</label>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="input-group input-group-merge">
+                        <span class="input-group-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M12.5 21h-6.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v8"></path>
+                                <path d="M16 3v4"></path>
+                                <path d="M8 3v4"></path>
+                                <path d="M4 11h16"></path>
+                                <path d="M16 19h6"></path>
+                            </svg>
+                        </span>
+                        <input type="number" data-usedYearLeave name="UsedYearLeave" class="form-control" disabled/>
+                        <span class="input-group-text">
+                            Kullanılan Yıllık İzin Miktarı
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="input-group input-group-merge">
+                        <span class="input-group-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-fish" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M16.69 7.44a6.973 6.973 0 0 0 -1.69 4.56c0 1.747 .64 3.345 1.699 4.571"></path><path d="M2 9.504c7.715 8.647 14.75 10.265 20 2.498c-5.25 -7.761 -12.285 -6.142 -20 2.504"></path><path d="M18 11v.01"></path><path d="M11.5 10.5c-.667 1 -.667 2 0 3"></path>
+                            </svg>
+                        </span>
+                        <input type="number" data-foodAid name="FoodAid" class="form-control" disabled/>
+                        <span class="input-group-text">
+                            Gıda Yardımı Miktarı
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="input-group input-group-merge">
+                        <span class="input-group-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bell-z-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.235 19c.865 0 1.322 1.024 .745 1.668a3.992 3.992 0 0 1 -2.98 1.332a3.992 3.992 0 0 1 -2.98 -1.332c-.552 -.616 -.158 -1.579 .634 -1.661l.11 -.006h4.471z" stroke-width="0" fill="currentColor" /><path d="M12 2c1.358 0 2.506 .903 2.875 2.141l.046 .171l.008 .043a8.013 8.013 0 0 1 4.024 6.069l.028 .287l.019 .289v2.931l.021 .136a3 3 0 0 0 1.143 1.847l.167 .117l.162 .099c.86 .487 .56 1.766 -.377 1.864l-.116 .006h-16c-1.028 0 -1.387 -1.364 -.493 -1.87a3 3 0 0 0 1.472 -2.063l.021 -.143l.001 -2.97a8 8 0 0 1 3.821 -6.454l.248 -.146l.01 -.043a3.003 3.003 0 0 1 2.562 -2.29l.182 -.017l.176 -.004zm2 6h-4l-.117 .007a1 1 0 0 0 -.883 .993l.007 .117a1 1 0 0 0 .993 .883h1.584l-2.291 2.293l-.076 .084c-.514 .637 -.07 1.623 .783 1.623h4l.117 -.007a1 1 0 0 0 .883 -.993l-.007 -.117a1 1 0 0 0 -.993 -.883h-1.586l2.293 -2.293l.076 -.084c.514 -.637 .07 -1.623 -.783 -1.623z" stroke-width="0" fill="currentColor" /></svg>
+                        </span>
+                        <input type="date" data-foodAidDate name="FoodAidDate" class="form-control" disabled/>
+                        <span class="input-group-text">
+                            Gıda Yardımı Yenilenme Tarihi
+                        </span>
+                    </div>
+                    <small id="foodAidIsDefault" class="form-hint"></small>
+                </div>
+            </div>
         </div>
         <div class="col border-start border-info">
             <label class="form-label text-center">Toplam Alacak İzin</label>
@@ -645,7 +690,7 @@
 
             </div>
             <div class="row">
-                <div class="col-4">
+                <div class="col-8">
                     <input data-hourInput type="number" placeholder="Saat Giriniz" disabled class="form-control"/>
                 </div>
                 <div class="col-2">
@@ -654,7 +699,7 @@
                 <div class="col-2">
                     <button data-removeHour class="btn btn-danger" disabled>Saat Çıkart</button>
                 </div>
-                <div class="col-4"></div>
+
             </div>
         </div>
     </div>
@@ -729,6 +774,122 @@
     </div>
 </div>
 <!--DeletePersonalModal-->
+<!--PersonalIstenCikarModal-->
+<div class="modal modal-blur fade" id="istenCikarModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-status bg-purple"></div>
+            <div class="modal-body py-4">
+                <div class="text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-purple icon-lg icon-tabler-info-hexagon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M19.875 6.27c.7 .398 1.13 1.143 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033z"/>
+                        <path d="M12 9h.01"/>
+                        <path d="M11 12h1v4h1"/>
+                    </svg>
+                    <h3>Emin Misiniz?</h3>
+                    <div class="text-muted">
+                        Seçmiş Olduğunuz <span class="badge badge-pill" id="istenCikarPersonelAd"></span> Adlı Personel İşten Çıkarılacaktır!!!.
+                    </div>
+                </div>
+                <div class="">
+                    <form id="istenCikarForm" method="post">
+                        <input type="hidden" name="ID" value="">
+                        <div id="dateInputDiv" class="m-3 col justify-content-start">
+                            <label class="form-label required" for="istenCikarDateInput">İşten Çıkış Tarihi</label>
+                            <input id="istenCikarDateInput" type="date" name="EndJobDate" class="form-control flatpickr-input" placeholder="Personal İşten Çıkış Tarihi">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="w-100">
+                    <div class="row">
+                        <div class="col">
+                            <a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                İptal
+                            </a>
+                        </div>
+                        <div class="col">
+                            <button id="istenCikarSubmitButton" type="button" class="btn btn-purple w-100">Personeli İşten Çıkar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--PersonalIstenCikarModal-->
+<!--PersonalIşe Geri Al Modal-->
+<div class="modal modal-blur fade" id="iseGeriAlModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-status bg-orange"></div>
+            <div class="modal-body py-4">
+                <div class="text-center">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-orange icon-lg icon-tabler-help-hexagon-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.425 1.414a3.33 3.33 0 0 1 3.026 -.097l.19 .097l6.775 3.995l.096 .063l.092 .077l.107 .075a3.224 3.224 0 0 1 1.266 2.188l.018 .202l.005 .204v7.284c0 1.106 -.57 2.129 -1.454 2.693l-.17 .1l-6.803 4.302c-.918 .504 -2.019 .535 -3.004 .068l-.196 -.1l-6.695 -4.237a3.225 3.225 0 0 1 -1.671 -2.619l-.007 -.207v-7.285c0 -1.106 .57 -2.128 1.476 -2.705l6.95 -4.098zm1.575 13.586a1 1 0 0 0 -.993 .883l-.007 .117l.007 .127a1 1 0 0 0 1.986 0l.007 -.117l-.007 -.127a1 1 0 0 0 -.993 -.883zm1.368 -6.673a2.98 2.98 0 0 0 -3.631 .728a1 1 0 0 0 1.44 1.383l.171 -.18a.98 .98 0 0 1 1.11 -.15a1 1 0 0 1 -.34 1.886l-.232 .012a1 1 0 0 0 .111 1.994a3 3 0 0 0 1.371 -5.673z" stroke-width="0" fill="currentColor"/>
+                    </svg>
+                    <h3>Emin Misiniz?</h3>
+                    <div class="text-muted">
+                        Seçmiş Olduğunuz <span class="badge badge-pill" id="iseGeriAlPersonelAd"></span> Adlı Personel İşe Geri Alınacaktır.
+                    </div>
+                </div>
+                <div class="">
+                    <form id="iseGeriAlForm" method="post">
+                        <input type="hidden" name="ID" value="">
+                        <div id="" class="m-3 col justify-content-start">
+                            <div class="mb-3">
+                                <label class="form-label required" for="">İşe Giriş Tarihi</label>
+                                <input id="StartJobDateModalInput" type="date" name="StartJobDate" class="form-control flatpickr-input" placeholder="Personal İşe Giriş Tarihi">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-check">
+                                    <input type="checkbox" class="form-check-input" name="IsYearLeaveProtected">
+                                    <span class="form-check-label">Yıllık İzin Sayılarını Koru <span class="form-help" data-bs-toggle="tooltip" data-bs-placement="right" title="Hak edilen yıllık izin, kullanılan yıllık izin ve kalan yıllık izin verileri korunsun mu?">?</span></span>
+                                </label>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-check">
+                                    <input type="checkbox" class="form-check-input" name="IsTakenLeaveProtected">
+                                    <span class="form-check-label">Alacak İzin Sayısını Koru <span class="form-help" data-bs-toggle="tooltip" data-bs-placement="right" title="Alacak izin verisi korunsun mu?">?</span></span>
+                                </label>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-check">
+                                    <input type="checkbox" class="form-check-input" name="IsFoodAidProtected">
+                                    <span class="form-check-label">Gıda Yardımı Miktarını Koru <span class="form-help" data-bs-toggle="tooltip" data-bs-placement="right" title="Gıda yardımı miktarı korunsun mu?">?</span></span>
+                                </label>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="">Gıda Yardımı Yenilenme Tarihi <span class="form-help" data-bs-toggle="tooltip" data-bs-placement="right" title="Gıda yardımı yenilenirken baz alınacak tarihtir.Boş bırakmanız durumunda yukarıda girmiş olduğunuz işe giriş tarihi baz alınacaktır.">?</span></label>
+                                <input id="FoodAidDateModalInput" type="date" name="FoodAidDate" class="form-control flatpickr-input" placeholder="İsteğe Bağlı!">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="w-100">
+                    <div class="row">
+                        <div class="col">
+                            <a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                İptal
+                            </a>
+                        </div>
+                        <div class="col">
+                            <button id="iseGeriAlSubmitButton" type="button" class="btn btn-orange w-100">Personeli Geri İşe Al</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--PersonalIşe Geri Al Modal-->
 
 
 @section Scripts

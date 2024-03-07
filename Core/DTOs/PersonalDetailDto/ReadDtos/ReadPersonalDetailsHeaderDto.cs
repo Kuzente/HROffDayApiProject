@@ -9,6 +9,9 @@ public class ReadPersonalDetailsHeaderDto
     public int TotalYearLeave { get; set; }
     public int TotalTakenLeave { get; set; }
     public int UsedYearLeave { get; set; }
+    public int FoodAid { get; set; }
+    public DateTime EndJobDate { get; set; }
+    public DateTime StartJobDate { get; set; }
     public EntityStatusEnum Status { get; set; }
     public ReadPersonalDetailsHeaderSubBranchDto Branch { get; set; }
     public ReadPersonalDetailsHeaderSubPositionDto Position { get; set; }

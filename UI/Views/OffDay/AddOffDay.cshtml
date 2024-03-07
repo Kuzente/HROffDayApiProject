@@ -39,255 +39,269 @@
 else
 {
     <input type="hidden" name="branchId" value="@Context.Request.Query["id"]"/>
-<div class="container-xxl">
-    <div class=" authentication-basic container-p-y">
-        <div class="">
-            <!-- Register Card -->
-            <div class="card">
-                <div class="card-body">
-                    <!-- Logo -->
-                    <div class="d-flex row text-center">
-                        <div class="col justify-content-center mb-3">
-                            <img style="width:120px;height:auto;" src="/0013478_LOGO1.jpeg" alt="Iyas Market"/>
-                        </div>
-                        <!-- /Logo -->
-                    </div>
-                    <div class="d-flex row text-center">
-                        <div class="col justify-content-center mb-3">
-
-                            <h4 class="mb-2">İzin Giriş Formu 🚀</h4>
-
-                        </div>
-                    </div>
-
-
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <label class="form-label required">Adı Soyadı</label>
-                            <div class="input-group input-group-merge">
-                                <span class="input-group-text">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
-                                        <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
-                                    </svg>
-                                </span>
-                                <select name="ID" id="personalSelect" class="form-select">
-                                    <option data-positionName="" value="">Personel Seçiniz...</option>
-                                    @foreach (var item in Model.Data)
-                                    {
-                                        <option data-YearLeave="@(item.TotalYearLeave - item.UsedYearLeave)" data-usedYearLeave="@item.UsedYearLeave" data-positionName="@item.PositionName" value="@item.ID">@item.NameSurname</option>
-                                    }
-                                </select>
+    <div class="container-xxl">
+        <div class=" authentication-basic container-p-y">
+            <div class="">
+                <!-- Register Card -->
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Logo -->
+                        <div class="d-flex row text-center">
+                            <div class="col justify-content-center mb-3">
+                                <img style="width:120px;height:auto;" src="/0013478_LOGO1.jpeg" alt="Iyas Market"/>
                             </div>
+                            <!-- /Logo -->
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <label class="form-label required">Şube</label>
-                            <div class="input-group input-group-merge">
-                                <span class="input-group-text">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-bank" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M3 21l18 0"></path>
-                                        <path d="M3 10l18 0"></path>
-                                        <path d="M5 6l7 -3l7 3"></path>
-                                        <path d="M4 10l0 11"></path>
-                                        <path d="M20 10l0 11"></path>
-                                        <path d="M8 14l0 3"></path>
-                                        <path d="M12 14l0 3"></path>
-                                        <path d="M16 14l0 3"></path>
-                                    </svg>
-                                </span>
-                                <input id="branchInput" name="BranchName" value="@Model.Data[0].BranchName" disabled class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <label class="form-label required">Ünvan</label>
-                            <div class="input-group input-group-merge">
-                                <span class="input-group-text">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-award" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M12 9m-6 0a6 6 0 1 0 12 0a6 6 0 1 0 -12 0"></path>
-                                        <path d="M12 15l3.4 5.89l1.598 -3.233l3.598 .232l-3.4 -5.889"></path>
-                                        <path d="M6.802 12l-3.4 5.89l3.598 -.233l1.598 3.232l3.4 -5.889"></path>
-                                    </svg>
-                                </span>
-                                <input id="positionInput" name="PositionName" disabled type="text" class="form-control" placeholder="">
+                        <div class="d-flex row text-center">
+                            <div class="col justify-content-center mb-3">
+
+                                <h4 class="mb-2">İzin Giriş Formu 🚀</h4>
 
                             </div>
                         </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <label class="form-label required">Mevcut Yıllık İzin Miktarı</label>
-                            <div class="input-group input-group-merge">
-                                <span class="input-group-text">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-123" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 10l2 -2v8"/><path d="M9 8h3a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 0 -1 1v2a1 1 0 0 0 1 1h3"/><path d="M17 8h2.5a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1 -1.5 1.5h-1.5h1.5a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1 -1.5 1.5h-2.5"/>
-                                    </svg>
-                                </span>
-                                <input id="personalTotalYearLeaveCount" disabled type="number" class="form-control" placeholder="">
 
-                            </div>
-                        </div>
-                    </div>
-                    <form id="formAuthentication" class="mb-3" action="/izin-olustur" method="POST">
-                        <input data-postID name="Personal_Id" type="hidden">
-                        <input data-postCountLeave name="CountLeave" type="hidden">
-                        <input name="returnUrl" value="@returnUrl" type="hidden">
 
                         <div class="row mb-3">
-                            <div class="col-6">
-                                <label class="form-label required">İzin Başlangıç Tarihi</label>
-                                <input name="StartDate" class="form-control" type="date" placeholder="İzin Başlangıç Tarihini Seçiniz" required/>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label required">İzin Bitiş Tarihi</label>
-                                <input name="EndDate" class="form-control" type="date" placeholder="İzin Bitiş Tarihini Seçiniz" required/>
+                            <div class="col-12">
+                                <label class="form-label required">Adı Soyadı</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                                        </svg>
+                                    </span>
+                                    <select name="ID" id="personalSelect" class="form-select">
+                                        <option data-positionName="" value="">Personel Seçiniz...</option>
+                                        @foreach (var item in Model.Data)
+                                        {
+                                            <option data-YearLeave="@(item.TotalYearLeave - item.UsedYearLeave)" data-TakenLeave="@item.TotalTakenLeave" data-usedYearLeave="@item.UsedYearLeave" data-positionName="@item.PositionName" value="@item.ID">@item.NameSurname</option>
+                                        }
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-12">
-
-                                <label class="form-label">Açıklama <span class="form-label-description">56/100</span></label>
-                                <textarea name="Description" class="form-control" rows="3" placeholder="Açıklama(Zorunlu Değil)"></textarea>
+                                <label class="form-label required">Şube</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-bank" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M3 21l18 0"></path>
+                                            <path d="M3 10l18 0"></path>
+                                            <path d="M5 6l7 -3l7 3"></path>
+                                            <path d="M4 10l0 11"></path>
+                                            <path d="M20 10l0 11"></path>
+                                            <path d="M8 14l0 3"></path>
+                                            <path d="M12 14l0 3"></path>
+                                            <path d="M16 14l0 3"></path>
+                                        </svg>
+                                    </span>
+                                    <input id="branchInput" name="BranchName" value="@Model.Data[0].BranchName" disabled class="form-control">
+                                </div>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <div class="col-12 mb-3">
-                                <label class="form-label required">İzin Detayları</label>
-                                <button class="btn btn-dark me-1 collapsed form-control" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                                    İzin Detaylarını Gör
-                                </button>
-                            </div>
                             <div class="col-12">
-                                <div class="collapse" id="collapseExample" style="">
-                                    <div id="offDayDetails" class="d-grid d-sm-grid p-3 border">
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <label class="form-label input-group">
-                                                    Yıllık İzin
-                                                </label>
-                                                <input max="" name="LeaveByYear" class="form-control" type="number" value="0"/>
-                                            </div>
-                                            <div class="col-4">
-                                                <label class="form-label input-group">Haftalık İzin</label>
-                                                <input name="LeaveByWeek" class="form-control" type="number" value="0"/>
-                                            </div>
-                                            <div class="col-4">
-                                                <label class="form-label input-group">Alacak İzin</label>
-                                                <input name="LeaveByTaken" class="form-control" type="number" value="0"/>
-                                            </div>
+                                <label class="form-label required">Ünvan</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-award" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M12 9m-6 0a6 6 0 1 0 12 0a6 6 0 1 0 -12 0"></path>
+                                            <path d="M12 15l3.4 5.89l1.598 -3.233l3.598 .232l-3.4 -5.889"></path>
+                                            <path d="M6.802 12l-3.4 5.89l3.598 -.233l1.598 3.232l3.4 -5.889"></path>
+                                        </svg>
+                                    </span>
+                                    <input id="positionInput" name="PositionName" disabled type="text" class="form-control" placeholder="">
 
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col-4">
-                                                <label class="form-label input-group">Resmi İzin</label>
-                                                <input name="LeaveByPublicHoliday" class="form-control" type="number" value="0"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <label class="form-label">Mevcut Alacak İzin Miktarı</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-number" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v-10l7 10v-10" /><path d="M15 17h5" /><path d="M17.5 10m-2.5 0a2.5 3 0 1 0 5 0a2.5 3 0 1 0 -5 0" /></svg>
+                                    </span>
+                                    <input id="personalTakenLeaveCount" disabled type="text" class="form-control" placeholder="">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <label class="form-label required">Mevcut Yıllık İzin Miktarı</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-123" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 10l2 -2v8"/><path d="M9 8h3a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-2a1 1 0 0 0 -1 1v2a1 1 0 0 0 1 1h3"/><path d="M17 8h2.5a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1 -1.5 1.5h-1.5h1.5a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1 -1.5 1.5h-2.5"/>
+                                        </svg>
+                                    </span>
+                                    <input id="personalTotalYearLeaveCount" disabled type="number" class="form-control" placeholder="">
+
+                                </div>
+                            </div>
+                        </div>
+                        <form id="formAuthentication" class="mb-3" action="/izin-olustur" method="POST">
+                            <input data-postID name="Personal_Id" type="hidden">
+                            <input data-postCountLeave name="CountLeave" type="hidden">
+                            <input name="returnUrl" value="@returnUrl" type="hidden">
+
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <label class="form-label required">İzin Başlangıç Tarihi</label>
+                                    <input name="StartDate" class="form-control" type="date" placeholder="İzin Başlangıç Tarihini Seçiniz" required/>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label required">İzin Bitiş Tarihi</label>
+                                    <input name="EndDate" class="form-control" type="date" placeholder="İzin Bitiş Tarihini Seçiniz" required/>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-12">
+
+                                    <label class="form-label">Açıklama <span class="form-label-description">56/100</span></label>
+                                    <textarea name="Description" class="form-control" rows="3" placeholder="Açıklama(Zorunlu Değil)"></textarea>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-12 mb-3">
+                                    <label class="form-label required">İzin Detayları</label>
+                                    <button class="btn btn-dark me-1 collapsed form-control" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                        İzin Detaylarını Gör
+                                    </button>
+                                </div>
+                                <div class="col-12">
+                                    <div class="collapse" id="collapseExample" style="">
+                                        <div id="offDayDetails" class="d-grid d-sm-grid p-3 border">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <label class="form-label input-group">
+                                                        Yıllık İzin
+                                                    </label>
+                                                    <input max="" name="LeaveByYear" class="form-control" type="number" value="0"/>
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="form-label input-group">Haftalık İzin</label>
+                                                    <input name="LeaveByWeek" class="form-control" type="number" value="0"/>
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="form-label input-group">Alacak İzin</label>
+                                                    <input name="LeaveByTaken" class="form-control" type="number" value="0"/>
+                                                </div>
+
                                             </div>
-                                            <div class="col-4">
-                                                <label class="form-label input-group">Ücretsiz İzin</label>
-                                                <input name="LeaveByFreeDay" class="form-control" type="number" value="0"/>
+                                            <div class="row mt-2">
+                                                <div class="col-4">
+                                                    <label class="form-label input-group">Resmi İzin</label>
+                                                    <input name="LeaveByPublicHoliday" class="form-control" type="number" value="0"/>
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="form-label input-group">Ücretsiz İzin</label>
+                                                    <input name="LeaveByFreeDay" class="form-control" type="number" value="0"/>
+                                                </div>
+                                                <div class="col-4">
+                                                    <label class="form-label input-group">Seyahat İzin</label>
+                                                    <input name="LeaveByTravel" class="form-control" type="number" value="0"/>
+                                                </div>
                                             </div>
-                                            <div class="col-4">
-                                                <label class="form-label input-group">Seyahat İzin</label>
-                                                <input name="LeaveByTravel" class="form-control" type="number" value="0"/>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="col">
-                                                <label class="form-label input-group">Evlenme / Babalık / Ölüm İzni</label>
-                                                <select name="LeaveByMarriedFatherDead" id="LeaveByMarriedFatherDead" multiple placeholder="Evlenme / Babalık / Ölüm İzni İçin Seçiniz." class="form-select">
-                                                    <option value="LeaveByMarried">Evlenme İzni (3 Gün)</option>
-                                                    <option value="LeaveByFather">Babalık İzni (5 Gün)</option>
-                                                    <option value="LeaveByDead">Ölüm İzni (3 Gün)</option>
-                                                </select>
+                                            <div class="row mt-2">
+                                                <div class="col">
+                                                    <label class="form-label input-group">Evlenme / Babalık / Ölüm İzni</label>
+                                                    <select name="LeaveByMarriedFatherDead" id="LeaveByMarriedFatherDead" multiple placeholder="Evlenme / Babalık / Ölüm İzni İçin Seçiniz." class="form-select">
+                                                        <option value="LeaveByMarried">Evlenme İzni (3 Gün)</option>
+                                                        <option value="LeaveByFather">Babalık İzni (5 Gün)</option>
+                                                        <option value="LeaveByDead">Ölüm İzni (3 Gün)</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <button id="submitButton" disabled type="button" class="btn btn-success d-grid w-100 mt-3">İzin Tanımla</button>
-                    </form>
+
+                            <button id="submitButton" disabled type="button" class="btn btn-success d-grid w-100 mt-3">İzin Tanımla</button>
+                        </form>
+                    </div>
                 </div>
+                <!-- Register Card -->
             </div>
-            <!-- Register Card -->
         </div>
     </div>
-</div>
-  <!--Error Modal-->
-        <div class="modal modal-blur fade" id="error-modal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="modal-status bg-danger"></div>
-                    <div class="modal-body text-center py-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>
-                        </svg>
-                        <h3>Uyarı?</h3>
-                        <div id="error-modal-message" class="text-muted">
-                            
-                        </div>
+    <!--Error Modal-->
+    <div class="modal modal-blur fade" id="error-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-status bg-danger"></div>
+                <div class="modal-body text-center py-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>
+                    </svg>
+                    <h3>Uyarı?</h3>
+                    <div id="error-modal-message" class="text-muted">
+
                     </div>
-                    <div class="modal-footer">
-                        <div class="w-100">
-                            <div class="row">
-                                <div class="col">
-                                    <a id="error-modal-button" href="#" class="btn btn-danger w-100" data-bs-dismiss="modal">
-                                        Anladım
-                                    </a>
-                                </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="w-100">
+                        <div class="row">
+                            <div class="col">
+                                <a id="error-modal-button" href="#" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                                    Anladım
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!--Error Modal-->
-        <!--Success Modal-->
-        <div class="modal modal-blur fade" id="success-modal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="modal-status bg-success"></div>
-                    <div class="modal-body text-center py-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path><path d="M9 12l2 2l4 -4"></path></svg>
-                        <h3>Başarılı</h3>
-                        <div id="success-modal-message" class="text-muted">
-                            
-                        </div>
+    </div>
+    <!--Error Modal-->
+    <!--Success Modal-->
+    <div class="modal modal-blur fade" id="success-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-status bg-success"></div>
+                <div class="modal-body text-center py-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path><path d="M9 12l2 2l4 -4"></path>
+                    </svg>
+                    <h3>Başarılı</h3>
+                    <div id="success-modal-message" class="text-muted">
+
                     </div>
-                    <div class="modal-footer">
-                        <div class="w-100">
-                            <div class="row">
-                                <div class="col">
-                                    <a id="success-modal-button" href="#" class="btn btn-success w-100" data-bs-dismiss="modal">
-                                        Anladım
-                                    </a>
-                                </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="w-100">
+                        <div class="row">
+                            <div class="col">
+                                <a id="success-modal-button" href="#" class="btn btn-success w-100" data-bs-dismiss="modal">
+                                    Anladım
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!--Success Modal-->
-<!-- Tabler Core -->
-<script src="/dist/js/demo-theme.min.js?1684106062"></script>
-<script src="/dist/js/tabler.min.js?1684106062" defer></script>
-<script src="/js/tom-select.js"></script>
-<script src="/js/plugin/flatpicker.js"></script>
-<script src="/dist/js/demo.min.js?1684106062" defer></script>
-<script src="/lib/jquery/dist/jquery.min.js"></script>
+    </div>
+    <!--Success Modal-->
+    <!-- Tabler Core -->
+    <script src="/dist/js/demo-theme.min.js?1684106062"></script>
+    <script src="/dist/js/tabler.min.js?1684106062" defer></script>
+    <script src="/js/tom-select.js"></script>
+    <script src="/js/plugin/flatpicker.js"></script>
+    <script src="/dist/js/demo.min.js?1684106062" defer></script>
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
 
 
-<script src="/js/custom/offday/createOffDay.js"></script>
+    <script src="/js/custom/offday/createOffDay.js"></script>
 }
 
 </body>

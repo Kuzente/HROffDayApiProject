@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.DTOs.PersonalDetailDto.WriteDtos;
 using Core.DTOs.PersonalDTOs.WriteDtos;
 using Core.Interfaces;
 using Core.Querys;
@@ -91,9 +92,9 @@ public class PersonalDetailController : Controller
     /// </summary>
     /// <returns></returns>
     [HttpPost]
-    public async Task<IActionResult> ChangeStatus(Guid id)
+    public async Task<IActionResult> ChangeStatus(WritePersonalChangeStatusDto dto)
     {
-        var result = await _writePersonalService.ChangeStatus(id);
+        var result = await _writePersonalService.ChangeStatus(dto);
         return Ok(result);
     }
     /// <summary>

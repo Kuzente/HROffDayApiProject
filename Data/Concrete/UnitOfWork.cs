@@ -1,11 +1,13 @@
 ﻿using Data.Abstract;
 using Data.Abstract.BranchRepositories;
-using Data.Abstract.DailyCounterRepositories;
+using Data.Abstract.DailyFoodLogRepositories;
+using Data.Abstract.DailyYearLogRepositories;
 using Data.Abstract.OffDayRepositories;
 using Data.Abstract.PersonalRepositories;
 using Data.Abstract.PositionRepositories;
 using Data.Concrete.BranchRepositories;
-using Data.Concrete.DailyCounterRepositories;
+using Data.Concrete.DailyFoodLogRepositories;
+using Data.Concrete.DailyYearLogRepositories;
 using Data.Concrete.OffDayRepositories;
 using Data.Concrete.PersonalRepositories;
 using Data.Concrete.PositionRepositories;
@@ -31,8 +33,10 @@ public class UnitOfWork : IUnitOfWork
 	public IReadPositionRepository ReadPositionRepository { get; private set; }
 	public IWriteOffDayRepository WriteOffDayRepository { get; private set; }
 	public IReadOffDayRepository ReadOffDayRepository { get; private set; }
-	public IWriteDailyCounterRepository WriteDailyCounterRepository { get; private set; }
-	public IReadDailyCounterRepository ReadDailyCounterRepository { get; private set; }
+	public IWriteDailyYearLogRepository WriteDailyYearLogRepository { get; private set; }
+	public IReadDailyYearLogRepository ReadDailyYearLogRepository { get; private set; }
+	public IWriteDailyFoodLogRepository WriteDailyFoodLogRepository { get; private set; }
+	public IReadDailyFoodLogRepository ReadDailyFoodLogRepository { get; private set; }
 
 	public UnitOfWork(DataContext context)
 	{
@@ -45,8 +49,10 @@ public class UnitOfWork : IUnitOfWork
 		ReadPositionRepository = new ReadPositionRepository(_context);
 		ReadOffDayRepository = new ReadOffDayRepository(_context);
 		WriteOffDayRepository = new WriteOffDayRepository(_context);
-		ReadDailyCounterRepository = new ReadDailyCounterRepository(_context);
-		WriteDailyCounterRepository = new WriteDailyCounterRepository(_context);
+		ReadDailyYearLogRepository = new ReadDailyYearLogRepository(_context);
+		WriteDailyYearLogRepository = new WriteDailyYearLogRepository(_context);
+		ReadDailyFoodLogRepository = new ReadDailyFoodLogRepository(_context);
+		WriteDailyFoodLogRepository = new WriteDailyFoodLogRepository(_context);
 		_transaction = _context.Database.BeginTransaction();
 	}
 

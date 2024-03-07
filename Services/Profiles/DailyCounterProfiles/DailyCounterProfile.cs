@@ -8,6 +8,7 @@ public class DailyCounterProfile : Profile
 {
     public DailyCounterProfile()
     {
-        CreateMap<DailyCounter, TodayStartPersonalDto>();
+        CreateMap<DailyYearLog, TodayStartPersonalYearDto>();
+        CreateMap<DailyFoodLog, TodayStartPersonalFoodDto>();
     }
 }

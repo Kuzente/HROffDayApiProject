@@ -1,8 +1,15 @@
-﻿@model IResultWithDataDto<List<TodayStartPersonalDto>>
-@{
+﻿@{
     ViewBag.Title = "title";
     Layout = "_Layout";
 }
+<style>
+    pre {
+        white-space: pre-wrap; /* Metni düzgün bir şekilde satırlara böl */
+        word-wrap: break-word; /* Kelimeleri gerektiğinde böler */
+        max-width: 100%; /* Metnin en fazla alanın genişliğine kadar genişlemesini sağlar */
+    }
+
+</style>
 <!--Heading Area-->
 <div class="page-header d-print-none">
     <div class="container-xl">
@@ -20,30 +27,18 @@
     </div>
 </div>
 <!--Heading Area-->
-@if (!Model.IsSuccess)
-{
-    <div class="card container-xl mt-3">
-        <div class="text-center p-5">
-            <h1 class="display-4">Üzgünüz</h1>
-            <p>@Model.Message</p>
-            <p>@Model.Err</p>
+
+<div class="card container-xl mt-3 p-3">
+    <div class="row mt-3">
+        <div class="col-6">
+            <h4>Yıllık İzin Logları</h4>
+            <pre id="yillikIzinLog"></pre>
         </div>
+        <div class="col-6">
+            <h4>Gıda Yardımı Logları</h4>
+            <pre id="gidaYardimiLog"></pre>
+        </div>
+        
     </div>
-}
-else
-{
-    <div class="card container-xl mt-3 p-3">
-        <div class="row mt-3">
-            <pre>
-            @foreach (var log in Model.Data)
-            {
-                 <text>-> @log.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR")) tarihinde - @log.NameSurname personeline - @log.AddedYearLeaveDescription - @log.AddedFoodAidAmountDescription
-</text>
-                
-            }
-            </pre>
-        </div>
-    </div> 
-}
-
-
+</div>
+<script src="/js/custom/dailyLog/dailyLog.js"></script>

@@ -35,9 +35,8 @@ public class QueryController : ODataController
     public async Task<IActionResult> GetBranchCount()
     {
         var result = await _readOdataService.GetBranchesOdataService();
-        var mappedResult = _mapper.Map<List<BranchDto>>(result);
-        mappedResult.ForEach(a=> a.Count = mappedResult.Count);
-        return Ok(mappedResult);
+        //mappedResult.ForEach(a=> a.Count = mappedResult.Count);
+        return Ok(result);
     }
     [HttpGet]
     [EnableQuery]

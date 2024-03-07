@@ -13,10 +13,21 @@ public class DailyLogController : Controller
     }
 
     // GET
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
-        var result = await _readDailyCounterService.GetLastHundredLogService();
+        //var result = await _readDailyCounterService.GetLastHundredDailyYearLogService();
         
-        return View(result);
+        return View();
+    }
+    // GET
+    public async Task<IActionResult> GetYearLogs()
+    {
+        var result = await _readDailyCounterService.GetLastHundredDailyYearLogService();
+        return Ok(result);
+    }
+    public async Task<IActionResult> GetFoodLogs()
+    {
+        var result = await _readDailyCounterService.GetLastHundredDailyFoodLogService();
+        return Ok(result);
     }
 }

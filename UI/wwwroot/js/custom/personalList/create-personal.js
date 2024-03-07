@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         return isValid;
     }
+    //Emeklilik Seçimi Değiştiğinde çalışan metod
     $('#RetiredOrOldInput').change(function () {
         let emeklilikLabel = $('label[for="RetiredOrOldInput"]');
        if($(this).is(':checked')){

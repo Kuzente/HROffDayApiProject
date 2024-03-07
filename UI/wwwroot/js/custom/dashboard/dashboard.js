@@ -9,7 +9,8 @@
     const today = new Date();
     const birthList = document.getElementById('birthList');
     let personalResponse ;
-    function WorkPowerTable(response , selectedYear = new Date().getFullYear()) {
+    //İş gücü verisi Fonksiyonu
+    function WorkPowerTable(response , selectedYear = new Date().getFullYear(),selectedBranches = []) {
         let currentMonth = new Date().getMonth();
         let monthNames = [
             "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
@@ -24,19 +25,30 @@
             let monthBanPersonel = 0;
             let monthBanPersonelMan = 0;
             let monthBanPersonelWoman = 0;
+            let endOfMonthPersonel = 0;
             let firstDayOfMonth = new Date(selectedYear, index, 1);
             let row = document.createElement('tr');
+            // Eğer Şube seçili ise ona göre filtreleme yap
+            if (selectedBranches.length > 0){
+                response = response.filter(person=> selectedBranches.includes(person.Branch.ID))
+                let branchNamesSet = new Set(response.map(person => person.Branch.Name)); // Şube adlarını alıyoruz
+                let branchNames = [...branchNamesSet]; //Tekile düşürmek için
+                let title = selectedYear + " Yılı ";
+                if (branchNames.length > 0) {
+                    title += branchNames.join(", ") + " ";
+                }
+                title += "İş Gücü Verileri";
+                $('#workPowerTitle').text(title);
+            }
             if (selectedYear === today.getFullYear() && index <= currentMonth) {
                 response.forEach(function (item) {
                     if (item.StartJobDate) { // EĞER İŞE BAŞLAMA TARİHİ VARSA
                         let startJobDate = new Date(item.StartJobDate);
-                        if (startJobDate.getFullYear() === selectedYear){
-                            console.log(startJobDate.getFullYear())
-                        }
-                        
-                        if (startJobDate < firstDayOfMonth) {
+                        let endJobDate = new Date(item.EndJobDate);
+                        if (startJobDate < firstDayOfMonth && (item.EndJobDate === null || endJobDate > firstDayOfMonth)) {
                             startMonthWorking++;
-                        } else if (startJobDate.getMonth() === index && startJobDate.getFullYear() === selectedYear) {
+                        } 
+                        if (startJobDate.getMonth() === index && startJobDate.getFullYear() === selectedYear) {
                             if (item.Gender === "Kadın") {
                                 monthGetPersonelWoman++;
                             } 
@@ -74,9 +86,11 @@
                 response.forEach(function (item) {
                     if (item.StartJobDate) { // EĞER İŞE BAŞLAMA TARİHİ VARSA
                         let startJobDate = new Date(item.StartJobDate);
-                        if (startJobDate < firstDayOfMonth) {
+                        let endJobDate = new Date(item.EndJobDate);
+                        if (startJobDate < firstDayOfMonth && (item.EndJobDate === null || endJobDate > firstDayOfMonth)) {
                             startMonthWorking++;
-                        } else if (startJobDate.getMonth() === index && startJobDate.getFullYear() === selectedYear) {
+                        } 
+                        if (startJobDate.getMonth() === index && startJobDate.getFullYear() === selectedYear) {
                             if (item.Gender === "Kadın") {
                                 monthGetPersonelWoman++;
                             }
@@ -114,9 +128,11 @@
             }
         });
     }
+    //Personel Sayısı Fonkisiyon
     function PersonalCountSec(PersonalCount) {
         $('#personalCount').text(PersonalCount);
     }
+    //Maaş Verisi Hesaplama Fonksiyonu
     function SalarySum(SalaryCount) {
         const formattedSalary = SalaryCount.toLocaleString('en-US', {
             minimumFractionDigits: 2,
@@ -124,6 +140,7 @@
         });
         $('#salarySum').text(formattedSalary);
     }
+    //Cinsiyet Dağılımı Grafik Fornkisyonu
     function genderPie(menLength, womenLenght) {
         let options = {
             series: [menLength, womenLenght],
@@ -162,6 +179,7 @@
         let chart = new ApexCharts(document.getElementById("genderGraph"), options);
         chart.render();
     }
+    //Eğitim Durumu Grafik Fonksiyonu
     function educationPie(educationCounts) {
         let seriesData = [];
         let labels = [];
@@ -205,6 +223,7 @@
         let chart = new ApexCharts(document.getElementById("educationGraph"), options);
         chart.render();
     }
+    //Doğum Tarihi Fonksiyonu
     function birthSection(birthDate,kalanGunSayisi,personalName) {
         let listItem = document.createElement('div');
         listItem.className = 'list-group-item';
@@ -244,8 +263,9 @@
     //Personel kısımlerı get metodu
     $.ajax({
         type: "GET",
-        url: "/query/personel-sayisi?expand=PersonalDetails($select=Salary,educationStatus)&$select=id,PersonalDetails,gender,birthDate,nameSurname,StartJobDate,EndJobDate,Status",
-    }).done(function (res) {
+        url: "/query/personel-sayisi?expand=PersonalDetails($select=Salary,educationStatus),Branch($select=ID,Name)&$select=id,PersonalDetails,gender,birthDate,nameSurname,StartJobDate,EndJobDate,Status",
+    })
+        .done(function (res) {
         spinner.hide();
         
         personalResponse = res;
@@ -295,9 +315,25 @@
     //Şube sayısı ajax metoddu
     $.ajax({
         type: "GET",
-        url: "/query/sube-sayisi?$select=count"
+        url: "/query/sube-sayisi?$select=name,id&$orderby=name"
     }).done(function (res) {
         $('#branchCount').text(res.length === 0 ? "Yok" : res.length);
+
+        $('[name="filterBranch"]').empty();
+        $.each(res, function (index , branch) {
+            $('[name="filterBranch"]').append(`<option value='${branch.ID}'>${branch.Name}</option>`);
+        });
+        let branchTomSelect = new TomSelect($('[name="filterBranch"]'),{
+            plugins: {
+                'clear_button':{
+                    'title':'Tüm Şubeleri Temizle',
+                },
+                remove_button:{
+                    title:'Şubeyi Temizle',
+                }
+            }, 
+        });
+        branchTomSelect.clear();
     });
     //Ünvan sayısı ajax metoddu
     $.ajax({
@@ -310,7 +346,8 @@
     $('#yearButton').on('click',function () {
         $('#tableBody').empty();
         $('.dropdown-menu').removeClass('show');
-        let selectedYearInput = parseInt($("select[name='filterYear']").val(),10); 
-        WorkPowerTable(personalResponse,selectedYearInput);
+        let selectedYearInput = parseInt($("select[name='filterYear']").val(),10) || today.getFullYear();
+        let selectedBranches = $('[name="filterBranch"]').val()
+        WorkPowerTable(personalResponse,selectedYearInput,selectedBranches);
     });
 });
