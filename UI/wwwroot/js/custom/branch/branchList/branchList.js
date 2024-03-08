@@ -1,9 +1,15 @@
 ﻿document.addEventListener('DOMContentLoaded',function () {
     let searchParams = new URLSearchParams(window.location.search);
+    //Arama Kısmı metod
     if (searchParams.has("search")){
         $('#searchInput').val(searchParams.get('search'))
     }
-
+    //Filtrele Kısmı Metod
+    if(searchParams.has("isActive")){
+        let activeInput = $('#filterForm').find('input[value="active"]')
+        let passiveInput = $('#filterForm').find('input[value="passive"]')
+        searchParams.get('isActive') === "active" ? activeInput.prop('checked', true) : passiveInput.prop('checked', true);
+    }
     if (!searchParams.has('sortName') || !searchParams.has('sortBy') || searchParams.get('sortBy') === '') {
         $('button[data-sort="sort-branchName"]').addClass('asc');
     } else {

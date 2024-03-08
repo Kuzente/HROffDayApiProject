@@ -79,7 +79,7 @@ else
                         </form>
                     </div>
                     <div class="col-md-1">
-                        <form method="get" action="/cikarilan-personeller">
+                        <form id="filterForm" method="get" action="/cikarilan-personeller">
                             <div class="dropdown filter-dropdown">
                                 <button class="btn btn-outline-secondary btn-icon" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter-down" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -89,41 +89,47 @@ else
                                         <path d="M22 19l-3 3l-3 -3"></path>
                                     </svg>
                                 </button>
-                                <div class="dropdown-menu dropdown-menu-end ">
-                                    <div class="dropdown-header" style="width: 250px;">Detaylı Filtre</div>
-                                    <div class="p-3">
-                                        <div class="form-group">
-                                            <label class="form-label">Şube *</label>
-                                            <select name="branch" id="branchSelect" class="form-select selectListTom" asp-items="@(new SelectList(ViewBag.Branches, "ID", "Name"))">
-                                                <option value=""></option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group mt-2">
-                                            <label class="form-label">Ünvan *</label>
-                                            <select name="position" id="positionSelect" type="text" class="form-select selectListTom"
-                                                    asp-items="@(new SelectList(ViewBag.Positions, "ID", "Name"))">
-                                                <option value=""></option>
-                                            </select>
+                                <div class="dropdown-menu dropdown-menu-start ">
+                                    <div class="dropdown-header" style="width: 500px;">Detaylı Filtre</div>
+                                    <div class="p-4">
+                                        <div class="row mb-2">
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Şube</label>
+                                                    <select id="branchSelect" class="form-select" name="branch" placeholder="Şube Seçiniz">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Ünvan</label>
+                                                    <select id="positionSelect" class="form-select" name="position" placeholder="Ünvan Seçiniz">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="row mt-2">
+                                                    <div class="form-check col-6">
+                                                        <input name="gender" value="erkek" class="form-check-input" type="radio" id="checkbox1">
+                                                        <label class="form-check-label" for="checkbox1">Erkek</label>
+                                                    </div>
+                                                    <div class="form-check col-6">
+                                                        <input name="gender" value="kadın" class="form-check-input" type="radio" id="checkbox2">
+                                                        <label class="form-check-label" for="checkbox2">Kadın</label>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                        </div>
-                                        <div class="row mt-2">
-                                            <div class="form-check col-6">
-                                                <input name="gender" value="erkek" class="form-check-input" type="radio" id="checkbox1">
-                                                <label class="form-check-label" for="checkbox1">Erkek</label>
+                                            <div class="row mt-2">
+                                                <div class="form-check col-6">
+                                                    <input name="retired" value="true" class="form-check-input" type="checkbox" id="checkbox3">
+                                                    <label class="form-check-label" for="checkbox3">Emekli</label>
+                                                </div>
                                             </div>
-                                            <div class="form-check col-6">
-                                                <input name="gender" value="kadın" class="form-check-input" type="radio" id="checkbox2">
-                                                <label class="form-check-label" for="checkbox2">Kadın</label>
+
+                                            <div class="d-flex justify-content-end">
+                                                <button class="btn btn-outline-primary me-4 " type="submit">Filtrele</button>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="form-check col-6">
-                                                <input name="retired" value="true" class="form-check-input" type="checkbox" id="checkbox3">
-                                                <label class="form-check-label" for="checkbox3">Emekli</label>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-end">
-                                            <button class="btn btn-outline-primary me-4 " type="submit">Filtrele</button>
                                         </div>
                                     </div>
                                 </div>
@@ -237,11 +243,11 @@ else
                     @{
                         if (data.RetiredOrOld)
                         {
-                            <span class="badge bg-purple">EYTli</span>
+                            <span class="badge bg-purple">Emekli</span>
                         }
                         else
                         {
-                            <span class="badge bg-secondary">EYTli Değil</span>
+                            <span class="badge bg-secondary">Emekli Değil</span>
                         }
                     }
                 </td>

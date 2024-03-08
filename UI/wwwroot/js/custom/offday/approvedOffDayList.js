@@ -1,6 +1,7 @@
 ﻿document.addEventListener('DOMContentLoaded',function () {
     let selectYear = new TomSelect($("#filterYear"));
     let selectMonth = new TomSelect($("#filterMonth"));
+    let checkFreeDay = $('#filterForm input[name="isFreedayLeave"]')
     let selectBranch;
     let selectPosition;
     
@@ -10,6 +11,8 @@
         let filterYear = urlParams.get('filterYear');
         let filterMonth = urlParams.get('filterMonth');
         let filterPosition = urlParams.get('positionName');
+        let filterBranch = urlParams.get('branchName');
+        let filterFreeDay = urlParams.get('isFreedayLeave');
         if (filterYear) {
             selectYear.setValue([filterYear]);
         }
@@ -17,6 +20,10 @@
             
             selectMonth.setValue([filterMonth]);
         }
+        if (filterFreeDay){
+            checkFreeDay.prop('checked', true)
+        }
+       
         $.ajax({ //TODO
             type: "GET",
             url : "/get-select-items"
@@ -33,6 +40,12 @@
             selectPosition = new TomSelect($("#positionSelect"));
             selectPosition.clear();
             selectBranch.clear();
+            if (filterPosition){
+                selectPosition.setValue([filterPosition])
+            }
+            if (filterBranch){
+                selectBranch.setValue([filterBranch])
+            }
         });
         
        

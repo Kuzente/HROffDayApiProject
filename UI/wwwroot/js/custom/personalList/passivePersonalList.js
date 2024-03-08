@@ -24,6 +24,40 @@
         searchParams.set('sortBy', sortOrder);
         window.location.href = window.location.pathname + '?' + searchParams.toString()
     })
+    //Filtrele Kısmı Metod
+    if(searchParams.has("gender")){
+        let erkekInput = $('#filterForm').find('input[value="erkek"]')
+        let kadinInput = $('#filterForm').find('input[value="kadın"]')
+        searchParams.get('gender') === "erkek" ? erkekInput.prop('checked', true) : kadinInput.prop('checked', true);
+    }
+    if(searchParams.has("retired")){
+        let retiredInput = $('#filterForm').find('input[name="retired"]')
+        searchParams.get('retired') === "true" ? retiredInput.prop('checked', true) : "";
+    }
+    $.ajax({ //TODO
+        type: "GET",
+        url : "/get-select-items"
+    }).done(function (res) {
+        $('#positionSelect').empty();
+        $('#branchSelect').empty();
+        $.each(res.branches, function (index , branch) {
+            $('#branchSelect').append(`<option value='${branch.name}'>${branch.name}</option>`);
+        });
+        $.each(res.positions, function (index , position) {
+            $('#positionSelect').append(`<option value='${position.name}'>${position.name}</option>`);
+        });
+        let branchSelect = new TomSelect($("#branchSelect"));
+        let positionSelect = new TomSelect($("#positionSelect"));
+        positionSelect.clear();
+        branchSelect.clear();
+        //Filtre
+        if (searchParams.has('position')){
+            positionSelect.setValue([searchParams.get('position')])
+        }
+        if (searchParams.has('branch')){
+            branchSelect.setValue([searchParams.get('branch')])
+        }
+    });
     $('[data-firstButton]').on('click',function () {
         let currentUrl = new URL(window.location.href);
         let pageParam = currentUrl.searchParams.get("sayfa");

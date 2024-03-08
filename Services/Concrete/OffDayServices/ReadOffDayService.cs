@@ -135,7 +135,10 @@ public class ReadOffDayService : IReadOffDayService
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth || a.EndDate.Month == query.filterMonth)&&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search))&&
 						(string.IsNullOrEmpty(query.branchName) || a.Personal.Branch.Name.Contains(query.branchName))&&
-						(string.IsNullOrEmpty(query.positionName) || a.Personal.Position.Name.Contains(query.positionName)),
+						(string.IsNullOrEmpty(query.positionName) || a.Personal.Position.Name.Contains(query.positionName))&& 
+							(string.IsNullOrEmpty(query.isFreedayLeave) || a.LeaveByFreeDay > 0),
+						
+					
 					include: p=>p.Include(a=>a.Personal)
 												.ThenInclude(a=>a.Branch)
 												.Include(a=>a.Personal.Position),
@@ -324,7 +327,8 @@ public class ReadOffDayService : IReadOffDayService
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth || a.EndDate.Month == query.filterMonth)&&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search))&&
 						(string.IsNullOrEmpty(query.branchName) || a.Personal.Branch.Name.Contains(query.branchName))&&
-						(string.IsNullOrEmpty(query.positionName) || a.Personal.Position.Name.Contains(query.positionName)),
+						(string.IsNullOrEmpty(query.positionName) || a.Personal.Position.Name.Contains(query.positionName))&&
+						(string.IsNullOrEmpty(query.isFreedayLeave) || a.LeaveByFreeDay > 0),
 					include: p=>p.Include(a=>a.Personal).ThenInclude(a=>a.Branch).Include(a=>a.Personal.Position),
 					orderBy: p =>
 					{

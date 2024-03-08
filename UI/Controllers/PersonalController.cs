@@ -40,8 +40,6 @@ namespace UI.Controllers
         {
             
             var personals = await _readPersonalService.GetPersonalListService(query);
-            ViewBag.Positions = await _readPositionService.GetAllJustNames();
-            ViewBag.Branches = await _readBranchService.GetAllJustNames();
             return View(personals);
         }
         

@@ -34,8 +34,6 @@ public class PassivePersonalController : Controller
     public async Task<IActionResult> Index([FromQuery] PersonalQuery query)
     {
         var personals = await _readPersonalService.GetPassivePersonalListService(query);
-        ViewBag.Positions = await _readPositionService.GetAllJustNames();
-        ViewBag.Branches = await _readBranchService.GetAllJustNames();
         return View(personals);
     }
 

@@ -96,7 +96,7 @@ else
                         </form>
                     </div>
                     <div class="col-md-1">
-                        <form method="get" action="/personeller">
+                        <form id="filterForm" method="get" action="/personeller">
                             <div class="dropdown filter-dropdown">
                                 <button class="btn btn-outline-secondary btn-icon" data-bs-toggle="dropdown" data-bs-auto-close="outside">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter-down" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -113,17 +113,14 @@ else
                                             <div class="col-6">
                                                 <div class="form-group">
                                                     <label class="form-label">Şube</label>
-                                                    <select name="branch" id="branchSelect" class="form-select selectListTom" asp-items="@(new SelectList(ViewBag.Branches, "ID", "Name"))">
-                                                        <option value=""></option>
+                                                    <select id="branchSelect" class="form-select" name="branch" placeholder="Şube Seçiniz">
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-6">
                                                 <div class="form-group">
                                                     <label class="form-label">Ünvan</label>
-                                                    <select name="position" id="positionSelect" type="text" class="form-select selectListTom"
-                                                            asp-items="@(new SelectList(ViewBag.Positions, "ID", "Name"))">
-                                                        <option value=""></option>
+                                                    <select id="positionSelect" class="form-select" name="position" placeholder="Ünvan Seçiniz">
                                                     </select>
                                                 </div>
                                             </div>
@@ -806,7 +803,6 @@ else
 
     @section Scripts
     {
-        <script src="/js/custom/personalList/create-personal.js"></script>
         <script src="/js/custom/personalList/personalList.js"></script>
 
     }

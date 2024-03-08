@@ -242,8 +242,8 @@ public class ReadPersonalService : IReadPersonalService
 					                (a.Position.Status == EntityStatusEnum.Online || a.Position.Status == EntityStatusEnum.Offline)&&
 					                (string.IsNullOrEmpty(query.search) || a.NameSurname.Contains(query.search))&& 
 					                (string.IsNullOrEmpty(query.gender) || a.Gender.Contains(query.gender))&& 
-					                (string.IsNullOrEmpty(query.branch) || a.Branch_Id.ToString().Contains(query.branch))&& 
-					                (string.IsNullOrEmpty(query.position) || a.Position_Id.ToString().Contains(query.position))&& 
+					                (string.IsNullOrEmpty(query.branch) || a.Branch.Name.Contains(query.branch))&& 
+					                (string.IsNullOrEmpty(query.position) || a.Position.Name.Contains(query.position))&& 
 					                (string.IsNullOrEmpty(query.retired) || a.RetiredOrOld),
 					orderBy: p =>
 					{
@@ -325,8 +325,8 @@ public class ReadPersonalService : IReadPersonalService
 					                (a.Position.Status == EntityStatusEnum.Online || a.Position.Status == EntityStatusEnum.Offline)&&
 					                (string.IsNullOrEmpty(query.search) || a.NameSurname.Contains(query.search))&& 
 					                (string.IsNullOrEmpty(query.gender) || a.Gender.Contains(query.gender))&& 
-					                (string.IsNullOrEmpty(query.branch) || a.Branch_Id.ToString().Contains(query.branch))&& 
-					                (string.IsNullOrEmpty(query.position) || a.Position_Id.ToString().Contains(query.position))&& 
+					                (string.IsNullOrEmpty(query.branch) || a.Branch.Name.Contains(query.branch))&& 
+					                (string.IsNullOrEmpty(query.position) || a.Position.Name.Contains(query.position))&& 
 					                (string.IsNullOrEmpty(query.retired) || a.RetiredOrOld),
 					orderBy: p =>
 					{
