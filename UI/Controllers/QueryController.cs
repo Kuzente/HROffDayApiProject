@@ -36,6 +36,7 @@ public class QueryController : ODataController
     {
         var result = await _readOdataService.GetBranchesOdataService();
         //mappedResult.ForEach(a=> a.Count = mappedResult.Count);
+        
         return Ok(result);
     }
     [HttpGet]
