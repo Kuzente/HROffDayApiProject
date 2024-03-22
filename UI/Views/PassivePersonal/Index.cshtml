@@ -211,12 +211,12 @@ else
 
         @foreach (var data in Model.Data)
         {
-            <tr>
-                <td>@data.RegistirationNumber</td>
+            <tr class="@(data.IsBackToWork ? "bg-green-lt" : "")">
+                <td>@data.RegistirationNumber.ToString()</td>
                 <td>
-                    <a href="/personel-detaylari?id=@data.ID">@data.NameSurname</a>
+                    <a href="/personel-detaylari?id=@data.ID">@data.NameSurname <br> @(data.IsBackToWork ? "(İşe Geri Alındı)" : "")</a>
                 </td>
-                <td>@data.Branch.Name</td>
+                <td>@(data.Branch.Name)</td>
                 <td>@data.Position.Name</td>
                 <td>
                     @if (@data.Gender == "Erkek")

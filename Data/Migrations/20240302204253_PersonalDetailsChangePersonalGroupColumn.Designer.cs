@@ -4,6 +4,7 @@ using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240302204253_PersonalDetailsChangePersonalGroupColumn")]
+    partial class PersonalDetailsChangePersonalGroupColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +52,7 @@ namespace Data.Migrations
                     b.ToTable("Branches");
                 });
 
-            modelBuilder.Entity("Core.Entities.DailyFoodLog", b =>
+            modelBuilder.Entity("Core.Entities.DailyCounter", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -61,33 +64,6 @@ namespace Data.Migrations
                     b.Property<string>("AddedFoodAidAmountDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("NameSurname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("DailyFoodLogs");
-                });
-
-            modelBuilder.Entity("Core.Entities.DailyYearLog", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AddedYearLeave")
                         .HasColumnType("int");
@@ -114,16 +90,13 @@ namespace Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("DailyYearLogs");
+                    b.ToTable("DailyCounters");
                 });
 
             modelBuilder.Entity("Core.Entities.OffDay", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BranchId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("CountLeave")
@@ -180,9 +153,6 @@ namespace Data.Migrations
                     b.Property<Guid>("Personal_Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PositionId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -231,9 +201,6 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsBackToWork")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -250,8 +217,9 @@ namespace Data.Migrations
                     b.Property<Guid>("Position_Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("RegistirationNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("RegistirationNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("RetiredDate")
                         .HasColumnType("datetime2");
@@ -311,9 +279,6 @@ namespace Data.Migrations
                     b.Property<DateTime>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DepartmantName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("EducationStatus")
                         .HasColumnType("nvarchar(max)");
 
@@ -353,6 +318,9 @@ namespace Data.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("WorkingPlace")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 

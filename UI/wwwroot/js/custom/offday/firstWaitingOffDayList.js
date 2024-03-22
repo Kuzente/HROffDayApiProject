@@ -12,6 +12,9 @@
         if (filterMonth) {
             selectMonth.setValue([filterMonth]);
         }
+        if (urlParams.has("search")){
+            $('#searchInput').val(urlParams.get('search'))
+        }
     }
    
     $('[data-firstButton]').on('click',function () {

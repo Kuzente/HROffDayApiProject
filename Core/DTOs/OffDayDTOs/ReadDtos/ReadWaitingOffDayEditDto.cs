@@ -22,6 +22,10 @@ public class ReadWaitingOffDayEditDto
     public int LeaveByFather { get; set; }
     public int LeaveByMarried { get; set; }
     public Guid Personal_Id { get; set; }
+    public string PositionName { get; set; }
+    public string BranchName { get; set; }
+    public Guid BranchId { get; set; }
+    public Guid PositionId { get; set; }
     public ReadWaitingOffDayEditSubPersonalDto Personal { get; set; }
 }
 
@@ -32,15 +36,4 @@ public class ReadWaitingOffDayEditSubPersonalDto
     public int TotalYearLeave { get; set; }
     public int UsedYearLeave { get; set; }
     public int TotalTakenLeave { get; set; }
-    public ReadWaitingOffDayEditSubPersonalSubBranchDto Branch { get; set; }
-    public ReadWaitingOffDayEditSubPersonalSubPositionDto Position { get; set; }
-}
-
-public class ReadWaitingOffDayEditSubPersonalSubBranchDto
-{
-    public string Name { get; set; }
-}
-public class ReadWaitingOffDayEditSubPersonalSubPositionDto
-{
-    public string Name { get; set; }
 }

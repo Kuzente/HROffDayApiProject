@@ -2,7 +2,7 @@
 @using Core.Enums
 @using Microsoft.AspNetCore.Http.Extensions
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model ResultWithPagingDataDto<List<ReadApprovedOffDayListDto>>
+@model ResultWithPagingDataDto<ReadApprovedOffDayDto>
 
 @{
     ViewBag.Title = "title";
@@ -126,12 +126,30 @@ else
                                         <div class="row mb-2">
                                             <div class="col-6">
                                                 <label class="form-label">Ünvan / Görev</label>
-                                                <select id="positionSelect" class="form-select" name="positionName" placeholder="Ünvan Seçiniz">
+                                                <select id="positionSelect" class="form-select selectListTom" name="positionName" placeholder="Ünvan Seçiniz">
+                                                    @{
+                                                        var selectedPositionValue = Context.Request.Query["positionName"];
+                                                    }
+                                                    <option></option>
+                                                    @foreach (var data in Model.Data.ReadApprovedOffDayGetPositionsList)
+                                                    {
+                                                        <!option value="@data.PositionNameValue" @(data.PositionNameValue == selectedPositionValue ? "selected" : "")>@data.PositionName</!option>
+                                                    }
+
                                                 </select>
                                             </div>
                                             <div class="col-6">
                                                 <label class="form-label">Şube</label>
-                                                <select id="branchSelect" class="form-select" name="branchName" placeholder="Şube Seçiniz">
+                                                <select id="branchSelect" class="form-select selectListTom" name="branchName" placeholder="Şube Seçiniz">
+                                                    @{
+                                                        var selectedBranchValue = Context.Request.Query["branchName"];
+                                                    }
+                                                    <option></option>
+                                                    @foreach (var data in Model.Data.ReadApprovedOffDayGetBranchesList)
+                                                    {
+                                                        <!option value="@data.BranchNameValue"@(data.BranchNameValue == selectedBranchValue ? "selected" : "")>@data.BranchName</!option>
+                                                    }
+
                                                 </select>
                                             </div>
                                         </div>
@@ -208,9 +226,9 @@ else
         </tr>
         </thead>
         <tbody class="table-border-bottom-0">
-        @foreach (var data in Model.Data)
+        @foreach (var data in Model.Data.ReadApprovedOffDayListDtos)
         {
-            <tr class="@(data.Personal.Status == EntityStatusEnum.Offline ? "bg-danger-lt" : "")">
+            <tr class="@(data.Personal.IsBackToWork ? "bg-green-lt" : (data.Personal.Status == EntityStatusEnum.Offline ? "bg-danger-lt" : ""))">
                 <td class="col-1">
                     <form action="/create-pdf" method="post">
                         <input type="hidden" name="id" value="@data.ID">
@@ -230,13 +248,14 @@ else
 
                 </td>
                 <td class="col-2">
-                    @data.Personal.NameSurname
+                    <a href="/personel-detaylari?id=@data.Personal_Id">@data.Personal.NameSurname <br> @(data.Personal.IsBackToWork ? "(Eski Kayıt)" : "")</a>
+
                 </td>
                 <td class="col-2">
-                    @data.Personal.Branch.Name
+                    @data.BranchName
                 </td>
                 <td class="col-2">
-                    @data.Personal.Position.Name
+                    @data.PositionName
                 </td>
                 <td class="col-2">
                     <span class="status status-dark mb-1">@data.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>

@@ -38,7 +38,7 @@ public class PersonalExcelExport
             int row = 2;
             foreach (var entity in personals)
             {
-                worksheet.Cells[row, 1].Value = entity.RegistirationNumber;
+                worksheet.Cells[row, 1].Value = entity.RegistirationNumber.ToString();
                 worksheet.Cells[row, 2].Value = entity.NameSurname;
                 worksheet.Cells[row, 3].Value = entity.Branch.Name;
                 worksheet.Cells[row, 4].Value = entity.Position.Name;

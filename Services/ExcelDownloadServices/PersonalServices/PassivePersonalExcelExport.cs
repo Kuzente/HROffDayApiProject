@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using Core.DTOs.PassivePersonalDtos;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 namespace Services.ExcelDownloadServices.PersonalServices;
 
@@ -37,7 +38,8 @@ public class PassivePersonalExcelExport
             int row = 2;
             foreach (var entity in personals)
             {
-                worksheet.Cells[row, 1].Value = entity.RegistirationNumber;
+               
+                worksheet.Cells[row, 1].Value = entity.RegistirationNumber.ToString();
                 worksheet.Cells[row, 2].Value = entity.NameSurname;
                 worksheet.Cells[row, 3].Value = entity.Branch.Name;
                 worksheet.Cells[row, 4].Value = entity.Position.Name;
@@ -48,6 +50,12 @@ public class PassivePersonalExcelExport
                 worksheet.Cells[row, 9].Value = entity.TotalYearLeave.ToString();
                 worksheet.Cells[row, 10].Value = entity.UsedYearLeave.ToString();
                 worksheet.Cells[row, 11].Value = (entity.TotalYearLeave - entity.UsedYearLeave).ToString();
+                if (entity.IsBackToWork)
+                {
+                    worksheet.Row(row).Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    worksheet.Row(row).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGreen);
+                    worksheet.Cells[row, 2].Value += "(İşe Geri Alındı)";
+                }
                 // ... Diğer alanları ekleyin.
 
                 row++;

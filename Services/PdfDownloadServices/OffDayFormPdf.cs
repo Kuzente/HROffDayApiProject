@@ -82,7 +82,7 @@ public class OffDayFormPdf
                 {
                     row.RelativeItem(4).Background("#DBE4F0").BorderRight(1).Height(24).AlignMiddle().PaddingLeft(10).Text("Kurum Sicil Numarası:").Style(titleStyle).FontSize(10);
 
-                    row.RelativeItem(8).Background(Colors.White).AlignMiddle().PaddingLeft(10).Text(Dto.Personal.RegistirationNumber).Style(titleStyle).FontSize(10);
+                    row.RelativeItem(8).Background(Colors.White).AlignMiddle().PaddingLeft(10).Text(Dto.Personal.RegistirationNumber.ToString()).Style(titleStyle).FontSize(10);
                 });
                 column.Item().BorderLeft(3).BorderRight(3).BorderBottom(1).Row(row =>
                 {

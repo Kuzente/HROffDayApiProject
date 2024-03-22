@@ -21,5 +21,7 @@ public class ReadPersonalOffDayListDto
     public int LeaveByFather { get; set; }
     public int LeaveByMarried { get; set; }
     public Guid Personal_Id { get; set; }
+    public Guid BranchId { get; set; }
+    public Guid PositionId { get; set; }
 }
 

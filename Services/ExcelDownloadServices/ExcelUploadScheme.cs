@@ -61,77 +61,55 @@ public class ExcelUploadScheme
             #endregion
 
             #region mainSection
+            string[] headersRequired = {
+                "Şube Kodu", 
+                "Ünvan Kodu", 
+                "Adı Soyadı", 
+                "İşe Başlama Tarihi", 
+                "Doğum Tarihi",
+                "Doğum Yeri", 
+                "Tc Kimlik Numarası", 
+                "Sicil Numarası", 
+                "SSK No", 
+                "SGK Kodu",
+                "Emekli Mi", 
+                "Emeklilik Tarihi",
+                "Engelli Mi", 
+                "Cinsiyet", 
+                "Maaş", 
+                "Departman Adı",
+            };
+            string[] headersOptional = {
+                "Anne Adı", 
+                "Baba Adı",
+                "Eğitim Durumu", 
+                "Personelin Grubu", 
+                "Telefon", 
+                "Medeni Durumu",
+                "Beden Ölçüleri", 
+                "Kan Grubu", 
+                "Banka Hesabı", 
+                "IBAN Adresi", 
+                "Adres",
+                "Toplam Yıllık İzin Miktarı", 
+                "Kullanılan Yıllık İzin Miktarı",
+                "Toplam Alınan İzin Miktarı (SAAT)", 
+                "Gıda Yardımı (TL)",
+                "Gıda Yardımı Yenilenme Tarihi"
+            };
 
-            // Sütun başlıklarını ekleyin.
-                
-            worksheet.Cells[1, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[1, 1].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Crimson);
-            worksheet.Cells[1, 2].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[1, 2].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Crimson);
-            worksheet.Cells[1, 3].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[1, 3].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Crimson);
-                
-            worksheet.Cells[1, 4].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[1, 4].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Crimson);
-                
-            worksheet.Cells[1, 5].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[1, 5].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Crimson);
-                
-            worksheet.Cells[1, 6].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[1, 6].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Crimson);
-                
-            worksheet.Cells[1, 7].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[1, 7].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Crimson);
-               
-            worksheet.Cells[1, 8].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[1, 8].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Crimson);
-                
-            worksheet.Cells[1, 9].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[1, 9].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Crimson);
-               
-            worksheet.Cells[1, 10].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[1, 10].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Crimson);
-               
-            worksheet.Cells[1, 11].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[1, 11].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Crimson);
-               
-            worksheet.Cells[1, 12].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[1, 12].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Crimson);
-               
-            worksheet.Cells[1, 13].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[1, 13].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Crimson);
-               
-            worksheet.Cells[1, 14].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[1, 14].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Crimson);
-            worksheet.Cells[1, 1].Value = "Şube Kodu";
-            worksheet.Cells[1, 2].Value = "Ünvan Kodu";
-            worksheet.Cells[1, 3].Value = "Adı Soyadı";
-            worksheet.Cells[1, 4].Value = "İşe Başlama Tarihi";
-            worksheet.Cells[1, 5].Value = "Doğum Tarihi";
-            worksheet.Cells[1, 6].Value = "Doğum Yeri";
-            worksheet.Cells[1, 7].Value = "Tc Kimlik Numarası";
-            worksheet.Cells[1, 8].Value = "Sicil Numarası";
-            worksheet.Cells[1, 9].Value = "SSK No";
-            worksheet.Cells[1, 10].Value = "SGK Kodu";
-            worksheet.Cells[1, 11].Value = "Emekli Mi";
-            worksheet.Cells[1, 12].Value = "Engelli Mi";
-            worksheet.Cells[1, 13].Value = "Cinsiyet";
-            worksheet.Cells[1, 14].Value = "Maaş";
-            worksheet.Cells[1, 15].Value = "Anne Adı";
-            worksheet.Cells[1, 16].Value = "Baba Adı";
-            worksheet.Cells[1, 17].Value = "Eğitim Durumu";
-            worksheet.Cells[1, 18].Value = "Personelin Grubu";
-            worksheet.Cells[1, 19].Value = "Telefon";
-            worksheet.Cells[1, 20].Value = "Medeni Durumu";
-            worksheet.Cells[1, 21].Value = "Beden Ölçüleri";
-            worksheet.Cells[1, 22].Value = "Kan Grubu";
-            worksheet.Cells[1, 23].Value = "Banka Hesabı";
-            worksheet.Cells[1, 24].Value = "IBAN Adresi";
-            worksheet.Cells[1, 25].Value = "Adres";
-            worksheet.Cells[1, 26].Value = "Toplam Yıllık İzin Miktarı";
-            worksheet.Cells[1, 27].Value = "Kullanılan Yıllık İzin Miktarı";
-            worksheet.Cells[1, 28].Value = "Toplam Alınan İzin Miktarı (SAAT)";
-            worksheet.Cells[1, 29].Value = "Gıda Yardımı (TL)";
+            int columnIndex = 1;
+            foreach (var header in headersRequired)
+            {
+                worksheet.Cells[1, columnIndex].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                worksheet.Cells[1, columnIndex].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Crimson);
+                worksheet.Cells[1, columnIndex++].Value = header;
+            }
+            foreach (var header in headersOptional)
+            {
+                worksheet.Cells[1, columnIndex++].Value = header;
+            }
+
             
 
             #endregion

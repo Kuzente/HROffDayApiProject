@@ -19,6 +19,8 @@ public class ReadApprovedOffDayFormExcelExportDto
     public string Description { get; set; }
     public Guid Personal_Id { get; set; }
     public int DocumentNumber { get; set; }
+    public Guid BranchId { get; set; }
+    public Guid PositionId { get; set; }
     public ReadApprovedOffDayFormExcelExportSubPersonalDto Personal { get; set; }
 }
 
@@ -26,7 +28,7 @@ public class ReadApprovedOffDayFormExcelExportSubPersonalDto
 {
     public string NameSurname { get; set; }
     public string IdentificationNumber { get; set; }
-    public string RegistirationNumber { get; set; }
+    public int RegistirationNumber { get; set; }
     public int UsedYearLeave { get; set; }
     public int TotalYearLeave { get; set; }
     public ReadApprovedOffDayFormExcelExportSubPersonalSubBranchDto Branch { get; set; }

@@ -63,7 +63,7 @@ else
                     <div class="row">
                         <div class="col-md-6">
                             <form class="d-flex" action="/bekleyen-izinler">
-                                <input class="form-control me-2" type="search" placeholder="Ara" name="search" aria-label="Search">
+                                <input id="searchInput" class="form-control me-2" type="search" placeholder="Ara" name="search" aria-label="Search">
                                 <button class="btn btn-outline-primary" type="submit">Ara</button>
                             </form>
                         </div>
@@ -199,10 +199,10 @@ else
                         @data.Personal.NameSurname
                     </td>
                     <td class="col-1">
-                        @data.Personal.Branch.Name
+                        @data.BranchName
                     </td>
                     <td class="col-1">
-                        @data.Personal.Position.Name
+                        @data.PositionName
                     </td>
                     <td class="col-2">
                         <span class="status status-dark mb-1">@data.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>

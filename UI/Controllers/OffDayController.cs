@@ -66,7 +66,7 @@ public class OffDayController : Controller
     /// <returns></returns>
     public async Task<IActionResult> WaitingOffDayEdit(Guid id , string returnUrl)
     {
-        var result = await _readOffDayService.GetFirstWaitingOffDayByIdService(id);
+        var result = await _readOffDayService.GetOffDayByIdService(id);
         ViewData["ReturnUrl"] = returnUrl;
         return View(result);
     }
@@ -74,7 +74,7 @@ public class OffDayController : Controller
     /// İzin Ekleme Formu Sayfası
     /// </summary>
     /// <returns></returns>
-    public async Task<IActionResult> AddOffDay(Guid id , string returnUrl)
+    public async Task<IActionResult> AddOffDay(Guid id)
     {
         var personalResult = await _readPersonalService.GetAllPersonalByBranchIdService(id);
         return View(personalResult);

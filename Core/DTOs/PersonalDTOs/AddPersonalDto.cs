@@ -23,7 +23,7 @@ public class AddPersonalDto : BaseDto
     [Required]
     public string IdentificationNumber { get; set; }
     [Required]
-    public string RegistirationNumber { get; set; }
+    public int RegistirationNumber { get; set; }
     public string Phonenumber { get; set; }
     public bool RetiredOrOld { get; set; }
     public DateTime? RetiredDate { get; set; }

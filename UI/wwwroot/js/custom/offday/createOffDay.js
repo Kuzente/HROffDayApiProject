@@ -146,7 +146,17 @@
         }else{
             $('[data-postID]').val(selectedPersonal);
             $('[data-postCountLeave]').val(totalValue);
+             let positionId = $('#personalSelect').find(":selected").attr('data-positionId');
+             let branchId = $('#personalSelect').find(":selected").attr('data-branchId');
             let formData = form.serializeArray();
+            formData.forEach(item => {
+                if (item.name === 'branchId') {
+                    item.value = branchId; // Yeni branchId değeri
+                }
+                if (item.name === 'positionId') {
+                    item.value = positionId; // Yeni PositionId değeri
+                }
+            });
             $.ajax({
                 type: "POST",
                 url: "/izin-olustur",

@@ -226,7 +226,7 @@ else
         @foreach (var data in Model.Data)
         {
             <tr>
-                <td>@data.RegistirationNumber</td>
+                <td>@data.RegistirationNumber.ToString()</td>
                 <td>
                     <a href="/personel-detaylari?id=@data.ID">@data.NameSurname</a>
                 </td>
@@ -435,7 +435,7 @@ else
                         <path d="M14 12h4"></path>
                     </svg>
                 </span>
-                <input type="text" data-required="true" name="RegistirationNumber" class="form-control" placeholder="Personal Sicil No Giriniz!">
+                <input type="number" data-required="true" name="RegistirationNumber" class="form-control" placeholder="Personal Sicil No Giriniz!">
             </div>
         </div>
 
@@ -483,6 +483,13 @@ else
         <div class="col mb-3">
             <label class="form-label required">Şube</label>
             <select id="branchSelectModal" data-required="true" class="form-select" name="Branch_Id">
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6 mb-3">
+            <label class="form-label required">Departman</label>
+            <select id="departmantNameSelect" data-required="true" class="form-select selectListTom" data-departmantSelect name="PersonalDetails.DepartmantName">
             </select>
         </div>
     </div>

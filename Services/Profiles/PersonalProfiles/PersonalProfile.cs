@@ -18,9 +18,7 @@ public class PersonalProfile : Profile
 		CreateMap<AddPersonalDto,Personal>().ReverseMap();
 		CreateMap<AddRangePersonalDto,Personal>().ReverseMap();
 		CreateMap<AddRangePersonalDetailDto,PersonalDetails>().ReverseMap();
-		CreateMap<PersonalDetailDto,Personal>().ReverseMap();
 		
-		CreateMap<WritePersonalDto,Personal>();
 		CreateMap<WriteUpdatePersonalDto, Personal>();
 	}
 }

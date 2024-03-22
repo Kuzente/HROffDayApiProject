@@ -21,21 +21,15 @@ public class ReadDeletedOffDayListDto
     public int LeaveByFather { get; set; }
     public int LeaveByMarried { get; set; }
     public Guid Personal_Id { get; set; }
+    public Guid BranchId { get; set; }
+    public Guid PositionId { get; set; }
+    public string BranchName { get; set; }
+    public string PositionName { get; set; }
     public ReadDeletedOffDayListSubPersonalDto Personal { get; set; }
 }
 public class ReadDeletedOffDayListSubPersonalDto
 {
     public Guid ID { get; set; }
     public string NameSurname { get; set; }
-    public ReadDeletedOffDayListSubPersonalBranchDto Branch { get; set; }
-    public ReadDeletedOffDayListSubPersonalPositionDto Position { get; set; }
 }
 
-public class ReadDeletedOffDayListSubPersonalBranchDto
-{
-    public string Name { get; set; }
-}
-public class ReadDeletedOffDayListSubPersonalPositionDto
-{
-    public string Name { get; set; }
-}

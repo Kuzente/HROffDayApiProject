@@ -27,19 +27,13 @@ public class WriteUpdateWatingOffDayDto
     public int LeaveByFreeDay { get; set; }
     [Required]
     public int LeaveByTravel { get; set; }
+    public Guid BranchId { get; set; }
+    public Guid PositionId { get; set; }
     
     public List<string>? LeaveByMarriedFatherDead { get; set; }
     [Required]
     public DateTime CreatedAt { get; set; }
     
     public string? returnUrl { get; set; }
-    //public WriteUpdateWatingOffDaySubPersonalDto Personal { get; set; }
 }
 
-// public class WriteUpdateWatingOffDaySubPersonalDto
-// {
-//     public Guid ID { get; set; }
-//     public int TotalYearLeave { get; set; }
-//     public int UsedYearLeave { get; set; }
-//     public int TotalTakenLeave { get; set; }
-// }

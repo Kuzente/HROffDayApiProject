@@ -14,12 +14,13 @@ public class PassivePersonalDto : BaseDto
 	
     public string Gender { get; set; }
 	
-    public string RegistirationNumber { get; set; } 
+    public int RegistirationNumber { get; set; } 
     public Guid Branch_Id { get; set; }
     public Guid Position_Id { get; set; }
     public BranchNameDto Branch { get; set; }
     public PositionNameDto Position { get; set; }
     public int TotalYearLeave { get; set; } 
-    public int UsedYearLeave { get; set; } 
+    public int UsedYearLeave { get; set; }
+    public bool IsBackToWork { get; set; }
 }
 

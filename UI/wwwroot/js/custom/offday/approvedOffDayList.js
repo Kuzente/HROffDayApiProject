@@ -23,30 +23,7 @@
         if (filterFreeDay){
             checkFreeDay.prop('checked', true)
         }
-       
-        $.ajax({ //TODO
-            type: "GET",
-            url : "/get-select-items"
-        }).done(function (res) {
-            $('#branchSelect').empty();
-            $('#positionSelect').empty();
-            $.each(res.branches, function (index , branch) {
-                $('#branchSelect').append(`<option value='${branch.name}'>${branch.name}</option>`);
-            });
-            $.each(res.positions, function (index , position) {
-                $('#positionSelect').append(`<option value='${position.name}'>${position.name}</option>`);
-            });
-            selectBranch = new TomSelect($("#branchSelect"));
-            selectPosition = new TomSelect($("#positionSelect"));
-            selectPosition.clear();
-            selectBranch.clear();
-            if (filterPosition){
-                selectPosition.setValue([filterPosition])
-            }
-            if (filterBranch){
-                selectBranch.setValue([filterBranch])
-            }
-        });
+        
         
        
     }

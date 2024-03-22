@@ -15,7 +15,7 @@ public class PersonalDetails : BaseEntity
     public double Salary { get; set; }
     public string? SgkCode { get; set; }
     public string SskNumber { get; set; }
-    public string? WorkingPlace { get; set; }
+    public string DepartmantName { get; set; }
     public string? Address { get; set; }
     public string? FatherName { get; set; }
     public string? MotherName { get; set; }

@@ -75,16 +75,19 @@
 
                 </div>
             </div>
-            <div class="alert alert-important alert-success alert-dismissible" role="alert">
+            <div class="alert alert-important alert-secondary alert-dismissible" role="alert">
                 <div class="d-flex">
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M5 12l5 5l10 -10"></path></svg>
                     </div>
                     <div>
                         <h4 class="alert-title text-white">Adımlar!</h4>
-                        <div>1- Sistem üzerinde tanımlamış olduğunuz şube ve ünvanların listesini aşağıdaki ilgili sayfalarda bulabilirsiniz. Veri sayfası üzerine ilgili personellerin şube ve ünvanları tanımlanırken bu sayfalar üzerinde bulunan şube ve unvan kodlarını kullanınız.</div>
-                        <div >2- Cinsiyet tanımlamalarında "Erkek" ve "Kadın" olarak kullanınız!</div>
-                        <div >3- Emekli veya Engelli olan personellere Evet yazmanız yeterlidir!</div>
+                        <div>1- Sistem üzerinde tanımlı olan şube ve ünvanların listesine ilgili sayfalardan ulaşabilirsiniz. Personellerin şube ve ünvanlarını tanımlarken, bu sayfalarda bulunan <span class="badge bg-green">Şube ve Ünvan kodlarını</span> kullanınız.</div>
+                        <div >2- Cinsiyet tanımlamalarında '<span class="badge bg-cyan">Erkek</span>' ve '<span class="badge bg-pink">Kadın</span>' terimlerini kullanınız!</div>
+                        <div >3- <span class="badge bg-dark">Emekli</span> veya <span class="badge bg-dark">Engelli</span> olan personeller için '<span class="badge bg-green">Evet</span>' yazmanız yeterlidir!</div>
+                        <div >4- Personel emekli değilse, <span class="badge bg-indigo">Emeklilik Tarihi</span> alanını boş bırakınız. Emekli olan personeller için <span class="badge bg-indigo">Emeklilik Tarihi</span> girmek <u>zorunludur</u>. Aksi halde hata alırsınız!</div>
+                        <div >5- Personelin <span class="badge bg-dark">Maaş</span> tanımlaması yapılırken kuruş ayrımı yaparken <u>nokta</u> kullanınız. <u>Örneğin: 16700.14</u> </div>
+                        <div >6- Personelin <span class="badge bg-yellow">Gıda Yardımı Yenilenme Tarihi</span> alanı boş bırakıldığında, gıda yardımı <u>işe başlama tarihine göre</u> otomatik olarak yenilenecektir.</div>
                     </div>
 
                 </div>
@@ -110,43 +113,5 @@
 @section Scripts
 {
     <script src="/dist/libs/dropzone/dist/dropzone-min.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-
-            let dropzone = new Dropzone('#dropzone-custom', {
-                acceptedFiles: ".xlsx, .xls",
-                uploadMultiple: false,
-                autoProcessQueue: false, // Yükleme işlemini otomatik olarak başlatma
-                accept: function (file, done) {
-                    // Sadece belirli bir dosya adını kabul et
-                    var allowedFileName = "TopluVeriTaslak.xlsx"; // Değiştirmeniz gereken dosya adı
-                    if (file.name === allowedFileName) {
-                        done();
-                    } else {
-                        alert("Lütfen doğru dosyayı seçin: " + allowedFileName);
-                        done("Dosya kabul edilmedi.");
-                    }
-                },
-                init: function () {
-                    var myDropzone = this;
-
-                    this.on("addedfile", function (file) {
-                        // Dosya eklendiğinde çalışan işlev
-                        var submitButton = document.querySelector("#dropzone-custom button[type=submit]");
-                        submitButton.addEventListener("click", function (e) {
-                            e.preventDefault();
-
-                            if (myDropzone.files.length > 0) {
-                                myDropzone.processQueue();
-                            } else {
-                                alert("Lütfen belirli bir dosyayı seçin.");
-                            }
-                        });
-                    });
-
-                    // Diğer Dropzone özellikleri buraya eklenebilir
-                }
-            });
-        });
-    </script>
+    <script src="/js/custom/multipleUpload/multipleUpload.js"></script>
 }

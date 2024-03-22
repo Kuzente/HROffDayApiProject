@@ -2,5 +2,6 @@
 
 public class ReadApprovedOffDayGetPositions
 {
-    
+    public string PositionName { get; set; }
+    public string PositionNameValue { get; set; }
 }

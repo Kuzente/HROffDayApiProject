@@ -19,7 +19,7 @@ public partial class Personal : BaseEntity
 	[DisplayName("TC Kimlik No"), Required]
 	public string IdentificationNumber { get; set; }
 	[DisplayName("Sicil No"), Required]
-	public string RegistirationNumber { get; set; }
+	public int RegistirationNumber { get; set; }
 	[DisplayName("Telefon No")]
 	public string? Phonenumber { get; set; }
 	[DisplayName("Özel Durum")]
@@ -36,6 +36,8 @@ public partial class Personal : BaseEntity
 	public int FoodAid { get; set; } 
 	[DisplayName("Gıda Yardımı Tarihi")] 
 	public DateTime FoodAidDate { get; set; }
+
+	public bool IsBackToWork { get; set; }
 
 }
 public partial class Personal

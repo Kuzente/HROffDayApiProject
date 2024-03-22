@@ -2,7 +2,6 @@
 
 @{
     Layout = null;
-    var returnUrl = Context.Request.QueryString.ToString();
 }
 
 <!DOCTYPE html>
@@ -76,7 +75,7 @@ else
                                         <option data-positionName="" value="">Personel Seçiniz...</option>
                                         @foreach (var item in Model.Data)
                                         {
-                                            <option data-YearLeave="@(item.TotalYearLeave - item.UsedYearLeave)" data-TakenLeave="@item.TotalTakenLeave" data-usedYearLeave="@item.UsedYearLeave" data-positionName="@item.PositionName" value="@item.ID">@item.NameSurname</option>
+                                            <option data-YearLeave="@(item.TotalYearLeave - item.UsedYearLeave)" data-TakenLeave="@item.TotalTakenLeave" data-usedYearLeave="@item.UsedYearLeave" data-positionName="@item.PositionName" data-positionId="@item.PositionId" data-branchId="@item.BranchId" value="@item.ID">@item.NameSurname</option>
                                         }
                                     </select>
                                 </div>
@@ -99,7 +98,7 @@ else
                                             <path d="M16 14l0 3"></path>
                                         </svg>
                                     </span>
-                                    <input id="branchInput" name="BranchName" value="@Model.Data[0].BranchName" disabled class="form-control">
+                                    <input id="branchInput" name="BranchId" value="@Model.Data[0].BranchName" disabled class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -115,7 +114,7 @@ else
                                             <path d="M6.802 12l-3.4 5.89l3.598 -.233l1.598 3.232l3.4 -5.889"></path>
                                         </svg>
                                     </span>
-                                    <input id="positionInput" name="PositionName" disabled type="text" class="form-control" placeholder="">
+                                    <input id="positionInput" name="PositionId" disabled type="text" class="form-control" placeholder="">
 
                                 </div>
                             </div>
@@ -148,9 +147,9 @@ else
                         </div>
                         <form id="formAuthentication" class="mb-3" action="/izin-olustur" method="POST">
                             <input data-postID name="Personal_Id" type="hidden">
+                            <input data-postbranchId name="branchId" type="hidden">
+                            <input data-postPositionId name="positionId" type="hidden">
                             <input data-postCountLeave name="CountLeave" type="hidden">
-                            <input name="returnUrl" value="@returnUrl" type="hidden">
-
                             <div class="row mb-3">
                                 <div class="col-6">
                                     <label class="form-label required">İzin Başlangıç Tarihi</label>
@@ -266,7 +265,6 @@ else
     <div class="modal modal-blur fade" id="success-modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
             <div class="modal-content">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 <div class="modal-status bg-success"></div>
                 <div class="modal-body text-center py-4">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

@@ -26,8 +26,9 @@ public class WriteAddOffDayDto
     public int LeaveByFreeDay { get; set; }
     [Required]
     public int LeaveByTravel { get; set; }
+    public Guid BranchId { get; set; }
+    public Guid PositionId { get; set; }
     
     public List<string>? LeaveByMarriedFatherDead { get; set; }
-
-    public string returnUrl { get; set; }
+    
 }

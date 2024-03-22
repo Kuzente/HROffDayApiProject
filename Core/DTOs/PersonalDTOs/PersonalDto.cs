@@ -10,7 +10,7 @@ public class PersonalDto : BaseDto
 	public DateTime StartJobDate { get; set; }
 	public bool RetiredOrOld { get; set; }
 	public string Gender { get; set; }
-	public string RegistirationNumber { get; set; } 
+	public int RegistirationNumber { get; set; } 
 	public Guid Branch_Id { get; set; }
 	public Guid Position_Id { get; set; }
 	public BranchNameDto Branch { get; set; }

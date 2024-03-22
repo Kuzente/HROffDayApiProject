@@ -464,7 +464,7 @@ public class ReadPersonalService : IReadPersonalService
 				)
 			);   
 			if(allData.IsNullOrEmpty()) 
-				res.SetStatus(false).SetErr("Branch Is Not Found").SetMessage("Şubeye ait personeller bulunamadı.Lütfen sistemi kontrol ediniz!");
+				res.SetStatus(false).SetErr("Personal not found").SetMessage("Şubeye ait personeller bulunamadı.Lütfen sistemi kontrol ediniz!");
 				
 			var mappedResult = allData.Select(a => new ReadPersonalsByBranchIdDto
 			{
@@ -474,6 +474,8 @@ public class ReadPersonalService : IReadPersonalService
 				UsedYearLeave = a.UsedYearLeave,
 				PositionName = a.Position.Name,
 				BranchName = a.Branch.Name,
+				BranchId = a.Branch_Id,
+				PositionId = a.Position_Id,
 				TotalTakenLeave = a.TotalTakenLeave
 			}).ToList();
 			res.SetData(mappedResult);

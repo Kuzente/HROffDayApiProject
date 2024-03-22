@@ -36,6 +36,8 @@ public partial class OffDay : BaseEntity
 	[DisplayName("Açıklama")]
 	public string? Description { get; set; }
 
+	public Guid BranchId { get; set; }
+	public Guid PositionId { get; set; }
 	public int DocumentNumber { get; set; }
 
 }

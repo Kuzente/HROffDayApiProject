@@ -70,7 +70,8 @@ else
                                     <input type="hidden" name="Personal.ID" value="@Model.Data.Personal_Id">
                                     <input type="hidden" name="Personal.UsedYearLeave" value="@Model.Data.Personal.UsedYearLeave">
                                     <input type="hidden" name="Personal.TotalTakenLeave" value="@Model.Data.Personal.TotalTakenLeave">
-                                    
+                                    <input type="hidden" name="BranchId" value="@Model.Data.BranchId" >
+                                    <input type="hidden" name="PositionId" value="@Model.Data.PositionId" >
                                     <input type="hidden" name="CountLeave" >
                                     <input type="hidden" name="CreatedAt" value="@Model.Data.CreatedAt" >
                                     <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" >
@@ -107,7 +108,7 @@ else
                                             <path d="M16 14l0 3"></path>
                                         </svg>
                                     </span>
-                                    <input id="branchInput" name="BranchName" value="@Model.Data.Personal.Branch.Name" disabled class="form-control">
+                                    <input id="branchInput" name="BranchName" value="@Model.Data.BranchName" disabled class="form-control">
                                 </div>
                             </div>
                             <div class="col-6">
@@ -121,7 +122,7 @@ else
                                             <path d="M6.802 12l-3.4 5.89l3.598 -.233l1.598 3.232l3.4 -5.889"></path>
                                         </svg>
                                     </span>
-                                    <input id="positionInput" name="PositionName" value="@Model.Data.Personal.Position.Name" disabled type="text" class="form-control" placeholder="">
+                                    <input id="positionInput" name="PositionName" value="@Model.Data.PositionName" disabled type="text" class="form-control" placeholder="">
 
                                 </div>
                             </div>

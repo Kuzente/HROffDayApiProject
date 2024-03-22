@@ -46,17 +46,21 @@ public class WriteBranchService : IWriteBranchService
 	public async Task<IResultDto> DeleteAsync(Guid id)
 	{
 		IResultDto res = new ResultDto();
-		
 		try
 		{
+			var getResult = await _unitOfWork.ReadBranchRepository.GetSingleAsync(predicate: p => p.ID == id , include:p=> p.Include(a=>a.Personals));
+			if(getResult is null)
+				return res.SetStatus(false).SetErr("Branch Not Found").SetMessage("Şube Bulunamadı");
+			if (getResult.Personals.Any())
+			{
+				return res.SetStatus(false).SetErr("Branch have Personals").SetMessage("Silmek İstediğiniz Şube Altında Personeller Mevcut Lütfen Nakil İşlemlerini Yaptıktan Sonra Tekrar Deneyiniz.");
+			}
 			var result = await _unitOfWork.WriteBranchRepository.DeleteByIdAsync(id);
 			if (!result)
-				res.SetStatus(false).SetErr("Data Layer Error")
-					.SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+				return res.SetStatus(false).SetErr("Data Layer Error").SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
-				return res.SetStatus(false).SetErr("Commit Fail")
-					.SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
 		}
 		catch (Exception ex)
 		{

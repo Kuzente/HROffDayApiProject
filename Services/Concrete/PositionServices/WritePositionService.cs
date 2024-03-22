@@ -45,6 +45,13 @@ public class WritePositionService : IWritePositionService
 		IResultDto res = new ResultDto();
 		try
 		{
+			var getResult = await _unitOfWork.ReadPositionRepository.GetSingleAsync(predicate: p => p.ID == id , include:p=> p.Include(a=>a.Personals));
+			if(getResult is null)
+				return res.SetStatus(false).SetErr("Position Not Found").SetMessage("Ünvan Bulunamadı");
+			if (getResult.Personals.Any())
+			{
+				return res.SetStatus(false).SetErr("Position have Personals").SetMessage("Silmek İstediğiniz Ünvan Altında Personeller Mevcut Lütfen Nakil İşlemlerini Yaptıktan Sonra Tekrar Deneyiniz.");
+			}
 			var result = await _unitOfWork.WritePositionRepository.DeleteByIdAsync(id);
 			if (!result)
 				res.SetStatus(false).SetErr("Data Layer Error")

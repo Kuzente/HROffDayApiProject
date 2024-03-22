@@ -7,6 +7,8 @@ public class ReadPersonalsByBranchIdDto
     public int TotalYearLeave { get; set; }
     public int TotalTakenLeave { get; set; }
     public int UsedYearLeave { get; set; }
+    public Guid BranchId { get; set; }
+    public Guid PositionId { get; set; }
     public string BranchName { get; set; }
     public string PositionName { get; set; }
 }

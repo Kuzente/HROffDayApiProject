@@ -22,21 +22,26 @@ public class ReadRejectedOffDayListDto
     public int LeaveByFather { get; set; }
     public int LeaveByMarried { get; set; }
     public Guid Personal_Id { get; set; }
+    public Guid BranchId { get; set; }
+    public Guid PositionId { get; set; }
+    public string BranchName { get; set; }
+    public string PositionName { get; set; }
+    
     public ReadRejectedOffDayListPersonelDto Personal { get; set; }
 }
 
 public class ReadRejectedOffDayListPersonelDto
 {
     public string NameSurname { get; set; }
-    public ReadRejectedOffDayListPersonelBranchDto Branch { get; set; }
-    public ReadRejectedOffDayListPersonelPositionDto Position { get; set; }
+    // public ReadRejectedOffDayListPersonelBranchDto Branch { get; set; }
+    // public ReadRejectedOffDayListPersonelPositionDto Position { get; set; }
 }
 
-public class ReadRejectedOffDayListPersonelBranchDto
-{
-    public string Name { get; set; }
-}
-public class ReadRejectedOffDayListPersonelPositionDto
-{
-    public string Name { get; set; }
-}
+// public class ReadRejectedOffDayListPersonelBranchDto
+// {
+//     public string Name { get; set; }
+// }
+// public class ReadRejectedOffDayListPersonelPositionDto
+// {
+//     public string Name { get; set; }
+// }

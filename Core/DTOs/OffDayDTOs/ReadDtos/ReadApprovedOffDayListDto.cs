@@ -3,6 +3,12 @@ using Core.Enums;
 
 namespace Core.DTOs.OffDayDTOs.ReadDtos;
 
+public class ReadApprovedOffDayDto
+{
+    public List<ReadApprovedOffDayListDto> ReadApprovedOffDayListDtos { get; set; }
+    public List<ReadApprovedOffDayGetBranches> ReadApprovedOffDayGetBranchesList { get; set; }
+    public List<ReadApprovedOffDayGetPositions> ReadApprovedOffDayGetPositionsList { get; set; }
+}
 public class ReadApprovedOffDayListDto
 {
     public Guid ID { get; set; }
@@ -22,6 +28,10 @@ public class ReadApprovedOffDayListDto
     public int LeaveByFather { get; set; }
     public int LeaveByMarried { get; set; }
     public Guid Personal_Id { get; set; }
+    public Guid BranchId { get; set; }
+    public Guid PositionId { get; set; }
+    public string BranchName { get; set; }
+    public string PositionName { get; set; }
     public ReadApprovedOffDayListSubPersonalDto Personal { get; set; }
 }
 
@@ -30,15 +40,6 @@ public class ReadApprovedOffDayListSubPersonalDto
     public Guid ID { get; set; }
     public string NameSurname { get; set; }
     public EntityStatusEnum Status { get; set; }
-    public ReadApprovedOffDayListSubPersonalBranchDto Branch { get; set; }
-    public ReadApprovedOffDayListSubPersonalPositionDto Position { get; set; }
+    public bool IsBackToWork { get; set; }
 }
 
-public class ReadApprovedOffDayListSubPersonalBranchDto
-{
-    public string Name { get; set; }
-}
-public class ReadApprovedOffDayListSubPersonalPositionDto
-{
-    public string Name { get; set; }
-}

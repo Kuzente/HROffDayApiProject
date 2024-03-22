@@ -14,33 +14,25 @@ public class OffDayProfile : Profile
 
 		CreateMap<OffDay, ReadWaitingOffDayListDto>();
 		CreateMap<Personal, ReadWaitingOffDayListPersonalDto>();
-		CreateMap<Branch, ReadWaitingOffDayListPersonalBranchDto>();
-		CreateMap<Position, ReadWaitingOffDayListPersonalPositionDto>();
 
 		CreateMap<OffDay, ReadWaitingOffDayEditDto>();
 		CreateMap<Personal, ReadWaitingOffDayEditSubPersonalDto>();
-		CreateMap<Branch, ReadWaitingOffDayEditSubPersonalSubBranchDto>();
-		CreateMap<Position, ReadWaitingOffDayEditSubPersonalSubPositionDto>();
 		
 		CreateMap<WriteUpdateWatingOffDayDto, OffDay>();
-		//CreateMap<WriteUpdateWatingOffDaySubPersonalDto, Personal>();
 		#endregion
 
 		#region Reddedilen İzinler
 		CreateMap<OffDay, ReadRejectedOffDayListDto>();
 		CreateMap<Personal, ReadRejectedOffDayListPersonelDto>();
-		CreateMap<Branch, ReadRejectedOffDayListPersonelBranchDto>();
-		CreateMap<Position, ReadRejectedOffDayListPersonelPositionDto>();
 		
-
 		#endregion
 		
 
 		#region Onaylanan İzinler
 		CreateMap<OffDay, ReadApprovedOffDayListDto>();
 		CreateMap<Personal, ReadApprovedOffDayListSubPersonalDto>();
-		CreateMap<Branch, ReadApprovedOffDayListSubPersonalBranchDto>();
-		CreateMap<Position, ReadApprovedOffDayListSubPersonalPositionDto>();
+		// CreateMap<Branch, ReadApprovedOffDayListSubPersonalBranchDto>();
+		// CreateMap<Position, ReadApprovedOffDayListSubPersonalPositionDto>();
 
 
 		CreateMap<OffDay, ReadApprovedOffDayFormExcelExportDto>();
@@ -52,8 +44,6 @@ public class OffDayProfile : Profile
 		#region Silinen İzinler
 		CreateMap<OffDay, ReadDeletedOffDayListDto>();
 		CreateMap<Personal, ReadDeletedOffDayListSubPersonalDto>();
-		CreateMap<Branch, ReadDeletedOffDayListSubPersonalBranchDto>();
-		CreateMap<Position, ReadDeletedOffDayListSubPersonalPositionDto>();
 		
 
 		#endregion

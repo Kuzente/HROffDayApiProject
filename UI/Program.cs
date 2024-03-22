@@ -130,6 +130,11 @@ app.MapControllerRoute(name: "dailyYearLog", pattern: "yillik-izin-log", default
 app.MapControllerRoute(name: "dailyFoodLog", pattern: "gida-yardimi-log", defaults: new { controller = "DailyLog", action = "GetFoodLogs" });
 #endregion
 
+#region User
+app.MapControllerRoute(name: "userListPage", pattern: "kullanici-listesi", defaults: new { controller = "User", action = "UsersList" });
+
+
+#endregion
 #region Authentication
 app.MapControllerRoute(name: "loginPage", pattern: "giris-yap", defaults: new { controller = "Authentication", action = "Login" });
 app.MapControllerRoute(name: "loginPage", pattern: "cikis-yap", defaults: new { controller = "Authentication", action = "Logout" });

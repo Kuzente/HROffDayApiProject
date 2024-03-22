@@ -1,8 +1,124 @@
-﻿@model TModel
-
-@{
-    ViewBag.Title = "title";
+﻿@{
+    ViewBag.Title = "Kullanıcı İşlemleri";
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+<!--Heading Area-->
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                    IYAŞ PANEL
+                </div>
+                <h2 class="page-title">
+                    Kullanıcı Listesi
+                </h2>
+            </div>
+            <!-- Page title actions -->
+            <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#addModal">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 5l0 14"></path>
+                            <path d="M5 12l14 0"></path>
+                        </svg>
+                        Kullanıcı Ekle
+                    </a>
+                    <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal" data-bs-target="#addModal" aria-label="Create new report">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 5l0 14"></path>
+                            <path d="M5 12l14 0"></path>
+                        </svg>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Heading Area-->
+<!--AddModal-->
+<form id="addUserForm" method="post" action="/sube-ekle">
+    <div class="modal modal-blur fade" id="addModal" tabindex="-1" style=" padding-left: 0;" aria-hidden="true" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Kullanıcı Ekle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="usernameInput" class="form-label required">Kullanıcı Adı</label>
+                            <input type="text" name="Username" id="usernameInput" class="form-control" placeholder="Kullanıcı Adını Giriniz!">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="mailInput" class="form-label required">Mail Adresi</label>
+                            <input type="email" name="Mail" id="mailInput" class="form-control" placeholder="Mail Adresini Giriniz!">
+                        </div>
+                    </div>
+                    <div class="row justify-content-around">
+                        <div class="mb-3">
+                            <label class="form-label required">Rol Seçiniz</label>
+                            <div class="form-selectgroup">
+
+                                <label class="form-selectgroup-item">
+                                    <input id="hrInput" type="radio" name="role" value="hr" class="form-selectgroup-input" checked="">
+                                    <span class="form-selectgroup-label">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-letter-i">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 4l0 16"/>
+                                        </svg>
+                                        İnsan Kaynakları
+                                    </span>
+                                </label>
+                                <label class="form-selectgroup-item">
+                                    <input id="directorInput" type="radio" name="role" value="director" class="form-selectgroup-input">
+                                    <span class="form-selectgroup-label">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-letter-g">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 9a5 5 0 0 0 -5 -5h-2a5 5 0 0 0 -5 5v6a5 5 0 0 0 5 5h2a5 5 0 0 0 5 -5v-2h-4"/>
+                                        </svg>
+                                        Genel Müdür
+                                    </span>
+                                </label>
+                                <label class="form-selectgroup-item">
+                                    <input id="branchManagerInput" type="radio" name="role" value="branchManager" class="form-selectgroup-input">
+                                    <span class="form-selectgroup-label">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/circle -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-letter-s">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 8a4 4 0 0 0 -4 -4h-2a4 4 0 0 0 0 8h2a4 4 0 0 1 0 8h-2a4 4 0 0 1 -4 -4"/>
+                                        </svg>
+                                        Şube Sorumlusu
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="branchSection" class="row">
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Kapat
+                    </button>
+                    <button id="addUserButton" type="button" class="btn btn-primary">Kullanıcı Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    <script src="/js/custom/user/userList.js"></script>
+}

@@ -42,8 +42,8 @@ public class OffDayExcelExport
             foreach (var entity in offDays)
             {
                 worksheet.Cells[row, 1].Value = entity.Personal.NameSurname;
-                worksheet.Cells[row, 2].Value = entity.Personal.Branch.Name;
-                worksheet.Cells[row, 3].Value = entity.Personal.Position.Name;
+                worksheet.Cells[row, 2].Value = entity.BranchName;
+                worksheet.Cells[row, 3].Value = entity.PositionName;
                 worksheet.Cells[row, 4].Value = entity.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"));
                 worksheet.Cells[row, 5].Value = entity.EndDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"));
                 worksheet.Cells[row, 6].Value = entity.CountLeave;
@@ -62,6 +62,12 @@ public class OffDayExcelExport
                 {
                     worksheet.Row(row).Style.Fill.PatternType = ExcelFillStyle.Solid;
                     worksheet.Row(row).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Red);
+                }
+                if (entity.Personal.IsBackToWork)
+                {
+                    worksheet.Row(row).Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    worksheet.Row(row).Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGreen);
+                    worksheet.Cells[row, 1].Value += "(Eski Kayıt)";
                 }
                 worksheet.Cells[row, 18].Value = entity.OffDayStatus == OffDayStatusEnum.Approved ? "Onaylandı" : "Reddedildi";
                 worksheet.Cells[row, 18].Style.Fill.PatternType = ExcelFillStyle.Solid;

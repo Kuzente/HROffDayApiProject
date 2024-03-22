@@ -22,21 +22,14 @@ public class ReadWaitingOffDayListDto
     public int LeaveByFather { get; set; }
     public int LeaveByMarried { get; set; }
     public Guid Personal_Id { get; set; }
+    public Guid BranchId { get; set; }
+    public Guid PositionId { get; set; }
+    public string PositionName { get; set; }
+    public string BranchName { get; set; }
     public ReadWaitingOffDayListPersonalDto Personal { get; set; }
 }
 
 public class ReadWaitingOffDayListPersonalDto
 {
     public string NameSurname { get; set; }
-    public ReadWaitingOffDayListPersonalBranchDto Branch { get; set; }
-    public ReadWaitingOffDayListPersonalPositionDto Position { get; set; }
-}
-
-public class ReadWaitingOffDayListPersonalBranchDto
-{
-    public string Name { get; set; }
-}
-public class ReadWaitingOffDayListPersonalPositionDto
-{
-    public string Name { get; set; }
 }

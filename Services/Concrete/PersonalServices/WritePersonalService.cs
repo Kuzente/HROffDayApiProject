@@ -56,7 +56,7 @@ public class WritePersonalService : IWritePersonalService
             {
 	            p.FoodAidDate = p.StartJobDate;
             });
-			var resultData = await _unitOfWork.WritePersonalRepository.AddRangeAsync(mapSet);
+			await _unitOfWork.WritePersonalRepository.AddRangeAsync(mapSet);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
@@ -120,8 +120,7 @@ public class WritePersonalService : IWritePersonalService
 		IResultDto res = new ResultDto();
 		try
 		{
-			var findData = await _unitOfWork.ReadPersonalRepository.GetByIdAsync(dto.ID);
-			var data = await findData.FirstOrDefaultAsync();
+			var data = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate:p=> p.ID == dto.ID,include:a=>a.Include(b=>b.PersonalDetails));
 			if (data is null) return res.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Veri Bulunamadı!!!");
 			if (data.Status == EntityStatusEnum.Online)
 			{
@@ -131,27 +130,64 @@ public class WritePersonalService : IWritePersonalService
 			}
 			else if (data.Status == EntityStatusEnum.Offline)
 			{
-				// Eğer "offline" ise "online" yapın
-				data.Status = EntityStatusEnum.Online;
-				data.StartJobDate = dto.StartJobDate;
-				data.EndJobDate = null;
-				if (!dto.IsYearLeaveProtected)
+				var newPersonel = new Personal
 				{
-					data.TotalYearLeave = 0;
-					data.UsedYearLeave = 0;
+					ID = Guid.NewGuid(),
+					Branch_Id = data.Branch_Id,
+					Position_Id = data.Position_Id,
+					NameSurname = data.NameSurname,
+					BirthDate = data.BirthDate,
+					StartJobDate = dto.StartJobDate,
+					EndJobDate = null,
+					IdentificationNumber = data.IdentificationNumber,
+					RegistirationNumber = data.RegistirationNumber,
+					Phonenumber = data.Phonenumber,
+					RetiredOrOld = data.RetiredOrOld,
+					RetiredDate = data.RetiredDate,
+					Gender = data.Gender,
+					Status = EntityStatusEnum.Online,
+					PersonalDetails = new PersonalDetails
+					{
+						Address = data.PersonalDetails.Address,
+						BankAccount = data.PersonalDetails.BankAccount,
+						BirthPlace = data.PersonalDetails.BirthPlace,
+						BloodGroup = data.PersonalDetails.BloodGroup,
+						BodySize = data.PersonalDetails.BodySize,
+						IBAN = data.PersonalDetails.IBAN,
+						Handicapped = data.PersonalDetails.Handicapped,
+						Salary = data.PersonalDetails.Salary,
+						EducationStatus = data.PersonalDetails.EducationStatus,
+						FatherName = data.PersonalDetails.FatherName,
+						MotherName = data.PersonalDetails.MotherName,
+						MaritalStatus = data.PersonalDetails.MaritalStatus,
+						PersonalGroup = data.PersonalDetails.PersonalGroup,
+						SgkCode = data.PersonalDetails.SgkCode,
+						SskNumber = data.PersonalDetails.SskNumber,
+						DepartmantName = data.PersonalDetails.DepartmantName
+					}
+					
+				};
+				
+				data.IsBackToWork = true;
+				//data.StartJobDate = dto.StartJobDate;
+				//data.EndJobDate = null;
+				if (dto.IsYearLeaveProtected)
+				{
+					newPersonel.TotalYearLeave = data.TotalYearLeave;
+					newPersonel.UsedYearLeave = data.UsedYearLeave;
 				}
-				if (!dto.IsTakenLeaveProtected)
+				if (dto.IsTakenLeaveProtected)
 				{
-					data.TotalTakenLeave = 0;
+					newPersonel.TotalTakenLeave = data.TotalTakenLeave;
 				}
-				if (!dto.IsFoodAidProtected)
+				if (dto.IsFoodAidProtected)
 				{
-					data.FoodAid = 0;
+					newPersonel.FoodAid = data.FoodAid;
 				}
 				//Eğer Gıda yardımı girilmediyse işe başlangıç tarihini baz al
-				data.FoodAidDate = dto.FoodAidDate.Year > 1000 ? dto.FoodAidDate : dto.StartJobDate;
+				newPersonel.FoodAidDate = dto.FoodAidDate.Year > 1000 ? dto.FoodAidDate : dto.StartJobDate;
+				await _unitOfWork.WritePersonalRepository.AddAsync(newPersonel);
 			}
-
 			await _unitOfWork.WritePersonalRepository.Update(data);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)

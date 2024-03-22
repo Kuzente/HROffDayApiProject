@@ -13,7 +13,7 @@ public class ReadUpdatePersonalDto
     public DateTime StartJobDate { get; set; }
     public DateTime? EndJobDate { get; set; } 
     public string IdentificationNumber { get; set; }
-    public string RegistirationNumber { get; set; }
+    public int RegistirationNumber { get; set; }
     public string Phonenumber { get; set; }
     public bool RetiredOrOld { get; set; }
     public DateTime RetiredDate { get; set; }
@@ -29,4 +29,5 @@ public class ReadUpdatePersonalDto
     public List<PositionNameDto> Positions { get; set; }
     public ReadUpdatePersonalDetailsDto PersonalDetails { get; set; }
     public EntityStatusEnum Status { get; set; }
+    public bool IsBackToWork { get; set; }
 }
