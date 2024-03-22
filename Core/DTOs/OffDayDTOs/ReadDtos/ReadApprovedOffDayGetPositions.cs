@@ -1,6 +1,6 @@
 ﻿namespace Core.DTOs.OffDayDTOs.ReadDtos;
 
-public class ReadOffDayExcelDto
+public class ReadApprovedOffDayGetPositions
 {
     
 }
