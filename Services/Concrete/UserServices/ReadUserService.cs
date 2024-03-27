@@ -8,6 +8,7 @@ using Core.Interfaces;
 using Core.Querys;
 using Data.Abstract;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Services.Abstract.UserServices;
 
 namespace Services.Concrete.UserServices;
@@ -139,10 +140,11 @@ public class ReadUserService : IReadUserService
 	    try
 	    {
     
-		    var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: d => d.Email == dto.Email);             
+		    var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: d => d.Email == dto.Email,include:a=>a.Include(b=>b.BranchUsers).ThenInclude(c=>c.Branch));             
 		    if (user is null || user.Password != "deneme") // _passwordCryptoHelper.DecryptString(user.Password) != dto.Password           
 			    return result.SetStatus(false).SetErr("Not Found User").SetMessage("Girmiş olduğunuz e-posta adresine ait hesap bulunamadı! Lütfen bilgilerinizi kontrol ediniz.");
 		    if (user.Status == EntityStatusEnum.Offline) return result.SetStatus(false).SetErr("The User is Banned").SetMessage("Bu bilgilere sahip üyelik pasif duruma alınmıştır.Bir hata olduğunu düşünüyorsanız yetkili ile iletişime geçiniz.");
+		    if(user.Role != UserRoleEnum.HumanResources && !user.BranchUsers.Any(a => a.Branch.Status == EntityStatusEnum.Online)) return result.SetStatus(false).SetErr("The User Branches Offline").SetMessage("Bu üyeliğe ait şubeler kapatılmış veya pasife alınmış olabilir.Lütfen yetkili ile iletişime geçiniz.");
 		    var userMap = _mapper.Map<ReadUserSignInDto>(user);
 		    result.SetData(userMap);
 	    }
@@ -158,8 +160,8 @@ public class ReadUserService : IReadUserService
 	    IResultWithDataDto<List<Guid>> result = new ResultWithDataDto<List<Guid>>();
 	    try
 	    {
-		    var branches = _unitOfWork.ReadBranchUserRepository.GetAll(predicate: p => p.UserID == id);
-		    if(branches is null) return result.SetStatus(false).SetErr("Not Found Branch").SetMessage("Bir Hata Meydana Geldi");
+		    var branches = _unitOfWork.ReadBranchUserRepository.GetAll(predicate: p => p.UserID == id && p.Branch.Status == EntityStatusEnum.Online,include:i=>i.Include(b=>b.Branch));
+		    if(branches.IsNullOrEmpty()) return result.SetStatus(false).SetErr("Not Found Branch").SetMessage("Bir Hata Meydana Geldi");
 		    result.SetData(branches.Select(p => p.BranchID).ToList());
 	    }
 	    catch (Exception ex)

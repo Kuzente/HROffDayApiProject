@@ -33,7 +33,7 @@ public class ReadBranchService : IReadBranchService
 			var resultData = await Task.Run(() => 
 				_unitOfWork.ReadBranchRepository.GetAll(
 				predicate: p=> (p.Status == EntityStatusEnum.Online || p.Status == EntityStatusEnum.Offline) &&
-				               (string.IsNullOrWhiteSpace(query.search) || p.Name.Contains(query.search))&&
+				               (string.IsNullOrEmpty(query.search) || p.Name.ToLower().Contains(query.search.ToLower()))&&
 				               (query.isActive == null ? p.Status==EntityStatusEnum.Online || p.Status == EntityStatusEnum.Offline : (query.isActive == "active" ? p.Status == EntityStatusEnum.Online : p.Status == EntityStatusEnum.Offline)),
 				orderBy: p => query.sortBy == "desc" ? p.OrderByDescending(a=>a.Name) : p.OrderBy(a=>a.Name)
                 ));
@@ -56,7 +56,7 @@ public class ReadBranchService : IReadBranchService
                 var allData = await Task.Run(() =>
                 _unitOfWork.ReadBranchRepository.GetAll(
                     predicate: a => (a.Status == EntityStatusEnum.Online || a.Status == EntityStatusEnum.Offline) && 
-                                    (string.IsNullOrEmpty(query.search) || a.Name.Contains(query.search))&&
+                                    (string.IsNullOrEmpty(query.search) || a.Name.ToLower().Contains(query.search.ToLower()))&&
                                     (query.isActive == null ? a.Status==EntityStatusEnum.Online || a.Status == EntityStatusEnum.Offline : (query.isActive == "active" ? a.Status == EntityStatusEnum.Online : a.Status == EntityStatusEnum.Offline)),
                     orderBy: p => query.sortBy == "desc" ? p.OrderByDescending(a=>a.Name) : p.OrderBy(a=>a.Name)
                     ));   
@@ -84,7 +84,7 @@ public class ReadBranchService : IReadBranchService
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadBranchRepository.GetAll(
 					predicate: a => (a.Status == EntityStatusEnum.Archive ) && 
-					                (string.IsNullOrEmpty(query.search) || a.Name.Contains(query.search)),
+					                (string.IsNullOrEmpty(query.search) || a.Name.ToLower().Contains(query.search.ToLower())),
 					orderBy: p =>
 					{
 						IOrderedQueryable<Branch> orderedBranch;

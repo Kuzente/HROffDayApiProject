@@ -44,7 +44,7 @@ public class ReadPersonalService : IReadPersonalService
 					predicate: a => (a.Status == EntityStatusEnum.Online) && 
 					                (a.Branch.Status == EntityStatusEnum.Online || a.Branch.Status == EntityStatusEnum.Offline)&&
 					                (a.Position.Status == EntityStatusEnum.Online || a.Position.Status == EntityStatusEnum.Offline)&&
-					                (string.IsNullOrEmpty(query.search) || a.NameSurname.Contains(query.search))&& 
+					                (string.IsNullOrEmpty(query.search) || a.NameSurname.ToLower().Contains(query.search.ToLower()))&& 
 					                (string.IsNullOrEmpty(query.gender) || a.Gender.Contains(query.gender))&& 
 					                (string.IsNullOrEmpty(query.branch) || a.Branch_Id.ToString().Contains(query.branch))&& 
 					                (string.IsNullOrEmpty(query.position) || a.Position_Id.ToString().Contains(query.position))&& 
@@ -125,7 +125,7 @@ public class ReadPersonalService : IReadPersonalService
 					predicate: a => (a.Status == EntityStatusEnum.Offline) && 
 					                (a.Branch.Status == EntityStatusEnum.Online || a.Branch.Status == EntityStatusEnum.Offline)&&
 					                (a.Position.Status == EntityStatusEnum.Online || a.Position.Status == EntityStatusEnum.Offline)&&
-					                (string.IsNullOrEmpty(query.search) || a.NameSurname.Contains(query.search))&& 
+					                (string.IsNullOrEmpty(query.search) || a.NameSurname.ToLower().Contains(query.search.ToLower()))&& 
 					                (string.IsNullOrEmpty(query.gender) || a.Gender.Contains(query.gender))&& 
 					                (string.IsNullOrEmpty(query.branch) || a.Branch_Id.ToString().Contains(query.branch))&& 
 					                (string.IsNullOrEmpty(query.position) || a.Position_Id.ToString().Contains(query.position))&& 
@@ -240,7 +240,7 @@ public class ReadPersonalService : IReadPersonalService
 					predicate: a => (a.Status == EntityStatusEnum.Online) && 
 					                (a.Branch.Status == EntityStatusEnum.Online || a.Branch.Status == EntityStatusEnum.Offline)&&
 					                (a.Position.Status == EntityStatusEnum.Online || a.Position.Status == EntityStatusEnum.Offline)&&
-					                (string.IsNullOrEmpty(query.search) || a.NameSurname.Contains(query.search))&& 
+					                (string.IsNullOrEmpty(query.search) || a.NameSurname.ToLower().Contains(query.search.ToLower()))&& 
 					                (string.IsNullOrEmpty(query.gender) || a.Gender.Contains(query.gender))&& 
 					                (string.IsNullOrEmpty(query.branch) || a.Branch.Name.Contains(query.branch))&& 
 					                (string.IsNullOrEmpty(query.position) || a.Position.Name.Contains(query.position))&& 
@@ -323,7 +323,7 @@ public class ReadPersonalService : IReadPersonalService
 					predicate: a => (a.Status == EntityStatusEnum.Offline) && 
 					                (a.Branch.Status == EntityStatusEnum.Online || a.Branch.Status == EntityStatusEnum.Offline)&&
 					                (a.Position.Status == EntityStatusEnum.Online || a.Position.Status == EntityStatusEnum.Offline)&&
-					                (string.IsNullOrEmpty(query.search) || a.NameSurname.Contains(query.search))&& 
+					                (string.IsNullOrEmpty(query.search) || a.NameSurname.ToLower().Contains(query.search.ToLower()))&& 
 					                (string.IsNullOrEmpty(query.gender) || a.Gender.Contains(query.gender))&& 
 					                (string.IsNullOrEmpty(query.branch) || a.Branch.Name.Contains(query.branch))&& 
 					                (string.IsNullOrEmpty(query.position) || a.Position.Name.Contains(query.position))&& 
@@ -404,7 +404,7 @@ public class ReadPersonalService : IReadPersonalService
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadPersonalRepository.GetAll(
 					predicate: a => (a.Status == EntityStatusEnum.Archive) && 
-					                (string.IsNullOrEmpty(query.search) || a.NameSurname.Contains(query.search)),
+					                (string.IsNullOrEmpty(query.search) || a.NameSurname.ToLower().Contains(query.search.ToLower())),
 			orderBy: p =>
 					{
 						IOrderedQueryable<Personal> orderedPersonal;

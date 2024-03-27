@@ -10,6 +10,7 @@ using Core.Interfaces;
 using Core.Querys;
 using Data.Abstract;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Services.Abstract.OffDayServices;
 
 namespace Services.Concrete.OffDayServices;
@@ -38,7 +39,7 @@ public class ReadOffDayService : IReadOffDayService
 						a.Personal.Status == EntityStatusEnum.Online &&
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth)&&
-						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search)),
+						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower())),
 					include: p=>p.Include(a=>a.Personal),
 					orderBy: p => p.OrderByDescending(a => a.CreatedAt)
 				));
@@ -85,7 +86,7 @@ public class ReadOffDayService : IReadOffDayService
 						a.Personal.Status == EntityStatusEnum.Online &&
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth)&&
-						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search)),
+						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower())),
 					include: p=>p.Include(a=>a.Personal),
 					orderBy: p => p.OrderByDescending(a => a.CreatedAt)
 				));
@@ -128,10 +129,10 @@ public class ReadOffDayService : IReadOffDayService
 					predicate: a =>
 						(a.Status == EntityStatusEnum.Online && a.OffDayStatus == OffDayStatusEnum.Rejected) &&
 						a.Personal.Status == EntityStatusEnum.Online &&
-						(query.UserBranches == null || query.UserBranches.Any(q=>q == a.BranchId)) &&
+						(query.UserBranches.IsNullOrEmpty()|| query.UserBranches.Any(q=>q == a.BranchId)) &&
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth)&&
-						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search)),
+						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower())),
 					include: p=>p.Include(a=>a.Personal),
 					orderBy: p => p.OrderByDescending(a => a.CreatedAt)
 				));
@@ -176,11 +177,11 @@ public class ReadOffDayService : IReadOffDayService
 						 a.OffDayStatus == OffDayStatusEnum.Approved ) &&
 						(a.Personal.Status == EntityStatusEnum.Online ||
 						 a.Personal.Status == EntityStatusEnum.Offline) &&
-						(query.UserBranches == null || query.UserBranches.Any(q=>q == a.BranchId)) &&
+						(query.UserBranches.IsNullOrEmpty() || query.UserBranches.Any(q=>q == a.BranchId)) &&
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear || a.EndDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth || a.EndDate.Month == query.filterMonth)&&
-						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search))&&
-							(string.IsNullOrEmpty(query.isFreedayLeave) || a.LeaveByFreeDay > 0),
+						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower()))&&
+						(string.IsNullOrEmpty(query.isFreedayLeave) || a.LeaveByFreeDay > 0),
 					
 					include: p=>p.Include(a=>a.Personal),
 					orderBy: p =>
@@ -301,7 +302,7 @@ public class ReadOffDayService : IReadOffDayService
 					predicate: a =>
 						(a.Status == EntityStatusEnum.Deleted ) &&
 						a.Personal.Status == EntityStatusEnum.Online &&
-						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search)),
+						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower())),
 					include: p=>p.Include(a=>a.Personal),
 					orderBy: p =>
 					{
@@ -414,12 +415,18 @@ public class ReadOffDayService : IReadOffDayService
 		try
 		{
 			var resultData = await _unitOfWork.ReadOffDayRepository.GetSingleAsync(
-				predicate: p => p.ID == id && 
-                p.Personal.Status == EntityStatusEnum.Online,
-				include: p=> p.Include(a=>a.Personal)
-											.Include(a=>a.Personal));
-			var branchList = await Task.Run(() => _unitOfWork.ReadBranchRepository.GetAll().Select(a=> new { a.Name,a.ID , a.Status}));
-			var positionList = await Task.Run(() => _unitOfWork.ReadPositionRepository.GetAll().Select(a=> new { a.Name,a.ID, a.Status}));
+				predicate: p => 
+						p.ID == id && 
+						p.Personal.Status == EntityStatusEnum.Online,
+				include: p=> p
+						.Include(a=>a.Personal)
+						.Include(a=>a.Personal));
+			var branchList = await Task.Run(() => _unitOfWork.ReadBranchRepository
+				.GetAll()
+				.Select(a=> new { a.Name,a.ID , a.Status}));
+			var positionList = await Task.Run(() => _unitOfWork.ReadPositionRepository
+				.GetAll()
+				.Select(a=> new { a.Name,a.ID, a.Status}));
 			if(resultData is null||branchList is null || positionList is null)
 				return res.SetStatus(false).SetErr("OffDay Not Found").SetMessage("İlgili Personele Ait İzin Bulunamadı!!!");
 			
@@ -451,13 +458,11 @@ public class ReadOffDayService : IReadOffDayService
 					predicate: a =>
 						(a.Status == EntityStatusEnum.Online && a.OffDayStatus == OffDayStatusEnum.Approved ) &&
 						(a.Personal.Status == EntityStatusEnum.Online || a.Personal.Status == EntityStatusEnum.Offline) &&
-						(query.UserBranches == null || query.UserBranches.Any(q=>q == a.BranchId)) &&
+						(query.UserBranches.IsNullOrEmpty() || query.UserBranches.Any(q=>q == a.BranchId)) &&
 						(!query.id.HasValue || a.Personal_Id == query.id) &&
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear || a.EndDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth || a.EndDate.Month == query.filterMonth)&&
-						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search))&&
-						// (string.IsNullOrEmpty(query.branchName) || a.Personal.Branch.Name.Contains(query.branchName))&&
-						// (string.IsNullOrEmpty(query.positionName) || a.Personal.Position.Name.Contains(query.positionName))&&
+						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower()))&&
 						(string.IsNullOrEmpty(query.isFreedayLeave) || a.LeaveByFreeDay > 0),
 					include: p=>p.Include(a=>a.Personal).ThenInclude(a=>a.Branch).Include(a=>a.Personal.Position),
 					orderBy: p =>
