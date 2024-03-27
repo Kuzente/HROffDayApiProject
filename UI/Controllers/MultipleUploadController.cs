@@ -1,29 +1,27 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Core.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.BranchServices;
 using Services.Abstract.ExcelServices;
 using Services.Abstract.PersonalServices;
 using Services.Abstract.PositionServices;
 using Services.ExcelDownloadServices;
-using Services.FileUpload;
 
 namespace UI.Controllers;
 
-[Authorize]
+[Authorize(Roles = nameof(UserRoleEnum.HumanResources))]
 public class MultipleUploadController : Controller
 {
-    private readonly ExcelPersonalAddrange _excelPersonalAddrange;
     private readonly IWritePersonalService _writePersonalService;
     private readonly IReadBranchService _readBranchService;
     private readonly IReadPositionService _readPositionService;
     private readonly ExcelUploadScheme _excelUploadScheme;
     private readonly IReadExcelServices _readExcelServices;
 
-    public MultipleUploadController(ExcelPersonalAddrange excelPersonalAddrange,
+    public MultipleUploadController(
         IWritePersonalService writePersonalService, IReadPositionService readPositionService,
         IReadBranchService readBranchService, ExcelUploadScheme excelUploadScheme, IReadExcelServices readExcelServices)
     {
-        _excelPersonalAddrange = excelPersonalAddrange;
         _writePersonalService = writePersonalService;
         _readPositionService = readPositionService;
         _readBranchService = readBranchService;

@@ -92,6 +92,7 @@
         window.location.href = currentUrl.toString();
     });
     $('#addBranchButton').on('click',function (e) {
+        spinnerStart($(this))
         e.preventDefault();
         let formData = $("#addBranchForm").serializeArray();
         $.ajax({
@@ -99,6 +100,7 @@
             url: "/sube-ekle",
             data: formData // Form verilerini al
         }).done(function (res) {
+            spinnerEnd($('#addBranchButton'))
             if (res.isSuccess){
                 $('#success-modal-message').text("Şube Başarılı Bir Şekilde Eklendi.")
                 $('#success-modal').modal('show')
@@ -114,13 +116,16 @@
     });
     //Modal üzerideki Şubeyi Sil Butonuna Tıklandığında
     $('#deleteBranchButton').on('click',function (e) {
+        spinnerStart($(this))
         e.preventDefault();
         let formData = $("#deleteBranchForm").serializeArray();
+        
         $.ajax({
             type: "POST",
             url: "/sube-sil",
             data: formData // Form verilerini al
         }).done(function (res) {
+            spinnerEnd($('#deleteBranchButton'))
             if (res.isSuccess){
                 $('#success-modal-message').text("Şube Başarılı Bir Şekilde Silindi.")
                 $('#success-modal').modal('show')

@@ -1,16 +1,20 @@
 ﻿using Data.Abstract;
 using Data.Abstract.BranchRepositories;
+using Data.Abstract.BranchUserRepositories;
 using Data.Abstract.DailyFoodLogRepositories;
 using Data.Abstract.DailyYearLogRepositories;
 using Data.Abstract.OffDayRepositories;
 using Data.Abstract.PersonalRepositories;
 using Data.Abstract.PositionRepositories;
+using Data.Abstract.UserRepositories;
 using Data.Concrete.BranchRepositories;
+using Data.Concrete.BranchUserRepositories;
 using Data.Concrete.DailyFoodLogRepositories;
 using Data.Concrete.DailyYearLogRepositories;
 using Data.Concrete.OffDayRepositories;
 using Data.Concrete.PersonalRepositories;
 using Data.Concrete.PositionRepositories;
+using Data.Concrete.UserRepositories;
 using Data.Context;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -37,6 +41,11 @@ public class UnitOfWork : IUnitOfWork
 	public IReadDailyYearLogRepository ReadDailyYearLogRepository { get; private set; }
 	public IWriteDailyFoodLogRepository WriteDailyFoodLogRepository { get; private set; }
 	public IReadDailyFoodLogRepository ReadDailyFoodLogRepository { get; private set; }
+	public IWriteUserRepository WriteUserRepository { get; private set; }
+	public IReadUserRepository ReadUserRepository { get; private set; }
+	public IWriteBranchUserRepository WriteBranchUserRepository { get; private set; }
+	public IReadBranchUserRepository ReadBranchUserRepository { get; private set; }
+	
 
 	public UnitOfWork(DataContext context)
 	{
@@ -53,6 +62,10 @@ public class UnitOfWork : IUnitOfWork
 		WriteDailyYearLogRepository = new WriteDailyYearLogRepository(_context);
 		ReadDailyFoodLogRepository = new ReadDailyFoodLogRepository(_context);
 		WriteDailyFoodLogRepository = new WriteDailyFoodLogRepository(_context);
+		ReadUserRepository = new ReadUserRepository(_context);
+		WriteUserRepository = new WriteUserRepository(_context);
+		ReadBranchUserRepository = new ReadBranchUserRepository(_context);
+		WriteBranchUserRepository = new WriteBranchUserRepository(_context);
 		_transaction = _context.Database.BeginTransaction();
 	}
 

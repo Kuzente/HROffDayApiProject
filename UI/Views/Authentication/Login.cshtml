@@ -40,10 +40,12 @@
                 <div class="row">
                     <h2 class="h2 text-center">İyaş Personel Takip <br>Giriş Yap</h2>
                 </div>
-                <form action="/giris-yap" method="post" autocomplete="off">
+                <form id="submitForm" action="/giris-yap" method="post" autocomplete="off">
+                    <input id="sitekeyInput" type="hidden" name="sitekey" value="@ViewBag.sitekey">
+                    <input id="sitekeyInputPost" type="hidden" name="Security" value="">
                     <div class="mb-3">
                         <label class="form-label">Mail Adresiniz</label>
-                        <input type="text" name="username" class="form-control" placeholder="Kullanıcı Adınız" autocomplete="off">
+                        <input id="emailInput" type="email" name="email" class="form-control" placeholder="Mail Adresiniz" autocomplete="off">
                     </div>
                     <div class="mb-2">
                         <label class="form-label">
@@ -53,34 +55,96 @@
                             </span>
                         </label>
                         <div class="input-group input-group-flat">
-                            <input type="password" name="password" class="form-control" placeholder="Şifreniz" autocomplete="off">
+                            <input id="passwordInput" type="password" name="password" class="form-control" placeholder="Şifreniz" autocomplete="off">
                             <span class="input-group-text">
                                 <a href="#" class="link-secondary" title="Şifremi Gör" data-bs-toggle="tooltip">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/>
-                                    </svg>
+                                    <div id="svgContainer1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/>
+                                        </svg>
+                                    </div>
+                                    <div id="svgContainer2" class="d-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye-off">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" /><path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" /><path d="M3 3l18 18" />
+                                        </svg>
+                                    </div>
                                 </a>
                             </span>
                         </div>
                     </div>
-                    <div class="mb-2">
-                        <label class="form-check">
-                            <input type="checkbox" class="form-check-input"/>
-                            <span class="form-check-label">Beni Hatırla</span>
-                        </label>
-                    </div>
                     <div class="form-footer">
-                        <button type="submit" class="btn btn-pink w-100">Giriş Yap</button>
+                        <button id="submitButton" type="button" class="btn btn-pink w-100">Giriş Yap</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+<!--Error Modal-->
+        <div class="modal modal-blur fade" id="error-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-status bg-danger"></div>
+                    <div class="modal-body text-center py-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>
+                        </svg>
+                        <h3>Uyarı?</h3>
+                        <div id="error-modal-message" class="text-muted">
+                            
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="w-100">
+                            <div class="row">
+                                <div class="col">
+                                    <a id="error-modal-button" href="#" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                                        Anladım
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Error Modal-->
+        <!--Success Modal-->
+        <div class="modal modal-blur fade" id="success-modal" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-status bg-success"></div>
+                    <div class="modal-body text-center py-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path><path d="M9 12l2 2l4 -4"></path></svg>
+                        <h3>Başarılı</h3>
+                        <div id="success-modal-message" class="text-muted">
+                            
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="w-100">
+                            <div class="row">
+                                <div class="col">
+                                    <a id="success-modal-button" href="#" class="btn btn-success w-100" data-bs-dismiss="modal">
+                                        Anladım
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Success Modal-->
 <!-- Libs JS -->
 <!-- Tabler Core -->
+<script src="/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/dist/js/tabler.min.js?1684106062" defer></script>
 <script src="~/dist/js/demo.min.js?1684106062" defer></script>
+<script src="https://www.google.com/recaptcha/api.js?render=@ViewBag.sitekey&trustedtypes=true"></script>
+<script src="~/js/custom/base/base.js"></script>
+<script src="~/js/custom/Authentication/login.js"></script>
 </body>
 </html>

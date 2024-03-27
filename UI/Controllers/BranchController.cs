@@ -1,6 +1,7 @@
 ﻿using Core;
 using Core.DTOs;
 using Core.DTOs.BranchDTOs;
+using Core.Enums;
 using Core.Interfaces;
 using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
@@ -11,7 +12,7 @@ using Services.ExcelDownloadServices.BranchServices;
 
 namespace UI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = nameof(UserRoleEnum.HumanResources))]
     public class BranchController : Controller
     {
         private readonly IReadBranchService _readBranchService;

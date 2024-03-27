@@ -45,7 +45,7 @@ public class ReadExcelServices : IReadExcelServices
                     return result.SetStatus(false).SetErr("Name is null or empty").SetMessage("Ad Soyad atlanmış personel var!!!");
                 personel.NameSurname = worksheet.Cells[row, 3].GetValue<string>();
                 DateTime startJobDate;
-                if (!DateTime.TryParseExact(worksheet.Cells[row, 4].Text, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out startJobDate))
+                if (!DateTime.TryParseExact(worksheet.Cells[row, 4].Text, "yyyy-M-d", CultureInfo.InvariantCulture, DateTimeStyles.None, out startJobDate))
                 {
                     return result.SetStatus(false).SetErr("StartJobDate is null or empty").SetMessage("İşe Başlama Tarihi atlanmış personel var!!!");
                 }
@@ -55,7 +55,7 @@ public class ReadExcelServices : IReadExcelServices
                 }
                 personel.StartJobDate = startJobDate;
                 DateTime birthDate;
-                if (!DateTime.TryParseExact(worksheet.Cells[row, 5].Text, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out birthDate))
+                if (!DateTime.TryParseExact(worksheet.Cells[row, 5].Text, "yyyy-M-d", CultureInfo.InvariantCulture, DateTimeStyles.None, out birthDate))
                 {
                     return result.SetStatus(false).SetErr("BirthDate is null or empty").SetMessage("Doğum Tarihi atlanmış personel var!!!");
                 }

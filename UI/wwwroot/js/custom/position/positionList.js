@@ -86,6 +86,7 @@
         window.location.href = currentUrl.toString();
     });
     $('#addPositionButton').on('click',function (e) {
+        spinnerStart($('#addPositionButton'))
         e.preventDefault();
         let formData = $("#addPositionForm").serializeArray();
         $.ajax({
@@ -93,6 +94,7 @@
             url: "/unvan-ekle",
             data: formData // Form verilerini al
         }).done(function (res) {
+            spinnerEnd($('#addPositionButton'))
             if (res.isSuccess){
                 $('#success-modal-message').text("Ünvan Başarılı Bir Şekilde Eklendi.")
                 $('#success-modal').modal('show')
@@ -108,6 +110,7 @@
     });
     //Modal üzerideki Ünvanı Sil Butonuna Tıklandığında
     $('#deletePositionButton').on('click',function (e) {
+        spinnerStart($('#deletePositionButton'))
         e.preventDefault();
         let formData = $("#deletePositionForm").serializeArray();
         console.log(formData)
@@ -116,6 +119,7 @@
             url: "/unvan-sil",
             data: formData // Form verilerini al
         }).done(function (res) {
+            spinnerEnd($('#deletePositionButton'))
             if (res.isSuccess){
                 $('#success-modal-message').text("Ünvan Başarılı Bir Şekilde Silindi.")
                 $('#success-modal').modal('show')

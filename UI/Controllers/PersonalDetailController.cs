@@ -1,6 +1,7 @@
 ﻿using Core;
 using Core.DTOs.PersonalDetailDto.WriteDtos;
 using Core.DTOs.PersonalDTOs.WriteDtos;
+using Core.Enums;
 using Core.Interfaces;
 using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +13,7 @@ using Services.Abstract.PositionServices;
 
 namespace UI.Controllers;
 
-[Authorize]
+[Authorize(Roles = nameof(UserRoleEnum.HumanResources))]
 public class PersonalDetailController : Controller
 {
     private readonly IReadPersonalService _readPersonalService;

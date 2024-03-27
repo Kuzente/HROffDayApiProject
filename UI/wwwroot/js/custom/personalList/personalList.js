@@ -217,6 +217,7 @@
     });
     //Personeli Ekle Butonu
     $("#personalAddButton").on("click", function (e) {
+        spinnerStart($("#personalAddButton"))
         e.preventDefault();
         let formData = $("#addPersonalForm").serializeArray();
         formData.forEach(function (f) {
@@ -230,7 +231,7 @@
             url: "/create-personal",
             data: formData // Form verilerini al
         }).done(function (res) {
-            console.log(res)
+            spinnerEnd($("#personalAddButton"))
             if (res.isSuccess){
                 $('#success-modal-message').text("Personel Başarılı Bir Şekilde Eklendi.")
                 $('#success-modal').modal('show')

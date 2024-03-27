@@ -1,17 +1,21 @@
 ﻿using Data.Abstract;
 using Data.Abstract.BranchRepositories;
+using Data.Abstract.BranchUserRepositories;
 using Data.Abstract.DailyFoodLogRepositories;
 using Data.Abstract.DailyYearLogRepositories;
 using Data.Abstract.OffDayRepositories;
 using Data.Abstract.PersonalRepositories;
 using Data.Abstract.PositionRepositories;
+using Data.Abstract.UserRepositories;
 using Data.Concrete;
 using Data.Concrete.BranchRepositories;
+using Data.Concrete.BranchUserRepositories;
 using Data.Concrete.DailyFoodLogRepositories;
 using Data.Concrete.DailyYearLogRepositories;
 using Data.Concrete.OffDayRepositories;
 using Data.Concrete.PersonalRepositories;
 using Data.Concrete.PositionRepositories;
+using Data.Concrete.UserRepositories;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +42,10 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(IWriteDailyYearLogRepository),typeof(WriteDailyYearLogRepository));
 		services.AddScoped(typeof(IReadDailyFoodLogRepository),typeof(ReadDailyFoodLogRepository));
 		services.AddScoped(typeof(IWriteDailyFoodLogRepository),typeof(WriteDailyFoodLogRepository));
+		services.AddScoped(typeof(IReadUserRepository),typeof(ReadUserRepository));
+		services.AddScoped(typeof(IWriteUserRepository),typeof(WriteUserRepository));
+		services.AddScoped(typeof(IReadBranchUserRepository),typeof(ReadBranchUserRepository));
+		services.AddScoped(typeof(IWriteBranchUserRepository),typeof(WriteBranchUserRepository));
 
 	}
 }

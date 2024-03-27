@@ -349,3 +349,9 @@ $("[data-sidebarListItem]").each(function() {
     }
    
 });
+function spinnerStart(element) {
+    element.addClass("disabled").append(" <span class=\"spinner-border spinner-border-sm ms-2\" role=\"status\"></span>")
+}
+function spinnerEnd(element) {
+    element.removeClass("disabled").find("span.spinner-border").remove();
+}

@@ -1,6 +1,7 @@
 ﻿
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using System.Security.Claims
+@using Core.Enums
 @model ResultWithPagingDataDto<List<ReadWaitingOffDayListDto>>
 
 @{
@@ -12,8 +13,8 @@
     var startPage = Math.Max(1, Model.PageNumber - (maxVisiblePages / 2));
     var endPage = Math.Min(Model.TotalPages, startPage + (maxVisiblePages - 1));
     string actionUrl;
-    var username = User.FindFirst(ClaimTypes.Name).Value;
-    if (username == "samicangulcan")
+    var userRole = User.FindFirst(ClaimTypes.Role).Value;
+    if (userRole == nameof(UserRoleEnum.HumanResources))
     {
         actionUrl = "/bekleyen-izin-guncelle-bir";
     }
@@ -157,7 +158,7 @@ else
                 <th>Toplam <br/> Alınan Gün</th>
                 <th>Detaylı <br/>İzin Günleri</th>
                 <th>Form <br>Oluşturulma Tarihi</th>
-                @if (username == "samicangulcan")
+                @if (userRole == nameof(UserRoleEnum.HumanResources))
                 {
                     <th>Düzenle</th> 
                 }
@@ -168,7 +169,6 @@ else
             {
                 <tr>
                     <td class="col-2">
-                        @* action="/bekleyen-izin-guncelle-bir" *@
                         <form data-approveForm class="d-inline-flex" action=@actionUrl method="post">
                             <input type="hidden" name="id" value="@data.ID">
                             <input type="hidden" name="returnUrl" value="@returnUrl">
@@ -180,7 +180,6 @@ else
                                 </svg>
                             </button>
                         </form>
-                        @* action="/bekleyen-izin-guncelle-bir" *@
                         <form data-rejectForm class="d-inline-flex" method="post" action=@actionUrl>
                             <input type="hidden" name="id" value="@data.ID">
                             <input type="hidden" name="returnUrl" value="@returnUrl">
@@ -231,7 +230,7 @@ else
                         <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
 
                     </td>
-                    @if (username == "samicangulcan")
+                    @if (userRole == nameof(UserRoleEnum.HumanResources))
                     {
                         <td class="col-1">
                             <!--TODO RETURN URL-->

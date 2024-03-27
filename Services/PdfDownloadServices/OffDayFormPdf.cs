@@ -70,13 +70,13 @@ public class OffDayFormPdf
                 {
                     row.RelativeItem(4).Background("#DBE4F0").BorderRight(1).Height(24).AlignMiddle().PaddingLeft(10).Text("Personel Ünvanı:").Style(titleStyle).FontSize(10);
 
-                    row.RelativeItem(8).Background(Colors.White).AlignMiddle().PaddingLeft(10).Text(Dto.Personal.Position.Name).Style(titleStyle).FontSize(10);
+                    row.RelativeItem(8).Background(Colors.White).AlignMiddle().PaddingLeft(10).Text(Dto.PositionName).Style(titleStyle).FontSize(10);
                 });
                 column.Item().BorderLeft(3).BorderRight(3).BorderBottom(1).Row(row =>
                 {
                     row.RelativeItem(4).Background("#DBE4F0").BorderRight(1).Height(24).AlignMiddle().PaddingLeft(10).Text("Görev Yeri:").Style(titleStyle).FontSize(10);
 
-                    row.RelativeItem(8).Background(Colors.White).AlignMiddle().PaddingLeft(10).Text(Dto.Personal.Branch.Name).Style(titleStyle).FontSize(10);
+                    row.RelativeItem(8).Background(Colors.White).AlignMiddle().PaddingLeft(10).Text(Dto.BranchName).Style(titleStyle).FontSize(10);
                 });
                 column.Item().BorderLeft(3).BorderRight(3).BorderBottom(1).Row(row =>
                 {

@@ -12,5 +12,6 @@ public class OffdayQuery
     public Guid? id { get; set; }
     public string sortName { get; set; }
     public string sortBy { get; set; }
+    public List<Guid> UserBranches { get; set; }
     
 }

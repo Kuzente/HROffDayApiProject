@@ -1,11 +1,9 @@
 ﻿using Core.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Context;
 
-public class DataContext : IdentityDbContext
+public class DataContext : DbContext
 {
 	public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
@@ -16,6 +14,8 @@ public class DataContext : IdentityDbContext
 	public DbSet<OffDay> OffDays => Set<OffDay>();
 	public DbSet<DailyYearLog> DailyYearLogs => Set<DailyYearLog>();
 	public DbSet<DailyFoodLog> DailyFoodLogs => Set<DailyFoodLog>();
+	public DbSet<User> Users => Set<User>();
+	public DbSet<BranchUser> BranchUsers => Set<BranchUser>();
 	public override int SaveChanges()
 	{
 		var datas = ChangeTracker.Entries<BaseEntity>();

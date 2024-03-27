@@ -1,6 +1,7 @@
 ﻿using Core;
 using Core.DTOs.PersonalDTOs;
 using Core.DTOs.PersonalDTOs.ReadDtos;
+using Core.Enums;
 using Core.Interfaces;
 using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +13,7 @@ using Services.ExcelDownloadServices.PersonalServices;
 
 namespace UI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = nameof(UserRoleEnum.HumanResources))]
     public class PersonalController : Controller
     {
         private readonly IReadPersonalService _readPersonalService;
@@ -38,7 +39,6 @@ namespace UI.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Index([FromQuery] PersonalQuery query)
         {
-            
             var personals = await _readPersonalService.GetPersonalListService(query);
             return View(personals);
         }

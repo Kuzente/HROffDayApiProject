@@ -1,6 +1,7 @@
 ﻿using Core;
 using Core.DTOs.PositionDTOs;
 using Core.DTOs;
+using Core.Enums;
 using Core.Interfaces;
 using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +11,7 @@ using Services.ExcelDownloadServices.PositionServices;
 
 namespace UI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = nameof(UserRoleEnum.HumanResources))]
     public class PositionController : Controller
     {
         private readonly IReadPositionService _readPositionService;

@@ -12,16 +12,18 @@ using Services.Abstract.DailyCounterServices;
 using Services.Abstract.DashboardServices;
 using Services.Abstract.ExcelServices;
 using Services.Abstract.OffDayServices;
+using Services.Abstract.UserServices;
 using Services.Concrete.DailyCounterServices;
 using Services.Concrete.DashboardServices;
 using Services.Concrete.ExcelServices;
 using Services.Concrete.OffDayServices;
+using Services.Concrete.UserServices;
 using Services.ExcelDownloadServices;
 using Services.ExcelDownloadServices.BranchServices;
 using Services.ExcelDownloadServices.OffDayServices;
 using Services.ExcelDownloadServices.PersonalServices;
 using Services.ExcelDownloadServices.PositionServices;
-using Services.FileUpload;
+using Services.HelperServices;
 using Services.PdfDownloadServices;
 
 namespace Services;
@@ -42,7 +44,6 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(IReadPositionService), typeof(ReadPositionService));
 		services.AddScoped(typeof(IReadOffDayService), typeof(ReadOffDayService));
 		services.AddScoped(typeof(IWriteOffDayService), typeof(WriteOffDayService));
-		services.AddScoped(typeof(ExcelPersonalAddrange));
 		services.AddScoped(typeof(IReadExcelServices), typeof(ReadExcelServices));
 		services.AddScoped(typeof(PersonalExcelExport));
 		services.AddScoped(typeof(PassivePersonalExcelExport));
@@ -53,6 +54,10 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(IReadOdataService), typeof(ReadOdataService));
 		services.AddScoped(typeof(IReadDailyCounterService), typeof(ReadDailyCounterService));
 		services.AddScoped(typeof(IWriteDailyCounterService), typeof(WriteDailyCounterService));
+		services.AddScoped(typeof(IReadUserService), typeof(ReadUserService));
+		services.AddScoped(typeof(IWriteUserService), typeof(WriteUserService));
+		services.AddSingleton(typeof(RecaptchaVerifyHelper));
+		services.AddScoped(typeof(PasswordCryptoHelper));
 		services.AddScoped( typeof(OffDayFormPdf));
 		services.AddHangfire(x =>
 		{

@@ -1,4 +1,5 @@
-﻿using Core.Querys;
+﻿using Core.Enums;
+using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.BranchServices;
@@ -7,7 +8,7 @@ using Services.Abstract.PersonalServices;
 using Services.Abstract.PositionServices;
 
 namespace UI.Controllers;
-[Authorize]
+[Authorize(Roles = nameof(UserRoleEnum.HumanResources))]
 public class RecoveryController : Controller
 {
     private readonly IReadBranchService _readBranchService;

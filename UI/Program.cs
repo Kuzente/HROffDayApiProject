@@ -15,18 +15,17 @@ QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         options.SlidingExpiration = true;
         options.LoginPath = "/giris-yap";
         options.Cookie.Name = "user";
 
     });
-// builder.Services.AddIdentity<IdentityUser, IdentityRole>(p=>
-// {
-//     p.Password.RequiredUniqueChars = 0;
-//     p.Password.RequireUppercase = false;
-//     p.Password.RequireNonAlphanumeric = false;
-// }).AddEntityFrameworkStores<DataContext>();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.MaxAge = TimeSpan.FromMinutes(60);
+    options.Cookie.HttpOnly = true;
+});
 builder.Services.AddControllers().AddJsonOptions(opt =>
 {
     opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
@@ -48,10 +47,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
@@ -76,7 +76,6 @@ app.MapControllerRoute(name: "personalDeletePost", pattern: "personel-sil", defa
 app.MapControllerRoute(name: "personalOffDays", pattern: "personel-izinleri", defaults: new { controller = "PersonalDetail", action = "PersonalOffDayList" });
 app.MapControllerRoute(name: "personalHeader", pattern: "personel-header", defaults: new { controller = "PersonalDetail", action = "PersonelDetailsHeader" });
 #endregion
-
 #region BranchList
 app.MapControllerRoute(name: "branchListGet", pattern: "subeler", defaults: new { controller = "Branch", action = "Index" });
 app.MapControllerRoute(name: "downloadBranchExcelListGet", pattern: "subeler-excel", defaults: new { controller = "Branch", action = "ExportExcel" });
@@ -85,7 +84,6 @@ app.MapControllerRoute(name: "addBranchPost", pattern: "sube-ekle", defaults: ne
 app.MapControllerRoute(name: "deleteBranchPost", pattern: "sube-sil", defaults: new { controller = "Branch", action = "ArchiveBranch" });
 
 #endregion
-
 #region PositionList
 app.MapControllerRoute(name: "positionListGet", pattern: "unvanlar", defaults: new { controller = "Position", action = "Index" });
 app.MapControllerRoute(name: "downloadPositionExcelListGet", pattern: "unvanlar-excel", defaults: new { controller = "Position", action = "ExportExcel" });
@@ -94,7 +92,6 @@ app.MapControllerRoute(name: "addPositionPost", pattern: "unvan-ekle", defaults:
 app.MapControllerRoute(name: "deletePositionPost", pattern: "unvan-sil", defaults: new { controller = "Position", action = "ArchivePosition" });
 
 #endregion
-
 #region OffDay
 app.MapControllerRoute(name: "offDayCreateGet", pattern: "izin-olustur", defaults: new { controller = "OffDay", action = "AddOffDay" });
 app.MapControllerRoute(name: "offDayWaitingList", pattern: "bekleyen-izinler", defaults: new { controller = "OffDay", action = "WaitingOffDayList" });
@@ -123,15 +120,17 @@ app.MapControllerRoute(name: "recoveryPersonal", pattern: "personel-gerigetir", 
 app.MapControllerRoute(name: "downloadScheme", pattern: "download-scheme", defaults: new { controller = "MultipleUpload", action = "GetExcelSheme" });
 app.MapControllerRoute(name: "personalUpload", pattern: "toplu-islemler", defaults: new { controller = "MultipleUpload", action = "PersonalUpload" });
 #endregion
-
 #region DailyLog
 app.MapControllerRoute(name: "dailyLogPage", pattern: "gunluk-takip", defaults: new { controller = "DailyLog", action = "Index" });
 app.MapControllerRoute(name: "dailyYearLog", pattern: "yillik-izin-log", defaults: new { controller = "DailyLog", action = "GetYearLogs" });
 app.MapControllerRoute(name: "dailyFoodLog", pattern: "gida-yardimi-log", defaults: new { controller = "DailyLog", action = "GetFoodLogs" });
 #endregion
-
 #region User
 app.MapControllerRoute(name: "userListPage", pattern: "kullanici-listesi", defaults: new { controller = "User", action = "UsersList" });
+app.MapControllerRoute(name: "createUser", pattern: "kullanici-ekle", defaults: new { controller = "User", action = "CreateUser" });
+app.MapControllerRoute(name: "deleteUser", pattern: "kullanici-sil", defaults: new { controller = "User", action = "DeleteUser" });
+app.MapControllerRoute(name: "getDirectorBranchSelect", pattern: "select-director-branch", defaults: new { controller = "User", action = "GetDirectorSelects" });
+app.MapControllerRoute(name: "getDirectorBranchSelect", pattern: "select-branchmanager-branch", defaults: new { controller = "User", action = "GetBranchManagerSelects" });
 
 
 #endregion

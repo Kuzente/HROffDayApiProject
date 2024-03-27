@@ -79,7 +79,9 @@ public class ReadOffDayService : IReadOffDayService
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadOffDayRepository.GetAll(
 					predicate: a =>
-						(a.Status == EntityStatusEnum.Online && a.OffDayStatus == OffDayStatusEnum.WaitingForSecond) &&
+						(a.Status == EntityStatusEnum.Online && 
+						 a.OffDayStatus == OffDayStatusEnum.WaitingForSecond) &&
+						query.UserBranches.Any(q=>q == a.BranchId) &&
 						a.Personal.Status == EntityStatusEnum.Online &&
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth)&&
@@ -126,6 +128,7 @@ public class ReadOffDayService : IReadOffDayService
 					predicate: a =>
 						(a.Status == EntityStatusEnum.Online && a.OffDayStatus == OffDayStatusEnum.Rejected) &&
 						a.Personal.Status == EntityStatusEnum.Online &&
+						(query.UserBranches == null || query.UserBranches.Any(q=>q == a.BranchId)) &&
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth)&&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search)),
@@ -169,9 +172,11 @@ public class ReadOffDayService : IReadOffDayService
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadOffDayRepository.GetAll(
 					predicate: a =>
-						(a.Status == EntityStatusEnum.Online && a.OffDayStatus == OffDayStatusEnum.Approved ) &&
+						(a.Status == EntityStatusEnum.Online &&
+						 a.OffDayStatus == OffDayStatusEnum.Approved ) &&
 						(a.Personal.Status == EntityStatusEnum.Online ||
 						 a.Personal.Status == EntityStatusEnum.Offline) &&
+						(query.UserBranches == null || query.UserBranches.Any(q=>q == a.BranchId)) &&
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear || a.EndDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth || a.EndDate.Month == query.filterMonth)&&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.Contains(query.search))&&
@@ -446,6 +451,7 @@ public class ReadOffDayService : IReadOffDayService
 					predicate: a =>
 						(a.Status == EntityStatusEnum.Online && a.OffDayStatus == OffDayStatusEnum.Approved ) &&
 						(a.Personal.Status == EntityStatusEnum.Online || a.Personal.Status == EntityStatusEnum.Offline) &&
+						(query.UserBranches == null || query.UserBranches.Any(q=>q == a.BranchId)) &&
 						(!query.id.HasValue || a.Personal_Id == query.id) &&
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear || a.EndDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth || a.EndDate.Month == query.filterMonth)&&
@@ -529,11 +535,15 @@ public class ReadOffDayService : IReadOffDayService
 		{
 			var offday = await _unitOfWork.ReadOffDayRepository.GetSingleAsync(
 					predicate:p=> p.ID == id && p.OffDayStatus == OffDayStatusEnum.Approved,
-					include: p=> p.Include(a=> a.Personal).Include(a=>a.Personal.Branch).Include(a=>a.Personal.Position)
+					include: p=> p.Include(a=> a.Personal)
 			);
-			if (offday is null)
-				return res.SetStatus(false).SetErr("Offday is not find").SetMessage("İlgili izin bulunamadı!");
+			if (offday is null) return res.SetStatus(false).SetErr("Offday is not find").SetMessage("İlgili izin bulunamadı!");
 			var mapData = _mapper.Map<ReadApprovedOffDayFormExcelExportDto>(offday);
+			var branchquery = await _unitOfWork.ReadBranchRepository.GetSingleAsync(predicate:p=>p.ID == offday.BranchId);
+			var positionquery = await _unitOfWork.ReadPositionRepository.GetSingleAsync(predicate:p=>p.ID == offday.PositionId);
+			if (branchquery is null || positionquery is null) res.SetStatus(false).SetErr("Offday is not find").SetMessage("İlgili izin bulunamadı!");
+			mapData.BranchName = branchquery.Name;
+			mapData.PositionName = positionquery.Name;
 			res.SetData(mapData);
 		}
 		catch (Exception e)

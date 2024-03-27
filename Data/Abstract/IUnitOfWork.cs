@@ -1,9 +1,11 @@
 ﻿using Data.Abstract.BranchRepositories;
+using Data.Abstract.BranchUserRepositories;
 using Data.Abstract.DailyFoodLogRepositories;
 using Data.Abstract.DailyYearLogRepositories;
 using Data.Abstract.OffDayRepositories;
 using Data.Abstract.PersonalRepositories;
 using Data.Abstract.PositionRepositories;
+using Data.Abstract.UserRepositories;
 
 namespace Data.Abstract;
 
@@ -21,5 +23,9 @@ public interface IUnitOfWork : IDisposable
 	IWriteDailyYearLogRepository WriteDailyYearLogRepository { get;  }
 	IReadDailyFoodLogRepository ReadDailyFoodLogRepository { get;  }
 	IWriteDailyFoodLogRepository WriteDailyFoodLogRepository { get;  }
+	IReadUserRepository ReadUserRepository { get;  }
+	IWriteUserRepository WriteUserRepository { get;  }
+	IReadBranchUserRepository ReadBranchUserRepository { get;  }
+	IWriteBranchUserRepository WriteBranchUserRepository { get;  }
 	bool Commit(bool state = true);
 }

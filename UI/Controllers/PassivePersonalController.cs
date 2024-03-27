@@ -1,4 +1,5 @@
-﻿using Core.Querys;
+﻿using Core.Enums;
+using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.BranchServices;
@@ -8,7 +9,7 @@ using Services.ExcelDownloadServices.PersonalServices;
 
 namespace UI.Controllers;
 
-[Authorize]
+[Authorize(Roles = nameof(UserRoleEnum.HumanResources))]
 public class PassivePersonalController : Controller
 {
     private readonly IReadPersonalService _readPersonalService;

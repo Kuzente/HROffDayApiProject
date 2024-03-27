@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Core.Enums;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.DailyCounterServices;
 
 namespace UI.Controllers;
-
+[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)}")]
 public class DailyLogController : Controller
 {
     private readonly IReadDailyCounterService _readDailyCounterService;
@@ -12,11 +14,11 @@ public class DailyLogController : Controller
         _readDailyCounterService = readDailyCounterService;
     }
 
+    #region PageActions
+
     // GET
     public IActionResult Index()
     {
-        //var result = await _readDailyCounterService.GetLastHundredDailyYearLogService();
-        
         return View();
     }
     // GET
@@ -30,4 +32,6 @@ public class DailyLogController : Controller
         var result = await _readDailyCounterService.GetLastHundredDailyFoodLogService();
         return Ok(result);
     }
+
+    #endregion
 }

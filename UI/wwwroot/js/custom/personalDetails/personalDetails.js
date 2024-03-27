@@ -625,25 +625,30 @@
         });
         //Personeli Güncelle Butonu Tıklandığında
         $('#updatePersonalButton').on('click', function () {
+            spinnerStart($('#updatePersonalButton'))
             let formData = $("#updatePersonalForm").serializeArray();
             let usedYearLeaveValue = formData.find(item => item.name === "UsedYearLeave").value
             let foodAidValue = formData.find(item => item.name === "FoodAid").value
             if (!checkRequiredFields()) {
+                spinnerEnd($('#updatePersonalButton'))
                 $('#error-modal-message').text("Lütfen Zorunlu Alanları Girdiğinizden Emin Olunuz.")
                 $('#error-modal').modal('show');
                 return; // Fonksiyondan çık
             }
             if (usedYearLeaveValue > data.totalYearLeave) {
+                spinnerEnd($('#updatePersonalButton'))
                 $('#error-modal-message').text("Kullanılan Yıllık İzin Hak edilenden büyük olamaz.")
                 $('#error-modal').modal('show');
                 return true;
             }
             if (usedYearLeaveValue < 0) {
+                spinnerEnd($('#updatePersonalButton'))
                 $('#error-modal-message').text("Kullanılan Yıllık İzin 0 dan küçük olamaz.")
                 $('#error-modal').modal('show');
                 return true;
             }
             if (foodAidValue < 0) {
+                spinnerEnd($('#updatePersonalButton'))
                 $('#error-modal-message').text("Gıda Yardımı 0 dan küçük olamaz.")
                 $('#error-modal').modal('show');
                 return true;
@@ -659,6 +664,7 @@
                 url: "/personel-detaylari",
                 data: formData // Form verilerini al
             }).done(function (res) {
+                spinnerEnd($('#updatePersonalButton'))
                 if (res.isSuccess) {
                     $('#success-modal-message').text("Personel Başarılı Bir Şekilde Güncellendi.")
                     $('#success-modal').modal('show');
@@ -679,10 +685,12 @@
         });
         //Modal üzerindeki Personeli Sil Butonu Tıklandığında
         $("#deleteSubmitBtn").on('click', function () {
+            spinnerStart($("#deleteSubmitBtn"))
             $.ajax({
                 type: "POST",
                 url: `/personel-sil?id=${$('input[name="ID"]').val()}`
             }).done(function (res) {
+                spinnerEnd($("#deleteSubmitBtn"))
                 if (res.isSuccess) {
                     $('#success-modal-message').text("Personel Başarılı Bir Şekilde Silindi")
                     $('#success-modal').modal('show')
@@ -765,6 +773,7 @@
         });
         //İşten Çıkar MODAL Butonu Tıklandığında
         $('#istenCikarSubmitButton').on("click", function () {
+            spinnerStart($('#istenCikarSubmitButton'))
             let formData = $("#istenCikarForm").serializeArray();
             let hasEmptyField = false;
             $("#istenCikarForm input[name='ID'], #istenCikarForm input[name='EndJobDate']").each(function () {
@@ -774,6 +783,7 @@
                 }
             });
             if (hasEmptyField) {
+                spinnerEnd($('#istenCikarSubmitButton'))
                 $('#error-modal-message').text("Lütfen Çıkış Tarihini Seçtiğinizden Emin Olunuz!")
                 $('#error-modal').modal('show');
             } else {
@@ -782,6 +792,7 @@
                     url: `/personel-durumu`,
                     data: formData
                 }).done(function (res) {
+                    spinnerEnd($('#istenCikarSubmitButton'))
                     if (res.isSuccess) {
                         $('#success-modal-message').text("Personel Başarılı Bir Şekilde İşten Çıkarıldı.")
                         $('#success-modal').modal('show')
@@ -806,6 +817,7 @@
         });
         //İşe Geri Al MODAL Butonu Tıklandığında
         $('#iseGeriAlSubmitButton').on("click", function () {
+            spinnerStart($('#iseGeriAlSubmitButton'))
             let formData = $("#iseGeriAlForm").serializeArray();
             formData.forEach(function (f) {
                 if (f.value === "on") {
@@ -820,6 +832,7 @@
                 }
             });
             if (hasEmptyField) {
+                spinnerEnd($('#iseGeriAlSubmitButton'))
                 $('#error-modal-message').text("Lütfen İşe Giriş Tarihini Seçtiğinizden Emin Olunuz!")
                 $('#error-modal').modal('show');
             } else {
@@ -828,6 +841,7 @@
                     url: `/personel-durumu`,
                     data: formData
                 }).done(function (res) {
+                    spinnerEnd($('#iseGeriAlSubmitButton'))
                     if (res.isSuccess) {
                         $('#success-modal-message').text("Personel Başarılı Bir Şekilde Geri İşe Alındı.")
                         $('#success-modal').modal('show')
