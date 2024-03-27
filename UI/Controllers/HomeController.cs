@@ -23,11 +23,20 @@ namespace UI.Controllers
             if (User.FindFirst(ClaimTypes.Role).Value == nameof(UserRoleEnum.BranchManager))
             {
                 var result =  await _readUserService.GetUserBranches(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value));
-                if (!result.IsSuccess) return Ok(); //Error Page TODO
+                if (!result.IsSuccess) return Redirect("/404");
                 
                 return Redirect("/izin-olustur?id=" + result.Data.First());
             }
             
+            return View();
+        }
+        [AllowAnonymous]
+        public IActionResult ErrorPage()
+        {
+            return View();
+        }
+        public IActionResult AccessDeniedPage()
+        {
             return View();
         }
        

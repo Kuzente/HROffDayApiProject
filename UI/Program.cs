@@ -19,6 +19,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.SlidingExpiration = true;
         options.LoginPath = "/giris-yap";
         options.Cookie.Name = "user";
+        options.AccessDeniedPath = "/403";
 
     });
 builder.Services.AddSession(options =>
@@ -138,6 +139,13 @@ app.MapControllerRoute(name: "getDirectorBranchSelect", pattern: "select-branchm
 app.MapControllerRoute(name: "loginPage", pattern: "giris-yap", defaults: new { controller = "Authentication", action = "Login" });
 app.MapControllerRoute(name: "loginPage", pattern: "cikis-yap", defaults: new { controller = "Authentication", action = "Logout" });
 app.MapControllerRoute(name: "loginPage", pattern: "/create-pdf", defaults: new { controller = "OffDay", action = "ExportPdf" });
+
+
+#endregion
+
+#region ErrorPages
+app.MapControllerRoute(name: "error404page", pattern: "404", defaults: new { controller = "Home", action = "ErrorPage" });
+app.MapControllerRoute(name: "accessDeniedpage", pattern: "403", defaults: new { controller = "Home", action = "AccessDeniedPage" });
 
 
 #endregion

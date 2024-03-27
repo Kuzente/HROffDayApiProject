@@ -49,7 +49,7 @@ public class OffDayController : Controller
        if (!string.IsNullOrEmpty(userRole) && userRole == nameof(UserRoleEnum.Director))
        {
            var branchesResult = await _readUserService.GetUserBranches(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty));
-           if (!branchesResult.IsSuccess) return Ok();// ERROR PAGE TODO
+           if (!branchesResult.IsSuccess) return Redirect("/404");
            query.UserBranches = branchesResult.Data;
            var result = await _readOffDayService.GetSecondWaitingOffDaysListService(query); 
            return View(result);
@@ -93,7 +93,7 @@ public class OffDayController : Controller
         if (!string.IsNullOrEmpty(userRole) && userRole == nameof(UserRoleEnum.Director))
         {
             var branchesResult = await _readUserService.GetUserBranches(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty));
-            if (!branchesResult.IsSuccess) return Ok();// ERROR PAGE TODO
+            if (!branchesResult.IsSuccess) return Redirect("/404");
             query.UserBranches = branchesResult.Data;
         }
         var result = await _readOffDayService.GetRejectedOffDaysListService(query);
@@ -110,7 +110,7 @@ public class OffDayController : Controller
         if (!string.IsNullOrEmpty(userRole) && userRole == nameof(UserRoleEnum.Director))
         {
             var branchesResult = await _readUserService.GetUserBranches(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty));
-            if (!branchesResult.IsSuccess) return Ok();// ERROR PAGE TODO
+            if (!branchesResult.IsSuccess) return Redirect("/404");;
             query.UserBranches = branchesResult.Data;
         }
         var result = await _readOffDayService.GetApprovedOffDaysListService(query);
@@ -204,7 +204,7 @@ public class OffDayController : Controller
         if (!string.IsNullOrEmpty(userRole) && userRole == nameof(UserRoleEnum.Director))
         {
             var branchesResult = await _readUserService.GetUserBranches(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty));
-            if (!branchesResult.IsSuccess) return Ok();// ERROR PAGE TODO
+            if (!branchesResult.IsSuccess) return Redirect("/404");
             query.UserBranches = branchesResult.Data;
         }
         var result = await _readOffDayService.GetExcelApprovedOffDayListService(query);
