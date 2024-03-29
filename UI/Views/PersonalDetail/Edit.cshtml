@@ -1,6 +1,7 @@
 ﻿@{
     Layout = "_Layout";
     var returnUrl = Context.Request.GetDisplayUrl();
+    ViewBag.Title = "Personel Kartı";
 }
 
 <!--Top Header-->
@@ -40,6 +41,9 @@
 <div class="card-status-top bg-azure"></div>
 <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs flex-row-reverse">
+        <li class="nav-item">
+            <a id="personelNakilPage" href="" class="nav-link">Nakil Listesi</a>
+        </li>
         <li class="nav-item">
             <a href="#tabs-home-2" class="nav-link">Eksik Gün</a>
         </li>

@@ -37,6 +37,11 @@ public class UserController : Controller
         var result = await _readUserService.GetBranchManagerUnusedBranches();
         return Ok(result);
     }
+    public async Task<IActionResult> UpdateUser(Guid id)
+    {
+        var result = await _readUserService.GetUpdateUserService(id);
+        return View(result);
+    }
     /// <summary>
     /// Kullanıcı Ekleme Post Metodu
     /// </summary>

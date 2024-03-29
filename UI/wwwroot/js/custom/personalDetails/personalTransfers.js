@@ -4,7 +4,7 @@
     let currentUrl = new URL(window.location.href);
     setFilterOptions();
     setPersonalHeader();
-    
+
     //Filtre Ayarları
     function setFilterOptions() {
         let urlParams = new URLSearchParams(window.location.search);
@@ -16,18 +16,19 @@
         if (filterMonth) {
             selectMonth.setValue([filterMonth]);
         }
-        
+
     }
     function setPersonalHeader() {
         let personal_id = currentUrl.searchParams.get("id");
         $.ajax({
-           type:"POST",
-           url:`/personel-header?id=${personal_id}` 
+            type:"POST",
+            url:`/personel-header?id=${personal_id}`
         }).done(function (res) {
             if (res.isSuccess){
                 $('#HeaderPersonalNameSurname').text(res.data.nameSurname);
                 $('#HeaderPersonalBranchPosition').text(res.data.branch.name + " - " + res.data.position.name);
                 $('#personalAvatar').html(res.data.nameSurname.charAt(0));
+
                 $('#badgeTotalTakenLeave').html(saatleriGunVeSaatlereCevir(res.data.totalTakenLeave));
                 $('#badgeFoodAid').html(res.data.foodAid);
                 $('#badgeTotalYearLeave').html(res.data.totalYearLeave);
@@ -37,6 +38,7 @@
                     $('#istenCikarButton').addClass("btn-secondary").removeClass("btn-orange");
                     $('#istenCikarButton span').html("İşten Çıkar");
                 }
+               // Personel İşten Çıkarılmış Personel ise
                 else{
                     $('#istenCikarilmaTarihiDiv').html(`
                 <button id="CikisTarihiShow" type="button" class="btn">
@@ -52,17 +54,16 @@
                         year: 'numeric'
                     });
                     $('#CikisTarihiShow span').html("İşten Çıkış Tarihi: " + formattedDate)
-                  if(!res.data.isBackToWork){
-                      $('#istenCikarButton').addClass("btn-orange").removeClass("btn-secondary");
-                      $('#istenCikarButton span').html("İşe Geri Al");
-                  }  
-                  else{
-                      $('#istenCikarButton').remove()
-                  }
+                    if(!res.data.isBackToWork){
+                        $('#istenCikarButton').addClass("btn-orange").removeClass("btn-secondary");
+                        $('#istenCikarButton span').html("İşe Geri Al");
+                    }
+                    else{
+                        $('#istenCikarButton').remove()
+                    }
                 }
-               
-               istenCikarGeriAl(res.data);
-                
+                istenCikarGeriAl(res.data);
+
             }
             else{
                 $('#error-modal-message').text(res.message)
@@ -74,6 +75,8 @@
         });
     }
     function istenCikarGeriAl(data) {
+
+
         //Personeli İşten Çıkar veya İşe Geri Al Butonu Tıklandığında 
         $("#istenCikarButton").on("click", function () {
             if (data.status === 0) {
@@ -233,32 +236,6 @@
             flatpickr(iseGirisTarihi).clear()
             flatpickr(gidaYardimTarihi).clear()
         });
-        //Personeli Güncelle Butonu Tıklandığında
-        $('#updatePersonalButton').on('click', function () {
-            let formData = $("#updatePersonalForm").serializeArray();
-            formData.forEach(function (f) {
-                if (f.value === "on") {
-                    f.value = true;
-                }
-            });
-            //Formun id'sini kullanarak formu gönder
-            $.ajax({
-                type: "POST",
-                url: "/personel-detaylari",
-                data: formData // Form verilerini al
-            }).done(function (res) {
-                if (res.isSuccess) {
-                    $('#success-modal-message').text("Personel Başarılı Bir Şekilde Güncellendi.")
-                    $('#success-modal').modal('show');
-                    $('#success-modal-button').click(function () {
-                        window.location.reload();
-                    })
-                } else {
-                    $('#error-modal-message').text(res.message)
-                    $('#error-modal').modal('show');
-                }
-            });
-        });
     }
     //Alacak İzin Saat bazından güne cevirme metodu
     function saatleriGunVeSaatlereCevir(saat) {
@@ -275,21 +252,20 @@
         $('#itemIdInput').val($(this).data("item-id"));
         $('#personalNamePlaceholder').text($(this).data("item-personal"));
     });
-    $('#izinSilForm').submit(function(event) {
+    $('#deleteForm').submit(function(event) {
         event.preventDefault(); // Formun normal submit işlemini engelle
         let formData = $(this).serializeArray(); // Form verilerini al
-        console.log(formData)
         $.ajax({
             type:"POST",
-            url:`/izin-sil`,
+            url:`/personel-nakil-sil`,
             data: formData
         }).done(function (res) {
             if(res.isSuccess){
-                $('#success-modal-message').text("İzin Başarılı Bir Şekilde İptal Edildi.")
+                $('#success-modal-message').text("Kayıt Başarılı Bir Şekilde Silindi.")
                 $('#success-modal').modal('show')
                 $('#success-modal-button').click(function () {
                     window.location.reload();
-                }); 
+                });
             }
             else{
                 $('#error-modal-message').text(res.message)

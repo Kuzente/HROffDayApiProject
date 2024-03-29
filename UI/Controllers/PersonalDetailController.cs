@@ -10,6 +10,8 @@ using Services.Abstract.BranchServices;
 using Services.Abstract.OffDayServices;
 using Services.Abstract.PersonalServices;
 using Services.Abstract.PositionServices;
+using Services.Abstract.TransferPersonalService;
+using Services.ExcelDownloadServices.TransferPersonalServices;
 
 namespace UI.Controllers;
 
@@ -19,12 +21,18 @@ public class PersonalDetailController : Controller
     private readonly IReadPersonalService _readPersonalService;
     private readonly IReadOffDayService _readOffDayService;
     private readonly IWritePersonalService _writePersonalService;
+    private readonly IReadTransferPersonalService _readTransferPersonalService;
+    private readonly IWriteTransferPersonalService _writeTransferPersonalService;
+    private readonly TransferPersonalExcelExport _transferPersonalExcelExport;
 
-    public PersonalDetailController(IReadPersonalService readPersonalService, IWritePersonalService writePersonalService,IReadOffDayService readOffDayService)
+    public PersonalDetailController(IReadPersonalService readPersonalService, IWritePersonalService writePersonalService,IReadOffDayService readOffDayService, IReadTransferPersonalService readTransferPersonalService, IWriteTransferPersonalService writeTransferPersonalService, TransferPersonalExcelExport transferPersonalExcelExport)
     {
         _readPersonalService = readPersonalService;
         _writePersonalService = writePersonalService;
         _readOffDayService = readOffDayService;
+        _readTransferPersonalService = readTransferPersonalService;
+        _writeTransferPersonalService = writeTransferPersonalService;
+        _transferPersonalExcelExport = transferPersonalExcelExport;
     }
 
     #region PageActions
@@ -43,6 +51,15 @@ public class PersonalDetailController : Controller
     public async Task<IActionResult> PersonalOffDayList(OffdayQuery query)
     {
         var result = await _readOffDayService.GetPersonalOffDaysListService(query);
+        return View(result);
+    }
+    /// <summary>
+    /// Personel Nakil Listesi Sayfası
+    /// </summary>
+    /// <returns></returns>
+    public async Task<IActionResult> PersonalTransferList(TransferPersonalQuery query)
+    {
+        var result = await _readTransferPersonalService.GetTransferPersonalListByIdService(query);
         return View(result);
     }
 
@@ -89,6 +106,16 @@ public class PersonalDetailController : Controller
         return Ok(result);
     }
     /// <summary>
+    /// Personel Nakil Sil Post Metodu
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<IActionResult> PersonalTransferDelete(Guid id)
+    {
+        var result = await _writeTransferPersonalService.DeleteTransferPersonalService(id);
+        return Ok(result);
+    }
+    /// <summary>
     /// Personel İşten Çıkar veya İşe Al Post Metodu
     /// </summary>
     /// <returns></returns>
@@ -106,6 +133,33 @@ public class PersonalDetailController : Controller
     {
         var result = await _readPersonalService.GetPersonalDetailsHeaderByIdService(id);
         return Ok(result);
+    }
+    /// <summary>
+    /// Personal Nakil Listesi Excel Raporu Alma
+    /// </summary>
+    /// <returns></returns>
+    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)}")]
+    [HttpPost]
+    public async Task<IActionResult> PersonalTransferExportExcel(TransferPersonalQuery query , string returnUrl)
+    {
+        var result = await _readTransferPersonalService.ExcelGetTransferPersonalListByIdService(query);
+        if (result.IsSuccess)
+        {
+            try
+            {
+                byte[] excelData = _transferPersonalExcelExport.ExportToExcel(result.Data); // Entity listesini Excel verisi olarak alın.
+                var response = HttpContext.Response;
+                response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                response.Headers.Add($"Content-Disposition", $"attachment; filename=Nakil-Listesi.xlsx");
+                await response.Body.WriteAsync(excelData, 0, excelData.Length);
+                return new EmptyResult();
+            }
+            catch (Exception e)
+            {
+                return Redirect(returnUrl);
+            }
+        }
+        return Redirect(returnUrl);
     }
     #endregion
   

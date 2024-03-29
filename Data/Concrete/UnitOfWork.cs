@@ -6,6 +6,7 @@ using Data.Abstract.DailyYearLogRepositories;
 using Data.Abstract.OffDayRepositories;
 using Data.Abstract.PersonalRepositories;
 using Data.Abstract.PositionRepositories;
+using Data.Abstract.TransferPersonalRepositories;
 using Data.Abstract.UserRepositories;
 using Data.Concrete.BranchRepositories;
 using Data.Concrete.BranchUserRepositories;
@@ -14,6 +15,7 @@ using Data.Concrete.DailyYearLogRepositories;
 using Data.Concrete.OffDayRepositories;
 using Data.Concrete.PersonalRepositories;
 using Data.Concrete.PositionRepositories;
+using Data.Concrete.TransferPersonalRepositories;
 using Data.Concrete.UserRepositories;
 using Data.Context;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -45,6 +47,8 @@ public class UnitOfWork : IUnitOfWork
 	public IReadUserRepository ReadUserRepository { get; private set; }
 	public IWriteBranchUserRepository WriteBranchUserRepository { get; private set; }
 	public IReadBranchUserRepository ReadBranchUserRepository { get; private set; }
+	public IWriteTransferPersonalRepository WriteTransferPersonalRepository { get; private set; }
+	public IReadTransferPersonalRepository ReadTransferPersonalRepository { get; private set; }
 	
 
 	public UnitOfWork(DataContext context)
@@ -66,6 +70,8 @@ public class UnitOfWork : IUnitOfWork
 		WriteUserRepository = new WriteUserRepository(_context);
 		ReadBranchUserRepository = new ReadBranchUserRepository(_context);
 		WriteBranchUserRepository = new WriteBranchUserRepository(_context);
+		ReadTransferPersonalRepository = new ReadTransferPersonalRepository(_context);
+		WriteTransferPersonalRepository = new WriteTransferPersonalRepository(_context);
 		_transaction = _context.Database.BeginTransaction();
 	}
 

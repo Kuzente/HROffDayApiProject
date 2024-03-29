@@ -1,4 +1,6 @@
-﻿@model IResultWithDataDto<List<ReadPersonalsByBranchIdDto>>
+﻿@using System.Security.Claims
+@using Core.Enums
+@model IResultWithDataDto<List<ReadPersonalsByBranchIdDto>>
 
 @{
     Layout = null;
@@ -224,7 +226,18 @@ else
                             </div>
 
                             <button id="submitButton" disabled type="button" class="btn btn-success d-grid w-100 mt-3">İzin Tanımla</button>
+                            
                         </form>
+                        <div class="d-flex justify-content-center">
+                            @if (User.FindFirst(ClaimTypes.Role).Value == nameof(UserRoleEnum.BranchManager))
+                            {
+                                <a class="btn btn-danger mt-3 " href="/cikis-yap">Hesaptan Çıkış Yap</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-purple mt-3 " href="/subeler">Şubelere Geri Dön</a> 
+                            }
+                        </div>
                     </div>
                 </div>
                 <!-- Register Card -->

@@ -15,16 +15,32 @@
             $('#HeaderPersonalNameSurname').text(res.data.nameSurname);
             $('#HeaderPersonalBranchPosition').text((res.data.branches.find(p => p.id === res.data.branch_Id) || {}).name + " - " + (res.data.positions.find(p => p.id === res.data.position_Id).name));
             $('#personelİzinleriPage').attr('href', `/personel-izinleri?id=${res.data.id}`);
+            $('#personelNakilPage').attr('href', `/personel-nakil-listesi?id=${res.data.id}`);
             if (res.data.status === 0) { // Online
                 $('#istenCikarButton').addClass("btn-secondary").removeClass("btn-orange");
                 $('#istenCikarButton span').html("İşten Çıkar");
             } else {
+                $('#istenCikarilmaTarihiDiv').html(`
+                <button id="CikisTarihiShow" type="button" class="btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12.5 21h-6.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v8"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/><path d="M16 19h6"/>
+                    </svg>
+                    <span></span>
+                </button>
+            `)
+                let formattedDate = new Date(res.data.endJobDate).toLocaleDateString("tr-TR", {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+                $('#CikisTarihiShow span').html("İşten Çıkış Tarihi: " + formattedDate)
                 if(!res.data.isBackToWork){
                     $('#istenCikarButton').addClass("btn-orange").removeClass("btn-secondary");
                     $('#istenCikarButton span').html("İşe Geri Al"); 
                 }
                 else{
                     $('#istenCikarButton').remove()
+                    
                 }
             }
             fillpersonalDetailsInputs(res.data);
@@ -39,23 +55,6 @@
     });
 
     function fillpersonalDetailsInputs(data) {
-        //Personel İşten Çıkarılmış Personel ise
-        if (data.status === 1) {
-            $('#istenCikarilmaTarihiDiv').html(`
-                <button id="CikisTarihiShow" type="button" class="btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12.5 21h-6.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v8"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/><path d="M16 19h6"/>
-                    </svg>
-                    <span></span>
-                </button>
-            `)
-            let formattedDate = new Date(data.endJobDate).toLocaleDateString("tr-TR", {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-            });
-            $('#CikisTarihiShow span').html("İşten Çıkış Tarihi: " + formattedDate)
-        }
         // Avatar ve diğer basit bilgilerin ayarlanması
         $('#personalAvatar').html(data.nameSurname.charAt(0));
         $('#badgeTotalTakenLeave').html(saatleriGunVeSaatlereCevir(data.totalTakenLeave));

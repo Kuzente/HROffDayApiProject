@@ -1,4 +1,5 @@
-﻿@model ResultWithPagingDataDto<List<ReadPersonalOffDayListDto>>
+﻿@model ResultWithPagingDataDto<List<Core.DTOs.TransferPersonalDtos.ReadDtos.ReadTransferPersonalDto>>
+
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
@@ -48,13 +49,13 @@
 <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs flex-row-reverse">
         <li class="nav-item">
-            <a id="personelNakilPage" href="/personel-nakil-listesi?id=@personelIdQuery" class="nav-link">Nakil Listesi</a>
+            <a id="personelNakilPage" href="/personel-nakil-listesi?id=@personelIdQuery" class="nav-link active">Nakil Listesi</a>
         </li>
         <li class="nav-item">
             <a href="#tabs-home-2" class="nav-link">Eksik Gün</a>
         </li>
         <li class="nav-item">
-            <a id="personelİzinleriPage" class="nav-link active">Personele Ait İzinler</a>
+            <a id="personelİzinleriPage" href="/personel-izinleri?id=@personelIdQuery" class="nav-link">Personele Ait İzinler</a>
         </li>
         <li class="nav-item">
             <a id="personelDetaylarıPage" href="/personel-detaylari?id=@personelIdQuery" class="nav-link">Personel Detayları</a>
@@ -241,7 +242,7 @@ else
                         <div class="col-md-2">
                             @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && kvp.Key != "id" && !string.IsNullOrEmpty(kvp.Value)))
                             {
-                                <a href="/personel-izinleri?id=@personelIdQuery" class="btn btn-outline-secondary ms-3">Temizle</a>
+                                <a href="/personel-nakil-listesi?id=@personelIdQuery" class="btn btn-outline-secondary ms-3">Temizle</a>
                             }
                         </div>
                         <!--Temizle Butonu-->
@@ -254,7 +255,7 @@ else
                 <div class="row d-inline-flex">
                     <div class="col-2">
                         <span class="">
-                            <form method="post" action="/izin-excel">
+                            <form method="post" action="/personel-nakil-excel">
                                 <button type="submit" class="btn btn-icon btn-green">
                                     <input type="hidden" name="id" value="@Context.Request.Query["id"]">
                                     <input type="hidden" name="filterYear" value="@Context.Request.Query["filterYear"]">
@@ -277,14 +278,14 @@ else
                         @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && kvp.Key != "id" && !string.IsNullOrEmpty(kvp.Value)))
                         {
                             <button type="button" class="btn">
-                                Filtrelenen Onaylanan İzin
+                                Filtrelenen Nakil Listesi
                                 <span class="badge bg-green ms-2">@Model.TotalRecords</span>
                             </button>
                         }
                         else
                         {
                             <button type="button" class="btn">
-                                Toplam Onaylanan İzin
+                                Toplam Nakil Listesi
                                 <span class="badge bg-green ms-2">@Model.TotalRecords</span>
                             </button>
                         }
@@ -296,13 +297,12 @@ else
         <table class="table table-responsive">
             <thead>
             <tr>
-                <th>İzin Başlangıç Tarihi</th>
-                <th>İzin Bitiş Tarihi</th>
-                <th>Toplam <br/> Alınan Gün</th>
-                <th>İzin Açıklaması</th>
-                <th>Detaylı <br/>İzin Günleri</th>
-                <th>Form <br>Oluşturulma Tarihi</th>
-                <th>Düzenle</th>
+                <th>Adı Soyadı</th>
+                <th>Eski Şube</th>
+                <th>Yeni Şube</th>
+                <th>Eski Ünvan</th>
+                <th>Yeni Ünvan</th>
+                <th>Nakil Tarihi</th>
                 <th>Sil</th>
 
             </tr>
@@ -313,42 +313,25 @@ else
                 <tr>
 
                     <td class="col-2">
-                        <span class="status status-dark mb-1">@data.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
+                        @data.PersonalNameSurname
                     </td>
                     <td class="col-2">
-                        <span class="status status-github">@data.EndDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
+                        @data.OldBranch
                     </td>
-                    <td class="col-1">
-                        @data.CountLeave
+                    <td class="col-2">
+                        @data.NewBranch
                     </td>
-                    <td class="col-3">
-                        @data.Description
+                    <td class="col-2">
+                        @data.OldPosition
                     </td>
-                    <td class="col-1">
-                        <button type="button" class="btn btn-teal btn-sm btn-pill" data-bs-trigger="hover" data-bs-html="true" data-bs-toggle="popover"
-                                title="Detaylı İzin Sayıları" data-bs-content="@(data.LeaveByYear > 0 ? $"Yıllık İzni: {data.LeaveByYear}</br>" : "")
-                                                                                           @(data.LeaveByWeek > 0 ? $"Haftalık İzni: {data.LeaveByWeek}</br>" : "")
-                                                                                           @(data.LeaveByTaken > 0 ? $"Alacak İzni: {data.LeaveByTaken}</br>" : "")
-                                                                                           @(data.LeaveByPublicHoliday > 0 ? $"Resmi İzni: {data.LeaveByPublicHoliday}</br>" : "")
-                                                                                           @(data.LeaveByFreeDay > 0 ? $"Ücretsiz İzni: {data.LeaveByFreeDay}</br>" : "")
-                                                                                           @(data.LeaveByTravel > 0 ? $"Seyahat İzni: {data.LeaveByTravel}</br>" : "")
-                                                                                           @(data.LeaveByFather > 0 ? $"Babalık İzni: {data.LeaveByFather}</br>" : "")
-                                                                                           @(data.LeaveByMarried > 0 ? $"Evlenme İzni: {data.LeaveByMarried}</br>" : "")
-                                                                                           @(data.LeaveByDead > 0 ? $"Ölüm İzni: {data.LeaveByDead}</br>" : "")
-                                                                                           @($"İzin Açıklaması: {data.Description}</br>")">
-                            Detaylı Görüntüle
-                        </button>
+                    <td class="col-2">
+                        @data.NewPosition
                     </td>
                     <td class="col-1">
                         <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
-
                     </td>
                     <td class="col-1">
-                        <!--TODO RETURN URL-->
-                        <a href='/izin-duzenle?id=@data.ID&returnUrl=@returnUrl' class="btn btn-dark btn-sm text-white btn-pill">Güncelle</a>
-                    </td>
-                    <td class="col-1">
-                        <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="">İptal Et</button>
+                        <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="">Sil</button>
                     </td>
                 </tr>
             }
@@ -414,7 +397,7 @@ else
         </div>
     </div>
     <!--DeleteModal-->
-    <form id="izinSilForm" action="/izin-sil" method="post">
+    <form id="deleteForm" action="/personel-nakil-sil" method="post">
         <div class="modal modal-blur fade" id="archiveModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -427,7 +410,7 @@ else
                         </svg>
                         <h3>Emin Misiniz?</h3>
                         <div class="text-muted">
-                            Seçmiş olduğunuz <span class="badge badge-pill" id="personalNamePlaceholder"></span> personeline ait izin kayıtlardan silinecektir!!!.
+                            Seçmiş olduğunuz <span class="badge badge-pill" id="personalNamePlaceholder"></span> personeline ait kayıt silinecektir!!!.
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -441,7 +424,7 @@ else
                                 <div class="col">
                                     <input type="hidden" id="itemIdInput" name="id">
                                     <input type="hidden" name="returnUrl" value="@returnUrl">
-                                    <button type="submit" class="btn btn-danger w-100" data-bs-dismiss="modal">İptal Et</button>
+                                    <button type="submit" class="btn btn-danger w-100" data-bs-dismiss="modal">Kaydı Sil</button>
                                 </div>
                             </div>
                         </div>
@@ -568,7 +551,7 @@ else
     <!--PersonalIşe Geri Al Modal-->
     @section Scripts
     {
-        <script src="/js/custom/personalDetails/personalOffdays.js"></script>
+        <script src="/js/custom/personalDetails/personalTransfers.js"></script>
     }
 }
 </div>

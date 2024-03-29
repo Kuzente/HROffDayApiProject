@@ -13,6 +13,7 @@ public class ReadPersonalDetailsHeaderDto
     public DateTime EndJobDate { get; set; }
     public DateTime StartJobDate { get; set; }
     public EntityStatusEnum Status { get; set; }
+    public bool IsBackToWork { get; set; }
     public ReadPersonalDetailsHeaderSubBranchDto Branch { get; set; }
     public ReadPersonalDetailsHeaderSubPositionDto Position { get; set; }
 }

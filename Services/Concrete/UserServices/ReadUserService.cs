@@ -134,6 +134,37 @@ public class ReadUserService : IReadUserService
 	    return result;
     }
 
+    public async Task<IResultWithDataDto<ReadUpdateUserDto>> GetUpdateUserService(Guid id)
+    {
+	    IResultWithDataDto<ReadUpdateUserDto> result = new ResultWithDataDto<ReadUpdateUserDto>();
+	    try
+	    {
+		    var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == id,include:p=>p.Include(a=>a.BranchUsers).ThenInclude(b=> b.Branch));
+		    if (user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Kullanıcı Bulunamadı");
+		    var mappedResult = _mapper.Map<ReadUpdateUserDto>(user);
+		    if (user.Role != UserRoleEnum.HumanResources)
+		    {
+			    mappedResult.SelectedBranches = new List<BranchNameDto>();
+			    mappedResult.SelectedBranches.AddRange(user.BranchUsers.Select(bu => new BranchNameDto
+				    { ID = bu.Branch.ID, Name = bu.Branch.Name }));
+		    };
+		    var getBranchManagerSelect = _unitOfWork.ReadBranchRepository.GetAll(
+			    predicate: p => 
+				    p.Status == EntityStatusEnum.Online &&
+				    p.BranchUsers.All(bu => bu.User.Role != UserRoleEnum.BranchManager || bu.User.Status != EntityStatusEnum.Online),
+			    include: p=>p.Include(bu=>bu.BranchUsers).ThenInclude(u=>u.User),
+			    orderBy:o=>o.OrderBy(a=>a.Name)
+		    ).ToList();
+		    result.SetData(mappedResult);
+	    }
+	    catch (Exception ex)
+	    {
+		    result.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+	    }
+
+	    return result;
+    }
+
     public async Task<IResultWithDataDto<ReadUserSignInDto>> SignInService(ReadUserSignInDto dto)
     {
 	    IResultWithDataDto<ReadUserSignInDto> result = new ResultWithDataDto<ReadUserSignInDto>();

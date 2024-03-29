@@ -127,8 +127,9 @@ public class ReadOffDayService : IReadOffDayService
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadOffDayRepository.GetAll(
 					predicate: a =>
-						(a.Status == EntityStatusEnum.Online && a.OffDayStatus == OffDayStatusEnum.Rejected) &&
-						a.Personal.Status == EntityStatusEnum.Online &&
+						a.Status == EntityStatusEnum.Online &&
+						 a.OffDayStatus == OffDayStatusEnum.Rejected &&
+						(a.Personal.Status == EntityStatusEnum.Online || a.Personal.Status == EntityStatusEnum.Offline) &&
 						(query.UserBranches.IsNullOrEmpty()|| query.UserBranches.Any(q=>q == a.BranchId)) &&
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth)&&
@@ -138,8 +139,8 @@ public class ReadOffDayService : IReadOffDayService
 				));
 			var branchList = await Task.Run(() => _unitOfWork.ReadBranchRepository.GetAll().Select(a=> new { a.Name,a.ID , a.Status}));
 			var positionList = await Task.Run(() => _unitOfWork.ReadPositionRepository.GetAll().Select(a=> new { a.Name,a.ID, a.Status}));
-			if(allData is null||branchList is null || positionList is null)
-				res.SetStatus(false).SetErr("Branch or Position or OffDay is not found").SetMessage("İzinler Bulunamadı...");
+			if(allData is null ||branchList.IsNullOrEmpty() || positionList.IsNullOrEmpty())
+				res.SetStatus(false).SetErr("Branch or Position or OffDay is not found").SetMessage("Şube veya Ünvan Bulunamadı...");
 			var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)
 				.Take(res.PageSize).ToList();
 			var mapData = _mapper.Map<List<ReadRejectedOffDayListDto>>(resultData);
@@ -173,8 +174,8 @@ public class ReadOffDayService : IReadOffDayService
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadOffDayRepository.GetAll(
 					predicate: a =>
-						(a.Status == EntityStatusEnum.Online &&
-						 a.OffDayStatus == OffDayStatusEnum.Approved ) &&
+						a.Status == EntityStatusEnum.Online &&
+						 a.OffDayStatus == OffDayStatusEnum.Approved  &&
 						(a.Personal.Status == EntityStatusEnum.Online ||
 						 a.Personal.Status == EntityStatusEnum.Offline) &&
 						(query.UserBranches.IsNullOrEmpty() || query.UserBranches.Any(q=>q == a.BranchId)) &&

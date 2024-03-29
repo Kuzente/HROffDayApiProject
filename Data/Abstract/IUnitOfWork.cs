@@ -5,6 +5,7 @@ using Data.Abstract.DailyYearLogRepositories;
 using Data.Abstract.OffDayRepositories;
 using Data.Abstract.PersonalRepositories;
 using Data.Abstract.PositionRepositories;
+using Data.Abstract.TransferPersonalRepositories;
 using Data.Abstract.UserRepositories;
 
 namespace Data.Abstract;
@@ -27,5 +28,7 @@ public interface IUnitOfWork : IDisposable
 	IWriteUserRepository WriteUserRepository { get;  }
 	IReadBranchUserRepository ReadBranchUserRepository { get;  }
 	IWriteBranchUserRepository WriteBranchUserRepository { get;  }
+	IReadTransferPersonalRepository ReadTransferPersonalRepository { get;  }
+	IWriteTransferPersonalRepository WriteTransferPersonalRepository { get;  }
 	bool Commit(bool state = true);
 }

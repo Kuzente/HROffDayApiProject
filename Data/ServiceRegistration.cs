@@ -6,6 +6,7 @@ using Data.Abstract.DailyYearLogRepositories;
 using Data.Abstract.OffDayRepositories;
 using Data.Abstract.PersonalRepositories;
 using Data.Abstract.PositionRepositories;
+using Data.Abstract.TransferPersonalRepositories;
 using Data.Abstract.UserRepositories;
 using Data.Concrete;
 using Data.Concrete.BranchRepositories;
@@ -15,6 +16,7 @@ using Data.Concrete.DailyYearLogRepositories;
 using Data.Concrete.OffDayRepositories;
 using Data.Concrete.PersonalRepositories;
 using Data.Concrete.PositionRepositories;
+using Data.Concrete.TransferPersonalRepositories;
 using Data.Concrete.UserRepositories;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +48,8 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(IWriteUserRepository),typeof(WriteUserRepository));
 		services.AddScoped(typeof(IReadBranchUserRepository),typeof(ReadBranchUserRepository));
 		services.AddScoped(typeof(IWriteBranchUserRepository),typeof(WriteBranchUserRepository));
+		services.AddScoped(typeof(IReadTransferPersonalRepository),typeof(ReadTransferPersonalRepository));
+		services.AddScoped(typeof(IWriteTransferPersonalRepository),typeof(WriteTransferPersonalRepository));
 
 	}
 }

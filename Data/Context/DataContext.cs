@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Context;
@@ -16,6 +17,7 @@ public class DataContext : DbContext
 	public DbSet<DailyFoodLog> DailyFoodLogs => Set<DailyFoodLog>();
 	public DbSet<User> Users => Set<User>();
 	public DbSet<BranchUser> BranchUsers => Set<BranchUser>();
+	public DbSet<TransferPersonal> TransferPersonals => Set<TransferPersonal>();
 	public override int SaveChanges()
 	{
 		var datas = ChangeTracker.Entries<BaseEntity>();
@@ -39,6 +41,33 @@ public class DataContext : DbContext
 		}
 		return base.SaveChanges();
 	}
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
+	{
+		base.OnModelCreating(modelBuilder);
+
+		// Users tablosunda hiç veri yoksa ve yeni bir veri ekleniyorsa
+		if (!Users.Any())
+		{
+			// Yeni bir User örneği oluşturarak veritabanına ekleyebilirsiniz
+			modelBuilder.Entity<User>().HasData(
+				new User
+				{
+					ID = Guid.NewGuid(),
+					Username = "superadmin",
+					Email = "superadmin@superadmin.com",
+					Password = "superadmin",
+					Role = UserRoleEnum.HumanResources,
+					Status = EntityStatusEnum.Online,
+					CreatedAt = DateTime.Now,
+					ModifiedAt = DateTime.Now,
+					DeletedAt = DateTime.MinValue,
+					IsDefaultPassword = true
+					// Diğer özellikler
+				}
+			);
+		}
+	}
+
 	
 
 }

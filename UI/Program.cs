@@ -76,6 +76,9 @@ app.MapControllerRoute(name: "personalDetailPageStatusPost", pattern: "personel-
 app.MapControllerRoute(name: "personalDeletePost", pattern: "personel-sil", defaults: new { controller = "PersonalDetail", action = "ArchivePersonal" });
 app.MapControllerRoute(name: "personalOffDays", pattern: "personel-izinleri", defaults: new { controller = "PersonalDetail", action = "PersonalOffDayList" });
 app.MapControllerRoute(name: "personalHeader", pattern: "personel-header", defaults: new { controller = "PersonalDetail", action = "PersonelDetailsHeader" });
+app.MapControllerRoute(name: "personalTransferListPage", pattern: "personel-nakil-listesi", defaults: new { controller = "PersonalDetail", action = "PersonalTransferList" });
+app.MapControllerRoute(name: "personalTransferDelete", pattern: "personel-nakil-sil", defaults: new { controller = "PersonalDetail", action = "PersonalTransferDelete" });
+app.MapControllerRoute(name: "personalTransferExcel", pattern: "personel-nakil-excel", defaults: new { controller = "PersonalDetail", action = "PersonalTransferExportExcel" });
 #endregion
 #region BranchList
 app.MapControllerRoute(name: "branchListGet", pattern: "subeler", defaults: new { controller = "Branch", action = "Index" });
@@ -129,6 +132,7 @@ app.MapControllerRoute(name: "dailyFoodLog", pattern: "gida-yardimi-log", defaul
 #region User
 app.MapControllerRoute(name: "userListPage", pattern: "kullanici-listesi", defaults: new { controller = "User", action = "UsersList" });
 app.MapControllerRoute(name: "createUser", pattern: "kullanici-ekle", defaults: new { controller = "User", action = "CreateUser" });
+app.MapControllerRoute(name: "updateUser", pattern: "kullanici-guncelle", defaults: new { controller = "User", action = "UpdateUser" });
 app.MapControllerRoute(name: "deleteUser", pattern: "kullanici-sil", defaults: new { controller = "User", action = "DeleteUser" });
 app.MapControllerRoute(name: "getDirectorBranchSelect", pattern: "select-director-branch", defaults: new { controller = "User", action = "GetDirectorSelects" });
 app.MapControllerRoute(name: "getDirectorBranchSelect", pattern: "select-branchmanager-branch", defaults: new { controller = "User", action = "GetBranchManagerSelects" });

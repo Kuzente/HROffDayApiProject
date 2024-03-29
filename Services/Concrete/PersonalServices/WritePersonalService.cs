@@ -9,6 +9,7 @@ using Core.Enums;
 using Core.Interfaces;
 using Data.Abstract;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Services.Abstract.PersonalServices;
 
 namespace Services.Concrete.PersonalServices;
@@ -73,11 +74,24 @@ public class WritePersonalService : IWritePersonalService
 		IResultDto result = new ResultDto();
 		try
 		{
-			var getPersonal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate:p=> p.ID == writeDto.ID);
-			if (getPersonal is  null)
-				return result.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Personel Bulunamadı!!!");
-			if(getPersonal.Status != EntityStatusEnum.Online)
-				return result.SetStatus(false).SetErr("Personel is Not Active").SetMessage("İlgili Personel Aktif Olarak Çalışmamaktadır!!!");
+			var getPersonal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate:p=> p.ID == writeDto.ID,include:a=>a.Include(b=>b.Branch).Include(c=>c.Position));
+			if (getPersonal is  null) return result.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Personel Bulunamadı!!!");
+			if(getPersonal.Status != EntityStatusEnum.Online) return result.SetStatus(false).SetErr("Personel is Not Active").SetMessage("İlgili Personel Aktif Olarak Çalışmamaktadır!!!");
+			if (getPersonal.Branch_Id != writeDto.Branch_Id || getPersonal.Position_Id != writeDto.Position_Id)
+			{
+				var getNewBranchName = await _unitOfWork.ReadBranchRepository.GetSingleAsync(predicate:p=>p.ID == writeDto.Branch_Id && p.Status != EntityStatusEnum.Archive);
+				var getNewPositionName = await _unitOfWork.ReadPositionRepository.GetSingleAsync(predicate:p=>p.ID == writeDto.Position_Id && p.Status != EntityStatusEnum.Archive);
+				if(getNewBranchName is null || getNewPositionName is null) return result.SetStatus(false).SetErr("Not Found Branch or Position").SetMessage("Girmiş Olduğunuz Şube veya Ünvan Eklenemedi!!!");
+				var transferObject = new TransferPersonal
+				{
+					OldBranch = getPersonal.Branch.Name,
+					OldPosition = getPersonal.Position.Name,
+					NewBranch = getNewBranchName.Name,
+					NewPosition = getNewPositionName.Name,
+					Personal_Id = getPersonal.ID,
+				};
+				await _unitOfWork.WriteTransferPersonalRepository.AddAsync(transferObject);
+			}
 			var mapSet = _mapper.Map<Personal>(writeDto);
 			mapSet.ID = getPersonal.ID;
 			mapSet.CreatedAt = getPersonal.CreatedAt;
