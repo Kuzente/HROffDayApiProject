@@ -667,7 +667,7 @@
                 if (res.isSuccess) {
                     $('#success-modal-message').text("Personel Başarılı Bir Şekilde Güncellendi.")
                     $('#success-modal').modal('show');
-                    $('#success-modal-button').click(function () {
+                    $('#success-modal').on('hidden.bs.modal', function () {
                         window.location.reload();
                     })
                 } else {
@@ -693,7 +693,7 @@
                 if (res.isSuccess) {
                     $('#success-modal-message').text("Personel Başarılı Bir Şekilde Silindi")
                     $('#success-modal').modal('show')
-                    $('#success-modal-button').click(function () {
+                    $('#success-modal').on('hidden.bs.modal', function () {
                         window.location.href = "/Personal";
                     })
                 } else {
@@ -795,7 +795,7 @@
                     if (res.isSuccess) {
                         $('#success-modal-message').text("Personel Başarılı Bir Şekilde İşten Çıkarıldı.")
                         $('#success-modal').modal('show')
-                        $('#success-modal-button').click(function () {
+                        $('#success-modal').on('hidden.bs.modal', function () {
                             window.location.reload();
                         });
                     } else {
@@ -844,7 +844,7 @@
                     if (res.isSuccess) {
                         $('#success-modal-message').text("Personel Başarılı Bir Şekilde Geri İşe Alındı.")
                         $('#success-modal').modal('show')
-                        $('#success-modal-button').click(function () {
+                        $('#success-modal').on('hidden.bs.modal', function () {
                             window.location.reload();
                         });
                     } else {

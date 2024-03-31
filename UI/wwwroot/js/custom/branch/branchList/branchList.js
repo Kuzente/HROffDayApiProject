@@ -91,9 +91,9 @@
 
         window.location.href = currentUrl.toString();
     });
-    $('#addBranchButton').on('click',function (e) {
-        spinnerStart($(this))
+    $('#addBranchForm').submit(function (e) {
         e.preventDefault();
+        spinnerStart($('#addBranchButton'))
         let formData = $("#addBranchForm").serializeArray();
         $.ajax({
             type: "POST",
@@ -104,7 +104,7 @@
             if (res.isSuccess){
                 $('#success-modal-message').text("Şube Başarılı Bir Şekilde Eklendi.")
                 $('#success-modal').modal('show')
-                $('#success-modal-button').click(function () {
+                $('#success-modal').on('hidden.bs.modal', function () {
                    window.location.href = "/subeler"
                 });
             }
@@ -115,8 +115,8 @@
         })
     });
     //Modal üzerideki Şubeyi Sil Butonuna Tıklandığında
-    $('#deleteBranchButton').on('click',function (e) {
-        spinnerStart($(this))
+    $('#deleteBranchForm').submit(function (e) {
+        spinnerStart($('#deleteBranchButton'))
         e.preventDefault();
         let formData = $("#deleteBranchForm").serializeArray();
         
@@ -129,7 +129,7 @@
             if (res.isSuccess){
                 $('#success-modal-message').text("Şube Başarılı Bir Şekilde Silindi.")
                 $('#success-modal').modal('show')
-                $('#success-modal-button').click(function () {
+                $('#success-modal').on('hidden.bs.modal', function () {
                     window.location.reload();
                 });
             }

@@ -44,28 +44,7 @@ public class DataContext : DbContext
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		base.OnModelCreating(modelBuilder);
-
-		// Users tablosunda hiç veri yoksa ve yeni bir veri ekleniyorsa
-		if (!Users.Any())
-		{
-			// Yeni bir User örneği oluşturarak veritabanına ekleyebilirsiniz
-			modelBuilder.Entity<User>().HasData(
-				new User
-				{
-					ID = Guid.NewGuid(),
-					Username = "superadmin",
-					Email = "superadmin@superadmin.com",
-					Password = "superadmin",
-					Role = UserRoleEnum.HumanResources,
-					Status = EntityStatusEnum.Online,
-					CreatedAt = DateTime.Now,
-					ModifiedAt = DateTime.Now,
-					DeletedAt = DateTime.MinValue,
-					IsDefaultPassword = true
-					// Diğer özellikler
-				}
-			);
-		}
+		modelBuilder.Seed();
 	}
 
 	

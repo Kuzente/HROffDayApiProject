@@ -254,16 +254,18 @@
     });
     $('#deleteForm').submit(function(event) {
         event.preventDefault(); // Formun normal submit işlemini engelle
+        spinnerStart($('#deleteButton'))
         let formData = $(this).serializeArray(); // Form verilerini al
         $.ajax({
             type:"POST",
             url:`/personel-nakil-sil`,
             data: formData
         }).done(function (res) {
+            spinnerEnd($('#deleteButton'))
             if(res.isSuccess){
                 $('#success-modal-message').text("Kayıt Başarılı Bir Şekilde Silindi.")
                 $('#success-modal').modal('show')
-                $('#success-modal-button').click(function () {
+                $('#success-modal').on('hidden.bs.modal', function () {
                     window.location.reload();
                 });
             }

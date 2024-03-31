@@ -61,18 +61,20 @@
         $('#personalNamePlaceholder').text($(this).data("item-personal"));
     });
     //Modal üzerideki İzni İptal Et Butonuna Tıklandığında
-    $('#deleteOffdayButton').on('click',function (e) {
+    $('#deleteOffDayForm').submit(function (e) {
         e.preventDefault();
+        spinnerStart($('#deleteOffdayButton'))
         let formData = $("#deleteOffDayForm").serializeArray();
         $.ajax({
             type: "POST",
             url: "/izin-sil",
             data: formData // Form verilerini al
         }).done(function (res) {
+            spinnerEnd($('#deleteOffdayButton'))
             if (res.isSuccess){
                 $('#success-modal-message').text("İzin Başarılı Bir Şekilde İptal Edildi.")
                 $('#success-modal').modal('show')
-                $('#success-modal-button').click(function () {
+                $('#success-modal').on('hidden.bs.modal', function () {
                     window.location.reload();
                 });
             }

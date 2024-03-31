@@ -88,7 +88,7 @@
         return gun + " gün " + kalanSaat + " saat";
     }
     //İzin Formu Gönder butonu tıklandığında çalışan metod
-    $('#submitButton').on('click',function () {
+    $('#submitButton').click(function () {
         let selectedPersonal = $("#personalSelect").find(":selected").val();
         let selectedFatherDeadMarried = $('#LeaveByMarriedFatherDead').find(":selected").val();
         let form = $("#formAuthentication");
@@ -125,24 +125,31 @@
         if (!selectedPersonal){
             $('#error-modal-message').text("Lütfen Personel Seçtiğinizden Emin Olunuz.")
             $('#error-modal').modal('show')
+            return false;
         }else if(!startDate || !endDate){
             $('#error-modal-message').text("Lütfen Tarih Seçtiğinizden Emin Olunuz.")
             $('#error-modal').modal('show')
+            return false;
         }else if(endDate < startDate){
             $('#error-modal-message').text("Başlangıç Tarihi Bitiş Tarihinden Sonra Olamaz.")
             $('#error-modal').modal('show')
+            return false;
         }else if (totalValue <= 0 && !selectedFatherDeadMarried){
             $('#error-modal-message').text("Lütfen İzin Günü Giriniz.")
             $('#error-modal').modal('show')
+            return false;
         }else if (negativeValues){
             $('#error-modal-message').text("Lütfen İzin Alanlarını Kontrol Ediniz.Negatif Değer Girilemez.")
             $('#error-modal').modal('show')
+            return false;
         }  else if (YearLeaveCount < $('[name="LeaveByYear"]').val()){
             $('#error-modal-message').text("Personelin Yıllık İzin Günü Yetersiz.Lütfen daha küçük bir değer giriniz.")
             $('#error-modal').modal('show')
+            return false;
         }else if (totalValue !== differenceInDays){
             $('#error-modal-message').text("Girdiğiniz Tarih Aralığı İle İzin Günleri Uyuşmuyor.")
             $('#error-modal').modal('show')
+            return false;
         }else{
             $('[data-postID]').val(selectedPersonal);
             $('[data-postCountLeave]').val(totalValue);
@@ -160,12 +167,12 @@
             $.ajax({
                 type: "POST",
                 url: "/izin-olustur",
-                data: formData 
+                data: formData
             }).done(function (res) {
                 if (res.isSuccess){
                     $('#success-modal-message').text("İzin Formu Başarılı Bir Şekilde Gönderildi.")
                     $('#success-modal').modal('show')
-                    $('#success-modal-button').click(function () {
+                    $('#success-modal').on('hidden.bs.modal', function () {
                         window.location.reload();
                     });
                 }

@@ -287,7 +287,7 @@
             if(res.isSuccess){
                 $('#success-modal-message').text("İzin Başarılı Bir Şekilde İptal Edildi.")
                 $('#success-modal').modal('show')
-                $('#success-modal-button').click(function () {
+                $('#success-modal').on('hidden.bs.modal', function () {
                     window.location.reload();
                 }); 
             }

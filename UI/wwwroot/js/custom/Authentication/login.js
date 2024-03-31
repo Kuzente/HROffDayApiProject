@@ -22,11 +22,10 @@
             svgContainer1.removeClass('d-none')
         }
     });
-    $('#submitButton').click(function (e) {
+    $('#submitForm').submit(function (e) {
         e.preventDefault()
         let emailValue = $('#emailInput').val()
         if (!isValidEmail(emailValue)) {
-            spinnerEnd($('#addUserButton'))
             $('#error-modal-message').text("Lütfen Geçerli Bir Mail Adresi Girdiğinizden Emin Olunuz.")
             $('#error-modal').modal('show')
             return;

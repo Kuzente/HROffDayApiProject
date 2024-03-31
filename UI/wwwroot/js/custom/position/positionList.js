@@ -85,9 +85,9 @@
 
         window.location.href = currentUrl.toString();
     });
-    $('#addPositionButton').on('click',function (e) {
-        spinnerStart($('#addPositionButton'))
+    $('#addPositionForm').submit(function (e) {
         e.preventDefault();
+        spinnerStart($('#addPositionButton'))
         let formData = $("#addPositionForm").serializeArray();
         $.ajax({
             type: "POST",
@@ -98,7 +98,7 @@
             if (res.isSuccess){
                 $('#success-modal-message').text("Ünvan Başarılı Bir Şekilde Eklendi.")
                 $('#success-modal').modal('show')
-                $('#success-modal-button').click(function () {
+                $('#success-modal').on('hidden.bs.modal', function () {
                     window.location.href = "/unvanlar"
                 });
             }
@@ -109,11 +109,10 @@
         })
     });
     //Modal üzerideki Ünvanı Sil Butonuna Tıklandığında
-    $('#deletePositionButton').on('click',function (e) {
-        spinnerStart($('#deletePositionButton'))
+    $('#deletePositionForm').submit(function (e) {
         e.preventDefault();
+        spinnerStart($('#deletePositionButton'))
         let formData = $("#deletePositionForm").serializeArray();
-        console.log(formData)
         $.ajax({
             type: "POST",
             url: "/unvan-sil",
@@ -123,7 +122,7 @@
             if (res.isSuccess){
                 $('#success-modal-message').text("Ünvan Başarılı Bir Şekilde Silindi.")
                 $('#success-modal').modal('show')
-                $('#success-modal-button').click(function () {
+                $('#success-modal').on('hidden.bs.modal', function () {
                     window.location.reload();
                 });
             }

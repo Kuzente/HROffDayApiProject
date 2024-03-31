@@ -29,7 +29,6 @@
                     e.preventDefault();
 
                     if (myDropzone.files.length > 0) {
-                        console.log(myDropzone.files.length)
                         myDropzone.processQueue();
                     } else {
                         $('#error-modal-message').text(`Lütfen belirli bir dosyayı seçin.`)
