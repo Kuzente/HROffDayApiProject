@@ -18,6 +18,7 @@ public class DataContext : DbContext
 	public DbSet<User> Users => Set<User>();
 	public DbSet<BranchUser> BranchUsers => Set<BranchUser>();
 	public DbSet<TransferPersonal> TransferPersonals => Set<TransferPersonal>();
+	public DbSet<MissingDay> MissingDays => Set<MissingDay>();
 	public override int SaveChanges()
 	{
 		var datas = ChangeTracker.Entries<BaseEntity>();

@@ -150,6 +150,50 @@ namespace Data.Migrations
                     b.ToTable("DailyYearLogs");
                 });
 
+            modelBuilder.Entity("Core.Entities.MissingDay", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Branch_Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndOffDayDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Personal_Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("StartJobDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartOffdayDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("Personal_Id");
+
+                    b.ToTable("MissingDays");
+                });
+
             modelBuilder.Entity("Core.Entities.OffDay", b =>
                 {
                     b.Property<Guid>("ID")
@@ -506,6 +550,21 @@ namespace Data.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = new Guid("15db391f-8823-4b1a-8139-b5a979abb3fc"),
+                            CreatedAt = new DateTime(2024, 3, 31, 16, 58, 16, 875, DateTimeKind.Local).AddTicks(5991),
+                            DeletedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "superadmin@superadmin.com",
+                            IsDefaultPassword = true,
+                            ModifiedAt = new DateTime(2024, 3, 31, 16, 58, 16, 875, DateTimeKind.Local).AddTicks(6002),
+                            Password = "superadmin",
+                            Role = 0,
+                            Status = 0,
+                            Username = "superadmin"
+                        });
                 });
 
             modelBuilder.Entity("Core.Entities.BranchUser", b =>
@@ -525,6 +584,17 @@ namespace Data.Migrations
                     b.Navigation("Branch");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Core.Entities.MissingDay", b =>
+                {
+                    b.HasOne("Core.Entities.Personal", "Personal")
+                        .WithMany("MissingDays")
+                        .HasForeignKey("Personal_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Personal");
                 });
 
             modelBuilder.Entity("Core.Entities.OffDay", b =>
@@ -588,6 +658,8 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Core.Entities.Personal", b =>
                 {
+                    b.Navigation("MissingDays");
+
                     b.Navigation("OffDays");
 
                     b.Navigation("PersonalDetails")

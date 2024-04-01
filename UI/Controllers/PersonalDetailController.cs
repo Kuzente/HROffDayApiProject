@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.DTOs.MissingDayDtos.WriteDtos;
 using Core.DTOs.PersonalDetailDto.WriteDtos;
 using Core.DTOs.PersonalDTOs.WriteDtos;
 using Core.Enums;
@@ -7,10 +8,12 @@ using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.BranchServices;
+using Services.Abstract.MissingDayServices;
 using Services.Abstract.OffDayServices;
 using Services.Abstract.PersonalServices;
 using Services.Abstract.PositionServices;
 using Services.Abstract.TransferPersonalService;
+using Services.ExcelDownloadServices.MissingDayServices;
 using Services.ExcelDownloadServices.TransferPersonalServices;
 
 namespace UI.Controllers;
@@ -24,8 +27,11 @@ public class PersonalDetailController : Controller
     private readonly IReadTransferPersonalService _readTransferPersonalService;
     private readonly IWriteTransferPersonalService _writeTransferPersonalService;
     private readonly TransferPersonalExcelExport _transferPersonalExcelExport;
+    private readonly IReadMissingDayService _readMissingDayService;
+    private readonly IWriteMissingDayService _writeMissingDayService;
+    private readonly MissingDayPersonalExcelExport _missingDayPersonalExcelExport;
 
-    public PersonalDetailController(IReadPersonalService readPersonalService, IWritePersonalService writePersonalService,IReadOffDayService readOffDayService, IReadTransferPersonalService readTransferPersonalService, IWriteTransferPersonalService writeTransferPersonalService, TransferPersonalExcelExport transferPersonalExcelExport)
+    public PersonalDetailController(IReadPersonalService readPersonalService, IWritePersonalService writePersonalService,IReadOffDayService readOffDayService, IReadTransferPersonalService readTransferPersonalService, IWriteTransferPersonalService writeTransferPersonalService, TransferPersonalExcelExport transferPersonalExcelExport, IReadMissingDayService readMissingDayService, IWriteMissingDayService writeMissingDayService, MissingDayPersonalExcelExport missingDayPersonalExcelExport)
     {
         _readPersonalService = readPersonalService;
         _writePersonalService = writePersonalService;
@@ -33,6 +39,9 @@ public class PersonalDetailController : Controller
         _readTransferPersonalService = readTransferPersonalService;
         _writeTransferPersonalService = writeTransferPersonalService;
         _transferPersonalExcelExport = transferPersonalExcelExport;
+        _readMissingDayService = readMissingDayService;
+        _writeMissingDayService = writeMissingDayService;
+        _missingDayPersonalExcelExport = missingDayPersonalExcelExport;
     }
 
     #region PageActions
@@ -62,7 +71,15 @@ public class PersonalDetailController : Controller
         var result = await _readTransferPersonalService.GetTransferPersonalListByIdService(query);
         return View(result);
     }
-
+    /// <summary>
+    /// Personel Eksik Gün Listesi Sayfası
+    /// </summary>
+    /// <returns></returns>
+    public async Task<IActionResult> PersonalMissingDayList(MissingDayQuery query)
+    {
+        var result = await _readMissingDayService.GetMissingDayListByIdService(query);
+        return View(result);
+    }
     #endregion
 
     #region Get/Post Actions
@@ -116,6 +133,35 @@ public class PersonalDetailController : Controller
         return Ok(result);
     }
     /// <summary>
+    /// Personel Eksik Gün Ekleme Post Metodu
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<IActionResult> PersonalMissingDayAdd(WriteAddMissingDayDto dto)
+    {
+        IResultDto result = new ResultDto();
+        if (!ModelState.IsValid)
+        {
+            result.SetStatus(false).SetErr("Modelstate is not valid").SetMessage("Lütfen Zorunlu Alanların Girildiğinden Emin Olunuz.");
+        }
+        else
+        {
+            result = await _writeMissingDayService.AddMissingDayService(dto);
+        }
+        
+        return Ok(result);
+    }
+    /// <summary>
+    /// Personel Eksik Gün Sil Post Metodu
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<IActionResult> PersonalMissingDayDelete(Guid id)
+    {
+        var result = await _writeMissingDayService.DeleteMissingDayService(id);
+        return Ok(result);
+    }
+    /// <summary>
     /// Personel İşten Çıkar veya İşe Al Post Metodu
     /// </summary>
     /// <returns></returns>
@@ -138,7 +184,6 @@ public class PersonalDetailController : Controller
     /// Personal Nakil Listesi Excel Raporu Alma
     /// </summary>
     /// <returns></returns>
-    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)}")]
     [HttpPost]
     public async Task<IActionResult> PersonalTransferExportExcel(TransferPersonalQuery query , string returnUrl)
     {
@@ -151,6 +196,28 @@ public class PersonalDetailController : Controller
                 var response = HttpContext.Response;
                 response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 response.Headers.Add($"Content-Disposition", $"attachment; filename=Nakil-Listesi.xlsx");
+                await response.Body.WriteAsync(excelData, 0, excelData.Length);
+                return new EmptyResult();
+            }
+            catch (Exception e)
+            {
+                return Redirect(returnUrl);
+            }
+        }
+        return Redirect(returnUrl);
+    }
+    [HttpPost]
+    public async Task<IActionResult> PersonalMissingDayExportExcel(MissingDayQuery query , string returnUrl)
+    {
+        var result = await _readMissingDayService.ExcelGetPersonalMissingDayListByIdService(query);
+        if (result.IsSuccess)
+        {
+            try
+            {
+                byte[] excelData = _missingDayPersonalExcelExport.ExportToExcel(result.Data); // Entity listesini Excel verisi olarak alın.
+                var response = HttpContext.Response;
+                response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                response.Headers.Add($"Content-Disposition", $"attachment; filename=Eksik-Gun.xlsx");
                 await response.Body.WriteAsync(excelData, 0, excelData.Length);
                 return new EmptyResult();
             }

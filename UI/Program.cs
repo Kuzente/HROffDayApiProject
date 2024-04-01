@@ -79,6 +79,10 @@ app.MapControllerRoute(name: "personalHeader", pattern: "personel-header", defau
 app.MapControllerRoute(name: "personalTransferListPage", pattern: "personel-nakil-listesi", defaults: new { controller = "PersonalDetail", action = "PersonalTransferList" });
 app.MapControllerRoute(name: "personalTransferDelete", pattern: "personel-nakil-sil", defaults: new { controller = "PersonalDetail", action = "PersonalTransferDelete" });
 app.MapControllerRoute(name: "personalTransferExcel", pattern: "personel-nakil-excel", defaults: new { controller = "PersonalDetail", action = "PersonalTransferExportExcel" });
+app.MapControllerRoute(name: "personalMissingDayPage", pattern: "personel-eksik-gun-listesi", defaults: new { controller = "PersonalDetail", action = "PersonalMissingDayList" });
+app.MapControllerRoute(name: "personalMissingDayDelete", pattern: "personel-eksik-gun-sil", defaults: new { controller = "PersonalDetail", action = "PersonalMissingDayDelete" });
+app.MapControllerRoute(name: "personalMissingDayAdd", pattern: "personel-eksik-gun-ekle", defaults: new { controller = "PersonalDetail", action = "PersonalMissingDayAdd" });
+app.MapControllerRoute(name: "personalMissingDayExcel", pattern: "personel-eksik-gun-excel", defaults: new { controller = "PersonalDetail", action = "PersonalMissingDayExportExcel" });
 #endregion
 #region BranchList
 app.MapControllerRoute(name: "branchListGet", pattern: "subeler", defaults: new { controller = "Branch", action = "Index" });

@@ -3,6 +3,7 @@ using Data.Abstract.BranchRepositories;
 using Data.Abstract.BranchUserRepositories;
 using Data.Abstract.DailyFoodLogRepositories;
 using Data.Abstract.DailyYearLogRepositories;
+using Data.Abstract.MissingDayRepositories;
 using Data.Abstract.OffDayRepositories;
 using Data.Abstract.PersonalRepositories;
 using Data.Abstract.PositionRepositories;
@@ -12,6 +13,7 @@ using Data.Concrete.BranchRepositories;
 using Data.Concrete.BranchUserRepositories;
 using Data.Concrete.DailyFoodLogRepositories;
 using Data.Concrete.DailyYearLogRepositories;
+using Data.Concrete.MissingDayRepositories;
 using Data.Concrete.OffDayRepositories;
 using Data.Concrete.PersonalRepositories;
 using Data.Concrete.PositionRepositories;
@@ -49,6 +51,8 @@ public class UnitOfWork : IUnitOfWork
 	public IReadBranchUserRepository ReadBranchUserRepository { get; private set; }
 	public IWriteTransferPersonalRepository WriteTransferPersonalRepository { get; private set; }
 	public IReadTransferPersonalRepository ReadTransferPersonalRepository { get; private set; }
+	public IWriteMissingDayRepository WriteMissingDayRepository { get; private set; }
+	public IReadMissingDayRepository ReadMissingDayRepository { get; private set; }
 	
 
 	public UnitOfWork(DataContext context)
@@ -72,6 +76,8 @@ public class UnitOfWork : IUnitOfWork
 		WriteBranchUserRepository = new WriteBranchUserRepository(_context);
 		ReadTransferPersonalRepository = new ReadTransferPersonalRepository(_context);
 		WriteTransferPersonalRepository = new WriteTransferPersonalRepository(_context);
+		ReadMissingDayRepository = new ReadMissingDayRepository(_context);
+		WriteMissingDayRepository = new WriteMissingDayRepository(_context);
 		_transaction = _context.Database.BeginTransaction();
 	}
 

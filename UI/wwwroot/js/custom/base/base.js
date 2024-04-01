@@ -303,6 +303,123 @@ document.querySelectorAll('.selectListTom').forEach((el) => {
             });
         });
     }
+    if(el.getAttribute('data-reasonSelect')!== null){
+        const reasonJson = `
+        [
+            {
+              "Name": "İstirahat (01)",
+              "Value": "İstirahat (01)"
+            },
+            {
+              "Name": "Disiplin Cezası (03)",
+              "Value": "Disiplin Cezası (03)"
+            },
+            {
+              "Name": "Gözaltına Alınma (04)",
+              "Value": "Gözaltına Alınma (04)"
+            },
+            {
+              "Name": "Tutukluluk (05)",
+              "Value": "Tutukluluk (05)"
+            },
+            {
+              "Name": "Kısmi İstihdam (06)",
+              "Value": "Kısmi İstihdam (06)"
+            },
+            {
+              "Name": "Puantaj Kayıtları (07)",
+              "Value": "Puantaj Kayıtları (07)"
+            },
+            {
+              "Name": "Grev (08)",
+              "Value": "Grev (08)"
+            },
+            {
+              "Name": "Lokavt (09)",
+              "Value": "Lokavt (09)"
+            },
+            {
+              "Name": "Genel Hayatı Etkileyen Olaylar (10)",
+              "Value": "Genel Hayatı Etkileyen Olaylar (10)"
+            },
+            {
+              "Name": "Doğal Afet (11)",
+              "Value": "Doğal Afet (11)"
+            },
+            {
+              "Name": "Birden Fazla (12)",
+              "Value": "Birden Fazla (12)"
+            },
+            {
+              "Name": "Diğer Nedenler (13)",
+              "Value": "Diğer Nedenler (13)"
+            },
+            {
+              "Name": "Devamsızlık (15)",
+              "Value": "Devamsızlık (15)"
+            },
+            {
+              "Name": "Fesih tarihinde çalışmamış(16)",
+              "Value": "Fesih tarihinde çalışmamış (16)"
+            },
+            {
+              "Name": "Ev hizmetlerinde 30 günden az çalışma (17)",
+              "Value": "Ev hizmetlerinde 30 günden az çalışma (17)"
+            },
+            {
+              "Name": "Kısa çalışma ödeneği (18)",
+              "Value": "Kısa çalışma ödeneği (18)"
+            },
+            {
+              "Name": "Ücretsiz Doğum İzni (19)",
+              "Value": "Ücretsiz Doğum İzni (19)"
+            },
+            {
+              "Name": "Ücretsiz Yol İzni (20)",
+              "Value": "Ücretsiz Yol İzni (20)"
+            },
+            {
+              "Name": "5434 SK. ek 76, GM 192 (22)",
+              "Value": "5434 SK. ek 76, GM 192 (22)"
+            },
+            {
+              "Name": "Yarım çalışma ödeneği (23)",
+              "Value": "Yarım çalışma ödeneği (23)"
+            },
+            {
+              "Name": "Yarım çalışma ödeneği ve diğer nedenler (24)",
+              "Value": "Yarım çalışma ödeneği ve diğer nedenler (24)"
+            },
+            {
+              "Name": "Diğer belge/kanun türlerinden gün tamamlama (25)",
+              "Value": "Diğer belge/kanun türlerinden gün tamamlama (25)"
+            },
+            {
+              "Name": "Kısmi istihdama izin verilen yabancı uyruklu sigortalı (26)",
+              "Value": "Kısmi istihdama izin verilen yabancı uyruklu sigortalı (26)"
+            },
+            {
+              "Name": "Kısa Çalışma Ödeneği ve Diğer Nedenler (27)",
+              "Value": "Kısa Çalışma Ödeneği ve Diğer Nedenler (27)"
+            },
+            {
+              "Name": "Pandemi Ücretsiz İzin (4857 Geç. 10 Md.) (28)",
+              "Value": "Pandemi Ücretsiz İzin (4857 Geç. 10 Md.) (28)"
+            },
+            {
+              "Name": "Pandemi Ücretsiz İzin (4857 Geç. 10.Md) Ve Diğer (29)",
+              "Value": "Pandemi Ücretsiz İzin (4857 Geç. 10.Md) Ve Diğer (29)"
+            }
+        ]
+        `
+        const reasons = JSON.parse(reasonJson);
+        reasons.forEach((reason) => {
+            select.addOption({
+                value: reason.Value,
+                text: reason.Value
+            }) 
+        })
+    }
 });
 
 // Tüm date inputlarını seçin

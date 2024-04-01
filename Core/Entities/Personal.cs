@@ -56,5 +56,6 @@ public partial class Personal
 	public Guid PersonalDetails_Id { get; set; }
 	public PersonalDetails PersonalDetails { get; set; }
 	public ICollection<TransferPersonal> TransferPersonals { get; set; }
+	public ICollection<MissingDay> MissingDays { get; set; }
 	
 }

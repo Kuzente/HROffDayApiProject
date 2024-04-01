@@ -15,6 +15,7 @@
             $('#HeaderPersonalNameSurname').text(res.data.nameSurname);
             $('#HeaderPersonalBranchPosition').text((res.data.branches.find(p => p.id === res.data.branch_Id) || {}).name + " - " + (res.data.positions.find(p => p.id === res.data.position_Id).name));
             $('#personelİzinleriPage').attr('href', `/personel-izinleri?id=${res.data.id}`);
+            $('#personelEksikGunPage').attr('href', `/personel-eksik-gun-listesi?id=${res.data.id}`);
             $('#personelNakilPage').attr('href', `/personel-nakil-listesi?id=${res.data.id}`);
             if (res.data.status === 0) { // Online
                 $('#istenCikarButton').addClass("btn-secondary").removeClass("btn-orange");
