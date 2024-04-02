@@ -8,6 +8,8 @@
     
     const today = new Date();
     const birthList = document.getElementById('birthList');
+    const offDayList = document.getElementById('waitingOffDayList')
+    const missDayList = document.getElementById('missingDayList')
     let personalResponse ;
     //İş gücü verisi Fonksiyonu
     function WorkPowerTable(response , selectedYear = new Date().getFullYear(),selectedBranches = []) {
@@ -241,10 +243,7 @@
                 <div class="text-truncate">
                     <strong>${personalName}</strong> doğum günü yaklaşıyor.
                 </div>
-                <div class="text-secondary">${birthDate.toLocaleDateString('tr-TR', {
-            day: 'numeric',
-            month: 'long'
-        })} - ${remainingText}</div>
+                <div class="text-secondary">${birthDate.toLocaleDateString('tr-TR', {day: 'numeric', month: 'long'})} - ${remainingText}</div>
             `;
         
 
@@ -342,6 +341,94 @@
     }).done(function (res) {
         $('#positionCount').text(res.length === 0 ? "Yok" : res.length);
     });
+    $.ajax({
+        type:"GET",
+        url: "/query/bekleyen-izinler-dashboard?$expand=Personal($select=ID,NameSurname;)&$select=id,createdAt,offdaystatus,Personal&$filter=Personal/Status eq 'Online'&$orderby=createdAt asc",
+    }).done(function (res) {
+        res.forEach(data=> {
+            console.log(data)
+            let listItem = document.createElement('div');
+            listItem.className = 'list-group-item';
+            let row = document.createElement('div');
+            row.className = 'row';
+            let avatarCol = document.createElement('div');
+            avatarCol.className = 'col-auto';
+            avatarCol.innerHTML = `<span class="avatar">${data.Personal.NameSurname.charAt(0)}</span>`;
+            let infoCol = document.createElement('div');
+            infoCol.className = 'col';
+            infoCol.innerHTML = `
+                <div class="text-truncate">
+                    <strong>${data.Personal.NameSurname}</strong> adlı personele ait bekleyen izin var.
+                </div>
+                <div class="text-secondary">Oluşturulma Tarihi - ${new Date(data.CreatedAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
+            `;
+
+            row.appendChild(avatarCol);
+            row.appendChild(infoCol);
+            let badgeCol = document.createElement('div');
+            badgeCol.className = 'col-auto align-self-center';
+            let badgeDiv = document.createElement('div');
+            if(data.OffDayStatus === 1){
+                badgeDiv.className = 'badge bg-primary';
+                badgeDiv.textContent =  "GM Onayı Bekliyor";
+                badgeCol.appendChild(badgeDiv)
+                listItem.className += " active";
+            }
+            else{
+                badgeDiv.className = 'badge bg-yellow';
+                badgeDiv.textContent =  "IK Onayı Bekliyor";
+                badgeCol.appendChild(badgeDiv)
+                listItem.className += " active";
+                listItem.style.borderLeftColor = "rgb(245 159 0)"
+            }
+            row.appendChild(badgeCol);
+            listItem.appendChild(row);
+            offDayList.appendChild(listItem);
+        })
+    })
+    $.ajax({
+        type:"GET",
+        url: "/query/eksik-gun-dashboard?$expand=Personal($select=NameSurname,Status;)&$select=id,EndOffDayDate,Personal,EndOffDayDate,Reason&$filter=Personal/Status eq 'Online'and Reason eq 'İstirahat (01)'&$orderby=EndOffDayDate asc",
+    }).done(function (res) {
+        res.forEach(data=> {
+            let raporTarihi = new Date(data.EndOffDayDate)
+            let kalanGunSayisi = Math.ceil((raporTarihi - today) / (1000 * 60 * 60 * 24));
+            if (kalanGunSayisi <= 5 && kalanGunSayisi >= 0) {
+                let remainingText = (raporTarihi.getDate() - today.getDate() === 0) ? "Bugün" :
+                    (raporTarihi.getDate() - today.getDate() === 1) ? "Yarın" :
+                        `${kalanGunSayisi} Gün Sonra`;
+                let listItem = document.createElement('div');
+                listItem.className = 'list-group-item';
+                let row = document.createElement('div');
+                row.className = 'row';
+                let avatarCol = document.createElement('div');
+                avatarCol.className = 'col-auto';
+                avatarCol.innerHTML = `<span class="avatar">${data.Personal.NameSurname.charAt(0)}</span>`;
+                let infoCol = document.createElement('div');
+                infoCol.className = 'col';
+                infoCol.innerHTML = `
+                <div class="text-truncate">
+                    <strong>${data.Personal.NameSurname}</strong> adlı personele ait rapor tarihi yaklaşıyor.
+                </div>
+                <div class="text-secondary">Rapor Bitiş Tarihi: ${new Date(data.EndOffDayDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' })} - ${remainingText}</div>
+            `;
+                
+                row.appendChild(avatarCol);
+                row.appendChild(infoCol);
+                if(raporTarihi.getDate() - today.getDate() === 0){
+                    let badgeCol = document.createElement('div');
+                    badgeCol.className = 'col-auto align-self-center';
+                    badgeCol.innerHTML = '<div class="badge bg-success"></div>';
+                    row.appendChild(badgeCol);
+                    listItem.className += " active";
+                    listItem.style.borderLeftColor = "rgb(47, 179, 68)"
+                }
+                listItem.appendChild(row);
+                missDayList.appendChild(listItem);
+            }
+            
+        })
+    })
     //İş gücü veri tablosu filtrele butonu tıklandığında calısan metod
     $('#yearButton').on('click',function () {
         $('#tableBody').empty();

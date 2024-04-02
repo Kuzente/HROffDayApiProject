@@ -8,6 +8,8 @@
             let preYillikIzin = $('#yillikIzinLog')
             res.data.forEach(item=> {
                 let tarihCreated = new Date(item.createdAt).toLocaleDateString("tr-TR", {
+                    minute: 'numeric',
+                    hour: 'numeric',
                     day: 'numeric',
                     month: 'long',
                     year: 'numeric'
@@ -29,6 +31,8 @@
             let preGidaYardimi = $('#gidaYardimiLog')
            res.data.forEach(item=> {
                let tarihCreated = new Date(item.createdAt).toLocaleDateString("tr-TR", {
+                   minute: 'numeric',
+                   hour: 'numeric',
                    day: 'numeric',
                    month: 'long',
                    year: 'numeric'

@@ -235,8 +235,10 @@ public class OffDayController : Controller
     public async Task<IActionResult> ExportPdf(Guid id,string returnUrl)
     {
         var result = await _readOffDayService.GetApprovedOffDayExcelFormService(id);
-        if (result.IsSuccess)
+        var userNameSurname = User.FindFirst(ClaimTypes.Name).Value; //TODO
+        if (result.IsSuccess && userNameSurname is not null)
         {
+            result.Data.HrNameSurname = userNameSurname;//TODO
             byte[] pdfFile = _offDayFormPdf.GetOffDayPdfDocument(result.Data);
             var response = HttpContext.Response;
             response.ContentType = "application/pdf";

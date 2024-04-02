@@ -35,7 +35,8 @@ public class ReadOffDayService : IReadOffDayService
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadOffDayRepository.GetAll(
 					predicate: a =>
-						(a.Status == EntityStatusEnum.Online && a.OffDayStatus == OffDayStatusEnum.WaitingForFirst) &&
+						(a.Status == EntityStatusEnum.Online &&
+						 a.OffDayStatus == OffDayStatusEnum.WaitingForFirst) &&
 						a.Personal.Status == EntityStatusEnum.Online &&
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth)&&

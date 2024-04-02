@@ -9,7 +9,8 @@ public class ReadUpdateUserDto
     public string Username { get; set; }
     public UserRoleEnum Role { get; set; }
     public List<BranchNameDto> SelectedBranches { get; set; }
-    public List<BranchNameDto> Branches { get; set; }
+    public List<BranchNameDto> DirectorBranches { get; set; }
+    public List<BranchNameDto> BranchManagerBranches { get; set; }
     public EntityStatusEnum Status { get; set; }
     public DateTime CreatedAt { get; set; }
 }

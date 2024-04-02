@@ -151,7 +151,7 @@ public class OffDayFormPdf
                 {
                     row.RelativeItem().AlignMiddle().AlignCenter().PaddingTop(10).Column(col=>
                     {
-                        col.Item().AlignCenter().Text("Sami Can Gülcan").Style(titleStyle).FontSize(10);
+                        col.Item().AlignCenter().Text(Dto.HrNameSurname).Style(titleStyle).FontSize(10);
                         col.Item().AlignCenter().Text("İnsan Kaynakları").Style(titleStyle).FontSize(9);
                     });
                     row.RelativeItem().AlignMiddle().AlignCenter().PaddingTop(10).Column(col =>

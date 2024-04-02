@@ -36,4 +36,19 @@ public class ReadOdataService : IReadOdataService
             p.Status == EntityStatusEnum.Online || p.Status == EntityStatusEnum.Offline);
         return query;
     }
+
+    public async Task<IQueryable> GetWaitingOffDaysService(bool directorRole,List<Guid>? branches)
+    {
+        var query = _unitOfWork.ReadOffDayRepository.GetAll(predicate: p =>
+            p.Status == EntityStatusEnum.Online&&
+            directorRole ? (p.OffDayStatus == OffDayStatusEnum.WaitingForSecond && branches.Any(a=> p.BranchId == a)) : (p.OffDayStatus ==OffDayStatusEnum.WaitingForFirst || p.OffDayStatus ==OffDayStatusEnum.WaitingForSecond));
+        return query;
+    }
+
+    public async Task<IQueryable> GetMissingDayService()
+    {
+        var query = _unitOfWork.ReadMissingDayRepository.GetAll(predicate: p =>
+            p.Status == EntityStatusEnum.Online);
+        return query;
+    }
 }

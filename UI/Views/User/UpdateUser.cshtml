@@ -23,7 +23,7 @@
 }
 else
 {
-    <form id="updateForm" method="post" action="/sube-duzenle">
+    <form id="updateForm" method="post" action="/kullanici-guncelle">
         <div class="page-header d-print-none">
             <div class="container-xl">
                 <div class="row g-2 align-items-center">
@@ -65,17 +65,18 @@ else
                 </thead>
                 <tbody class="table-border-bottom-0">
                 <tr>
-                    <td>
-                        <input class="form-control" asp-for="Data.Username"/>
-                        <input type="hidden" asp-for="Data.ID"/>
-                        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]"/>
+                    <td class="col-2">
+                        <input id="usernameInput" class="form-control" name="Username" value="@Model.Data.Username"/>
+                        <input id="idInput" type="hidden" name="ID" value="@Model.Data.ID"/>
+                        <input type="hidden" name="CreatedAt" value="@Model.Data.CreatedAt"/>
+                        <input id="returnUrlInput" type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]"/>
 
                     </td>
-                    <td>
+                    <td class="col-2">
                         <div class="btn-group w-100" role="group">
                             <div class="form-selectgroup form-selectgroup-boxes d-flex">
                                 <label class="form-selectgroup-item flex-fill">
-                                    <input type="radio" value="1" asp-for="Data.Status" class="form-selectgroup-input" checked="@(Model.Data.Status == EntityStatusEnum.Offline)">
+                                    <input type="radio" value="1" name="Status" class="form-selectgroup-input" checked="@(Model.Data.Status == EntityStatusEnum.Offline)">
                                     <div class="form-selectgroup-label d-flex align-items-center p-3">
                                         <div class="me-3">
                                             <span class="form-selectgroup-check"></span>
@@ -86,7 +87,7 @@ else
                                     </div>
                                 </label>
                                 <label class="form-selectgroup-item flex-fill">
-                                    <input type="radio" value="0" asp-for="Data.Status" class="form-selectgroup-input"
+                                    <input type="radio" value="0" name="Status" class="form-selectgroup-input"
                                            checked="@(Model.Data.Status == EntityStatusEnum.Online)">
                                     <div class="form-selectgroup-label d-flex align-items-center p-3">
                                         <div class="me-3">
@@ -100,13 +101,13 @@ else
                             </div>
                         </div>
                     </td>
-                    <td>
+                    <td class="col-6">
                         <div class="row justify-content-around">
                             <div class="mb-3">
                                 <div class="form-selectgroup">
 
                                     <label class="form-selectgroup-item">
-                                        <input id="hrInput" type="radio" data-checkadd asp-for="Data.Role" value="0" class="form-selectgroup-input" checked="@(Model.Data.Role == UserRoleEnum.HumanResources)">
+                                        <input id="hrInput" type="radio" data-checkadd name="Role" value="0" class="form-selectgroup-input" checked="@(Model.Data.Role == UserRoleEnum.HumanResources)">
                                         <span class="form-selectgroup-label">
                                             <!-- Download SVG icon from http://tabler-icons.io/i/user -->
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-letter-i">
@@ -116,7 +117,7 @@ else
                                         </span>
                                     </label>
                                     <label class="form-selectgroup-item">
-                                        <input id="directorInput" type="radio" data-checkadd asp-for="Data.Role" value="1" class="form-selectgroup-input" checked="@(Model.Data.Role == UserRoleEnum.Director)">
+                                        <input id="directorInput" type="radio" data-checkadd name="Role" value="1" class="form-selectgroup-input" checked="@(Model.Data.Role == UserRoleEnum.Director)">
                                         <span class="form-selectgroup-label">
                                             <!-- Download SVG icon from http://tabler-icons.io/i/home -->
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-letter-g">
@@ -126,7 +127,7 @@ else
                                         </span>
                                     </label>
                                     <label class="form-selectgroup-item">
-                                        <input id="branchManagerInput" type="radio" data-checkadd asp-for="Data.Role" value="2" class="form-selectgroup-input" checked="@(Model.Data.Role == UserRoleEnum.BranchManager)">
+                                        <input id="branchManagerInput" type="radio" data-checkadd name="Role" value="2" class="form-selectgroup-input" checked="@(Model.Data.Role == UserRoleEnum.BranchManager)">
                                         <span class="form-selectgroup-label">
                                             <!-- Download SVG icon from http://tabler-icons.io/i/circle -->
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-letter-s">
@@ -138,12 +139,24 @@ else
                                 </div>
                             </div>
                         </div>
-                        <div id="branchSection" class="row">
-                            <select name="BranchNames"  id="branchSelect" class="form-select" placeholder="Şube Seçiniz!">
+                        <div id="branchSectionDirector" class="row d-none">
+                            <select name="BranchDirectorNames" multiple id="branchSelectDirector" class="form-select" placeholder="Şube Seçiniz!">
+                                @foreach (var item in Model.Data.DirectorBranches)
+                                {
+                                    <option value="@item.ID">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div id="branchSectionBranchManager" class="row d-none">
+                            <select name="BranchBranchManagerNames" id="branchSelectBranchManager" class="form-select" placeholder="Şube Seçiniz!">
+                                @foreach (var item in Model.Data.BranchManagerBranches)
+                                {
+                                    <option value="@item.ID">@item.Name</option>
+                                }
                             </select>
                         </div>
                     </td>
-                    <td>
+                    <td class="col-2">
                         @Model.Data.CreatedAt.ToString("dd/MM/yyyy")
                     </td>
                 </tr>
@@ -151,31 +164,84 @@ else
             </table>
         </div>
     </form>
+    @*<script src="/js/custom/user/userUpdate.js"></script>*@
     <script>
         document.addEventListener('DOMContentLoaded',function() {
-           $('#submitButton').on('click',function (e) {
-               spinnerStart($('#submitButton'))
-                  e.preventDefault();
-                  let formData = $("#updateForm").serializeArray();
-                  $.ajax({
-                      type: "POST",
-                      url: "/sube-duzenle",
-                      data: formData // Form verilerini al
-                  }).done(function (res) {
-                      spinnerEnd($('#submitButton'))
-                      if (res.isSuccess){
-                          $('#success-modal-message').text("Şube Başarılı Bir Şekilde Güncellendi.")
-                          $('#success-modal').modal('show')
-                          $('#success-modal-button').click(function () {
-                             window.location.href = "@ViewData["ReturnUrl"]";
-                          });
-                      }
-                      else{
-                          $('#error-modal-message').text(res.message)
-                          $('#error-modal').modal('show')
-                      }
-                  })
-              });
+           let branchDirectorSelect = new TomSelect($('#branchSelectDirector'));
+           let branchBranchManagerSelect = new TomSelect($('#branchSelectBranchManager'));
+           branchBranchManagerSelect.clear();
+           branchDirectorSelect.clear();
+            if('@Model.Data.Role.ToString()' === 'Director'){
+                $('#branchSectionDirector').removeClass('d-none')
+   
+                  let branchList = @Html.Raw(Json.Serialize(Model.Data.SelectedBranches))
+                  branchList.forEach(function(branch) {
+                          branchDirectorSelect.addItem(branch.id);
+                      });    
+            }
+            if('@Model.Data.Role.ToString()' === 'BranchManager'){
+                $('#branchSectionBranchManager').removeClass('d-none')
+                                  let branchList = @Html.Raw(Json.Serialize(Model.Data.SelectedBranches))
+                                  branchList.forEach(function(branch) {
+                                          branchBranchManagerSelect.addItem(branch.id);
+                                      });   
+            }
+            document.querySelectorAll('[data-checkadd]').forEach(function(radio) {
+                    radio.addEventListener('change', function() {
+                        if (this.value === '1') {
+                           $('#branchSectionBranchManager').addClass('d-none') 
+                           $('#branchSectionDirector').removeClass('d-none')
+                            
+                        } else if(this.value === '2') {
+                            $('#branchSectionDirector').addClass('d-none')
+                            $('#branchSectionBranchManager').removeClass('d-none')
+                        }
+                        else{
+                           $('#branchSectionBranchManager').addClass('d-none')  
+                           $('#branchSectionDirector').addClass('d-none')
+                        }
+                    });
+                });
+            $('#submitButton').on('click',function (e) {
+                //spinnerStart($('#submitButton'))
+                e.preventDefault();
+                let formData = $("#updateForm").serializeArray();            
+                let selectedBranches =[]
+                if ($('#directorInput').prop('checked')) { // Genel Müdür
+                        selectedBranches = [...selectedBranches, ...$("#branchSectionDirector select").val() || []];
+                        
+                    } 
+                else if ($('#branchManagerInput').prop('checked')) { // Şube Sorumlusu
+                        selectedBranches = [...selectedBranches, $("#branchSectionBranchManager select").val() || []];
+                        
+                    }
+                else{
+                    branchDirectorSelect.clear();
+                    branchBranchManagerSelect.clear()
+                }
+                 selectedBranches.forEach(function(branchId) {
+                        formData.push({ name: "BranchNames", value: branchId });
+                    });
+                console.log(formData)
+                $.ajax({
+                    type: "POST",
+                    url: "/kullanici-guncelle",
+                    data: formData // Form verilerini al
+                }).done(function (res) {
+                    spinnerEnd($('#submitButton'))
+                    if (res.isSuccess){
+                        $('#success-modal-message').text("Kullanıcı Başarılı Bir Şekilde Güncellendi.")
+                        $('#success-modal').modal('show')
+                        $('#success-modal-button').click(function () {
+                            window.location.href = "/kullanici-listesi";
+                        });
+                    }
+                    else{
+                        $('#error-modal-message').text(res.message)
+                        $('#error-modal').modal('show')
+                    }
+                })
+            });
         })
     </script>
 }

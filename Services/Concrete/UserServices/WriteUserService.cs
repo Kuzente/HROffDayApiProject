@@ -74,6 +74,65 @@ public class WriteUserService : IWriteUserService
         return result;
     }
 
+    public async Task<IResultDto> UpdateUserService(WriteUpdateUserDto dto)
+    {
+        IResultDto result = new ResultDto();
+        try
+        {
+            var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(
+                predicate: p =>
+                    p.ID == dto.ID,
+                include:p=>p.Include(a=>a.BranchUsers)
+            );
+            if(user is null) return result.SetStatus(false).SetErr("User is not found").SetMessage("Kullanıcı bulunamadı.");
+            user.Username = dto.Username;
+            user.Status = dto.Status;
+            user.Role = dto.Role;
+            var newBranchUserList = new List<BranchUser>();
+            if (dto.Role == UserRoleEnum.BranchManager)
+            {
+                var getbranchUser = await _unitOfWork.ReadBranchUserRepository.GetAny(predicate: p =>
+                    dto.BranchNames.Contains(p.BranchID) && p.User.Role == UserRoleEnum.BranchManager && p.UserID != dto.ID && p.User.Status == EntityStatusEnum.Online);
+                if(getbranchUser) return result.SetStatus(false).SetErr("Branch already have").SetMessage("Girmek İstediğiniz Şubeye ait kayıt mevcut");
+            }
+            if (dto.Role == UserRoleEnum.Director)
+            {
+                var getbranchUser = await _unitOfWork.ReadBranchUserRepository.GetAny(predicate: p =>
+                    dto.BranchNames.Contains(p.BranchID) && p.User.Role == UserRoleEnum.Director && p.UserID != dto.ID && p.User.Status == EntityStatusEnum.Online);
+                if(getbranchUser) return result.SetStatus(false).SetErr("Branch already have").SetMessage("Girmek İstediğiniz Şubeye ait kayıt mevcut");
+            }
+            if (user.BranchUsers.Any())
+            {
+                await _unitOfWork.WriteBranchUserRepository.RemoveRangeAsync(user.BranchUsers.ToList());
+
+            }
+            if (dto.BranchNames != null)
+            {
+                dto.BranchNames.ForEach(a =>
+                {
+                    var branchUser = new BranchUser
+                    {
+                        UserID = user.ID,
+                        BranchID = a,
+                    };
+                    newBranchUserList.Add(branchUser);
+                });
+            }
+            user.BranchUsers = newBranchUserList;
+            
+            await _unitOfWork.WriteUserRepository.Update(user);
+            
+            var resultCommit = _unitOfWork.Commit();
+            if (!resultCommit) return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+        }
+        catch (Exception ex)
+        {
+            result.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+        }
+
+        return result;
+    }
+
     public async Task<IResultDto> DeleteUserService(Guid id)
     {
         IResultDto res = new ResultDto();

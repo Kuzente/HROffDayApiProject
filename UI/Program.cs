@@ -47,7 +47,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+//app.UseExceptionHandler("/404");//TODO
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();
@@ -150,7 +150,6 @@ app.MapControllerRoute(name: "loginPage", pattern: "/create-pdf", defaults: new 
 
 
 #endregion
-
 #region ErrorPages
 app.MapControllerRoute(name: "error404page", pattern: "404", defaults: new { controller = "Home", action = "ErrorPage" });
 app.MapControllerRoute(name: "accessDeniedpage", pattern: "403", defaults: new { controller = "Home", action = "AccessDeniedPage" });

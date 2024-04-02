@@ -57,6 +57,20 @@ public class UserController : Controller
         return Ok(result);
     }
     /// <summary>
+    /// Kullanıcı Güncelleme Post Metodu
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<IActionResult> UpdateUser(WriteUpdateUserDto dto)
+    {
+        IResultDto result = new ResultDto();
+        if (!ModelState.IsValid) return Ok(result.SetStatus(false).SetErr("ModelState is not valid").SetMessage("Lütfen Tüm Alanları Girdiğinizden Emin Olunuz."));
+        if(dto.Role is UserRoleEnum.Director or UserRoleEnum.BranchManager && dto.BranchNames is null) return Ok(result.SetStatus(false).SetErr("ModelState is not valid").SetMessage("Lütfen Tüm Alanları Girdiğinizden Emin Olunuz."));
+        result = await _writeUserService.UpdateUserService(dto);
+        
+        return Ok(result);
+    }
+    /// <summary>
     /// Kullanıcı Silme Post Metodu
     /// </summary>
     /// <returns></returns>

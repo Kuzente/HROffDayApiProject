@@ -23,6 +23,8 @@ public class ReadApprovedOffDayFormExcelExportDto
     public Guid PositionId { get; set; }
     public string BranchName { get; set; }
     public string PositionName { get; set; }
+    public string DirectorNameSurname { get; set; }
+    public string HrNameSurname { get; set; }
     public ReadApprovedOffDayFormExcelExportSubPersonalDto Personal { get; set; }
 }
 

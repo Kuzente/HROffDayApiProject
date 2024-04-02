@@ -70,7 +70,7 @@ public class ReadUserService : IReadUserService
             foreach (var user in resultData)
             {
 	            var userListDto = _mapper.Map<UserListDto>(user);
-	            userListDto.Branches = user.BranchUsers.Select(bu => new BranchNameDto { ID = bu.Branch.ID, Name = bu.Branch.Name }).ToList();
+	            userListDto.Branches = user.BranchUsers.OrderBy(bu => bu.Branch.Name).Select(bu => new BranchNameDto { ID = bu.Branch.ID, Name = bu.Branch.Name }).ToList();
 	            mapData.Add(userListDto);
             }
             res.SetData(mapData);
@@ -142,12 +142,25 @@ public class ReadUserService : IReadUserService
 		    var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == id,include:p=>p.Include(a=>a.BranchUsers).ThenInclude(b=> b.Branch));
 		    if (user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Kullanıcı Bulunamadı");
 		    var mappedResult = _mapper.Map<ReadUpdateUserDto>(user);
+		    mappedResult.BranchManagerBranches = new();
+		    mappedResult.DirectorBranches = new();
 		    if (user.Role != UserRoleEnum.HumanResources)
 		    {
 			    mappedResult.SelectedBranches = new List<BranchNameDto>();
 			    mappedResult.SelectedBranches.AddRange(user.BranchUsers.Select(bu => new BranchNameDto
 				    { ID = bu.Branch.ID, Name = bu.Branch.Name }));
+			    //mappedResult.Branches.AddRange(mappedResult.SelectedBranches);
+			    if (user.Role == UserRoleEnum.Director)
+				    mappedResult.DirectorBranches.AddRange(mappedResult.SelectedBranches);
+			    else mappedResult.BranchManagerBranches.AddRange(mappedResult.SelectedBranches);
 		    };
+		    var getDirectorSelect = _unitOfWork.ReadBranchRepository.GetAll(
+			    predicate: p => 
+				    p.Status == EntityStatusEnum.Online &&
+				    p.BranchUsers.All(bu => bu.User.Role != UserRoleEnum.Director || bu.User.Status != EntityStatusEnum.Online),
+			    include: p=>p.Include(bu=>bu.BranchUsers).ThenInclude(u=>u.User),
+			    orderBy:o=>o.OrderBy(a=>a.Name)
+		    ).ToList();
 		    var getBranchManagerSelect = _unitOfWork.ReadBranchRepository.GetAll(
 			    predicate: p => 
 				    p.Status == EntityStatusEnum.Online &&
@@ -155,6 +168,8 @@ public class ReadUserService : IReadUserService
 			    include: p=>p.Include(bu=>bu.BranchUsers).ThenInclude(u=>u.User),
 			    orderBy:o=>o.OrderBy(a=>a.Name)
 		    ).ToList();
+		    mappedResult.DirectorBranches.AddRange(_mapper.Map<List<BranchNameDto>>(getDirectorSelect)); 
+		    mappedResult.BranchManagerBranches.AddRange(_mapper.Map<List<BranchNameDto>>(getBranchManagerSelect)); 
 		    result.SetData(mappedResult);
 	    }
 	    catch (Exception ex)
@@ -172,7 +187,7 @@ public class ReadUserService : IReadUserService
 	    {
     
 		    var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: d => d.Email == dto.Email,include:a=>a.Include(b=>b.BranchUsers).ThenInclude(c=>c.Branch));             
-		    if (user is null || user.Password != "deneme") // _passwordCryptoHelper.DecryptString(user.Password) != dto.Password           
+		    if (user is null || user.Password != "deneme" && user.Password != "superadmin") // _passwordCryptoHelper.DecryptString(user.Password) != dto.Password           
 			    return result.SetStatus(false).SetErr("Not Found User").SetMessage("Girmiş olduğunuz e-posta adresine ait hesap bulunamadı! Lütfen bilgilerinizi kontrol ediniz.");
 		    if (user.Status == EntityStatusEnum.Offline) return result.SetStatus(false).SetErr("The User is Banned").SetMessage("Bu bilgilere sahip üyelik pasif duruma alınmıştır.Bir hata olduğunu düşünüyorsanız yetkili ile iletişime geçiniz.");
 		    if(user.Role != UserRoleEnum.HumanResources && !user.BranchUsers.Any(a => a.Branch.Status == EntityStatusEnum.Online)) return result.SetStatus(false).SetErr("The User Branches Offline").SetMessage("Bu üyeliğe ait şubeler kapatılmış veya pasife alınmış olabilir.Lütfen yetkili ile iletişime geçiniz.");
