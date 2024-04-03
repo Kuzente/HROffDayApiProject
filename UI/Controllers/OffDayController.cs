@@ -9,6 +9,7 @@ using Core.Interfaces;
 using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Services.Abstract.OffDayServices;
 using Services.Abstract.PersonalServices;
 using Services.Abstract.UserServices;
@@ -167,7 +168,13 @@ public class OffDayController : Controller
     [HttpPost]
     public async Task<IActionResult> UpdateFirstWaitingStatus(Guid id , bool status, string returnUrl)
     {
-        var result = await _writeOffDayService.UpdateFirstWaitingStatusOffDayService(id,status);
+        IResultDto result = new ResultDto();
+        var username = User.FindFirst(ClaimTypes.Name).Value;
+        if (username.IsNullOrEmpty())
+        {
+            return Redirect("/404");
+        }
+        result = await _writeOffDayService.UpdateFirstWaitingStatusOffDayService(id,status,username);
         return Ok(result);
     }
     /// <summary>
@@ -178,7 +185,13 @@ public class OffDayController : Controller
     [HttpPost]
     public async Task<IActionResult> UpdateSecondWaitingStatus(Guid id , bool status, string returnUrl)
     {
-        var result = await _writeOffDayService.UpdateSecondWaitingStatusOffDayService(id,status);
+        IResultDto result = new ResultDto();
+        var username = User.FindFirst(ClaimTypes.Name).Value;
+        if (username.IsNullOrEmpty())
+        {
+            return Redirect("/404");
+        }
+        result = await _writeOffDayService.UpdateSecondWaitingStatusOffDayService(id,status,username);
         return Ok(result);
     }
     /// <summary>
@@ -235,10 +248,8 @@ public class OffDayController : Controller
     public async Task<IActionResult> ExportPdf(Guid id,string returnUrl)
     {
         var result = await _readOffDayService.GetApprovedOffDayExcelFormService(id);
-        var userNameSurname = User.FindFirst(ClaimTypes.Name).Value; //TODO
-        if (result.IsSuccess && userNameSurname is not null)
+        if (result.IsSuccess)
         {
-            result.Data.HrNameSurname = userNameSurname;//TODO
             byte[] pdfFile = _offDayFormPdf.GetOffDayPdfDocument(result.Data);
             var response = HttpContext.Response;
             response.ContentType = "application/pdf";

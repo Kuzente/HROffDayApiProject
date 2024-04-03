@@ -151,7 +151,7 @@ public class OffDayFormPdf
                 {
                     row.RelativeItem().AlignMiddle().AlignCenter().PaddingTop(10).Column(col=>
                     {
-                        col.Item().AlignCenter().Text(Dto.HrNameSurname).Style(titleStyle).FontSize(10);
+                        col.Item().AlignCenter().Text(Dto.HrName).Style(titleStyle).FontSize(10);
                         col.Item().AlignCenter().Text("İnsan Kaynakları").Style(titleStyle).FontSize(9);
                     });
                     row.RelativeItem().AlignMiddle().AlignCenter().PaddingTop(10).Column(col =>
@@ -165,7 +165,7 @@ public class OffDayFormPdf
                     row.RelativeItem(12).AlignCenter().Column(col =>
                     {
                         col.Item().AlignCenter().Text("ONAYLANDI").Style(titleStyle).FontSize(10);
-                        col.Item().AlignCenter().Text("Azim Yılmaz").Style(titleStyle).FontSize(10);
+                        col.Item().AlignCenter().Text(Dto.DirectorName).Style(titleStyle).FontSize(10);
                         col.Item().AlignCenter().Text("Mağazalar Genel Müdürü").Style(titleStyle).FontSize(9);
 
                     });

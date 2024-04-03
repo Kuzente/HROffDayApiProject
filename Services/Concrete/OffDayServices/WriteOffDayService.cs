@@ -159,7 +159,7 @@ public class WriteOffDayService : IWriteOffDayService
 		return result;
 	}
 
-	public async Task<IResultDto> UpdateFirstWaitingStatusOffDayService(Guid id,bool status)
+	public async Task<IResultDto> UpdateFirstWaitingStatusOffDayService(Guid id,bool status,string username)
 	{
 		IResultDto result = new ResultDto();
 		try
@@ -168,6 +168,7 @@ public class WriteOffDayService : IWriteOffDayService
 			if(offday is null)
 				return result.SetStatus(false).SetErr("OffDay Is Not Found").SetMessage("İlgili İzin Bulunamadı.");
 			offday.OffDayStatus = status ? OffDayStatusEnum.WaitingForSecond : OffDayStatusEnum.Rejected;
+			offday.HrName = username;
 			await _unitOfWork.WriteOffDayRepository.Update(offday);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -181,7 +182,7 @@ public class WriteOffDayService : IWriteOffDayService
 		return result;
 	}
 
-	public async Task<IResultDto> UpdateSecondWaitingStatusOffDayService(Guid id, bool status)
+	public async Task<IResultDto> UpdateSecondWaitingStatusOffDayService(Guid id, bool status,string username)
 	{
 		IResultDto result = new ResultDto();
 		try
@@ -204,9 +205,13 @@ public class WriteOffDayService : IWriteOffDayService
 					return result.SetStatus(false).SetErr("OffDay Is Not Found").SetMessage("Belge Sayısı İşlenirken bir hata meydana geldi.");
 				offday.DocumentNumber = getMaxDocNumber.DocumentNumber + 1;
 				offday.OffDayStatus = OffDayStatusEnum.Approved;
+				offday.DirectorName = username;
 			}
 			else
+			{
+				offday.DirectorName = username;
 				offday.OffDayStatus = OffDayStatusEnum.Rejected;
+			}
 			await _unitOfWork.WriteOffDayRepository.Update(offday);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)

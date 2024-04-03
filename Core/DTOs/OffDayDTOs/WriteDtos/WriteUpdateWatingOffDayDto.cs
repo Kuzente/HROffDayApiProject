@@ -29,6 +29,8 @@ public class WriteUpdateWatingOffDayDto
     public int LeaveByTravel { get; set; }
     public Guid BranchId { get; set; }
     public Guid PositionId { get; set; }
+    public string? HrName { get; set; }
+    public string? DirectorName { get; set; }
     
     public List<string>? LeaveByMarriedFatherDead { get; set; }
     [Required]
