@@ -36,7 +36,11 @@ public partial class Personal : BaseEntity
 	public int FoodAid { get; set; } 
 	[DisplayName("Gıda Yardımı Tarihi")] 
 	public DateTime FoodAidDate { get; set; }
-
+	[DisplayName("Yıllık İzin Yenilenme Tarihi")] 
+	public DateTime YearLeaveDate { get; set; }
+	[DisplayName("Yıllık İzin Emeklilik Durumu")] 
+	public bool IsYearLeaveRetired { get; set; }
+	[DisplayName("İşe Geri Alındı Mı Durumu")] 
 	public bool IsBackToWork { get; set; }
 
 }

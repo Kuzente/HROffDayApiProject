@@ -8,5 +8,6 @@ public class WritePersonalChangeStatusDto
     public bool IsYearLeaveProtected { get; set; }
     public bool IsTakenLeaveProtected { get; set; }
     public bool IsFoodAidProtected { get; set; }
+    public bool IsYearLeaveDateProtected { get; set; }
     public DateTime FoodAidDate { get; set; }
 }

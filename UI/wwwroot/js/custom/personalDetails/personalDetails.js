@@ -63,7 +63,7 @@
         $('#badgeTotalYearLeave').html(data.totalYearLeave);
         $('#badgeUsedYearLeave').html(data.usedYearLeave);
         $('#balanceYearLeave').html(data.totalYearLeave - data.usedYearLeave);
-        kalanIzinKumulatif(data.usedYearLeave, new Date(data.startJobDate), new Date(data.birthDate), data.retiredOrOld, new Date(data.retiredDate));
+        kalanIzinKumulatif(data.usedYearLeave, new Date(data.yearLeaveDate), new Date(data.birthDate), data.isYearLeaveRetired, new Date(data.retiredDate));
 
         //Date Başlatıcı Fonksiyon
         function initializeFlatpickr(input) {
@@ -108,6 +108,20 @@
             //Manuel Ayarlar
             $('[data-takenLeave]').val(parseInt(data.totalTakenLeave, 10)); // Manuel Alacak İzin alanı
             $('[data-usedYearLeave]').val(parseInt(data.usedYearLeave, 10))
+            $('[data-yearLeaveDate]').text(new Date(data.yearLeaveDate).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' }))
+            console.log(data)
+            if (!data.isYearLeaveRetired){
+                $('#isYearLeaveRetiredDefault').remove()
+            }
+            else{
+                $('#isYearLeaveRetiredDefault').text("Yıllık İzin Yenilenirken Emeklilik Durumu baz alınacaktır.")
+            }
+            if (data.yearLeaveDate === data.startJobDate){
+                $('#yearLeaveDateIsDefault').text("Yıllık İzin Yenilenme Tarihi Varsayılan olarak İşe Başlangıç Tarihinden Alındı.") 
+            }
+            else{
+                $('#yearLeaveDateIsDefault').text("Yıllık İzin Yenilenme Tarihi Bir Önceki Personel Kartının İşe Giriş Tarihinden Baz Alındı.") 
+            }
             $('[data-foodAid]').val(parseInt(data.foodAid, 10))
             initializeFlatpickr($("[data-foodAidDate]")).setDate(data.foodAidDate); //TODO
             if(data.foodAidDate === data.startJobDate){

@@ -23,8 +23,8 @@ public class WriteDailyCounterService : IWriteDailyCounterService
         {
             var todayStartPersonals =  _unitOfWork.ReadPersonalRepository.GetAll(
                 predicate: p =>
-                    p.StartJobDate.Month == DateTime.UtcNow.AddHours(3).Month && 
-                    p.StartJobDate.Day == DateTime.UtcNow.AddHours(3).Day &&
+                    p.YearLeaveDate.Month == DateTime.UtcNow.AddHours(3).Month && 
+                    p.YearLeaveDate.Day == DateTime.UtcNow.AddHours(3).Day &&
                     p.Status == EntityStatusEnum.Online).ToList();
             if (!todayStartPersonals.Any())
             {
@@ -47,11 +47,11 @@ public class WriteDailyCounterService : IWriteDailyCounterService
                 todayStartPersonals.ForEach(a =>
                 {
                     var log = new DailyYearLog();
-                    int yearsSinceStart = (int)((DateTime.Now - a.StartJobDate).TotalDays / 365);
+                    int yearsSinceStart = (int)((DateTime.Now - a.YearLeaveDate).TotalDays / 365);
                     int yearsSinceBirth = (int)((DateTime.Now - a.BirthDate).TotalDays / 365);
                     switch (yearsSinceStart)
                     {
-                        case >= 1 when (yearsSinceBirth >= 50 || yearsSinceBirth < 18 || a.RetiredOrOld):
+                        case >= 1 when (yearsSinceBirth >= 50 || yearsSinceBirth < 18 || a.IsYearLeaveRetired):
                             a.TotalYearLeave += 20;
                             log.AddedYearLeave = 20;
                             log.AddedYearLeaveDescription =
@@ -59,7 +59,7 @@ public class WriteDailyCounterService : IWriteDailyCounterService
                                     ? "Personel 50 yaşından büyük olduğu için 20 gün eklendi"
                                     : (yearsSinceBirth < 18
                                         ? "Personel 18 yaşından küçük olduğu için 20 gün eklendi"
-                                        : "Personel Emekli olduğu için 20 gün eklendi");
+                                        : "Personel İyaş Bünyesinde Emekli olduğu için 20 gün eklendi");
                             break;
                         case >= 1 and <= 5:
                             a.TotalYearLeave += 14;
@@ -136,7 +136,7 @@ public class WriteDailyCounterService : IWriteDailyCounterService
                 todayStartPersonals.ForEach(a =>
                 {
                     var log = new DailyFoodLog();
-                    int yearsSinceStart = (int)((DateTime.Now - a.StartJobDate).TotalDays / 365);
+                    int yearsSinceStart = (int)((DateTime.Now - a.FoodAidDate).TotalDays / 365);
                     switch (yearsSinceStart)
                     {
                         case 3:

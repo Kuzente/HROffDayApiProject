@@ -32,6 +32,8 @@ public class WritePersonalService : IWritePersonalService
 		{
 			var mapSet = _mapper.Map<Personal>(writePersonalDto);
 			mapSet.FoodAidDate = mapSet.StartJobDate;
+			mapSet.YearLeaveDate = mapSet.StartJobDate;
+			mapSet.IsYearLeaveRetired = false;
 			var resultData = await _unitOfWork.WritePersonalRepository.AddAsync(mapSet);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -77,6 +79,7 @@ public class WritePersonalService : IWritePersonalService
 			var getPersonal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate:p=> p.ID == writeDto.ID,include:a=>a.Include(b=>b.Branch).Include(c=>c.Position));
 			if (getPersonal is  null) return result.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Personel Bulunamadı!!!");
 			if(getPersonal.Status != EntityStatusEnum.Online) return result.SetStatus(false).SetErr("Personel is Not Active").SetMessage("İlgili Personel Aktif Olarak Çalışmamaktadır!!!");
+			//Personel Şubesi veya Ünvanı Değişti ise nakil tablosuna ekleme yap
 			if (getPersonal.Branch_Id != writeDto.Branch_Id || getPersonal.Position_Id != writeDto.Position_Id)
 			{
 				var getNewBranchName = await _unitOfWork.ReadBranchRepository.GetSingleAsync(predicate:p=>p.ID == writeDto.Branch_Id && p.Status != EntityStatusEnum.Archive);
@@ -96,6 +99,8 @@ public class WritePersonalService : IWritePersonalService
 			mapSet.ID = getPersonal.ID;
 			mapSet.CreatedAt = getPersonal.CreatedAt;
 			mapSet.TotalYearLeave = getPersonal.TotalYearLeave;
+			mapSet.YearLeaveDate = getPersonal.YearLeaveDate;
+			mapSet.IsYearLeaveRetired = getPersonal.IsYearLeaveRetired;
 			await _unitOfWork.WritePersonalRepository.Update(mapSet);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -181,20 +186,26 @@ public class WritePersonalService : IWritePersonalService
 					}
 					
 				};
-				
-				data.IsBackToWork = true;
-				//data.StartJobDate = dto.StartJobDate;
-				//data.EndJobDate = null;
-				if (dto.IsYearLeaveProtected)
+				if (data.RetiredOrOld) // Eğer Eski kayıt personel emekli ise yeni kayıt üzerinde emeklilik durumu değerlendirilecek
+				{
+					newPersonel.IsYearLeaveRetired = true;
+				}
+				data.IsBackToWork = true; // Personeli geri işe alındı olarak işaretle
+				if (dto.IsYearLeaveProtected) // Yıllık izinleri koru seçeneği işaretlenirse
 				{
 					newPersonel.TotalYearLeave = data.TotalYearLeave;
 					newPersonel.UsedYearLeave = data.UsedYearLeave;
 				}
-				if (dto.IsTakenLeaveProtected)
+
+				if (dto.IsYearLeaveDateProtected)// yıllık izin tarihi korunuyorsa eski işe giriş tarihini yeni personelde yıllık izin yenilenme tarihi olarak ayarla
+				{
+					newPersonel.YearLeaveDate = data.StartJobDate; 
+				}
+				if (dto.IsTakenLeaveProtected) // Alacak İzinleri Koru işaretlenirse
 				{
 					newPersonel.TotalTakenLeave = data.TotalTakenLeave;
 				}
-				if (dto.IsFoodAidProtected)
+				if (dto.IsFoodAidProtected) // Gıda yardımı miktarını koru işaretlenirse
 				{
 					newPersonel.FoodAid = data.FoodAid;
 				}

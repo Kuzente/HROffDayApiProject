@@ -30,4 +30,6 @@ public class ReadUpdatePersonalDto
     public ReadUpdatePersonalDetailsDto PersonalDetails { get; set; }
     public EntityStatusEnum Status { get; set; }
     public bool IsBackToWork { get; set; }
+    public DateTime YearLeaveDate { get; set; }
+    public bool IsYearLeaveRetired { get; set; }
 }
