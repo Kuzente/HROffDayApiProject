@@ -203,21 +203,7 @@
         let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
     }
-        $('#usernameInput').on('keyup', function () {
-            let str = $(this).val().toLowerCase();
-            str = str.replace(/[^a-z0-9_ğüşıöçı.-]+/gi, '');
-            str = str.replace(' ', '');
-            str = str.replace('ç', 'c');
-            str = str.replace('ş', 's');
-            str = str.replace('ı', 'i');
-            str = str.replace('ü', 'u');
-            str = str.replace('ö', 'o');
-            str = str.replace('ğ', 'g');
-            str = str.replace('-', '');
-            str = str.replace('_', '');
-            str = str.replace('.', '');
-            $(this).val(str);
-        });
+   
     //Formu Resetleme
     $('#addModal').on('hidden.bs.modal', function (e) {
         // Form alanınızı resetleme

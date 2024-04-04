@@ -35,9 +35,9 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
     conf.EnableQueryFeatures();
 });
 //Test DB
-builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("Mssql"),builder.Configuration.GetConnectionString("Mssql"));
+builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("NewMssql"),builder.Configuration.GetConnectionString("NewMssql"));
 //Test DB
-//builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("MssqlSomee"),builder.Configuration.GetConnectionString("MssqlSomee"));
+//builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("Mssql"), builder.Configuration.GetConnectionString("Mssql"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -58,6 +58,7 @@ public class WritePersonalService : IWritePersonalService
             mapSet.ForEach(p =>
             {
 	            p.FoodAidDate = p.StartJobDate;
+				p.YearLeaveDate = p.StartJobDate;
             });
 			await _unitOfWork.WritePersonalRepository.AddRangeAsync(mapSet);
 			var resultCommit = _unitOfWork.Commit();
@@ -165,6 +166,7 @@ public class WritePersonalService : IWritePersonalService
 					RetiredDate = data.RetiredDate,
 					Gender = data.Gender,
 					Status = EntityStatusEnum.Online,
+					YearLeaveDate = dto.StartJobDate,
 					PersonalDetails = new PersonalDetails
 					{
 						Address = data.PersonalDetails.Address,
@@ -188,7 +190,11 @@ public class WritePersonalService : IWritePersonalService
 				};
 				if (data.RetiredOrOld) // Eğer Eski kayıt personel emekli ise yeni kayıt üzerinde emeklilik durumu değerlendirilecek
 				{
-					newPersonel.IsYearLeaveRetired = true;
+					if (dto.IsYearLeaveProtected)
+					{
+						newPersonel.IsYearLeaveRetired = true;
+					}
+					
 				}
 				data.IsBackToWork = true; // Personeli geri işe alındı olarak işaretle
 				if (dto.IsYearLeaveProtected) // Yıllık izinleri koru seçeneği işaretlenirse

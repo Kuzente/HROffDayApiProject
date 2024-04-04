@@ -296,18 +296,21 @@
                     birthSection(birthDate,kalanGunSayisi,p.NameSurname);
                 }
             } //Doğum gunu alanı 
+            if (p.Status === 0) {
+                //Eğitim Durumu Alanı Dinamik
+                let educationStatus = p.PersonalDetails.EducationStatus ? p.PersonalDetails.EducationStatus : 'Yok';
+                if (!educationCounts[educationStatus]) {
+                    educationCounts[educationStatus] = { count: 0 };
+                }
+                educationCounts[educationStatus].count++;
             //Eğitim Durumu Alanı Dinamik
-            let educationStatus = p.PersonalDetails.EducationStatus ? p.PersonalDetails.EducationStatus : 'Yok';
-            if (!educationCounts[educationStatus]) {
-                educationCounts[educationStatus] = { count: 0};
             }
-            educationCounts[educationStatus].count++;
-            //Eğitim Durumu Alanı Dinamik
         });
         PersonalCountSec(PersonalCount);
         SalarySum(SalaryCount);
         WorkPowerTable(res);
-        genderPie(erkekSayisi, kadinSayisi)
+            genderPie(erkekSayisi, kadinSayisi)
+            console.log(educationCounts)
         educationPie(educationCounts);
         
     });

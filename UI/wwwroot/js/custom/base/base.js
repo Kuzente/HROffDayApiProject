@@ -9,291 +9,177 @@ document.querySelectorAll('.selectListTom').forEach((el) => {
     if (el.getAttribute('data-departmantSelect') !== null) {
         const departmantsJson = `
         [
-  {
-    "Name": "Acil Tıp Teknisyeni",
-    "Value": "Acil Tıp Teknisyeni"
+             {
+    "Name": "Yönetim",
+    "Value": "Yönetim"
   },
-  {
-    "Name": "Akaryakıt İstasyon Sorumlusu",
-    "Value": "Akaryakıt İstasyon Sorumlusu"
+   {
+    "Name": "Satın Alma Departmanı",
+    "Value": "Satın Alma Departmanı"
   },
-  {
-    "Name": "Akaryakıt Satış Elemanı (Pompacı)",
-    "Value": "Akaryakıt Satış Elemanı (Pompacı)"
+   {
+    "Name": "Muhasebe Servisi",
+    "Value": "Muhasebe Servisi"
   },
-  {
-    "Name": "Aşçı",
-    "Value": "Aşçı"
-  },
-  {
-    "Name": "Aşçı Yardımcısı",
-    "Value": "Aşçı Yardımcısı"
-  },
-  {
-    "Name": "Bilgi İşlem Destek Elemanı",
-    "Value": "Bilgi İşlem Destek Elemanı"
-  },
-  {
-    "Name": "Bilgi İşlem Destek Uzmanı",
-    "Value": "Bilgi İşlem Destek Uzmanı"
-  },
-  {
-    "Name": "Bilişim Teknolojileri Teknisyeni",
-    "Value": "Bilişim Teknolojileri Teknisyeni"
-  },
-  {
-    "Name": "Bulaşıkçı (Stevard)",
-    "Value": "Bulaşıkçı (Stevard)"
-  },
-  {
-    "Name": "Büro Memuru (Genel)",
-    "Value": "Büro Memuru (Genel)"
-  },
-  {
-    "Name": "Büro Memuru (İdari İşler)",
-    "Value": "Büro Memuru (İdari İşler)"
-  },
-  {
-    "Name": "Büro Yönetimi Elemanı",
-    "Value": "Büro Yönetimi Elemanı"
-  },
-  {
-    "Name": "Çaycı - büro, otel ve diğer işyerlerinde",
-    "Value": "Çaycı - büro, otel ve diğer işyerlerinde"
-  },
-  {
-    "Name": "Depo Forklift Operatörü",
-    "Value": "Depo Forklift Operatörü"
-  },
-  {
-    "Name": "Depo Görevlisi (Gıda)",
-    "Value": "Depo Görevlisi (Gıda)"
-  },
-  {
-    "Name": "Depo Lojistik Elemanı",
-    "Value": "Depo Lojistik Elemanı"
-  },
-  {
-    "Name": "Depo Sevkiyat Sorumlusu",
-    "Value": "Depo Sevkiyat Sorumlusu"
-  },
-  {
-    "Name": "Depo Şoför-Yük Taşıma",
-    "Value": "Depo Şoför-Yük Taşıma"
-  },
-  {
-    "Name": "Depo Sorumlusu",
-    "Value": "Depo Sorumlusu"
-  },
-  {
-    "Name": "Et Ve Et Ürünleri İşlemecisi",
-    "Value": "Et Ve Et Ürünleri İşlemecisi"
-  },
-  {
-    "Name": "Et Ve Et Ürünleri Satış Elemanı",
-    "Value": "Et Ve Et Ürünleri Satış Elemanı"
-  },
-  {
-    "Name": "E-Ticaret Meslek Elemanı",
-    "Value": "E-Ticaret Meslek Elemanı"
-  },
-  {
-    "Name": "Finansman Yöneticisi",
-    "Value": "Finansman Yöneticisi"
-  },
-  {
-    "Name": "Garson (Servis Elemanı)",
-    "Value": "Garson (Servis Elemanı)"
-  },
-  {
-    "Name": "Genel Alan Temizleme Görevlisi/Meydancı",
-    "Value": "Genel Alan Temizleme Görevlisi/Meydancı"
-  },
-  {
+   {
     "Name": "Genel Müdür",
     "Value": "Genel Müdür"
   },
+   {
+    "Name": "Bilgi İşlem Servisi",
+    "Value": "Bilgi İşlem Servisi"
+  },
+   {
+    "Name": "Finans Müdürü",
+    "Value": "Finans Müdürü"
+  },
+   {
+    "Name": "Santral Görevlisi",
+    "Value": "Santral Görevlisi"
+  },
+    
+
   {
-    "Name": "Genel Müdür Yardımcısı",
-    "Value": "Genel Müdür Yardımcısı"
+    "Name": "Depo",
+    "Value": "Depo"
   },
   {
-    "Name": "Genel Müdür-Perakende Ve Toptan Ticaret (Özel Sektör)",
-    "Value": "Genel Müdür-Perakende Ve Toptan Ticaret (Özel Sektör)"
+    "Name": "Ortaklar Servisi",
+    "Value": "Ortaklar Servisi"
   },
   {
-    "Name": "Grafik Tasarımcısı",
-    "Value": "Grafik Tasarımcısı"
+    "Name": "Otel",
+    "Value": "Otel"
   },
   {
-    "Name": "Güneş Isıl Sistem Personeli/Güneş Enerjisi Sistemleri Montaj İşçisi",
-    "Value": "Güneş Isıl Sistem Personeli/Güneş Enerjisi Sistemleri Montaj İşçisi"
+    "Name": "Vezne",
+    "Value": "Vezne"
   },
   {
-    "Name": "Güneş Isıl Sistem Personeli/Güneş Enerjisi Sistemleri Montajcısı",
-    "Value": "Güneş Isıl Sistem Personeli/Güneş Enerjisi Sistemleri Montajcısı"
+    "Name": "Çay Servisi",
+    "Value": "Çay Servisi"
   },
   {
-    "Name": "Halkla İlişkiler Görevlisi",
-    "Value": "Halkla İlişkiler Görevlisi"
+    "Name": "İnsan Kaynakları Departmanı",
+    "Value": "İnsan Kaynakları Departmanı"
   },
   {
-    "Name": "İnşaat Bekçisi",
-    "Value": "İnşaat Bekçisi"
+    "Name": "E-Ticaret",
+    "Value": "E-Ticaret"
   },
   {
-    "Name": "İnsan Kaynakları Uzmanı",
-    "Value": "İnsan Kaynakları Uzmanı"
-  },
-  {
-    "Name": "İnsan Kaynakları Yönetimi Meslek Elemanı",
-    "Value": "İnsan Kaynakları Yönetimi Meslek Elemanı"
+    "Name": "Basın ve Reklam Birimi",
+    "Value": "Basın ve Reklam Birimi"
   },
   {
     "Name": "Kasap",
     "Value": "Kasap"
   },
   {
+    "Name": "Şarküteri",
+    "Value": "Şarküteri"
+  },
+  {
+    "Name": "Süpermarket Sorumlusu",
+    "Value": "Süpermarket Sorumlusu"
+  },
+  {
     "Name": "Kasiyer",
     "Value": "Kasiyer"
   },
   {
-    "Name": "Kozmetik Ürünleri Satış Elemanı",
-    "Value": "Kozmetik Ürünleri Satış Elemanı"
+    "Name": "Ara Eleman",
+    "Value": "Ara Eleman"
   },
   {
-    "Name": "Kuruyemiş Satış Elemanı",
-    "Value": "Kuruyemiş Satış Elemanı"
+    "Name": "Kozmetik",
+    "Value": "Kozmetik"
   },
   {
-    "Name": "Mağaza Sorumlusu/şefi",
-    "Value": "Mağaza Sorumlusu/şefi"
+    "Name": "E-Ticaret Ürün Hazırlama",
+    "Value": "E-Ticaret Ürün Hazırlama"
   },
   {
-    "Name": "Mali Müşavir",
-    "Value": "Mali Müşavir"
+    "Name": "İnşaat / Teknik",
+    "Value": "İnşaat / Teknik"
   },
   {
-    "Name": "Market Elemanı",
-    "Value": "Market Elemanı"
+    "Name": "Kuruyemiş",
+    "Value": "Kuruyemiş"
   },
   {
-    "Name": "Muhasebe Yetkilisi Mutemedi",
-    "Value": "Muhasebe Yetkilisi Mutemedi"
+    "Name": "İş Takibi",
+    "Value": "İş Takibi"
   },
   {
-    "Name": "Muhasebeci",
-    "Value": "Muhasebeci"
+    "Name": "Araba Toplama (Sepetçi)",
+    "Value": "Araba Toplama (Sepetçi)"
   },
   {
-    "Name": "Mutfak Görevlisi",
-    "Value": "Mutfak Görevlisi"
+    "Name": "Personel Yemekhanesi",
+    "Value": "Personel Yemekhanesi"
   },
   {
-    "Name": "Otel Müdürü",
-    "Value": "Otel Müdürü"
+    "Name": "Kısmi Süreli",
+    "Value": "Kısmi Süreli"
   },
   {
-    "Name": "Otopark Görevlisi/Vale",
-    "Value": "Otopark Görevlisi/Vale"
+    "Name": "Avm Market Şubesi",
+    "Value": "Avm Market Şubesi"
   },
   {
-    "Name": "Part-time",
-    "Value": "Part-time"
+    "Name": "Ayazmana Şubesi",
+    "Value": "Ayazmana Şubesi"
   },
   {
-    "Name": "Pazarlama Uzmanı",
-    "Value": "Pazarlama Uzmanı"
+    "Name": "Bulvar Şubesi",
+    "Value": "Bulvar Şubesi"
   },
   {
-    "Name": "Resepsiyon Görevlisi (Ön Büro Elemanı)",
-    "Value": "Resepsiyon Görevlisi (Ön Büro Elemanı)"
+    "Name": "Burdur Şubesi",
+    "Value": "Burdur Şubesi"
   },
   {
-    "Name": "Reyon Görevlisi",
-    "Value": "Reyon Görevlisi"
+    "Name": "Çünür Şubesi",
+    "Value": "Çünür Şubesi"
   },
   {
-    "Name": "Reyon Şefi",
-    "Value": "Reyon Şefi"
+    "Name": "Dinar Şubesi",
+    "Value": "Dinar Şubesi"
   },
   {
-    "Name": "Şarküteri Ürünleri Satış Elemanı",
-    "Value": "Şarküteri Ürünleri Satış Elemanı"
+    "Name": "Gölcük Şubesi",
+    "Value": "Gölcük Şubesi"
   },
   {
-    "Name": "Satın Alma Sorumlusu",
-    "Value": "Satın Alma Sorumlusu"
+    "Name": "Halıkent Şubesi",
+    "Value": "Halıkent Şubesi"
   },
   {
-    "Name": "Satın Alma Yöneticisi/Müdürü",
-    "Value": "Satın Alma Yöneticisi/Müdürü"
+    "Name": "Iyaş Park İdari",
+    "Value": "Iyaş Park İdari"
   },
   {
-    "Name": "Sekreter",
-    "Value": "Sekreter"
+    "Name": "Kesikbaş Şubesi",
+    "Value": "Kesikbaş Şubesi"
   },
   {
-    "Name": "Süt Ve Süt Ürünleri Satış Elemanı",
-    "Value": "Süt Ve Süt Ürünleri Satış Elemanı"
+    "Name": "Kongre Merkezi",
+    "Value": "Kongre Merkezi"
   },
   {
-    "Name": "Teknik / Asma Tavan Ustası (Metal)",
-    "Value": "Teknik / Asma Tavan Ustası (Metal)"
+    "Name": "Nokta Şubesi",
+    "Value": "Nokta Şubesi"
   },
   {
-    "Name": "Teknik / Beden İşçisi (İnşaat)",
-    "Value": "Teknik / Beden İşçisi (İnşaat)"
+    "Name": "Akaryakıt (Shell)",
+    "Value": "Akaryakıt (Shell)"
   },
   {
-    "Name": "Teknik / Elektrik Tesisatı Ve Pano Montörü Teknisyeni",
-    "Value": "Teknik / Elektrik Tesisatı Ve Pano Montörü Teknisyeni"
-  },
-  {
-    "Name": "Teknik / İnşaat Teknolojisi Teknikeri",
-    "Value": "Teknik / İnşaat Teknolojisi Teknikeri"
-  },
-  {
-    "Name": "Teknik / Isıtma Ve Sıhhi Tesisatçı",
-    "Value": "Teknik / Isıtma Ve Sıhhi Tesisatçı"
-  },
-  {
-    "Name": "Teknik / Kaynak Teknisyeni",
-    "Value": "Teknik / Kaynak Teknisyeni"
-  },
-  {
-    "Name": "Teknik / Sıvacı",
-    "Value": "Teknik / Sıvacı"
-  },
-  {
-    "Name": "Teknik Elektrikçi (Genel)",
-    "Value": "Teknik Elektrikçi (Genel)"
-  },
-  {
-    "Name": "Teknik Müdür",
-    "Value": "Teknik Müdür"
-  },
-  {
-    "Name": "Teknik Servis Elemanı",
-    "Value": "Teknik Servis Elemanı"
-  },
-  {
-    "Name": "Yemekhane servis işçisi",
-    "Value": "Yemekhane servis işçisi"
-  },
-  {
-    "Name": "Yönetici (Bilgi İşlem)",
-    "Value": "Yönetici (Bilgi İşlem)"
-  },
-  {
-    "Name": "Yönetim Kurulu Başkanı (Özel Sektör)",
-    "Value": "Yönetim Kurulu Başkanı (Özel Sektör)"
-  },
-  {
-    "Name": "Yönetim Kurulu Üyesi (Özel Sektör)",
-    "Value": "Yönetim Kurulu Üyesi (Özel Sektör)"
+    "Name": "Part-Time",
+    "Value": "Part-Time"
   }
-]
+        ]
         `
         const departmants = JSON.parse(departmantsJson);
         departmants.forEach((departmant) => {

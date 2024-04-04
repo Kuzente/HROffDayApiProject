@@ -43,8 +43,8 @@ public class ReadTransferPersonalService : IReadTransferPersonalService
                 ID = a.ID,
                 OldBranch = a.OldBranch,
                 NewBranch = a.NewBranch,
-                NewPosition = a.NewBranch,
-                OldPosition = a.OldBranch,
+                NewPosition = a.NewPosition,
+                OldPosition = a.OldPosition,
                 Personal_Id = a.Personal_Id,
                 PersonalNameSurname = a.Personal.NameSurname,
                 CreatedAt = a.CreatedAt
