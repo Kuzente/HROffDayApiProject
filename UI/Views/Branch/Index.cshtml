@@ -160,58 +160,60 @@ else
             </div>
 
         </div>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>
-                    <button class="table-sort" data-sort="sort-branchName">Şube Adı</button>
-                </th>
-                <th>Durum</th>
-                <th>Oluşturulma Tarihi</th>
-                <th>Güncellenme Tarihi</th>
-                <th>Düzenle</th>
-                <th>Sil</th>
-            </tr>
-            </thead>
-            <tbody class="table-border-bottom-0">
-            @foreach (var data in Model.Data)
-            {
-                <tr>
-                    <td>
-                        <a href="/izin-olustur?id=@data.ID">@data.Name</a>
-                    </td>
-                    <td>
-                        @{
-                            if (data.Status == EntityStatusEnum.Online)
-                            {
-                                <span class="badge bg-success">Aktif</span>
-                            }
-                            else if (data.Status == EntityStatusEnum.Archive)
-                            {
-                                <span class="badge bg-danger">Arşivlenmiş</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-secondary">Pasif</span>
-                            }
+        <div class="table-responsive">
+            <table class="table table-nowrap">
+                        <thead>
+                        <tr>
+                            <th>
+                                <button class="table-sort" data-sort="sort-branchName">Şube Adı</button>
+                            </th>
+                            <th>Durum</th>
+                            <th>Oluşturulma Tarihi</th>
+                            <th>Güncellenme Tarihi</th>
+                            <th>Düzenle</th>
+                            <th>Sil</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                        @foreach (var data in Model.Data)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="/izin-olustur?id=@data.ID">@data.Name</a>
+                                </td>
+                                <td>
+                                    @{
+                                        if (data.Status == EntityStatusEnum.Online)
+                                        {
+                                            <span class="badge bg-success">Aktif</span>
+                                        }
+                                        else if (data.Status == EntityStatusEnum.Archive)
+                                        {
+                                            <span class="badge bg-danger">Arşivlenmiş</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Pasif</span>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @data.CreatedAt.ToString("dd/MM/yyyy")
+                                </td>
+                                <td>
+                                    @data.ModifiedAt.ToString("dd/MM/yyyy")
+                                </td>
+                                <td>
+                                    <a href="/sube-duzenle?id=@data.ID&returnUrl=@returnUrl" class="btn btn-warning btn-sm text-white btn-pill w-50">Düzenle</a>
+                                </td>
+                                <td>
+                                    <button data-deleteButton type="button" class="btn btn-danger archive-button btn-sm btn-pill w-50" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="@data.Name">Sil</button>
+                                </td>
+                            </tr>
                         }
-                    </td>
-                    <td>
-                        @data.CreatedAt.ToString("dd/MM/yyyy")
-                    </td>
-                    <td>
-                        @data.ModifiedAt.ToString("dd/MM/yyyy")
-                    </td>
-                    <td>
-                        <a href="/sube-duzenle?id=@data.ID&returnUrl=@returnUrl" class="btn btn-warning btn-sm text-white btn-pill w-50">Düzenle</a>
-                    </td>
-                    <td>
-                        <button data-deleteButton type="button" class="btn btn-danger archive-button btn-sm btn-pill w-50" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="@data.Name">Sil</button>
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
+                        </tbody>
+                    </table>
+        </div>
 
         <!--Pagination-->
         <div class="border-top pt-3 mx-3 d-flex justify-content-end">

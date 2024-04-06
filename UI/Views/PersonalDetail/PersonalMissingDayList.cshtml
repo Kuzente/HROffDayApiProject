@@ -215,7 +215,7 @@ else
         <!-- Card Header-->
     </div>
     <!--FirstCard-->
-    <div class="card-body table-responsive">
+    <div class="card-body">
         <div class="row">
             <div class="col-7">
                 <div class="p-3">
@@ -305,68 +305,71 @@ else
             </div>
 
         </div>
-        <table class="table table-nowrap">
-            <thead>
-            <tr>
-                <th>Adı Soyadı</th>
-                <th>TC Kimlik</th>
-                <th>Şube</th>
-                <th>
-                    <button class="table-sort" data-sort="sort-startOffDayDate">İzin Başlangıç Tarihi</button>
-                </th>
-                <th>
-                    <button class="table-sort" data-sort="sort-EndOffDayDate">İzin Bitiş Tarihi</button>
-                </th>
-                <th>
-                    <button class="table-sort" data-sort="sort-startJobDayDate">İşe Başlama Tarihi</button>
-                </th>
-                <th>
-                    <button class="table-sort" data-sort="sort-reason">Sebebi</button>
-                </th>
-                <th>
-                    <button class="table-sort" data-sort="sort-createdAt">Oluşturulma Tarihi</button>
-                </th>
-                <th>Sil</th>
-
-            </tr>
-            </thead>
-            <tbody class="table-border-bottom-0">
-            @foreach (var data in Model.Data)
-            {
-                <tr>
-
-                    <td class="col-2">
-                        @data.NameSurname
-                    </td>
-                    <td class="col-2">
-                        @data.IdentificationNumber
-                    </td>
-                    <td class="col-2">
-                        @data.BranchName
-                    </td>
-                    <td class="col-1">
-                        <span class="badge bg-secondary">@data.StartOffdayDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
-                    </td>
-                    <td class="col-1">
-                        <span class="badge bg-secondary">@data.EndOffDayDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
-                    </td>
-                    <td class="col-1">
-                        <span class="badge bg-success">@(data.StartJobDate.HasValue ? data.StartJobDate.Value.ToString("dd MMMM yyyy", new CultureInfo("tr-TR")) : "Yok")</span>
-                    </td>
-                    <td class="col-1">
-                        @data.Reason
-                    </td>
-                    <td class="col-1">
-                        <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
-                    </td>
-                    <td class="col-1">
-                        <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="">Sil</button>
-                    </td>
-                </tr>
-            }
-            </tbody>
-
-        </table>
+        <div class="table-responsive">
+            <table class="table table-nowrap">
+                        <thead>
+                        <tr>
+                            <th>Adı Soyadı</th>
+                            <th>TC Kimlik</th>
+                            <th>Şube</th>
+                            <th>
+                                <button class="table-sort" data-sort="sort-startOffDayDate">İzin Başlangıç Tarihi</button>
+                            </th>
+                            <th>
+                                <button class="table-sort" data-sort="sort-EndOffDayDate">İzin Bitiş Tarihi</button>
+                            </th>
+                            <th>
+                                <button class="table-sort" data-sort="sort-startJobDayDate">İşe Başlama Tarihi</button>
+                            </th>
+                            <th>
+                                <button class="table-sort" data-sort="sort-reason">Sebebi</button>
+                            </th>
+                            <th>
+                                <button class="table-sort" data-sort="sort-createdAt">Oluşturulma Tarihi</button>
+                            </th>
+                            <th>Sil</th>
+            
+                        </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                        @foreach (var data in Model.Data)
+                        {
+                            <tr>
+            
+                                <td class="col-2">
+                                    @data.NameSurname
+                                </td>
+                                <td class="col-2">
+                                    @data.IdentificationNumber
+                                </td>
+                                <td class="col-2">
+                                    @data.BranchName
+                                </td>
+                                <td class="col-1">
+                                    <span class="badge bg-secondary">@data.StartOffdayDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
+                                </td>
+                                <td class="col-1">
+                                    <span class="badge bg-secondary">@data.EndOffDayDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
+                                </td>
+                                <td class="col-1">
+                                    <span class="badge bg-success">@(data.StartJobDate.HasValue ? data.StartJobDate.Value.ToString("dd MMMM yyyy", new CultureInfo("tr-TR")) : "Yok")</span>
+                                </td>
+                                <td class="col-1">
+                                    @data.Reason
+                                </td>
+                                <td class="col-1">
+                                    <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
+                                </td>
+                                <td class="col-1">
+                                    <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="">Sil</button>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+            
+                    </table>
+        </div>
+        
 
         <!--Pagination-->
         <div class="border-top pt-3 mx-3 d-flex justify-content-end">

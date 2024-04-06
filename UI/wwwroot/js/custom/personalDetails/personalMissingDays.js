@@ -269,7 +269,7 @@
         let kalanSaat = saat % 8;
 
         // Sonucu döndür
-        return gun + " gün " + kalanSaat + " saat";
+        return gun + " gün " + kalanSaat.toFixed(1) + " saat";
     }
     // Sil butonuna tıklanınca
     $('[data-deleteButton]').on('click',function () {

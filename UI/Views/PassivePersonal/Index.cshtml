@@ -169,103 +169,111 @@ else
             }
         </div>
     </div>
-    <table class="table mt-3">
-        <thead>
-        <tr>
-            <th>
-                <button class="table-sort" data-sort="sort-registrationNumber">Sicil No</button>
-            </th>
-            <th>
-                <button class="table-sort" data-sort="sort-nameSurname">Adı Soyadı</button>
-            </th>
-            <th>
-                <button class="table-sort" data-sort="sort-branchName">Şube</button>
-            </th>
-            <th>
-                <button class="table-sort" data-sort="sort-positionName">Ünvan</button>
-            </th>
-            <th>
-                <button class="table-sort" data-sort="sort-gender">Cinsiyet</button>
-            </th>
-            <th>
-                <button class="table-sort" data-sort="sort-startJobDate">İşe Giriş Tarihi</button>
-            </th>
-            <th>
-                <button class="table-sort" data-sort="sort-endJobDate">Çıkarılma Tarihi</button>
-            </th>
-            <th>
-                <button class="table-sort" data-sort="sort-retiredOrOld">Sgk Durum</button>
-            </th>
-            <th>
-                <button class="table-sort" data-sort="sort-totalYearLeave">Hak Ettiği İzin</button>
-            </th>
-            <th>
-                <button class="table-sort" data-sort="sort-usedYearLeave">Kullandığı İzin</button>
-            </th>
-            <th>
-                <button class="table-sort" data-sort="sort-remainYearLeave">Kalan İzin</button>
-            </th>
-        </tr>
-        </thead>
-        <tbody class="table-border-bottom-0">
+    <div class="table-responsive">
+        <table class="table mt-3 table-nowrap">
+            <thead>
+            <tr>
+                <th>
+                    <button class="table-sort" data-sort="sort-registrationNumber">Sicil No</button>
+                </th>
+                <th>
+                    <button class="table-sort" data-sort="sort-nameSurname">Adı Soyadı</button>
+                </th>
+                <th>
+                    <button class="table-sort" data-sort="sort-branchName">Şube</button>
+                </th>
+                <th>
+                    <button class="table-sort" data-sort="sort-positionName">Ünvan</button>
+                </th>
+                <th>
+                    <button class="table-sort" data-sort="sort-gender">Cinsiyet</button>
+                </th>
+                <th>
+                    <button class="table-sort" data-sort="sort-startJobDate">İşe Giriş Tarihi</button>
+                </th>
+                <th>
+                    <button class="table-sort" data-sort="sort-endJobDate">Çıkarılma Tarihi</button>
+                </th>
+                <th>
+                    <button class="table-sort" data-sort="sort-retiredOrOld">Sgk Durum</button>
+                </th>
+                <th>
+                    <button class="table-sort" data-sort="sort-birthDate">Doğum Tarihi</button>
+                </th>
+                <th>
+                    <button class="table-sort text-center" data-sort="sort-totalYearLeave">Hak Edilen<br>İzin</button>
+                </th>
+                <th>
+                    <button class="table-sort text-center" data-sort="sort-usedYearLeave">Kullanılan<br>İzin</button>
+                </th>
+                <th>
+                    <button class="table-sort text-center" data-sort="sort-remainYearLeave">Kalan<br>İzin</button>
+                </th>
+            </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
 
-        @foreach (var data in Model.Data)
-        {
-            <tr class="@(data.IsBackToWork ? "bg-green-lt" : "")">
-                <td>@data.RegistirationNumber.ToString()</td>
-                <td>
-                    <a href="/personel-detaylari?id=@data.ID">@data.NameSurname <br> @(data.IsBackToWork ? "(İşe Geri Alındı)" : "")</a>
-                </td>
-                <td>@(data.Branch.Name)</td>
-                <td>@data.Position.Name</td>
-                <td>
-                    @if (@data.Gender == "Erkek")
-                    {
-                        <span class="badge bg-cyan">Erkek</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-pink">Kadın</span>
-                    }
-                </td>
-                <td>@data.StartJobDate.ToString("dd/MM/yyyy")</td>
-
-                @if (@data.EndJobDate == null)
-                {
-                    <td>Yok</td>
-                }
-                else
-                {
-                    <td>@data.EndJobDate?.ToString("dd/MM/yyyy")</td>
-                }
-
-                <td>
-                    @{
-                        if (data.RetiredOrOld)
+            @foreach (var data in Model.Data)
+            {
+                <tr class="@(data.IsBackToWork ? "bg-green-lt" : "")">
+                    <td>@data.RegistirationNumber.ToString()</td>
+                    <td>
+                        <a href="/personel-detaylari?id=@data.ID">
+                            @data.NameSurname <br> @(data.IsBackToWork ? "(İşe Geri Alındı)" : "")
+                        </a>
+                    </td>
+                    <td>@(data.Branch.Name)</td>
+                    <td>@data.Position.Name</td>
+                    <td>
+                        @if (@data.Gender == "Erkek")
                         {
-                            <span class="badge bg-purple">Emekli</span>
+                            <span class="badge bg-cyan">Erkek</span>
                         }
                         else
                         {
-                            <span class="badge bg-secondary">Emekli Değil</span>
+                            <span class="badge bg-pink">Kadın</span>
                         }
+                    </td>
+                    <td>@data.StartJobDate.ToString("dd/MM/yyyy")</td>
+
+                    @if (@data.EndJobDate == null)
+                    {
+                        <td>Yok</td>
                     }
-                </td>
-                <td>
-                    @data.TotalYearLeave
-                </td>
-                <td>
-                    @data.UsedYearLeave
-                </td>
-                <td>
-                    @(data.TotalYearLeave - data.UsedYearLeave)
-                </td>
-            </tr>
-        }
+                    else
+                    {
+                        <td>@data.EndJobDate?.ToString("dd/MM/yyyy")</td>
+                    }
+
+                    <td>
+                        @{
+                            if (data.RetiredOrOld)
+                            {
+                                <span class="badge bg-purple">Emekli</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Emekli Değil</span>
+                            }
+                        }
+                    </td>
+                    <td>@data.BirthDate.ToString("dd/MM/yyyy")</td>
+                    <td>
+                        @data.TotalYearLeave
+                    </td>
+                    <td>
+                        @data.UsedYearLeave
+                    </td>
+                    <td>
+                        @(data.TotalYearLeave - data.UsedYearLeave)
+                    </td>
+                </tr>
+            }
 
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
     <!--Pagination-->
     <div class="border-top pt-3 mx-3 d-flex justify-content-end">
         <div class="border-top pt-3 mx-3">

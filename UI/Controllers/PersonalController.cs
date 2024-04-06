@@ -73,7 +73,7 @@ namespace UI.Controllers
             IResultDto result = new ResultDto();
             if (!ModelState.IsValid)
             {
-                result.SetStatus(false).SetErr("ModelState is not Valid").SetErr("Zorunlu Alanları Doldurduğunuzdan Emin Olunuz");
+                result.SetStatus(false).SetErr("ModelState is not Valid").SetMessage("Zorunlu Alanları Doldurduğunuzdan Emin Olunuz");
             }
             else
             { 

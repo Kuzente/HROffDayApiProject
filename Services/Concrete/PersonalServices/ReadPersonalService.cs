@@ -270,6 +270,9 @@ public class ReadPersonalService : IReadPersonalService
 								"startJobDate" => query.sortBy == "asc"
 									? p.OrderBy(a => a.StartJobDate)
 									: p.OrderByDescending(a => a.StartJobDate),
+								"birthDate" => query.sortBy == "asc"
+									? p.OrderBy(a => a.BirthDate)
+									: p.OrderByDescending(a => a.BirthDate),
 								"retiredOrOld" => query.sortBy == "asc"
 									? p.OrderBy(a => a.RetiredOrOld)
 									: p.OrderByDescending(a => a.RetiredOrOld),
@@ -353,6 +356,9 @@ public class ReadPersonalService : IReadPersonalService
 								"startJobDate" => query.sortBy == "asc"
 									? p.OrderBy(a => a.StartJobDate)
 									: p.OrderByDescending(a => a.StartJobDate),
+								"birthDate" => query.sortBy == "asc"
+									? p.OrderBy(a => a.BirthDate)
+									: p.OrderByDescending(a => a.BirthDate),
 								"endJobDate" => query.sortBy == "asc"
 									? p.OrderBy(a => a.EndJobDate)
 									: p.OrderByDescending(a => a.EndJobDate),
@@ -368,12 +374,12 @@ public class ReadPersonalService : IReadPersonalService
 								"remainYearLeave" => query.sortBy == "asc"
 									? p.OrderBy(a => (a.TotalYearLeave - a.UsedYearLeave))
 									: p.OrderByDescending(a => (a.TotalYearLeave - a.UsedYearLeave)),
-								_ => p.OrderBy(a=> a.NameSurname)
+								_ => p.OrderByDescending(a=> a.EndJobDate)
 							};
 						}
 						else
 						{
-							orderedPersonal = p.OrderBy(a=> a.NameSurname);
+							orderedPersonal = p.OrderByDescending(a=> a.EndJobDate);
 						}
 
 						return orderedPersonal;

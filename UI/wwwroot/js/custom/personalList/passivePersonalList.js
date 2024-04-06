@@ -5,7 +5,7 @@
     }
 
     if (!searchParams.has('sortName') || !searchParams.has('sortBy') || searchParams.get('sortBy') === '') {
-        $('button[data-sort="sort-nameSurname"]').addClass('asc');
+        $('button[data-sort="sort-endJobDate"]').addClass('desc');
     } else {
         if (searchParams.get('sortBy') === 'asc') {
             $('button[data-sort="sort-' + searchParams.get('sortName') + '"]').addClass('asc');

@@ -31,7 +31,7 @@ public partial class Personal : BaseEntity
 	[DisplayName("Kullanılan Yıllık İzin"), Required]
 	public int UsedYearLeave { get; set; } 
 	[DisplayName("Toplam Alacak İzin"), Required]
-	public int TotalTakenLeave { get; set; } 
+	public double TotalTakenLeave { get; set; } 
 	[DisplayName("Gıda Yardımı"), Required]
 	public int FoodAid { get; set; } 
 	[DisplayName("Gıda Yardımı Tarihi")] 

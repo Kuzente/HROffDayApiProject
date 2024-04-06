@@ -32,6 +32,7 @@ public class ReadUserService : IReadUserService
                 _unitOfWork.ReadUserRepository.GetAll(
                     predicate: a =>
                                     (string.IsNullOrEmpty(query.search) || a.Username.Contains(query.search))&&
+                                    a.Role != UserRoleEnum.SuperAdmin &&
                                     (query.isActive == null ? a.Status==EntityStatusEnum.Online || a.Status == EntityStatusEnum.Offline : (query.isActive == "active" ? a.Status == EntityStatusEnum.Online : a.Status == EntityStatusEnum.Offline)),
                     orderBy: p =>
                     					{

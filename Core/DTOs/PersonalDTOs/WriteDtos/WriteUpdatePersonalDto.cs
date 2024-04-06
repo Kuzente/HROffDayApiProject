@@ -17,11 +17,11 @@ public class WriteUpdatePersonalDto
     public string IdentificationNumber { get; set; }
     [Required]
     public string RegistirationNumber { get; set; }
-    public string Phonenumber { get; set; }
+    public string? Phonenumber { get; set; }
     public bool RetiredOrOld { get; set; }
     public DateTime? RetiredDate { get; set; }
     [Required]
-    public int TotalTakenLeave { get; set; }
+    public double TotalTakenLeave { get; set; }
     [Required]
     public string Gender { get; set; }
     [Required]

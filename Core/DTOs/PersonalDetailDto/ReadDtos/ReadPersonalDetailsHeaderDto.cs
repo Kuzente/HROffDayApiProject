@@ -8,7 +8,7 @@ public class ReadPersonalDetailsHeaderDto
     public string NameSurname { get; set; }
     public string IdentificationNumber { get; set; }
     public int TotalYearLeave { get; set; }
-    public int TotalTakenLeave { get; set; }
+    public double TotalTakenLeave { get; set; }
     public int UsedYearLeave { get; set; }
     public int FoodAid { get; set; }
     public DateTime EndJobDate { get; set; }

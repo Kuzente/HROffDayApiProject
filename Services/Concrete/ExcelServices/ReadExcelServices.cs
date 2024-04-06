@@ -23,6 +23,7 @@ public class ReadExcelServices : IReadExcelServices
             using var package = new ExcelPackage(stream);
             var worksheet = package.Workbook.Worksheets[0];
             List<AddRangePersonalDto> personelListesiDto = new();
+            var deneme = worksheet.Dimension.Rows;
             for (int row = 2; row < worksheet.Dimension.Rows +1 ; row++)
             {
                 var personel = new AddRangePersonalDto

@@ -62,8 +62,9 @@
         $('#badgeFoodAid').html(data.foodAid);
         $('#badgeTotalYearLeave').html(data.totalYearLeave);
         $('#badgeUsedYearLeave').html(data.usedYearLeave);
-        $('#balanceYearLeave').html(data.totalYearLeave - data.usedYearLeave);
-        kalanIzinKumulatif(data.usedYearLeave, new Date(data.yearLeaveDate), new Date(data.birthDate), data.isYearLeaveRetired, new Date(data.retiredDate));
+        let kalanIzinSayisiResponse = data.totalYearLeave - data.usedYearLeave
+        $('#balanceYearLeave').html(kalanIzinSayisiResponse);
+        kalanIzinKumulatif(data.usedYearLeave, new Date(data.yearLeaveDate), new Date(data.birthDate), data.isYearLeaveRetired, new Date(data.retiredDate),kalanIzinSayisiResponse);
 
         //Date Başlatıcı Fonksiyon
         function initializeFlatpickr(input) {
@@ -101,15 +102,14 @@
             initializeFlatpickr($('#StartJobDateInput')).setDate(data.startJobDate); //TODO
             $('input[name="PersonalDetails.MotherName"]').val(data.personalDetails.motherName);
             $('input[name="PersonalDetails.FatherName"]').val(data.personalDetails.fatherName);
-            $('input[name="Phonenumber"]').val(data.phonenumber);
+            $('input[name="Phonenumber"]').val(formatPhoneNumber(data.phonenumber));
             $('input[name="PersonalDetails.BankAccount"]').val(data.personalDetails.bankAccount);
-            $('input[name="PersonalDetails.IBAN"]').val(data.personalDetails.iban);
+            $('input[name="PersonalDetails.IBAN"]').val(formatIBAN(data.personalDetails.iban));
             $('textarea[name="PersonalDetails.Address"]').val(data.personalDetails.address);
             //Manuel Ayarlar
-            $('[data-takenLeave]').val(parseInt(data.totalTakenLeave, 10)); // Manuel Alacak İzin alanı
+            $('[data-takenLeave]').val(data.totalTakenLeave); // Manuel Alacak İzin alanı
             $('[data-usedYearLeave]').val(parseInt(data.usedYearLeave, 10))
             $('[data-yearLeaveDate]').text(new Date(data.yearLeaveDate).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' }))
-            console.log(data)
             if (!data.isYearLeaveRetired){
                 $('#isYearLeaveRetiredDefault').remove()
             }
@@ -132,7 +132,26 @@
             }
             //Manuel Ayarlar
         }
+        //Telefon donuşum fonksiyonu
+        function formatPhoneNumber(phonenumber) {
+            if (!phonenumber) return ""; // null veya undefined ise boş string döndür
 
+            // Formatlı IBAN için desen tanımla
+            let pattern = /(\d{3})(\d{3})(\d{2})(\d{2})/;
+
+            // İstenen formata göre dönüşüm yap
+            return phonenumber.replace(pattern, "$1-$2-$3-$4");
+        }
+        //Iban dönüşüm fonksiyonu
+        function formatIBAN(iban) {
+            if (!iban) return ""; // null veya undefined ise boş string döndür
+            
+            // Formatlı IBAN için desen tanımla
+            let pattern = /(\d{2})(\d{4})(\d{4})(\d{4})(\d{4})(\d{4})(\d{2})/;
+
+            // İstenen formata göre dönüşüm yap
+            return iban.replace(pattern, "TR$1-$2-$3-$4-$5-$6-$7");
+        }
         //Alacak İzin Saat bazından güne cevirme metodu
         function saatleriGunVeSaatlereCevir(saat) {
             // Toplam saatleri gün ve saatlere çevir
@@ -140,9 +159,8 @@
             let kalanSaat = saat % 8;
 
             // Sonucu döndür
-            return gun + " gün " + kalanSaat + " saat";
+            return gun + " gün " + kalanSaat.toFixed(1) + " saat";
         }
-
         // Şube ve pozisyon seçeneklerinin ayarlanması
         function setSelects() {
             branchSelect.empty();
@@ -342,14 +360,12 @@
             BloodGroupSelect.val(data.personalDetails.bloodGroup);
         }
 
-        function kalanIzinKumulatif(kullanilanYillikIzin, iseBaslamaTarihi, dogumTarihi, emeklilikDurumu, emeklilikTarihi) {
+        function kalanIzinKumulatif(kullanilanYillikIzin, iseBaslamaTarihi, dogumTarihi, emeklilikDurumu, emeklilikTarihi,kalanIzinSayisiResponse) {
             let outputDiv = document.getElementById("balanceYearLeaveDetail");
             let calisilanYil = 0;
             let kalanGun = 0;
             let todayDate = new Date()
             for (let year = iseBaslamaTarihi.getFullYear(); year <= new Date().getFullYear(); year++) {
-                // let pointerYearDate = new Date(todayDate)
-                // pointerYearDate.setFullYear(year)
                 let iseBaslamaKontrolDate = new Date(year, iseBaslamaTarihi.getMonth(), iseBaslamaTarihi.getDate())
                 let calisanYas = calculateAge(iseBaslamaKontrolDate, dogumTarihi)
                 if (calisilanYil === 0 && iseBaslamaTarihi <= todayDate) {
@@ -357,35 +373,57 @@
                     calisilanYil++;
                     continue;
                 }
-                
-
                 if (calisanYas >= 50 || calisanYas < 18 || (emeklilikDurumu && iseBaslamaKontrolDate > emeklilikTarihi)) {
-                    kalanGun = Math.max(20 - kullanilanYillikIzin, 0);
-                    console.log(kalanGun)
-                    kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 20, 0)
+                    if (iseBaslamaKontrolDate < new Date(2003,5,10)){
+                        kalanGun = Math.max(12 - kullanilanYillikIzin, 0);
+                        kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 12, 0)
+                    }
+                    else{
+                        kalanGun = Math.max(20 - kullanilanYillikIzin, 0);
+                        kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 20, 0)
+                    }
+                    
                 }
                 else {
                     if (calisilanYil <= 5) {
-                        kalanGun = Math.max(14 - kullanilanYillikIzin, 0);
-                        console.log(kalanGun)
-                        kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 14, 0)
+                        if (iseBaslamaKontrolDate < new Date(2003,5,10)){
+                            kalanGun = Math.max(12 - kullanilanYillikIzin, 0);
+                            kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 12, 0) 
+                        }
+                        else{
+                            kalanGun = Math.max(14 - kullanilanYillikIzin, 0);
+                            kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 14, 0)
+                        }
                     } else if (calisilanYil < 15) {
-                        kalanGun = Math.max(20 - kullanilanYillikIzin, 0);
-                        console.log(kalanGun)
-                        kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 20, 0)
+                        if (iseBaslamaKontrolDate < new Date(2003,5,10)){
+                            kalanGun = Math.max(18 - kullanilanYillikIzin, 0);
+                            kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 18, 0)
+                        }
+                        else{
+                            kalanGun = Math.max(20 - kullanilanYillikIzin, 0);
+                            kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 20, 0)
+                        }
+                        
                     } else {
-                        kalanGun = Math.max(26 - kullanilanYillikIzin, 0);
-                        console.log(kalanGun)
-                        kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 26, 0)
+                        if (iseBaslamaKontrolDate < new Date(2003,5,10)){
+                            kalanGun = Math.max(24 - kullanilanYillikIzin, 0);
+                            kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 24, 0)
+                        }
+                        else{
+                            kalanGun = Math.max(26 - kullanilanYillikIzin, 0);
+                            kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 26, 0)
+                        }
+                        
                     }
                 }
-                
-
                 if (year === todayDate.getFullYear() && iseBaslamaKontrolDate > todayDate) {
                     outputDiv.innerHTML += "Yıl: " + year + ", Hak Edilen: " + "Bekliyor" + "<br>";
                 } else {
                     if (iseBaslamaTarihi) {
                         outputDiv.innerHTML += "Yıl: " + year + ", Hak Edilen: " + kalanGun + "<br>";
+                        if (todayDate.getFullYear() === year && kalanGun !== kalanIzinSayisiResponse){
+                            $('#balanceYearWarning').text("Hatalı Olabilir"); 
+                        }
                     }
                 }
 
@@ -470,7 +508,7 @@
         $('[data-addHour]').on('click', function () {
             if ($('[data-hourInput]').val() !== '') {
                 $('[data-takenLeave]').val(function (index, currentValue) {
-                    return parseInt(currentValue, 10) + parseInt($('[data-hourInput]').val(), 10);
+                    return (parseFloat(currentValue) + parseFloat($('[data-hourInput]').val())).toFixed(1);
                 });
             }
             $('[data-hourInput]').val("");
@@ -479,7 +517,7 @@
         $('[data-removeHour]').on('click', function () {
             if ($('[data-hourInput]').val() !== '') {
                 $('[data-takenLeave]').val(function (index, currentValue) {
-                    return parseInt(currentValue, 10) - parseInt($('[data-hourInput]').val(), 10);
+                    return (parseFloat(currentValue) - parseFloat($('[data-hourInput]').val())).toFixed(1);
                 });
             }
             $('[data-hourInput]').val("");
@@ -561,6 +599,22 @@
             formData.forEach(function (f) {
                 if (f.value === "on") {
                     f.value = true;
+                }
+                if (f.name === "Phonenumber"){
+                    if (f.value === "___-___-__-__"){
+                        f.value = null
+                    }
+                    else{
+                        f.value = f.value.replace(/-/g, "");
+                    }
+                }
+                else if (f.name === "PersonalDetails.IBAN"){
+                    if (f.value === "TR__-____-____-____-____-____-__"){
+                        f.value = null
+                    }
+                    else{
+                        f.value = f.value.replace(/^TR|-/g, "");
+                    }
                 }
             });
             //Formun id'sini kullanarak formu gönder

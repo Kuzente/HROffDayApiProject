@@ -9,6 +9,7 @@ public class PassivePersonalDto : BaseDto
     public string NameSurname { get; set; }
 		
     public DateTime StartJobDate { get; set; }
+    public DateTime BirthDate { get; set; }
     public DateTime? EndJobDate { get; set; } 
     public bool RetiredOrOld { get; set; }
 	

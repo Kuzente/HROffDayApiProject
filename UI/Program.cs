@@ -35,9 +35,9 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
     conf.EnableQueryFeatures();
 });
 //Test DB
-builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("NewMssql"),builder.Configuration.GetConnectionString("NewMssql"));
+//builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("NewMssql"),builder.Configuration.GetConnectionString("NewMssql"));
 //Test DB
-//builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("Mssql"), builder.Configuration.GetConnectionString("Mssql"));
+builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("Mssql"), builder.Configuration.GetConnectionString("Mssql"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -58,6 +58,7 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
 	Authorization = new[] { new HangfireAuthorizationFilter() }
 });
+
 #region PersonalList
 app.MapControllerRoute(name: "personalListGet", pattern: "personeller", defaults: new { controller = "Personal", action = "Index" });
 app.MapControllerRoute(name: "personalListCreate", pattern: "create-personal", defaults: new { controller = "Personal", action = "AddPersonal" });
@@ -147,6 +148,12 @@ app.MapControllerRoute(name: "getDirectorBranchSelect", pattern: "select-branchm
 app.MapControllerRoute(name: "loginPage", pattern: "giris-yap", defaults: new { controller = "Authentication", action = "Login" });
 app.MapControllerRoute(name: "loginPage", pattern: "cikis-yap", defaults: new { controller = "Authentication", action = "Logout" });
 app.MapControllerRoute(name: "loginPage", pattern: "/create-pdf", defaults: new { controller = "OffDay", action = "ExportPdf" });
+
+
+#endregion
+
+#region DetailedFilter
+app.MapControllerRoute(name: "detailedFilterPage", pattern: "detayli-filtre", defaults: new { controller = "DetailedFilter", action = "Index" });
 
 
 #endregion

@@ -72,7 +72,6 @@ public class MultipleUploadController : Controller
     [HttpPost]
     public async Task<IActionResult> PersonalUpload(IFormFile file)
     {
-        //var list = _excelPersonalAddrange.ImportDataFromExcel(file);
         var resultExcel = await _readExcelServices.ImportDataFromExcel(file);
         if (!resultExcel.IsSuccess)
             return Ok(resultExcel);

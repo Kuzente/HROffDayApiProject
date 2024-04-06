@@ -91,7 +91,7 @@
     
     
     
-    //Create form
+    //Sayfa üzerindeki sube ve ünvan selectleri get metodu
     
     $.ajax({ //TODO
         type: "GET",
@@ -223,6 +223,22 @@
         formData.forEach(function (f) {
             if (f.value ==="on"){
                 f.value = true;
+            }
+            if (f.name === "Phonenumber"){
+                if (f.value === "___-___-__-__"){
+                    f.value = null
+                }
+                else{
+                    f.value = f.value.replace(/-/g, "");
+                }
+            }
+            else if (f.name === "PersonalDetails.IBAN"){
+                if (f.value === "TR__-____-____-____-____-____-__"){
+                    f.value = null
+                }
+                else{
+                    f.value = f.value.replace(/^TR|-/g, "");
+                }
             }
         });
         //Formun id'sini kullanarak formu gönder

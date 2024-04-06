@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
+﻿document.addEventListener('DOMContentLoaded', function (string) {
     new TomSelect($("#personalSelect"));
     let LeaveByMarriedFatherDeadSelect = new TomSelect($("#LeaveByMarriedFatherDead"),{
         plugins: {
@@ -44,7 +44,7 @@
     let YearLeaveCount ;
     let TakenLeaveCount;
     //Personel seçimi değiştiğinde çalışan metod
-    $('#personalSelect').change(function () {
+    $('#personalSelect').change(function (string) {
         //Resetleme Alanları
         $('#formAuthentication')[0].reset();
         dateInputs.forEach(function (date) {
@@ -59,7 +59,7 @@
             let positionName = selectedOption.attr('data-positionName');
             $("#positionInput").val(positionName); // Eğer positionName boşsa, boş bir string ata
             YearLeaveCount = parseInt(selectedOption.attr('data-YearLeave'),10);
-            TakenLeaveCount = parseInt(selectedOption.attr('data-TakenLeave'),10);
+            TakenLeaveCount = selectedOption.attr('data-TakenLeave')
             if (YearLeaveCount <= 0){
                 $('[name="LeaveByYear"]').attr('disabled', true);
     
@@ -85,7 +85,7 @@
         let kalanSaat = saat % 8;
 
         // Sonucu döndür
-        return gun + " gün " + kalanSaat + " saat";
+        return gun + " gün " + kalanSaat.toFixed(1) + " saat";
     }
     //İzin Formu Gönder butonu tıklandığında çalışan metod
     $('#submitButton').click(function () {

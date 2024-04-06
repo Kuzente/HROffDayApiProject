@@ -147,103 +147,105 @@ else
             </div>
 
         </div>
-        <table class="table table-responsive">
-            <thead>
-            <tr>
-                <th>İşlemler</th>
-                <th>Personel<br> Adı Soyadı</th>
-                <th>Şube</th>
-                <th>Ünvan</th>
-                <th>İzin Başlangıç Tarihi /<br> İzin Bitiş Tarihi</th>
-                <th>Toplam <br/> Alınan Gün</th>
-                <th>Detaylı <br/>İzin Günleri</th>
-                <th>Form <br>Oluşturulma Tarihi</th>
-                @if (userRole == nameof(UserRoleEnum.HumanResources))
-                {
-                    <th>Düzenle</th> 
-                }
-            </tr>
-            </thead>
-            <tbody class="table-border-bottom-0">
-            @foreach (var data in Model.Data)
-            {
-                <tr>
-                    <td class="col-2">
-                        <form data-approveForm class="d-inline-flex" action=@actionUrl method="post">
-                            <input type="hidden" name="id" value="@data.ID">
-                            <input type="hidden" name="returnUrl" value="@returnUrl">
-                            <input type="hidden" name="status" value="true">
-                            <button data-approveButton type="button" class="btn btn-success btn-icon" aria-label="Button">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M5 12l5 5l10 -10" />
-                                </svg>
-                            </button>
-                        </form>
-                        <form data-rejectForm class="d-inline-flex" method="post" action=@actionUrl>
-                            <input type="hidden" name="id" value="@data.ID">
-                            <input type="hidden" name="returnUrl" value="@returnUrl">
-                            <input type="hidden" name="status" value="false">
-                            <button data-rejectButton type="button" class="btn btn-danger btn-icon" aria-label="Button">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M18 6l-12 12" />
-                                    <path d="M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </form>
-
-                    </td>
-                    <td class="col-2">
-                        @data.Personal.NameSurname
-                    </td>
-                    <td class="col-1">
-                        @data.BranchName
-                    </td>
-                    <td class="col-1">
-                        @data.PositionName
-                    </td>
-                    <td class="col-2">
-                        <span class="status status-dark mb-1">@data.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
-                        <span class="status status-github">@data.EndDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
-                    </td>
-
-                    <td class="col-1">
-                        @data.CountLeave
-                    </td>
-                    <td class="col-1">
-                        <button type="button" class="btn btn-teal btn-sm btn-pill" data-bs-trigger="hover" data-bs-html="true" data-bs-toggle="popover"
-                                title="Detaylı İzin Sayıları" data-bs-content="@(data.LeaveByYear > 0 ? $"Yıllık İzni: {data.LeaveByYear}</br>" : "")
-                                                                               @(data.LeaveByWeek > 0 ? $"Haftalık İzni: {data.LeaveByWeek}</br>" : "")
-                                                                               @(data.LeaveByTaken > 0 ? $"Alacak İzni: {data.LeaveByTaken}</br>" : "")
-                                                                               @(data.LeaveByPublicHoliday > 0 ? $"Resmi İzni: {data.LeaveByPublicHoliday}</br>" : "")
-                                                                               @(data.LeaveByFreeDay > 0 ? $"Ücretsiz İzni: {data.LeaveByFreeDay}</br>" : "")
-                                                                               @(data.LeaveByTravel > 0 ? $"Seyahat İzni: {data.LeaveByTravel}</br>" : "")
-                                                                               @(data.LeaveByFather > 0 ? $"Babalık İzni: {data.LeaveByFather}</br>" : "")
-                                                                               @(data.LeaveByMarried > 0 ? $"Evlenme İzni: {data.LeaveByMarried}</br>" : "")
-                                                                               @(data.LeaveByDead > 0 ? $"Ölüm İzni: {data.LeaveByDead}</br>" : "")
-                                                                               @($"İzin Açıklaması: {data.Description}</br>")">
-                            Detaylı Görüntüle
-                        </button>
-                    </td>
-                    <td class="col-1">
-                        <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
-
-                    </td>
-                    @if (userRole == nameof(UserRoleEnum.HumanResources))
-                    {
-                        <td class="col-1">
-                            <!--TODO RETURN URL-->
-                            <a href='/izin-duzenle?id=@data.ID&returnUrl=@returnUrl' class="btn btn-warning btn-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
-                            </a>
-                        </td>
-                    }
-                </tr>
-            }
-            </tbody>
-
-        </table>
+        <div class="table-responsive">
+            <table class="table table-nowrap">
+                        <thead>
+                        <tr>
+                            <th>İşlemler</th>
+                            <th>Personel<br> Adı Soyadı</th>
+                            <th>Şube</th>
+                            <th>Ünvan</th>
+                            <th>İzin Başlangıç Tarihi /<br> İzin Bitiş Tarihi</th>
+                            <th>Toplam <br/> Alınan Gün</th>
+                            <th>Detaylı <br/>İzin Günleri</th>
+                            <th>Form <br>Oluşturulma Tarihi</th>
+                            @if (userRole == nameof(UserRoleEnum.HumanResources))
+                            {
+                                <th>Düzenle</th> 
+                            }
+                        </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                        @foreach (var data in Model.Data)
+                        {
+                            <tr>
+                                <td class="col-2">
+                                    <form data-approveForm class="d-inline-flex" action=@actionUrl method="post">
+                                        <input type="hidden" name="id" value="@data.ID">
+                                        <input type="hidden" name="returnUrl" value="@returnUrl">
+                                        <input type="hidden" name="status" value="true">
+                                        <button data-approveButton type="button" class="btn btn-success btn-icon" aria-label="Button">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-check" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M5 12l5 5l10 -10" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                    <form data-rejectForm class="d-inline-flex" method="post" action=@actionUrl>
+                                        <input type="hidden" name="id" value="@data.ID">
+                                        <input type="hidden" name="returnUrl" value="@returnUrl">
+                                        <input type="hidden" name="status" value="false">
+                                        <button data-rejectButton type="button" class="btn btn-danger btn-icon" aria-label="Button">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M18 6l-12 12" />
+                                                <path d="M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                    </form>
+            
+                                </td>
+                                <td class="col-2">
+                                    @data.Personal.NameSurname
+                                </td>
+                                <td class="col-1">
+                                    @data.BranchName
+                                </td>
+                                <td class="col-1">
+                                    @data.PositionName
+                                </td>
+                                <td class="col-2">
+                                    <span class="status status-dark mb-1">@data.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span><br>
+                                    <span class="status status-github">@data.EndDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
+                                </td>
+            
+                                <td class="col-1">
+                                    @data.CountLeave
+                                </td>
+                                <td class="col-1">
+                                    <button type="button" class="btn btn-teal btn-sm btn-pill" data-bs-trigger="hover" data-bs-html="true" data-bs-toggle="popover"
+                                            title="Detaylı İzin Sayıları" data-bs-content="@(data.LeaveByYear > 0 ? $"Yıllık İzni: {data.LeaveByYear}</br>" : "")
+                                                                                           @(data.LeaveByWeek > 0 ? $"Haftalık İzni: {data.LeaveByWeek}</br>" : "")
+                                                                                           @(data.LeaveByTaken > 0 ? $"Alacak İzni: {data.LeaveByTaken}</br>" : "")
+                                                                                           @(data.LeaveByPublicHoliday > 0 ? $"Resmi İzni: {data.LeaveByPublicHoliday}</br>" : "")
+                                                                                           @(data.LeaveByFreeDay > 0 ? $"Ücretsiz İzni: {data.LeaveByFreeDay}</br>" : "")
+                                                                                           @(data.LeaveByTravel > 0 ? $"Seyahat İzni: {data.LeaveByTravel}</br>" : "")
+                                                                                           @(data.LeaveByFather > 0 ? $"Babalık İzni: {data.LeaveByFather}</br>" : "")
+                                                                                           @(data.LeaveByMarried > 0 ? $"Evlenme İzni: {data.LeaveByMarried}</br>" : "")
+                                                                                           @(data.LeaveByDead > 0 ? $"Ölüm İzni: {data.LeaveByDead}</br>" : "")
+                                                                                           @($"İzin Açıklaması: {data.Description}</br>")">
+                                        Detaylı Görüntüle
+                                    </button>
+                                </td>
+                                <td class="col-1">
+                                    <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
+            
+                                </td>
+                                @if (userRole == nameof(UserRoleEnum.HumanResources))
+                                {
+                                    <td class="col-1">
+                                        <!--TODO RETURN URL-->
+                                        <a href='/izin-duzenle?id=@data.ID&returnUrl=@returnUrl' class="btn btn-warning btn-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
+                                        </a>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                        </tbody>
+            
+                    </table>
+        </div>
 
         <!--Pagination-->
         <div class="border-top pt-3 mx-3 d-flex justify-content-end">

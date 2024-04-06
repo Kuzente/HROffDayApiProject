@@ -3,6 +3,7 @@
     let erkekSayisi = 0;
     let kadinSayisi = 0;
     let SalaryCount = 0;
+    let FoodAidCount = 0;
     let PersonalCount = 0;
     let educationCounts= {};
     
@@ -142,6 +143,14 @@
         });
         $('#salarySum').text(formattedSalary);
     }
+    //Gıda Yardım Hesaplama Fonksiyonu
+    function FoodAidSum(FoodAidCount) {
+        const formattedSalary = FoodAidCount.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        });
+        $('#foodAidSum').text(formattedSalary);
+    }
     //Cinsiyet Dağılımı Grafik Fornkisyonu
     function genderPie(menLength, womenLenght) {
         let options = {
@@ -262,11 +271,10 @@
     //Personel kısımlerı get metodu
     $.ajax({
         type: "GET",
-        url: "/query/personel-sayisi?expand=PersonalDetails($select=Salary,educationStatus),Branch($select=ID,Name)&$select=id,PersonalDetails,gender,birthDate,nameSurname,StartJobDate,EndJobDate,Status",
+        url: "/query/personel-sayisi?expand=PersonalDetails($select=Salary,educationStatus),Branch($select=ID,Name)&$select=id,PersonalDetails,gender,birthDate,nameSurname,StartJobDate,EndJobDate,Status,foodAid",
     })
         .done(function (res) {
         spinner.hide();
-        
         personalResponse = res;
         // Tüm kişileri doğum tarihine göre sırala
         res.sort(function(a, b) {
@@ -288,6 +296,10 @@
             }else if (p.Gender === 'Kadın' && p.Status === 0) { // Cinsiyet Alanı
                 kadinSayisi++;
             }
+            //Gıda Yardım Alanı
+            if (p.FoodAid && p.Status === 0){
+                FoodAidCount += parseFloat(p.FoodAid)
+            }
             if (p.BirthDate && p.Status === 0) {
                 let birthDate = new Date(p.BirthDate);
                 let dogumgununtarihi = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
@@ -308,9 +320,9 @@
         });
         PersonalCountSec(PersonalCount);
         SalarySum(SalaryCount);
+        FoodAidSum(FoodAidCount);
         WorkPowerTable(res);
-            genderPie(erkekSayisi, kadinSayisi)
-            console.log(educationCounts)
+        genderPie(erkekSayisi, kadinSayisi)
         educationPie(educationCounts);
         
     });
@@ -344,12 +356,12 @@
     }).done(function (res) {
         $('#positionCount').text(res.length === 0 ? "Yok" : res.length);
     });
+    //Bekleyen İzinler ajax metodu
     $.ajax({
         type:"GET",
-        url: "/query/bekleyen-izinler-dashboard?$expand=Personal($select=ID,NameSurname;)&$select=id,createdAt,offdaystatus,Personal&$filter=Personal/Status eq 'Online'&$orderby=createdAt asc",
+        url: "/query/bekleyen-izinler-dashboard?$expand=Personal($select=ID,NameSurname;)&$select=id,createdAt,offdaystatus,Personal&$filter=Personal/Status eq 'Online'&$orderby=createdAt desc",
     }).done(function (res) {
         res.forEach(data=> {
-            console.log(data)
             let listItem = document.createElement('div');
             listItem.className = 'list-group-item';
             let row = document.createElement('div');
@@ -389,6 +401,7 @@
             offDayList.appendChild(listItem);
         })
     })
+    //Eksik Gün istirahat ajax metodu
     $.ajax({
         type:"GET",
         url: "/query/eksik-gun-dashboard?$expand=Personal($select=NameSurname,Status;)&$select=id,EndOffDayDate,Personal,EndOffDayDate,Reason&$filter=Personal/Status eq 'Online'and Reason eq 'İstirahat (01)'&$orderby=EndOffDayDate asc",

@@ -351,8 +351,8 @@ namespace Data.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("TotalTakenLeave")
-                        .HasColumnType("int");
+                    b.Property<double>("TotalTakenLeave")
+                        .HasColumnType("float");
 
                     b.Property<int>("TotalYearLeave")
                         .HasColumnType("int");
@@ -566,14 +566,14 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("d3a9bf02-3988-46d0-8bc8-9d0c1f0d9234"),
-                            CreatedAt = new DateTime(2024, 4, 3, 18, 0, 55, 103, DateTimeKind.Local).AddTicks(4445),
+                            ID = new Guid("2d09c162-d749-46ce-8cf6-b681c35b02d1"),
+                            CreatedAt = new DateTime(2024, 4, 6, 0, 40, 7, 695, DateTimeKind.Local).AddTicks(4273),
                             DeletedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "superadmin@superadmin.com",
                             IsDefaultPassword = true,
-                            ModifiedAt = new DateTime(2024, 4, 3, 18, 0, 55, 103, DateTimeKind.Local).AddTicks(4460),
+                            ModifiedAt = new DateTime(2024, 4, 6, 0, 40, 7, 695, DateTimeKind.Local).AddTicks(4286),
                             Password = "superadmin",
-                            Role = 0,
+                            Role = 3,
                             Status = 0,
                             Username = "superadmin"
                         });

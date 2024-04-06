@@ -293,68 +293,70 @@ else
             </div>
 
         </div>
-        <table class="table table-responsive">
-            <thead>
-            <tr>
-                <th>İzin Başlangıç Tarihi</th>
-                <th>İzin Bitiş Tarihi</th>
-                <th>Toplam <br/> Alınan Gün</th>
-                <th>İzin Açıklaması</th>
-                <th>Detaylı <br/>İzin Günleri</th>
-                <th>Form <br>Oluşturulma Tarihi</th>
-                <th>Düzenle</th>
-                <th>Sil</th>
-
-            </tr>
-            </thead>
-            <tbody class="table-border-bottom-0">
-            @foreach (var data in Model.Data)
-            {
-                <tr>
-
-                    <td class="col-2">
-                        <span class="status status-dark mb-1">@data.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
-                    </td>
-                    <td class="col-2">
-                        <span class="status status-github">@data.EndDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
-                    </td>
-                    <td class="col-1">
-                        @data.CountLeave
-                    </td>
-                    <td class="col-3">
-                        @data.Description
-                    </td>
-                    <td class="col-1">
-                        <button type="button" class="btn btn-teal btn-sm btn-pill" data-bs-trigger="hover" data-bs-html="true" data-bs-toggle="popover"
-                                title="Detaylı İzin Sayıları" data-bs-content="@(data.LeaveByYear > 0 ? $"Yıllık İzni: {data.LeaveByYear}</br>" : "")
-                                                                                           @(data.LeaveByWeek > 0 ? $"Haftalık İzni: {data.LeaveByWeek}</br>" : "")
-                                                                                           @(data.LeaveByTaken > 0 ? $"Alacak İzni: {data.LeaveByTaken}</br>" : "")
-                                                                                           @(data.LeaveByPublicHoliday > 0 ? $"Resmi İzni: {data.LeaveByPublicHoliday}</br>" : "")
-                                                                                           @(data.LeaveByFreeDay > 0 ? $"Ücretsiz İzni: {data.LeaveByFreeDay}</br>" : "")
-                                                                                           @(data.LeaveByTravel > 0 ? $"Seyahat İzni: {data.LeaveByTravel}</br>" : "")
-                                                                                           @(data.LeaveByFather > 0 ? $"Babalık İzni: {data.LeaveByFather}</br>" : "")
-                                                                                           @(data.LeaveByMarried > 0 ? $"Evlenme İzni: {data.LeaveByMarried}</br>" : "")
-                                                                                           @(data.LeaveByDead > 0 ? $"Ölüm İzni: {data.LeaveByDead}</br>" : "")
-                                                                                           @($"İzin Açıklaması: {data.Description}</br>")">
-                            Detaylı Görüntüle
-                        </button>
-                    </td>
-                    <td class="col-1">
-                        <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
-
-                    </td>
-                    <td class="col-1">
-                        <!--TODO RETURN URL-->
-                        <a href='/izin-duzenle?id=@data.ID&returnUrl=@returnUrl' class="btn btn-dark btn-sm text-white btn-pill">Güncelle</a>
-                    </td>
-                    <td class="col-1">
-                        <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="">İptal Et</button>
-                    </td>
-                </tr>
-            }
-            </tbody>
-
-        </table>
+        <div class="table-responsive">
+            <table class="table table-nowrap">
+                        <thead>
+                        <tr>
+                            <th>İzin Başlangıç Tarihi</th>
+                            <th>İzin Bitiş Tarihi</th>
+                            <th>Toplam <br/> Alınan Gün</th>
+                            <th>İzin Açıklaması</th>
+                            <th>Detaylı <br/>İzin Günleri</th>
+                            <th>Form <br>Oluşturulma Tarihi</th>
+                            <th>Düzenle</th>
+                            <th>Sil</th>
+            
+                        </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                        @foreach (var data in Model.Data)
+                        {
+                            <tr>
+            
+                                <td class="col-2">
+                                    <span class="status status-dark mb-1">@data.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
+                                </td>
+                                <td class="col-2">
+                                    <span class="status status-github">@data.EndDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
+                                </td>
+                                <td class="col-1">
+                                    @data.CountLeave
+                                </td>
+                                <td class="col-3">
+                                    @data.Description
+                                </td>
+                                <td class="col-1">
+                                    <button type="button" class="btn btn-teal btn-sm btn-pill" data-bs-trigger="hover" data-bs-html="true" data-bs-toggle="popover"
+                                            title="Detaylı İzin Sayıları" data-bs-content="@(data.LeaveByYear > 0 ? $"Yıllık İzni: {data.LeaveByYear}</br>" : "")
+                                                                                                       @(data.LeaveByWeek > 0 ? $"Haftalık İzni: {data.LeaveByWeek}</br>" : "")
+                                                                                                       @(data.LeaveByTaken > 0 ? $"Alacak İzni: {data.LeaveByTaken}</br>" : "")
+                                                                                                       @(data.LeaveByPublicHoliday > 0 ? $"Resmi İzni: {data.LeaveByPublicHoliday}</br>" : "")
+                                                                                                       @(data.LeaveByFreeDay > 0 ? $"Ücretsiz İzni: {data.LeaveByFreeDay}</br>" : "")
+                                                                                                       @(data.LeaveByTravel > 0 ? $"Seyahat İzni: {data.LeaveByTravel}</br>" : "")
+                                                                                                       @(data.LeaveByFather > 0 ? $"Babalık İzni: {data.LeaveByFather}</br>" : "")
+                                                                                                       @(data.LeaveByMarried > 0 ? $"Evlenme İzni: {data.LeaveByMarried}</br>" : "")
+                                                                                                       @(data.LeaveByDead > 0 ? $"Ölüm İzni: {data.LeaveByDead}</br>" : "")
+                                                                                                       @($"İzin Açıklaması: {data.Description}</br>")">
+                                        Detaylı Görüntüle
+                                    </button>
+                                </td>
+                                <td class="col-1">
+                                    <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
+            
+                                </td>
+                                <td class="col-1">
+                                    <!--TODO RETURN URL-->
+                                    <a href='/izin-duzenle?id=@data.ID&returnUrl=@returnUrl' class="btn btn-dark btn-sm text-white btn-pill">Güncelle</a>
+                                </td>
+                                <td class="col-1">
+                                    <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="">İptal Et</button>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+            
+                    </table>
+        </div>
 
         <!--Pagination-->
         <div class="border-top pt-3 mx-3 d-flex justify-content-end">

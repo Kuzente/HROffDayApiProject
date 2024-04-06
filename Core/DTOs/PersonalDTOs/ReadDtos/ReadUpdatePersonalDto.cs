@@ -20,7 +20,7 @@ public class ReadUpdatePersonalDto
     public DateTime FoodAidDate { get; set; }
     public string Gender { get; set; }
     public int TotalYearLeave { get; set; }
-    public int TotalTakenLeave { get; set; }
+    public double TotalTakenLeave { get; set; }
     public int UsedYearLeave { get; set; }
     public int FoodAid { get; set; }
     public Guid Branch_Id { get; set; }

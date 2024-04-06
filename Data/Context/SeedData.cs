@@ -15,7 +15,7 @@ public static class SeedData
                 Username = "superadmin",
                 Email = "superadmin@superadmin.com",
                 Password = "superadmin",
-                Role = UserRoleEnum.HumanResources,
+                Role = UserRoleEnum.SuperAdmin,
                 Status = EntityStatusEnum.Online,
                 CreatedAt = DateTime.Now,
                 ModifiedAt = DateTime.Now,

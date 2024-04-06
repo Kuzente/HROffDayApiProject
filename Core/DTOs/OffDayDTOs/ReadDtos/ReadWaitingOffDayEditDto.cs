@@ -37,5 +37,5 @@ public class ReadWaitingOffDayEditSubPersonalDto
     public string NameSurname { get; set; }
     public int TotalYearLeave { get; set; }
     public int UsedYearLeave { get; set; }
-    public int TotalTakenLeave { get; set; }
+    public double TotalTakenLeave { get; set; }
 }

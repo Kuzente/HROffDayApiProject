@@ -15,9 +15,10 @@ public class WriteUpdatePersonalDetailDto
     [Required]
     public double Salary { get; set; }
     [Required]
-    public string? SgkCode { get; set; }
+    public string SgkCode { get; set; }
     [Required]
     public string SskNumber { get; set; }
+    [Required]
     public string DepartmantName { get; set; }
     public string? Address { get; set; }
     public string? FatherName { get; set; }

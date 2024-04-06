@@ -294,50 +294,52 @@ else
             </div>
 
         </div>
-        <table class="table table-responsive">
-            <thead>
-            <tr>
-                <th>Adı Soyadı</th>
-                <th>Eski Şube</th>
-                <th>Yeni Şube</th>
-                <th>Eski Ünvan</th>
-                <th>Yeni Ünvan</th>
-                <th>Nakil Tarihi</th>
-                <th>Sil</th>
-
-            </tr>
-            </thead>
-            <tbody class="table-border-bottom-0">
-            @foreach (var data in Model.Data)
-            {
-                <tr>
-
-                    <td class="col-2">
-                        @data.PersonalNameSurname
-                    </td>
-                    <td class="col-2">
-                        @data.OldBranch
-                    </td>
-                    <td class="col-2">
-                        @data.NewBranch
-                    </td>
-                    <td class="col-2">
-                        @data.OldPosition
-                    </td>
-                    <td class="col-2">
-                        @data.NewPosition
-                    </td>
-                    <td class="col-1">
-                        <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
-                    </td>
-                    <td class="col-1">
-                        <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="">Sil</button>
-                    </td>
-                </tr>
-            }
-            </tbody>
-
-        </table>
+        <div class="table-responsive">
+            <table class="table table-nowrap">
+                        <thead>
+                        <tr>
+                            <th>Adı Soyadı</th>
+                            <th>Eski Şube</th>
+                            <th>Yeni Şube</th>
+                            <th>Eski Ünvan</th>
+                            <th>Yeni Ünvan</th>
+                            <th>Nakil Tarihi</th>
+                            <th>Sil</th>
+            
+                        </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                        @foreach (var data in Model.Data)
+                        {
+                            <tr>
+            
+                                <td class="col-2">
+                                    @data.PersonalNameSurname
+                                </td>
+                                <td class="col-2">
+                                    @data.OldBranch
+                                </td>
+                                <td class="col-2">
+                                    @data.NewBranch
+                                </td>
+                                <td class="col-2">
+                                    @data.OldPosition
+                                </td>
+                                <td class="col-2">
+                                    @data.NewPosition
+                                </td>
+                                <td class="col-1">
+                                    <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
+                                </td>
+                                <td class="col-1">
+                                    <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="">Sil</button>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+            
+                    </table>
+        </div>
 
         <!--Pagination-->
         <div class="border-top pt-3 mx-3 d-flex justify-content-end">

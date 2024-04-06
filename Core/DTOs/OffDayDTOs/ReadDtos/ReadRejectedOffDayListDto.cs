@@ -33,15 +33,6 @@ public class ReadRejectedOffDayListDto
 public class ReadRejectedOffDayListPersonelDto
 {
     public string NameSurname { get; set; }
-    // public ReadRejectedOffDayListPersonelBranchDto Branch { get; set; }
-    // public ReadRejectedOffDayListPersonelPositionDto Position { get; set; }
+   
 }
 
-// public class ReadRejectedOffDayListPersonelBranchDto
-// {
-//     public string Name { get; set; }
-// }
-// public class ReadRejectedOffDayListPersonelPositionDto
-// {
-//     public string Name { get; set; }
-// }

@@ -140,99 +140,101 @@ else
             </div>
 
         </div>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>
-                    <button class="table-sort" data-sort="sort-username">Adı Soyadı</button>
-                </th>
-                <th>
-                    <button class="table-sort" data-sort="sort-email">Mail Adresi</button>
-                </th>
-                <th>
-                    <button class="table-sort" data-sort="sort-isDefaultPassword">Şifre Değişikliği</button>
-                </th>
-                <th>
-                    <button class="table-sort" data-sort="sort-role">Rol</button>
-                </th>
-                <th>Atanan Şubeler</th>
-                <th>Durumu</th>
-                <th>Düzenle</th>
-                <th>Sil</th>
-            </tr>
-            </thead>
-            <tbody class="table-border-bottom-0">
-            @foreach (var data in Model.Data)
-            {
-                <tr>
-                    <td>
-                        @data.Username
-                    </td>
-                    <td>
-                        @data.Email
-
-                    </td>
-                    <td>
-                        @Html.Raw(data.IsDefaultPassword ? "<span class='badge bg-success-lt'>Değiştirilmiş</span>" : "<span class='badge bg-danger-lt'>Değiştirilmemiş</span>")
-
-                </td>
-                <td>
-                    @if (data.Role == UserRoleEnum.Director)
-                    {
-                        <span class='badge bg-primary'>Genel Müdür</span>
-                    }
-                    else if (data.Role == UserRoleEnum.BranchManager)
-                    {
-                        <span class='badge bg-green'>Şube Sorumlusu</span>
-                    }
-                    else
-                    {
-                        <span class='badge bg-yellow'>İnsan Kaynakları</span>
-                    }
-                </td>
-                <td>
-                    @if (@data.Role == UserRoleEnum.HumanResources)
-                    {
-                        <button type="button" class="btn btn-secondary btn-sm btn-pill">Rol Gereği Yok</button>
-                    }
-                    else if (data.Role == UserRoleEnum.Director)
-                    {
-                        <button type="button" class="btn btn-purple btn-sm btn-pill " data-bs-trigger="hover" data-bs-html="true" data-bs-toggle="popover"
-                                title="Kullanıcıya Atanan Şubeler" data-bs-content="@(string.Join("<br>", data.Branches.Select(p => p.Name)))">
-                            Atanan Şubeler
-                        </button>
-                    }
-                    else
-                    {
-                        <button type="button" class="btn btn-cyan btn-sm btn-pill">@data.Branches.Select(p => p.Name).FirstOrDefault()</button>
-                    }
-                </td>
-                <td>
-                    @{
-                        if (data.Status == EntityStatusEnum.Online)
+        <div class="table-responsive">
+            <table class="table table-nowrap">
+                        <thead>
+                        <tr>
+                            <th>
+                                <button class="table-sort" data-sort="sort-username">Adı Soyadı</button>
+                            </th>
+                            <th>
+                                <button class="table-sort" data-sort="sort-email">Mail Adresi</button>
+                            </th>
+                            <th>
+                                <button class="table-sort" data-sort="sort-isDefaultPassword">Şifre Değişikliği</button>
+                            </th>
+                            <th>
+                                <button class="table-sort" data-sort="sort-role">Rol</button>
+                            </th>
+                            <th>Atanan Şubeler</th>
+                            <th>Durumu</th>
+                            <th>Düzenle</th>
+                            <th>Sil</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                        @foreach (var data in Model.Data)
                         {
-                            <span class="badge bg-success-lt">Aktif</span>
-                        }
-                        else if (data.Status == EntityStatusEnum.Offline)
-                        {
-                            <span class="badge bg-secondary-lt">Pasif</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-danger-lt">Arşivlenmiş</span>
-                        }
+                            <tr>
+                                <td>
+                                    @data.Username
+                                </td>
+                                <td>
+                                    @data.Email
+            
+                                </td>
+                                <td>
+                                    @Html.Raw(data.IsDefaultPassword ? "<span class='badge bg-success-lt'>Değiştirilmiş</span>" : "<span class='badge bg-danger-lt'>Değiştirilmemiş</span>")
+            
+                            </td>
+                            <td>
+                                @if (data.Role == UserRoleEnum.Director)
+                                {
+                                    <span class='badge bg-primary'>Genel Müdür</span>
+                                }
+                                else if (data.Role == UserRoleEnum.BranchManager)
+                                {
+                                    <span class='badge bg-green'>Şube Sorumlusu</span>
+                                }
+                                else
+                                {
+                                    <span class='badge bg-yellow'>İnsan Kaynakları</span>
+                                }
+                            </td>
+                            <td>
+                                @if (@data.Role == UserRoleEnum.HumanResources)
+                                {
+                                    <button type="button" class="btn btn-secondary btn-sm btn-pill">Rol Gereği Yok</button>
+                                }
+                                else if (data.Role == UserRoleEnum.Director)
+                                {
+                                    <button type="button" class="btn btn-purple btn-sm btn-pill " data-bs-trigger="hover" data-bs-html="true" data-bs-toggle="popover"
+                                            title="Kullanıcıya Atanan Şubeler" data-bs-content="@(string.Join("<br>", data.Branches.Select(p => p.Name)))">
+                                        Atanan Şubeler
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-cyan btn-sm btn-pill">@data.Branches.Select(p => p.Name).FirstOrDefault()</button>
+                                }
+                            </td>
+                            <td>
+                                @{
+                                    if (data.Status == EntityStatusEnum.Online)
+                                    {
+                                        <span class="badge bg-success-lt">Aktif</span>
+                                    }
+                                    else if (data.Status == EntityStatusEnum.Offline)
+                                    {
+                                        <span class="badge bg-secondary-lt">Pasif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger-lt">Arşivlenmiş</span>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                <a href="/kullanici-guncelle?id=@data.ID" class="btn btn-warning btn-sm text-white btn-pill">Düzenle</a>
+                            </td>
+                            <td>
+                                <button data-deleteButton type="button" class="btn btn-danger archive-button btn-sm btn-pill w-50" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="@data.Username">Sil</button>
+                            </td>
+                        </tr>
                     }
-                </td>
-                <td>
-                    <a href="/kullanici-guncelle?id=@data.ID" class="btn btn-warning btn-sm text-white btn-pill">Düzenle</a>
-                </td>
-                <td>
-                    <button data-deleteButton type="button" class="btn btn-danger archive-button btn-sm btn-pill w-50" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="@data.Username">Sil</button>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+                    </tbody>
+                </table>
+        </div>
 
         <!--Pagination-->
         <div class="border-top pt-3 mx-3 d-flex justify-content-end">
