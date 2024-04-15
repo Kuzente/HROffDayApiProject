@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.UserServices;
 
 namespace UI.Controllers;
-[Authorize(Roles = nameof(UserRoleEnum.HumanResources))]
+[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
 public class UserController : Controller
 {
     private readonly IWriteUserService _writeUserService;

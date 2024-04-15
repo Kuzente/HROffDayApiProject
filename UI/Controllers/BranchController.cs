@@ -12,7 +12,7 @@ using Services.ExcelDownloadServices.BranchServices;
 
 namespace UI.Controllers
 {
-    [Authorize(Roles = nameof(UserRoleEnum.HumanResources))]
+    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
     public class BranchController : Controller
     {
         private readonly IReadBranchService _readBranchService;

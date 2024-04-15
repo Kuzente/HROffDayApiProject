@@ -9,7 +9,7 @@ using Services.ExcelDownloadServices;
 
 namespace UI.Controllers;
 
-[Authorize(Roles = nameof(UserRoleEnum.HumanResources))]
+[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
 public class MultipleUploadController : Controller
 {
     private readonly IWritePersonalService _writePersonalService;

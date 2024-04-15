@@ -21,6 +21,7 @@ public class ReadUpdatePersonalDto
     public string Gender { get; set; }
     public int TotalYearLeave { get; set; }
     public double TotalTakenLeave { get; set; }
+    public string CumulativeFormula { get; set; }
     public int UsedYearLeave { get; set; }
     public int FoodAid { get; set; }
     public Guid Branch_Id { get; set; }

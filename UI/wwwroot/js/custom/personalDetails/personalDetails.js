@@ -45,7 +45,10 @@
                 }
             }
             fillpersonalDetailsInputs(res.data);
+            getKumulatifInputs(new Date(res.data.yearLeaveDate),res.data.cumulativeFormula)
+            kalanIzinKumulatif(res.data.usedYearLeave,res.data.cumulativeFormula,new Date(res.data.yearLeaveDate).getFullYear());
             onClickEvents(res.data);
+            console.log(res.data.cumulativeFormula)
         } else {
             $('#error-modal-message').text(res.message)
             $('#error-modal').modal('show')
@@ -64,7 +67,7 @@
         $('#badgeUsedYearLeave').html(data.usedYearLeave);
         let kalanIzinSayisiResponse = data.totalYearLeave - data.usedYearLeave
         $('#balanceYearLeave').html(kalanIzinSayisiResponse);
-        kalanIzinKumulatif(data.usedYearLeave, new Date(data.yearLeaveDate), new Date(data.birthDate), data.isYearLeaveRetired, new Date(data.retiredDate),kalanIzinSayisiResponse);
+        
 
         //Date Başlatıcı Fonksiyon
         function initializeFlatpickr(input) {
@@ -360,88 +363,7 @@
             BloodGroupSelect.val(data.personalDetails.bloodGroup);
         }
 
-        function kalanIzinKumulatif(kullanilanYillikIzin, iseBaslamaTarihi, dogumTarihi, emeklilikDurumu, emeklilikTarihi,kalanIzinSayisiResponse) {
-            let outputDiv = document.getElementById("balanceYearLeaveDetail");
-            let calisilanYil = 0;
-            let kalanGun = 0;
-            let todayDate = new Date()
-            for (let year = iseBaslamaTarihi.getFullYear(); year <= new Date().getFullYear(); year++) {
-                let iseBaslamaKontrolDate = new Date(year, iseBaslamaTarihi.getMonth(), iseBaslamaTarihi.getDate())
-                let calisanYas = calculateAge(iseBaslamaKontrolDate, dogumTarihi)
-                if (calisilanYil === 0 && iseBaslamaTarihi <= todayDate) {
-                    outputDiv.innerHTML += "Yıl: " + year + ", Hak Edilen: " + kalanGun + "<br>";
-                    calisilanYil++;
-                    continue;
-                }
-                if (calisanYas >= 50 || calisanYas < 18 || (emeklilikDurumu && iseBaslamaKontrolDate > emeklilikTarihi)) {
-                    if (iseBaslamaKontrolDate < new Date(2003,5,10)){
-                        kalanGun = Math.max(12 - kullanilanYillikIzin, 0);
-                        kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 12, 0)
-                    }
-                    else{
-                        kalanGun = Math.max(20 - kullanilanYillikIzin, 0);
-                        kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 20, 0)
-                    }
-                    
-                }
-                else {
-                    if (calisilanYil <= 5) {
-                        if (iseBaslamaKontrolDate < new Date(2003,5,10)){
-                            kalanGun = Math.max(12 - kullanilanYillikIzin, 0);
-                            kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 12, 0) 
-                        }
-                        else{
-                            kalanGun = Math.max(14 - kullanilanYillikIzin, 0);
-                            kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 14, 0)
-                        }
-                    } else if (calisilanYil < 15) {
-                        if (iseBaslamaKontrolDate < new Date(2003,5,10)){
-                            kalanGun = Math.max(18 - kullanilanYillikIzin, 0);
-                            kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 18, 0)
-                        }
-                        else{
-                            kalanGun = Math.max(20 - kullanilanYillikIzin, 0);
-                            kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 20, 0)
-                        }
-                        
-                    } else {
-                        if (iseBaslamaKontrolDate < new Date(2003,5,10)){
-                            kalanGun = Math.max(24 - kullanilanYillikIzin, 0);
-                            kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 24, 0)
-                        }
-                        else{
-                            kalanGun = Math.max(26 - kullanilanYillikIzin, 0);
-                            kullanilanYillikIzin = Math.max(kullanilanYillikIzin - 26, 0)
-                        }
-                        
-                    }
-                }
-                if (year === todayDate.getFullYear() && iseBaslamaKontrolDate > todayDate) {
-                    outputDiv.innerHTML += "Yıl: " + year + ", Hak Edilen: " + "Bekliyor" + "<br>";
-                } else {
-                    if (iseBaslamaTarihi) {
-                        outputDiv.innerHTML += "Yıl: " + year + ", Hak Edilen: " + kalanGun + "<br>";
-                        if (todayDate.getFullYear() === year && kalanGun !== kalanIzinSayisiResponse){
-                            $('#balanceYearWarning').text("Hatalı Olabilir"); 
-                        }
-                    }
-                }
-
-
-                calisilanYil++;
-
-                function calculateAge(pointerYearDate, dogumTarihi) {
-                    let age = pointerYearDate.getFullYear() - dogumTarihi.getFullYear();
-                    if (pointerYearDate.getMonth() < dogumTarihi.getMonth()) {
-                        age--;
-                    } else if (pointerYearDate.getMonth() === dogumTarihi.getMonth() && pointerYearDate.getDate() < dogumTarihi.getDate()) {
-                        age--;
-                    }
-                    return age;
-                }
-
-            }
-        }
+        
 
         // Emeklilik ve engellilik durumlarının işaretlenmesi
         function setCheckboxes() {
@@ -470,6 +392,72 @@
         setGenderSelection();
 
 
+    }
+    function kalanIzinKumulatif(kullanilanYillikIzin, cumulativeFormula,yearLeaveDateYear) {
+        let outputDiv = document.getElementById("balanceYearLeaveDetail");
+        //cumulativeFormula = cumulativeFormula.substring(0, cumulativeFormula.length - 1);
+        let izinListesi = cumulativeFormula.split("+");
+        console.log(izinListesi)
+        // Kullanılan izin miktarını string değerlerden düş
+        for (let i = 0; i < izinListesi.length && kullanilanYillikIzin > 0; i++) {
+            if (izinListesi[i] <= kullanilanYillikIzin) {
+                kullanilanYillikIzin -= izinListesi[i];
+                izinListesi[i] = 0;
+            } else {
+                izinListesi[i] -= kullanilanYillikIzin;
+                kullanilanYillikIzin = 0;
+            }
+
+        }
+        
+        izinListesi.forEach(i=> {
+            console.log(i)
+            if (i !== ''){
+                outputDiv.innerHTML += "Yıl: " + yearLeaveDateYear + ", Kalan: " + i  + "<br>";  
+            }
+            else{
+                outputDiv.innerHTML += "Yıl: " + yearLeaveDateYear + ", Bekliyor" + "<br>";
+            }
+            
+            yearLeaveDateYear++;
+        })
+    }
+    function getKumulatifInputs(yearLeaveDate,cumulativeFormula) {
+        let values = cumulativeFormula.split("+")
+        let counter = 0
+        const inputSection = $('#cumulative-inputs-section');
+        let outputDiv = document.getElementById("balanceYearLeaveDetail");
+        let todayDate = new Date()
+        
+        for (let year = yearLeaveDate.getFullYear();year <= new Date().getFullYear(); year++){
+            let YearRefreshDate = new Date(year,yearLeaveDate.getMonth(),yearLeaveDate.getDate())
+            let inputRow = `
+                    <div class="row mb-3 pe-8 ps-8">
+                        <div class="col">
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text">
+                                    ${year} -->
+                                </span>
+                                ${
+
+                                (year === todayDate.getFullYear() && YearRefreshDate > todayDate) ?
+                                    `<span class="form-control disabled">Bekliyor</span>` :
+                                    `<input type="number" data-deneme name="cumulativeFormulaInput" value="${values[counter] ? values[counter] : 0}" class="form-control" disabled/>`
+                                
+                                }
+                                
+                                
+                                <span class="input-group-text">
+                                    Gün
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+            `
+            inputSection.append(inputRow)
+            counter += 1
+        }
+        
     }
     //Validasyon Fonksiyonu
     function checkRequiredFields() {

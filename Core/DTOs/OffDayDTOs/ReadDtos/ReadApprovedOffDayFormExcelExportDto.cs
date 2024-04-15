@@ -25,6 +25,9 @@ public class ReadApprovedOffDayFormExcelExportDto
     public string PositionName { get; set; }
     public string DirectorName { get; set; }
     public string HrName { get; set; }
+    public int PdfUsedYearLeave { get; set; }
+    public int PdfRemainYearLeave { get; set; }
+    public double PdfRemainTakenLeave { get; set; }
     public ReadApprovedOffDayFormExcelExportSubPersonalDto Personal { get; set; }
 }
 
@@ -35,6 +38,7 @@ public class ReadApprovedOffDayFormExcelExportSubPersonalDto
     public int RegistirationNumber { get; set; }
     public int UsedYearLeave { get; set; }
     public int TotalYearLeave { get; set; }
+    public double TotalTakenLeave { get; set; }
     
 }
 

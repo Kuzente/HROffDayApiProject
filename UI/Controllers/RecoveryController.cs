@@ -8,7 +8,7 @@ using Services.Abstract.PersonalServices;
 using Services.Abstract.PositionServices;
 
 namespace UI.Controllers;
-[Authorize(Roles = nameof(UserRoleEnum.HumanResources))]
+[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
 public class RecoveryController : Controller
 {
     private readonly IReadBranchService _readBranchService;

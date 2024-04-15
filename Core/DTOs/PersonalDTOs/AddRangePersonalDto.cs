@@ -15,7 +15,9 @@ public class AddRangePersonalDto : BaseDto
     public DateTime? RetiredDate { get; set; }
     public int FoodAid { get; set; }
     public DateTime FoodAidDate { get; set; }
-        
+    public string CumulativeFormula { get; set; }
+    public bool IsYearLeaveRetired { get; set; }
+    public DateTime YearLeaveDate { get; set; }
     public string Gender { get; set; }
     public double TotalTakenLeave { get; set; }
     public int TotalYearLeave { get; set; }

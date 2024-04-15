@@ -52,6 +52,7 @@ public class WriteDailyCounterService : IWriteDailyCounterService
                     switch (yearsSinceStart)
                     {
                         case >= 1 when (yearsSinceBirth >= 50 || yearsSinceBirth < 18 || a.IsYearLeaveRetired):
+                            a.CumulativeFormula += "20+";
                             a.TotalYearLeave += 20;
                             log.AddedYearLeave = 20;
                             log.AddedYearLeaveDescription =
@@ -63,24 +64,29 @@ public class WriteDailyCounterService : IWriteDailyCounterService
                             break;
                         case >= 1 and <= 5:
                             a.TotalYearLeave += 14;
+                            a.CumulativeFormula += "14+";
                             log.AddedYearLeave = 14;
                             log.AddedYearLeaveDescription =
                                 $"{yearsSinceStart} yıl hizmet süresi olduğu için 14 gün eklendi";
                             break;
                         case > 5 and < 15:
                             a.TotalYearLeave += 20;
+                            a.CumulativeFormula += "20+";
                             log.AddedYearLeave = 20;
                             log.AddedYearLeaveDescription =
                                 $"{yearsSinceStart} yıl hizmet süresi olduğu için 20 gün eklendi";
                             break;
                         case >= 15:
                             a.TotalYearLeave += 26;
+                            a.CumulativeFormula += "26+";
                             log.AddedYearLeave = 26;
                             log.AddedYearLeaveDescription =
                                 $"{yearsSinceStart} yıl hizmet süresi olduğu için 26 gün eklendi";
                             break;
                         default:
                             log.AddedYearLeave = 0;
+                            a.TotalYearLeave = 0;
+                            a.CumulativeFormula = "0+";
                             log.AddedYearLeaveDescription =
                                 "Personel 1 seneyi doldurmadı. Ekleme Yapılmadı.";
                             break;

@@ -260,6 +260,15 @@ namespace Data.Migrations
                     b.Property<int>("OffDayStatus")
                         .HasColumnType("int");
 
+                    b.Property<double>("PdfRemainTakenLeave")
+                        .HasColumnType("float");
+
+                    b.Property<int>("PdfRemainYearLeave")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PdfUsedYearLeave")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("Personal_Id")
                         .HasColumnType("uniqueidentifier");
 
@@ -293,6 +302,10 @@ namespace Data.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("CumulativeFormula")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -566,12 +579,12 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("2d09c162-d749-46ce-8cf6-b681c35b02d1"),
-                            CreatedAt = new DateTime(2024, 4, 6, 0, 40, 7, 695, DateTimeKind.Local).AddTicks(4273),
+                            ID = new Guid("c5a3dc3d-ce8b-4e7c-af1e-01d9866048ef"),
+                            CreatedAt = new DateTime(2024, 4, 12, 22, 45, 26, 599, DateTimeKind.Local).AddTicks(6008),
                             DeletedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "superadmin@superadmin.com",
                             IsDefaultPassword = true,
-                            ModifiedAt = new DateTime(2024, 4, 6, 0, 40, 7, 695, DateTimeKind.Local).AddTicks(4286),
+                            ModifiedAt = new DateTime(2024, 4, 12, 22, 45, 26, 599, DateTimeKind.Local).AddTicks(6018),
                             Password = "superadmin",
                             Role = 3,
                             Status = 0,

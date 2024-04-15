@@ -42,7 +42,7 @@
 <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs flex-row-reverse">
         <li class="nav-item">
-            <a id="personelNakilPage" href="" class="nav-link">Nakil Listesi</a>
+            <a id="personelNakilPage" href="" class="nav-link">Görevlendirmeler</a>
         </li>
         <li class="nav-item">
             <a id="personelEksikGunPage" href="" class="nav-link">Eksik Gün</a>
@@ -215,7 +215,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
                 </svg>
-                Yıllık ve Alacak İzin Ayarları
+                Yıllık İzin, Alacak İzin ve Gıda Yardımı Ayarları
             </a>
         </li>
     </ul>
@@ -623,10 +623,10 @@
 </div>
 
 <div class="tab-pane" id="tabs-settings-1" role="tabpanel">
-    <div class="hr-text mb-3 text-black">Yıllık ve Alacak İzin Ayarları</div>
-    <div class="row mb-3">
-        <div class="col">
-            <label class="form-label text-center">Yıllık İzin ve Gıda Yardımı</label>
+
+    <div class="row mb-3 mt-3">
+        <div class="col pe-5">
+            <label class="form-label text-center mb-3">Yıllık İzin ve Gıda Yardımı</label>
             <div class="row mb-3">
                 <div class="col">
                     <div class="input-group input-group-merge">
@@ -695,21 +695,13 @@
                     <small id="foodAidIsDefault" class="form-hint"></small>
                 </div>
             </div>
-        </div>
-        <div class="col border-start border-info">
             <label class="form-label text-center">Toplam Alacak İzin</label>
             <div class="row mb-3">
                 <div class="col">
                     <div class="input-group input-group-merge">
                         <span class="input-group-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-woman" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M10 16v5"></path>
-                                <path d="M14 16v5"></path>
-                                <path d="M8 16h8l-2 -7h-4z"></path>
-                                <path d="M5 11c1.667 -1.333 3.333 -2 5 -2"></path>
-                                <path d="M19 11c-1.667 -1.333 -3.333 -2 -5 -2"></path>
-                                <path d="M12 4m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-clock-hour-4">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M12 12l3 2"/><path d="M12 7v5"/>
                             </svg>
                         </span>
                         <input type="number" data-takenLeave name="TotalTakenLeave" class="form-control" readonly/>
@@ -720,17 +712,21 @@
                 </div>
 
             </div>
-            <div class="row">
-                <div class="col-8">
-                    <input data-hourInput type="number" placeholder="Saat Giriniz" disabled class="form-control"/>
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="input-group input-group-merge">
+                        <input data-hourInput type="number" placeholder="Saat Giriniz" disabled class="form-control"/>
+                        <button data-addHour class="btn btn-success" disabled>Saat Ekle</button>
+                        <button data-removeHour class="btn btn-danger" disabled>Saat Çıkart</button>
+                    </div>
                 </div>
-                <div class="col-2">
-                    <button data-addHour class="btn btn-success" disabled>Saat Ekle</button>
-                </div>
-                <div class="col-2">
-                    <button data-removeHour class="btn btn-danger" disabled>Saat Çıkart</button>
-                </div>
-
+            </div>
+        </div>
+        
+        <div class="col border-start border-info">
+            <label class="form-label text-center mb-3">Yıllık İzin Hak Edişinin Yıllara Göre Hesaplanması</label>
+            <div id="cumulative-inputs-section" class="row scroll-y mb-3" style="max-height: 400px">
+                
             </div>
         </div>
     </div>

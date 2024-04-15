@@ -11,6 +11,7 @@ using Data.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Services.Abstract.PersonalServices;
+using Services.HelperServices;
 
 namespace Services.Concrete.PersonalServices;
 
@@ -34,6 +35,9 @@ public class WritePersonalService : IWritePersonalService
 			mapSet.FoodAidDate = mapSet.StartJobDate;
 			mapSet.YearLeaveDate = mapSet.StartJobDate;
 			mapSet.IsYearLeaveRetired = false;
+			mapSet.CumulativeFormula = CalculateCumulativeHelper.CalculateCumulative(mapSet.YearLeaveDate, mapSet.BirthDate,mapSet.IsYearLeaveRetired,mapSet.RetiredDate);
+			mapSet.TotalYearLeave = mapSet.CumulativeFormula.Split('+').Where(s => !string.IsNullOrEmpty(s)).Select(int.Parse).Sum();
+			//TODO return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
 			var resultData = await _unitOfWork.WritePersonalRepository.AddAsync(mapSet);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -80,6 +84,7 @@ public class WritePersonalService : IWritePersonalService
 			var getPersonal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate:p=> p.ID == writeDto.ID,include:a=>a.Include(b=>b.Branch).Include(c=>c.Position));
 			if (getPersonal is  null) return result.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Personel Bulunamadı!!!");
 			if(getPersonal.Status != EntityStatusEnum.Online) return result.SetStatus(false).SetErr("Personel is Not Active").SetMessage("İlgili Personel Aktif Olarak Çalışmamaktadır!!!");
+			if(!writeDto.CumulativeFormulaInput.IsNullOrEmpty() && writeDto.CumulativeFormulaInput.Any(a=>a < 0)) return result.SetStatus(false).SetErr("Cumulative is not to be negative").SetMessage("Yıllık İzin Hak Edişlerde Negatif Değer Olamaz!!!");
 			//Personel Şubesi veya Ünvanı Değişti ise nakil tablosuna ekleme yap
 			if (getPersonal.Branch_Id != writeDto.Branch_Id || getPersonal.Position_Id != writeDto.Position_Id)
 			{
@@ -96,10 +101,18 @@ public class WritePersonalService : IWritePersonalService
 				};
 				await _unitOfWork.WriteTransferPersonalRepository.AddAsync(transferObject);
 			}
+			var CumulativeFormula = "";
+			var CumulativeTotalSum = 0;
+			if (!writeDto.CumulativeFormulaInput.IsNullOrEmpty())
+			{
+				CumulativeFormula = string.Join("+", writeDto.CumulativeFormulaInput) + "+";
+				writeDto.CumulativeFormulaInput.ForEach(a => CumulativeTotalSum += a);
+			}
 			var mapSet = _mapper.Map<Personal>(writeDto);
 			mapSet.ID = getPersonal.ID;
 			mapSet.CreatedAt = getPersonal.CreatedAt;
-			mapSet.TotalYearLeave = getPersonal.TotalYearLeave;
+			mapSet.TotalYearLeave = CumulativeTotalSum;
+			mapSet.CumulativeFormula = CumulativeFormula;
 			mapSet.YearLeaveDate = getPersonal.YearLeaveDate;
 			mapSet.IsYearLeaveRetired = getPersonal.IsYearLeaveRetired;
 			await _unitOfWork.WritePersonalRepository.Update(mapSet);

@@ -189,42 +189,42 @@ else
     <div class="">
         <table class="table mt-3 table-nowrap">
             <thead>
-            <tr>
-                <th>
-                    <button class="table-sort" data-sort="sort-registrationNumber">Sicil No</button>
-                </th>
-                <th>
-                    <button class="table-sort" data-sort="sort-nameSurname">Adı Soyadı</button>
-                </th>
-                <th>
-                    <button class="table-sort" data-sort="sort-branchName">Şube</button>
-                </th>
-                <th>
-                    <button class="table-sort" data-sort="sort-positionName">Ünvan</button>
-                </th>
-                <th>
-                    <button class="table-sort" data-sort="sort-gender">Cinsiyet</button>
-                </th>
-                <th>
-                    <button class="table-sort" data-sort="sort-startJobDate">İşe Giriş Tarihi</button>
-                </th>
-                <th>
-                    <button class="table-sort" data-sort="sort-retiredOrOld">Sgk Durum</button>
-                </th>
-                <th>
-                    <button class="table-sort" data-sort="sort-birthDate">Doğum Tarihi</button>
-                </th>
-                <th>
-                    <button class="table-sort text-center" data-sort="sort-totalYearLeave">Hak Edilen<br>İzin</button>
-                </th>
-                <th>
-                    <button class="table-sort text-center" data-sort="sort-usedYearLeave">Kullanılan<br>İzin</button>
-                </th>
-                <th>
-                    <button class="table-sort text-center" data-sort="sort-remainYearLeave">Kalan<br>İzin</button>
-                </th>
+                <tr>
+                    <th>
+                        <button class="table-sort" data-sort="sort-registrationNumber">Sicil No</button>
+                    </th>
+                    <th>
+                        <button class="table-sort" data-sort="sort-nameSurname">Adı Soyadı</button>
+                    </th>
+                    <th>
+                        <button class="table-sort" data-sort="sort-branchName">Şube</button>
+                    </th>
+                    <th>
+                        <button class="table-sort" data-sort="sort-positionName">Ünvan</button>
+                    </th>
+                    <th>
+                        <button class="table-sort" data-sort="sort-gender">Cinsiyet</button>
+                    </th>
+                    <th>
+                        <button class="table-sort" data-sort="sort-retiredOrOld">Sgk Durum</button>
+                    </th>
+                    <th>
+                        <button class="table-sort" data-sort="sort-birthDate">Doğum Tarihi</button>
+                    </th>
+                    <th>
+                        <button class="table-sort" data-sort="sort-startJobDate">İşe Giriş Tarihi</button>
+                    </th>
+                    <th>
+                        <button class="table-sort text-center" data-sort="sort-totalYearLeave">Hak Edilen<br>İzin</button>
+                    </th>
+                    <th>
+                        <button class="table-sort text-center" data-sort="sort-usedYearLeave">Kullanılan<br>İzin</button>
+                    </th>
+                    <th>
+                        <button class="table-sort text-center" data-sort="sort-remainYearLeave">Kalan<br>İzin</button>
+                    </th>
 
-            </tr>
+                </tr>
             </thead>
             <tbody class="table-border-bottom-0">
             @foreach (var data in Model.Data)
@@ -246,7 +246,7 @@ else
                             <span class="badge bg-pink">Kadın</span>
                         }
                     </td>
-                    <td>@data.StartJobDate.ToString("dd/MM/yyyy")</td>
+
                     <td>
                         @{
                             if (data.RetiredOrOld)
@@ -260,6 +260,7 @@ else
                         }
                     </td>
                     <td>@data.BirthDate.ToString("dd/MM/yyyy")</td>
+                    <td>@data.StartJobDate.ToString("dd/MM/yyyy")</td>
                     <td>
                         @data.TotalYearLeave
                     </td>

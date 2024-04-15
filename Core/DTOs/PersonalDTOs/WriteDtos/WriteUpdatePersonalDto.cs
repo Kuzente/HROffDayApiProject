@@ -37,4 +37,5 @@ public class WriteUpdatePersonalDto
     [Required]
     public Guid Position_Id { get; set; }
     public WriteUpdatePersonalDetailDto PersonalDetails { get; set; }
+    public List<int>? CumulativeFormulaInput { get; set; }
 }

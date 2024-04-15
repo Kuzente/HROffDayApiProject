@@ -13,8 +13,8 @@ using Services.ExcelDownloadServices.PersonalServices;
 
 namespace UI.Controllers
 {
-    [Authorize(Roles = nameof(UserRoleEnum.HumanResources))]
-    public class PersonalController : Controller
+	[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
+	public class PersonalController : Controller
     {
         private readonly IReadPersonalService _readPersonalService;
         private readonly IWritePersonalService _writePersonalService;

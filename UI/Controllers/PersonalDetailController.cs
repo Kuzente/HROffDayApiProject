@@ -18,7 +18,7 @@ using Services.ExcelDownloadServices.TransferPersonalServices;
 
 namespace UI.Controllers;
 
-[Authorize(Roles = nameof(UserRoleEnum.HumanResources))]
+[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
 public class PersonalDetailController : Controller
 {
     private readonly IReadPersonalService _readPersonalService;

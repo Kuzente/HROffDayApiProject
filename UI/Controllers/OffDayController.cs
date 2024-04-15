@@ -38,13 +38,13 @@ public class OffDayController : Controller
         _readUserService = readUserService;
     }
 
-    #region PageActions
-    /// <summary>
-    /// Bekleyen İzinler Listelenme Sayfası
-    /// </summary>
-    /// <returns></returns>
-    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)}")]
-    public async Task<IActionResult> WaitingOffDayList(OffdayQuery query)
+	#region PageActions
+	/// <summary>
+	/// Bekleyen İzinler Listelenme Sayfası
+	/// </summary>
+	/// <returns></returns>
+	[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.SuperAdmin)}")]
+	public async Task<IActionResult> WaitingOffDayList(OffdayQuery query)
     {
         var userRole = User.FindFirst(ClaimTypes.Role).Value;
        if (!string.IsNullOrEmpty(userRole) && userRole == nameof(UserRoleEnum.Director))
@@ -62,12 +62,12 @@ public class OffDayController : Controller
        }
         
     }
-    /// <summary>
-    /// Bekleyen İzinler Düzenle Sayfası
-    /// </summary>
-    /// <returns></returns>
-    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)}")]
-    public async Task<IActionResult> WaitingOffDayEdit(Guid id , string returnUrl)
+	/// <summary>
+	/// Bekleyen İzinler Düzenle Sayfası
+	/// </summary>
+	/// <returns></returns>
+	[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.SuperAdmin)}")]
+	public async Task<IActionResult> WaitingOffDayEdit(Guid id , string returnUrl)
     {
         var result = await _readOffDayService.GetOffDayByIdService(id);
         ViewData["ReturnUrl"] = returnUrl;
@@ -77,18 +77,18 @@ public class OffDayController : Controller
     /// İzin Ekleme Formu Sayfası
     /// </summary>
     /// <returns></returns>
-    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.BranchManager)}")]
+    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.BranchManager)},{nameof(UserRoleEnum.SuperAdmin)}")]
     public async Task<IActionResult> AddOffDay(Guid id)
     {
         var personalResult = await _readPersonalService.GetAllPersonalByBranchIdService(id);
         return View(personalResult);
     }
-    /// <summary>
-    /// Reddedilen İzinler Listelenme Sayfası
-    /// </summary>
-    /// <returns></returns>
-    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)}")]
-    public async Task<IActionResult> RejectedOffDayList(OffdayQuery query)
+	/// <summary>
+	/// Reddedilen İzinler Listelenme Sayfası
+	/// </summary>
+	/// <returns></returns>
+	[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.SuperAdmin)}")]
+	public async Task<IActionResult> RejectedOffDayList(OffdayQuery query)
     {
         var userRole = User.FindFirst(ClaimTypes.Role).Value;
         if (!string.IsNullOrEmpty(userRole) && userRole == nameof(UserRoleEnum.Director))
@@ -100,12 +100,12 @@ public class OffDayController : Controller
         var result = await _readOffDayService.GetRejectedOffDaysListService(query);
         return View(result);
     }
-    /// <summary>
-    /// Onaylanan İzinler Listelenme Sayfası
-    /// </summary>
-    /// <returns></returns>
-    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)}")]
-    public async Task<IActionResult> ApprovedOffDayList(OffdayQuery query)
+	/// <summary>
+	/// Onaylanan İzinler Listelenme Sayfası
+	/// </summary>
+	/// <returns></returns>
+	[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.SuperAdmin)}")]
+	public async Task<IActionResult> ApprovedOffDayList(OffdayQuery query)
     {
         var userRole = User.FindFirst(ClaimTypes.Role).Value;
         if (!string.IsNullOrEmpty(userRole) && userRole == nameof(UserRoleEnum.Director))
@@ -117,16 +117,16 @@ public class OffDayController : Controller
         var result = await _readOffDayService.GetApprovedOffDaysListService(query);
         return View(result);
     }
-    
-    #endregion
 
-    #region Get/Post Actions
-    /// <summary>
-    /// İzin Ekleme Post Metodu
-    /// </summary>
-    /// <returns></returns>
-    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.BranchManager)}")]
-    [HttpPost]
+	#endregion
+
+	#region Get/Post Actions
+	/// <summary>
+	/// İzin Ekleme Post Metodu
+	/// </summary>
+	/// <returns></returns>
+	[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.BranchManager)},{nameof(UserRoleEnum.SuperAdmin)}")]
+	[HttpPost]
     public async Task<IActionResult> AddOffDay(WriteAddOffDayDto dto)
     {
         IResultDto result = new ResultDto();
@@ -141,12 +141,12 @@ public class OffDayController : Controller
         
         return Ok(result);
     }
-    /// <summary>
-    /// Bekleyen İzinler Düzenleme ve Onaylanan İzin Güncelleme Post Metodu
-    /// </summary>
-    /// <returns></returns>
-    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)}")]
-    [HttpPost]
+	/// <summary>
+	/// Bekleyen İzinler Düzenleme ve Onaylanan İzin Güncelleme Post Metodu
+	/// </summary>
+	/// <returns></returns>
+	[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.SuperAdmin)}")]
+	[HttpPost]
     public async Task<IActionResult> WaitingOffDayEdit(WriteUpdateWatingOffDayDto dto)
     {
         IResultDto result = new ResultDto();
@@ -164,7 +164,7 @@ public class OffDayController : Controller
     /// İlk Bekleyen İzinler Durum Değiştirme(Onayla/Reddet) Post Metodu
     /// </summary>
     /// <returns></returns>
-    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)}")]
+    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
     [HttpPost]
     public async Task<IActionResult> UpdateFirstWaitingStatus(Guid id , bool status, string returnUrl)
     {
@@ -177,12 +177,12 @@ public class OffDayController : Controller
         result = await _writeOffDayService.UpdateFirstWaitingStatusOffDayService(id,status,username);
         return Ok(result);
     }
-    /// <summary>
-    /// İkinci Bekleyen İzinler Durum Değiştirme(Onayla/Reddet) Post Metodu
-    /// </summary>
-    /// <returns></returns>
-    [Authorize(Roles = $"{nameof(UserRoleEnum.Director)}")]
-    [HttpPost]
+	/// <summary>
+	/// İkinci Bekleyen İzinler Durum Değiştirme(Onayla/Reddet) Post Metodu
+	/// </summary>
+	/// <returns></returns>
+	[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.SuperAdmin)}")]
+	[HttpPost]
     public async Task<IActionResult> UpdateSecondWaitingStatus(Guid id , bool status, string returnUrl)
     {
         IResultDto result = new ResultDto();
@@ -194,23 +194,23 @@ public class OffDayController : Controller
         result = await _writeOffDayService.UpdateSecondWaitingStatusOffDayService(id,status,username);
         return Ok(result);
     }
-    /// <summary>
-    /// Onaylanan İzinler İptal Etme Post Metodu
-    /// </summary>
-    /// <returns></returns>
-    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)}")]
-    [HttpPost]
+	/// <summary>
+	/// Onaylanan İzinler İptal Etme Post Metodu
+	/// </summary>
+	/// <returns></returns>
+	[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.SuperAdmin)}")]
+	[HttpPost]
     public async Task<IActionResult> DeleteOffDay(Guid id, string returnUrl)
     {
         var result = await _writeOffDayService.DeleteOffDayService(id);
         return Ok(result);
     }
-    /// <summary>
-    /// Onaylanan İzinler Excel Raporu Alma
-    /// </summary>
-    /// <returns></returns>
-    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)}")]
-    [HttpPost]
+	/// <summary>
+	/// Onaylanan İzinler Excel Raporu Alma
+	/// </summary>
+	/// <returns></returns>
+	[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.SuperAdmin)}")]
+	[HttpPost]
     public async Task<IActionResult> ExportExcel(OffdayQuery query , string returnUrl)
     {
         var userRole = User.FindFirst(ClaimTypes.Role).Value;
@@ -239,12 +239,12 @@ public class OffDayController : Controller
         }
         return Redirect(returnUrl);
     }
-    /// <summary>
-    /// Onaylanan İzinler Pdf Formu Alma
-    /// </summary>
-    /// <returns></returns>
-    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)}")]
-    [HttpPost]
+	/// <summary>
+	/// Onaylanan İzinler Pdf Formu Alma
+	/// </summary>
+	/// <returns></returns>
+	[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.SuperAdmin)}")]
+	[HttpPost]
     public async Task<IActionResult> ExportPdf(Guid id,string returnUrl)
     {
         var result = await _readOffDayService.GetApprovedOffDayExcelFormService(id);

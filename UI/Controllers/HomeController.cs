@@ -30,7 +30,6 @@ namespace UI.Controllers
             
             return View();
         }
-        [AllowAnonymous]
         public IActionResult ErrorPage()
         {
             return View();

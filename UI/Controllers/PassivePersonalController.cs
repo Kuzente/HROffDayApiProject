@@ -9,7 +9,7 @@ using Services.ExcelDownloadServices.PersonalServices;
 
 namespace UI.Controllers;
 
-[Authorize(Roles = nameof(UserRoleEnum.HumanResources))]
+[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
 public class PassivePersonalController : Controller
 {
     private readonly IReadPersonalService _readPersonalService;

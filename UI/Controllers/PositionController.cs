@@ -11,8 +11,8 @@ using Services.ExcelDownloadServices.PositionServices;
 
 namespace UI.Controllers
 {
-    [Authorize(Roles = nameof(UserRoleEnum.HumanResources))]
-    public class PositionController : Controller
+	[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
+	public class PositionController : Controller
     {
         private readonly IReadPositionService _readPositionService;
         private readonly IWritePositionService _writePositionService;

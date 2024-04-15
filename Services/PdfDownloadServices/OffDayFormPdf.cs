@@ -96,9 +96,9 @@ public class OffDayFormPdf
                 });
                 column.Item().BorderLeft(3).BorderRight(3).BorderBottom(1).Row(row =>
                 {
-                    row.RelativeItem(4).Background("#DBE4F0").BorderRight(1).Height(24).AlignMiddle().PaddingLeft(10).Text("Mevcut İzin Hakkı:").Style(titleStyle).FontSize(10);
+                    row.RelativeItem(4).Background("#DBE4F0").BorderRight(1).Height(24).AlignMiddle().PaddingLeft(10).Text("Kullanmak İstediği İznin İçeriği:").Style(titleStyle).FontSize(10);
 
-                    row.RelativeItem(8).Background(Colors.White).AlignMiddle().PaddingLeft(10).Text(GetIzınCesitleriString(Dto)).Style(titleStyle).FontSize(10);
+                    row.RelativeItem(8).Background(Colors.White).AlignMiddle().PaddingLeft(10).PaddingRight(10).Text(GetIzınCesitleriString(Dto)).Style(titleStyle).FontSize(10);
                 });
                 column.Item().BorderLeft(3).BorderRight(3).BorderBottom(1).Row(row =>
                 {
@@ -110,8 +110,14 @@ public class OffDayFormPdf
                 {
                     row.RelativeItem(4).Background("#DBE4F0").BorderRight(1).Height(24).AlignMiddle().PaddingLeft(10).Text("Kalan İzin Süresi:").Style(titleStyle).FontSize(10);
 
-                    row.RelativeItem(4).Background(Colors.White).BorderRight(1).AlignMiddle().PaddingLeft(10).Text($"Kullanılan Yıllık İzin {Dto.Personal.UsedYearLeave.ToString()}").Style(titleStyle).FontSize(10);
-                    row.RelativeItem(4).Background(Colors.White).AlignMiddle().PaddingLeft(10).Text($"Kalan Yıllık İzin {(Dto.Personal.TotalYearLeave - Dto.Personal.UsedYearLeave).ToString()}").Style(titleStyle).FontSize(10);
+                    row.RelativeItem(4).Background(Colors.White).BorderRight(1).AlignMiddle().PaddingLeft(10).Text($"Kullanılan Yıllık İzin {Dto.PdfUsedYearLeave.ToString()}").Style(titleStyle).FontSize(10);
+                    row.RelativeItem(4).Background(Colors.White).AlignMiddle().PaddingLeft(10).Text($"Kalan Yıllık İzin {Dto.PdfRemainYearLeave.ToString()}").Style(titleStyle).FontSize(10);
+                });
+                column.Item().BorderLeft(3).BorderRight(3).BorderBottom(1).Row(row =>
+                {
+                    row.RelativeItem(4).Background("#DBE4F0").BorderRight(1).Height(24).AlignMiddle().PaddingLeft(10).Text("Kalan Alacak İzin Süresi:").Style(titleStyle).FontSize(10);
+
+                    row.RelativeItem(8).Background(Colors.White).AlignMiddle().PaddingLeft(10).PaddingRight(10).Text((Dto.PdfRemainTakenLeave + " Saat").ToString()).Style(titleStyle).FontSize(10);
                 });
                 column.Item().BorderLeft(3).BorderRight(3).BorderBottom(1).Row(row =>
                 {
@@ -191,4 +197,13 @@ public class OffDayFormPdf
             }
             return metin;
         }
+        //private string SaatleriGunVeSaatlereCevir(double saat)
+        //{
+        //    // Toplam saatleri gün ve saatlere çevir
+        //    int gun = (int)(saat / 8);
+        //    double kalanSaat = saat % 8;
+
+        //    // Sonucu döndür
+        //    return gun + " gün " + kalanSaat.ToString("0.0") + " saat";
+        //}
 }

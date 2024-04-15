@@ -48,7 +48,7 @@
 <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs flex-row-reverse">
         <li class="nav-item">
-            <a id="personelNakilPage" href="/personel-nakil-listesi?id=@personelIdQuery" class="nav-link">Nakil Listesi</a>
+            <a id="personelNakilPage" href="/personel-nakil-listesi?id=@personelIdQuery" class="nav-link">Görevlendirmeler</a>
         </li>
         <li class="nav-item">
             <a id="personelEksikGun" href="/personel-eksik-gun-listesi?id=@personelIdQuery" class="nav-link">Eksik Gün</a>
@@ -295,39 +295,57 @@ else
         </div>
         <div class="table-responsive">
             <table class="table table-nowrap">
-                        <thead>
-                        <tr>
-                            <th>İzin Başlangıç Tarihi</th>
-                            <th>İzin Bitiş Tarihi</th>
-                            <th>Toplam <br/> Alınan Gün</th>
-                            <th>İzin Açıklaması</th>
-                            <th>Detaylı <br/>İzin Günleri</th>
-                            <th>Form <br>Oluşturulma Tarihi</th>
-                            <th>Düzenle</th>
-                            <th>Sil</th>
-            
-                        </tr>
-                        </thead>
-                        <tbody class="table-border-bottom-0">
-                        @foreach (var data in Model.Data)
-                        {
-                            <tr>
-            
-                                <td class="col-2">
-                                    <span class="status status-dark mb-1">@data.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
-                                </td>
-                                <td class="col-2">
-                                    <span class="status status-github">@data.EndDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
-                                </td>
-                                <td class="col-1">
-                                    @data.CountLeave
-                                </td>
-                                <td class="col-3">
-                                    @data.Description
-                                </td>
-                                <td class="col-1">
-                                    <button type="button" class="btn btn-teal btn-sm btn-pill" data-bs-trigger="hover" data-bs-html="true" data-bs-toggle="popover"
-                                            title="Detaylı İzin Sayıları" data-bs-content="@(data.LeaveByYear > 0 ? $"Yıllık İzni: {data.LeaveByYear}</br>" : "")
+                <thead>
+                <tr>
+                    <th>Pdf</th>
+                    <th>İzin Başlangıç Tarihi</th>
+                    <th>İzin Bitiş Tarihi</th>
+                    <th>Toplam <br/> Alınan Gün</th>
+                    <th>İzin Açıklaması</th>
+                    <th>Detaylı <br/>İzin Günleri</th>
+                    <th>Form <br>Oluşturulma Tarihi</th>
+                    <th>Düzenle</th>
+                    <th>Sil</th>
+
+                </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                @foreach (var data in Model.Data)
+                {
+                    <tr>
+                        <td class="col-1">
+                            <form action="/create-pdf" method="post">
+                                <input type="hidden" name="id" value="@data.ID">
+                                <input type="hidden" name="returnUrl" value="@returnUrl">
+                                <button type="submit" class="btn btn-danger btn-icon" aria-label="Button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-type-pdf" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
+                                        <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4"/>
+                                        <path d="M5 18h1.5a1.5 1.5 0 0 0 0 -3h-1.5v6"/>
+                                        <path d="M17 18h2"/>
+                                        <path d="M20 15h-3v6"/>
+                                        <path d="M11 15v6h1a2 2 0 0 0 2 -2v-2a2 2 0 0 0 -2 -2h-1z"/>
+                                    </svg>
+                                </button>
+                            </form>
+
+                        </td>
+                        <td class="col-2">
+                            <span class="status status-dark mb-1">@data.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
+                        </td>
+                        <td class="col-2">
+                            <span class="status status-github">@data.EndDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
+                        </td>
+                        <td class="col-1">
+                            @data.CountLeave
+                        </td>
+                        <td class="col-3">
+                            @data.Description
+                        </td>
+                        <td class="col-1">
+                            <button type="button" class="btn btn-teal btn-sm btn-pill" data-bs-trigger="hover" data-bs-html="true" data-bs-toggle="popover"
+                                    title="Detaylı İzin Sayıları" data-bs-content="@(data.LeaveByYear > 0 ? $"Yıllık İzni: {data.LeaveByYear}</br>" : "")
                                                                                                        @(data.LeaveByWeek > 0 ? $"Haftalık İzni: {data.LeaveByWeek}</br>" : "")
                                                                                                        @(data.LeaveByTaken > 0 ? $"Alacak İzni: {data.LeaveByTaken}</br>" : "")
                                                                                                        @(data.LeaveByPublicHoliday > 0 ? $"Resmi İzni: {data.LeaveByPublicHoliday}</br>" : "")
@@ -337,25 +355,25 @@ else
                                                                                                        @(data.LeaveByMarried > 0 ? $"Evlenme İzni: {data.LeaveByMarried}</br>" : "")
                                                                                                        @(data.LeaveByDead > 0 ? $"Ölüm İzni: {data.LeaveByDead}</br>" : "")
                                                                                                        @($"İzin Açıklaması: {data.Description}</br>")">
-                                        Detaylı Görüntüle
-                                    </button>
-                                </td>
-                                <td class="col-1">
-                                    <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
-            
-                                </td>
-                                <td class="col-1">
-                                    <!--TODO RETURN URL-->
-                                    <a href='/izin-duzenle?id=@data.ID&returnUrl=@returnUrl' class="btn btn-dark btn-sm text-white btn-pill">Güncelle</a>
-                                </td>
-                                <td class="col-1">
-                                    <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="">İptal Et</button>
-                                </td>
-                            </tr>
-                        }
-                        </tbody>
-            
-                    </table>
+                                Detaylı Görüntüle
+                            </button>
+                        </td>
+                        <td class="col-1">
+                            <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
+
+                        </td>
+                        <td class="col-1">
+                            <!--TODO RETURN URL-->
+                            <a href='/izin-duzenle?id=@data.ID&returnUrl=@returnUrl' class="btn btn-dark btn-sm text-white btn-pill">Güncelle</a>
+                        </td>
+                        <td class="col-1">
+                            <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="">İptal Et</button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+
+            </table>
         </div>
 
         <!--Pagination-->

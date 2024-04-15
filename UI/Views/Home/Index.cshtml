@@ -156,7 +156,8 @@
             </div>
             <div class=" card-body-scrollable card-body-scrollable-shadow">
                 <div class="d-flex justify-content-center">
-                    <div class="spinner-border text-blue m-5" role="status"></div>
+                    <div id="waitingOffDaySpinner" class="spinner-border text-blue m-5" role="status"></div>
+                    <div id="waitingOffDayEmptyText" class="d-none text-secondary m-5">Herhangi bir bekleyen izin bulunmamaktadır.</div>
                 </div>
                 <div class="divide-y">
 
@@ -181,7 +182,8 @@
             </div>
             <div class=" card-body-scrollable card-body-scrollable-shadow">
                 <div class="d-flex justify-content-center">
-                    <div class="spinner-border text-blue m-5" role="status"></div>
+                    <div id="missingDaySpinner" class="spinner-border text-blue m-5" role="status"></div>
+                    <div id="missingDayEmptyText" class="d-none text-secondary m-5">Herhangi bir yaklaşan rapor bulunmamaktadır.</div>
                 </div>
                 <div class="divide-y">
 
@@ -206,7 +208,8 @@
             </div>
             <div class=" card-body-scrollable card-body-scrollable-shadow">
                 <div class="d-flex justify-content-center">
-                    <div class="spinner-border text-blue m-5" role="status"></div>
+                    <div id="birthListSpinner" class="spinner-border text-blue m-5" role="status"></div>
+                    <div id="birthListEmptyText" class="d-none text-secondary m-5">Herhangi bir yaklaşan doğum günü bulunmamaktadır.</div>
                 </div>
                 <div class="divide-y">
 
@@ -284,7 +287,7 @@
                             </tbody>
                         </table>
                         <div class="d-flex justify-content-center">
-                            <div class="spinner-border text-blue m-5" role="status"></div>
+                            <div id="workTableSpinner" class="spinner-border text-blue m-5" role="status"></div>
                         </div>
                     </div>
 
@@ -298,7 +301,7 @@
     <div class="card">
         <div class="card-body">
             <div class="d-flex justify-content-center">
-                <div class="spinner-border text-blue m-5" role="status"></div>
+                <div id="genderGraphSpinner" class="spinner-border text-blue m-5" role="status"></div>
             </div>
             <div id="genderGraph">
 
@@ -310,7 +313,7 @@
     <div class="card">
         <div class="card-body">
             <div class="d-flex justify-content-center">
-                <div class="spinner-border text-blue m-5" role="status"></div>
+                <div id="educationGraphSpinner" class="spinner-border text-blue m-5" role="status"></div>
             </div>
             <div id="educationGraph">
 

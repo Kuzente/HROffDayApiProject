@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.DailyCounterServices;
 
 namespace UI.Controllers;
-[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)}")]
+[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.SuperAdmin)}")]
 public class DailyLogController : Controller
 {
     private readonly IReadDailyCounterService _readDailyCounterService;

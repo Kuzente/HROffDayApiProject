@@ -35,13 +35,21 @@ public partial class OffDay : BaseEntity
 	public OffDayStatusEnum OffDayStatus { get; set; }
 	[DisplayName("Açıklama")]
 	public string? Description { get; set; }
+	public Guid BranchId { get; set; }
+	public Guid PositionId { get; set; }
+	[DisplayName("Pdf Döküman Numarası")]
+	public int DocumentNumber { get; set; }
+
 	[DisplayName("Onaylayan İnsan Kaynakları Adı-Soyadı")]
 	public string? HrName { get; set; }
 	[DisplayName("Onaylayan Genel Müdür Adı-Soyadı")]
 	public string? DirectorName { get; set; }
-	public Guid BranchId { get; set; }
-	public Guid PositionId { get; set; }
-	public int DocumentNumber { get; set; }
+	[DisplayName("Onaylanan İzin Kullanılan Yıllık İzin Miktarı")]
+	public int PdfUsedYearLeave { get; set; }
+	[DisplayName("Onaylanan İzin Kalan Yıllık İzin Miktarı")]
+	public int PdfRemainYearLeave { get; set; }
+	[DisplayName("Onaylanan İzin Kalan Alacak İzin Miktarı")]
+	public double PdfRemainTakenLeave { get; set; }
 
 }
 public partial class OffDay

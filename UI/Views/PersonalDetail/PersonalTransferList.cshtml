@@ -49,7 +49,7 @@
 <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs flex-row-reverse">
         <li class="nav-item">
-            <a id="personelNakilPage" href="/personel-nakil-listesi?id=@personelIdQuery" class="nav-link active">Nakil Listesi</a>
+            <a id="personelNakilPage" href="/personel-nakil-listesi?id=@personelIdQuery" class="nav-link active">Görevlendirmeler</a>
         </li>
         <li class="nav-item">
             <a id="personelEksikGun" href="/personel-eksik-gun-listesi?id=@personelIdQuery" class="nav-link">Eksik Gün</a>
@@ -278,14 +278,14 @@ else
                         @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && kvp.Key != "id" && !string.IsNullOrEmpty(kvp.Value)))
                         {
                             <button type="button" class="btn">
-                                Filtrelenen Nakil Listesi
+                                Filtrelenen Görevlendirmeler
                                 <span class="badge bg-green ms-2">@Model.TotalRecords</span>
                             </button>
                         }
                         else
                         {
                             <button type="button" class="btn">
-                                Toplam Nakil Listesi
+                                Toplam Görevlendirmeler
                                 <span class="badge bg-green ms-2">@Model.TotalRecords</span>
                             </button>
                         }
