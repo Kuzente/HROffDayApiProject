@@ -1,4 +1,6 @@
-﻿namespace Services.HelperServices;
+﻿using Core.Entities;
+
+namespace Services.HelperServices;
 
 public static class CalculateCumulativeHelper
 {
@@ -83,6 +85,43 @@ public static class CalculateCumulativeHelper
             age--;
         }
         return age;
+    }
+
+    public static List<PersonalCumulative> GetCumulativeList(string cumulativeFormula,int yearLeaveDateYear,int usedYearLeave)
+    {
+        cumulativeFormula = cumulativeFormula.TrimEnd('+');
+        var listOfGainLeave = cumulativeFormula.Split('+').Where(s => !string.IsNullOrEmpty(s)).Select(int.Parse).ToList();
+        var personalCumulative = new List<PersonalCumulative>();
+        int year = yearLeaveDateYear;
+        foreach (var gainLeave in listOfGainLeave)
+        {
+            int remainYearLeave = gainLeave;
+            if (gainLeave <= usedYearLeave) {
+                usedYearLeave -= gainLeave;
+                remainYearLeave = 0;
+            } else {
+                remainYearLeave -= usedYearLeave;
+                usedYearLeave = 0;
+            }
+            //int remainYearLeave = Math.Max(gainLeave - usedYearLeave, 0);
+            personalCumulative.Add(new PersonalCumulative
+            {
+                Year = year,
+                EarnedYearLeave = gainLeave,
+                RemainYearLeave = remainYearLeave,
+                IsReportCompleted = remainYearLeave == 0
+                
+            });
+            year++;
+        }
+        var lastZeroLeave = personalCumulative
+            .OrderByDescending(p => p.Year)
+            .FirstOrDefault(p => p.RemainYearLeave == 0);
+        if (lastZeroLeave != null && lastZeroLeave.Year != yearLeaveDateYear)
+        {
+            lastZeroLeave.IsNotificationExist = true;
+        }
+        return personalCumulative;
     }
     
 }

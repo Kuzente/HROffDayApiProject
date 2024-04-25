@@ -63,5 +63,6 @@ public partial class Personal
 	public PersonalDetails PersonalDetails { get; set; }
 	public ICollection<TransferPersonal> TransferPersonals { get; set; }
 	public ICollection<MissingDay> MissingDays { get; set; }
+	public ICollection<PersonalCumulative> PersonalCumulatives { get; set; }
 	
 }

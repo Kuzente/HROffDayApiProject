@@ -385,6 +385,49 @@ namespace Data.Migrations
                     b.ToTable("Personals");
                 });
 
+            modelBuilder.Entity("Core.Entities.PersonalCumulative", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EarnedYearLeave")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsNotificationExist")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsReportCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("Personal_Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("RemainYearLeave")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("Personal_Id");
+
+                    b.ToTable("PersonalCumulatives");
+                });
+
             modelBuilder.Entity("Core.Entities.PersonalDetails", b =>
                 {
                     b.Property<Guid>("ID")
@@ -579,12 +622,12 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("c5a3dc3d-ce8b-4e7c-af1e-01d9866048ef"),
-                            CreatedAt = new DateTime(2024, 4, 12, 22, 45, 26, 599, DateTimeKind.Local).AddTicks(6008),
+                            ID = new Guid("d3f934a8-0661-41ae-90ab-05aa5c144cb3"),
+                            CreatedAt = new DateTime(2024, 4, 25, 18, 9, 16, 995, DateTimeKind.Local).AddTicks(3095),
                             DeletedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "superadmin@superadmin.com",
                             IsDefaultPassword = true,
-                            ModifiedAt = new DateTime(2024, 4, 12, 22, 45, 26, 599, DateTimeKind.Local).AddTicks(6018),
+                            ModifiedAt = new DateTime(2024, 4, 25, 18, 9, 16, 995, DateTimeKind.Local).AddTicks(3104),
                             Password = "superadmin",
                             Role = 3,
                             Status = 0,
@@ -652,6 +695,17 @@ namespace Data.Migrations
                     b.Navigation("Position");
                 });
 
+            modelBuilder.Entity("Core.Entities.PersonalCumulative", b =>
+                {
+                    b.HasOne("Core.Entities.Personal", "Personal")
+                        .WithMany("PersonalCumulatives")
+                        .HasForeignKey("Personal_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Personal");
+                });
+
             modelBuilder.Entity("Core.Entities.PersonalDetails", b =>
                 {
                     b.HasOne("Core.Entities.Personal", "Personal")
@@ -686,6 +740,8 @@ namespace Data.Migrations
                     b.Navigation("MissingDays");
 
                     b.Navigation("OffDays");
+
+                    b.Navigation("PersonalCumulatives");
 
                     b.Navigation("PersonalDetails")
                         .IsRequired();
