@@ -32,6 +32,7 @@ public class ReadApprovedOffDayListDto
     public Guid PositionId { get; set; }
     public string BranchName { get; set; }
     public string PositionName { get; set; }
+    public int DocumentNumber { get; set; }
     public ReadApprovedOffDayListSubPersonalDto Personal { get; set; }
 }
 

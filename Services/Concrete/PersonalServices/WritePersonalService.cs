@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core;
 using Core.DTOs;
+using Core.DTOs.PersonalCumulativeDtos.WriteDtos;
 using Core.DTOs.PersonalDetailDto.WriteDtos;
 using Core.DTOs.PersonalDTOs;
 using Core.DTOs.PersonalDTOs.WriteDtos;
@@ -34,10 +35,13 @@ public class WritePersonalService : IWritePersonalService
 			var mapSet = _mapper.Map<Personal>(writePersonalDto);
 			mapSet.FoodAidDate = mapSet.StartJobDate;
 			mapSet.YearLeaveDate = mapSet.StartJobDate;
-			mapSet.IsYearLeaveRetired = false;
-			mapSet.CumulativeFormula = CalculateCumulativeHelper.CalculateCumulative(mapSet.YearLeaveDate, mapSet.BirthDate,mapSet.IsYearLeaveRetired,mapSet.RetiredDate);
-			mapSet.TotalYearLeave = mapSet.CumulativeFormula.Split('+').Where(s => !string.IsNullOrEmpty(s)).Select(int.Parse).Sum();
-			//TODO return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+			var cumulativeFormula = CalculateCumulativeHelper.CalculateCumulative(mapSet.YearLeaveDate, mapSet.BirthDate,mapSet.IsYearLeaveRetired,mapSet.RetiredDate);
+			mapSet.TotalYearLeave = cumulativeFormula
+				.Split('+')
+				.Select(s => !string.IsNullOrEmpty(s) ? int.Parse(s) : 0)
+				.Sum();
+			var personalCumulatives = CalculateCumulativeHelper.GetCumulativeList(cumulativeFormula, mapSet.YearLeaveDate.Year, 0);
+			mapSet.PersonalCumulatives = personalCumulatives;
 			var resultData = await _unitOfWork.WritePersonalRepository.AddAsync(mapSet);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -57,13 +61,12 @@ public class WritePersonalService : IWritePersonalService
 		{
 			if(writeDto == null || writeDto.Count <= 0)
                 return res.SetStatus(false).SetErr("Not Found").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-			
-            var mapSet = _mapper.Map<List<Personal>>(writeDto);
-            mapSet.ForEach(p =>
+            writeDto.ForEach(p =>
             {
-	            p.FoodAidDate = p.StartJobDate;
-				p.YearLeaveDate = p.StartJobDate;
+	            var personalCumulatives = CalculateCumulativeHelper.GetCumulativeList(p.CumulativeFormula, p.YearLeaveDate.Year, p.UsedYearLeave);
+	            p.PersonalCumulatives = personalCumulatives;
             });
+            var mapSet = _mapper.Map<List<Personal>>(writeDto);
 			await _unitOfWork.WritePersonalRepository.AddRangeAsync(mapSet);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -84,7 +87,6 @@ public class WritePersonalService : IWritePersonalService
 			var getPersonal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate:p=> p.ID == writeDto.ID,include:a=>a.Include(b=>b.Branch).Include(c=>c.Position));
 			if (getPersonal is  null) return result.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Personel Bulunamadı!!!");
 			if(getPersonal.Status != EntityStatusEnum.Online) return result.SetStatus(false).SetErr("Personel is Not Active").SetMessage("İlgili Personel Aktif Olarak Çalışmamaktadır!!!");
-			if(!writeDto.CumulativeFormulaInput.IsNullOrEmpty() && writeDto.CumulativeFormulaInput.Any(a=>a < 0)) return result.SetStatus(false).SetErr("Cumulative is not to be negative").SetMessage("Yıllık İzin Hak Edişlerde Negatif Değer Olamaz!!!");
 			//Personel Şubesi veya Ünvanı Değişti ise nakil tablosuna ekleme yap
 			if (getPersonal.Branch_Id != writeDto.Branch_Id || getPersonal.Position_Id != writeDto.Position_Id)
 			{
@@ -101,20 +103,12 @@ public class WritePersonalService : IWritePersonalService
 				};
 				await _unitOfWork.WriteTransferPersonalRepository.AddAsync(transferObject);
 			}
-			var CumulativeFormula = "";
-			var CumulativeTotalSum = 0;
-			if (!writeDto.CumulativeFormulaInput.IsNullOrEmpty())
-			{
-				CumulativeFormula = string.Join("+", writeDto.CumulativeFormulaInput) + "+";
-				writeDto.CumulativeFormulaInput.ForEach(a => CumulativeTotalSum += a);
-			}
 			var mapSet = _mapper.Map<Personal>(writeDto);
 			mapSet.ID = getPersonal.ID;
 			mapSet.CreatedAt = getPersonal.CreatedAt;
-			mapSet.TotalYearLeave = CumulativeTotalSum;
-			mapSet.CumulativeFormula = CumulativeFormula;
+			mapSet.TotalYearLeave = getPersonal.TotalYearLeave;
+			mapSet.UsedYearLeave = getPersonal.UsedYearLeave;
 			mapSet.YearLeaveDate = getPersonal.YearLeaveDate;
-			mapSet.IsYearLeaveRetired = getPersonal.IsYearLeaveRetired;
 			await _unitOfWork.WritePersonalRepository.Update(mapSet);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -153,7 +147,10 @@ public class WritePersonalService : IWritePersonalService
 		IResultDto res = new ResultDto();
 		try
 		{
-			var data = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate:p=> p.ID == dto.ID,include:a=>a.Include(b=>b.PersonalDetails));
+			var data = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate:p=> 
+					p.ID == dto.ID,
+				include:a=>
+					a.Include(b=>b.PersonalDetails).Include(c=> c.PersonalCumulatives));
 			if (data is null) return res.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Veri Bulunamadı!!!");
 			if (data.Status == EntityStatusEnum.Online)
 			{
@@ -163,6 +160,7 @@ public class WritePersonalService : IWritePersonalService
 			}
 			else if (data.Status == EntityStatusEnum.Offline)
 			{
+				if (data.EndJobDate > dto.StartJobDate) return res.SetStatus(false).SetErr("Invalid StartJobDate").SetMessage("İşe başlangıç tarihi işten çıkış tarihinden önce olamaz!");
 				var newPersonel = new Personal
 				{
 					ID = Guid.NewGuid(),
@@ -180,6 +178,7 @@ public class WritePersonalService : IWritePersonalService
 					Gender = data.Gender,
 					Status = EntityStatusEnum.Online,
 					YearLeaveDate = dto.StartJobDate,
+					IsYearLeaveRetired = data.IsYearLeaveRetired,
 					PersonalDetails = new PersonalDetails
 					{
 						Address = data.PersonalDetails.Address,
@@ -201,25 +200,39 @@ public class WritePersonalService : IWritePersonalService
 					}
 					
 				};
-				if (data.RetiredOrOld) // Eğer Eski kayıt personel emekli ise yeni kayıt üzerinde emeklilik durumu değerlendirilecek
-				{
-					if (dto.IsYearLeaveProtected)
-					{
-						newPersonel.IsYearLeaveRetired = true;
-					}
-					
-				}
-				data.IsBackToWork = true; // Personeli geri işe alındı olarak işaretle
+				
+				data.IsBackToWork = true; //Önceki Personeli geri işe alındı olarak işaretle
 				if (dto.IsYearLeaveProtected) // Yıllık izinleri koru seçeneği işaretlenirse
 				{
 					newPersonel.TotalYearLeave = data.TotalYearLeave;
 					newPersonel.UsedYearLeave = data.UsedYearLeave;
+					var oldPersonalCumulatives = new List<PersonalCumulative>();
+					foreach (var oldCumulative in data.PersonalCumulatives)
+					{
+						oldPersonalCumulatives.Add(new PersonalCumulative
+						{
+							EarnedYearLeave = oldCumulative.EarnedYearLeave,
+							RemainYearLeave = oldCumulative.RemainYearLeave,
+							IsReportCompleted = oldCumulative.IsReportCompleted,
+							IsNotificationExist = oldCumulative.IsNotificationExist,
+							Year = oldCumulative.Year,
+							Status = oldCumulative.Status,
+							CreatedAt = oldCumulative.CreatedAt,
+							ModifiedAt = oldCumulative.ModifiedAt,
+							DeletedAt = oldCumulative.DeletedAt,
+							Personal_Id = newPersonel.ID,
+						});
+					}
+					newPersonel.PersonalCumulatives = oldPersonalCumulatives; // Eğer Yıllık izin sayıları korunuyorsa kümülatifi kopyala
+					newPersonel.YearLeaveDate = data.YearLeaveDate;
 				}
-
-				if (dto.IsYearLeaveDateProtected)// yıllık izin tarihi korunuyorsa eski işe giriş tarihini yeni personelde yıllık izin yenilenme tarihi olarak ayarla
+				else // Eğer Yıllık izin sayıları korunmuyor ise 
 				{
-					newPersonel.YearLeaveDate = data.StartJobDate; 
+					var cumulativeFormula = CalculateCumulativeHelper.CalculateCumulative(newPersonel.YearLeaveDate, newPersonel.BirthDate,newPersonel.IsYearLeaveRetired,newPersonel.RetiredDate);
+					var personalCumulatives = CalculateCumulativeHelper.GetCumulativeList(cumulativeFormula, newPersonel.YearLeaveDate.Year, newPersonel.UsedYearLeave);
+					newPersonel.PersonalCumulatives = personalCumulatives;
 				}
+				
 				if (dto.IsTakenLeaveProtected) // Alacak İzinleri Koru işaretlenirse
 				{
 					newPersonel.TotalTakenLeave = data.TotalTakenLeave;
@@ -230,6 +243,7 @@ public class WritePersonalService : IWritePersonalService
 				}
 				//Eğer Gıda yardımı girilmediyse işe başlangıç tarihini baz al
 				newPersonel.FoodAidDate = dto.FoodAidDate.Year > 1000 ? dto.FoodAidDate : dto.StartJobDate;
+				
 				await _unitOfWork.WritePersonalRepository.AddAsync(newPersonel);
 			}
 			await _unitOfWork.WritePersonalRepository.Update(data);
@@ -265,5 +279,120 @@ public class WritePersonalService : IWritePersonalService
 			res.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
 		}
 		return res;
+	}
+
+	public async Task<IResultDto> UpdatePersonalCumulativeAsyncService(WriteUpdateCumulativeDto dto)
+	{
+		IResultDto result = new ResultDto();
+		try
+		{
+			var personal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate: p =>
+				p.ID == dto.Personal_Id && 
+				p.Status == EntityStatusEnum.Online,
+				include: p=> p.Include(c=>c.PersonalCumulatives.OrderBy(pc=> pc.Year)));
+			if(personal is null) return result.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Personel Bulunamadı!!!");
+			// Ekleme işlemi kontrol edilirken boş guidden kontrol edilebilir
+			if (!personal.PersonalCumulatives.Any(c => c.ID == dto.ID && c.Status == EntityStatusEnum.Online)) //Ekleme İşlemi
+			{
+				var personalCumulative = new PersonalCumulative
+				{
+					EarnedYearLeave = dto.EarnedYearLeave,
+					RemainYearLeave = dto.RemainYearLeave,
+					IsReportCompleted = dto.IsReportCompleted,
+					IsNotificationExist = dto.IsNotificationExist,
+					Year = DateTime.Now.Year
+				};
+				personal.PersonalCumulatives.Add(personalCumulative);
+			}
+			else
+			{
+				var personalCumulative = personal.PersonalCumulatives.FirstOrDefault(p=>p.ID == dto.ID);
+				if(personalCumulative is null) return result.SetStatus(false).SetErr("Personal Cumulative Not Found").SetMessage("İlgili Kümülatif verisi bulunamadı!");
+				personalCumulative.RemainYearLeave = dto.RemainYearLeave;
+				personalCumulative.EarnedYearLeave = dto.EarnedYearLeave;
+				personalCumulative.IsNotificationExist = dto.IsNotificationExist;
+				personalCumulative.IsReportCompleted = dto.IsReportCompleted;
+			}
+
+			int totalGainedYearLeave = 0;
+			int totalUsedYearLeave = 0;
+			foreach (var pc in personal.PersonalCumulatives.OrderBy(pc=> pc.Year))
+			{
+				totalGainedYearLeave += pc.EarnedYearLeave;
+				totalUsedYearLeave += pc.EarnedYearLeave - pc.RemainYearLeave;
+			}
+
+			personal.TotalYearLeave = totalGainedYearLeave;
+			personal.UsedYearLeave = totalUsedYearLeave;
+			await _unitOfWork.WritePersonalRepository.Update(personal);
+			var resultCommit = _unitOfWork.Commit();
+			if (!resultCommit) return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+
+		}
+		catch (Exception ex)
+		{
+			result.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+
+		return result;
+	}
+
+	public async Task<IResultDto> UpdatePersonalCumulativeNotificationAsyncService(Guid id)
+	{
+		IResultDto result = new ResultDto();
+		try
+		{
+			var personalCumulative = await _unitOfWork.ReadPersonalCumulativeRepository.GetSingleAsync(predicate: p =>
+					p.ID == id && 
+					p.Status == EntityStatusEnum.Online && 
+					p.Personal.Status == EntityStatusEnum.Online,
+					include: i=> i.Include(p=>p.Personal));
+			if(personalCumulative is null) return result.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Kümülatif Rapor Bulunamadı!!!");
+			if (personalCumulative.IsReportCompleted)
+			{
+				personalCumulative.IsNotificationExist = false;
+			}
+			else
+			{
+				personalCumulative.IsReportCompleted = true;
+				personalCumulative.IsNotificationExist = false;
+			}
+			await _unitOfWork.WritePersonalCumulativeRepository.Update(personalCumulative);
+			var resultCommit = _unitOfWork.Commit();
+			if (!resultCommit) return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+		}
+		catch (Exception ex)
+		{
+			result.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+		return result;
+	}
+
+	public async Task<IResultDto> DeletePersonalCumulativeAsyncService(Guid personalId, Guid cumulativeId)
+	{
+		IResultDto result = new ResultDto();
+		try
+		{
+			var personal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate: p =>
+					p.ID == personalId && 
+					p.Status == EntityStatusEnum.Online &&
+					p.PersonalCumulatives.Any(c => c.ID == cumulativeId && c.Status == EntityStatusEnum.Online),
+				include: p=> p.Include(c=>c.PersonalCumulatives));
+			if(personal is null) return result.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Personel Bulunamadı!!!");
+				var deletedCumulative = personal.PersonalCumulatives.First(p => p.ID == cumulativeId);
+				personal.TotalYearLeave -= deletedCumulative.EarnedYearLeave;
+				personal.UsedYearLeave -= (deletedCumulative.EarnedYearLeave - deletedCumulative.RemainYearLeave);
+				await _unitOfWork.WritePersonalCumulativeRepository.RemoveAsync(deletedCumulative);
+				await _unitOfWork.WritePersonalRepository.Update(personal);
+				var resultCommit = _unitOfWork.Commit();
+				if (!resultCommit) return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+			
+		}
+		catch (Exception ex)
+		{
+			result.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+
+		return result;
 	}
 }

@@ -6,12 +6,15 @@
     let FoodAidCount = 0;
     let PersonalCount = 0;
     let educationCounts= {};
-    
+    let personalResponse ;
     const today = new Date();
     const birthList = document.getElementById('birthList');
-    const offDayList = document.getElementById('waitingOffDayList')
-    const missDayList = document.getElementById('missingDayList')
-    let personalResponse ;
+    const waitingOffDayList = document.getElementById('waitingOffDayList')
+    const approvedOffDayList = document.getElementById('approvedOffDayList')
+    
+    ajaxMethods()
+    
+    
     //İş gücü verisi Fonksiyonu
     function WorkPowerTable(response , selectedYear = new Date().getFullYear(),selectedBranches = []) {
         let currentMonth = new Date().getMonth();
@@ -268,167 +271,110 @@
         listItem.appendChild(row);
         birthList.appendChild(listItem);
     }
-    //Personel kısımlerı get metodu
-    $.ajax({
-        type: "GET",
-        url: "/query/personel-sayisi?expand=PersonalDetails($select=Salary,educationStatus),Branch($select=ID,Name)&$select=id,PersonalDetails,gender,birthDate,nameSurname,StartJobDate,EndJobDate,Status,foodAid",
-    })
-        .done(function (res) {
-        $('#genderGraphSpinner').hide()
-        $('#educationGraphSpinner').hide()
-        $('#workTableSpinner').hide()
-        $('#birthListSpinner').hide()
-        personalResponse = res;
-        // Tüm kişileri doğum tarihine göre sırala
-        res.sort(function(a, b) {
-            let dateA = new Date(2000, new Date(a.BirthDate).getMonth(), new Date(a.BirthDate).getDate());
-            let dateB = new Date(2000, new Date(b.BirthDate).getMonth(), new Date(b.BirthDate).getDate());
+    function ajaxMethods() {
+        //Personel kısımlerı get metodu
+        $.ajax({
+            type: "GET",
+            url: "/query/personel-sayisi?expand=PersonalDetails($select=Salary,educationStatus),Branch($select=ID,Name)&$select=id,PersonalDetails,gender,birthDate,nameSurname,StartJobDate,EndJobDate,Status,foodAid",
+        }).done(function (res) {
+            $('#genderGraphSpinner').hide()
+            $('#educationGraphSpinner').hide()
+            $('#workTableSpinner').hide()
+            $('#birthListSpinner').hide()
+            personalResponse = res;
+            // Tüm kişileri doğum tarihine göre sırala
+            res.sort(function(a, b) {
+                let dateA = new Date(2000, new Date(a.BirthDate).getMonth(), new Date(a.BirthDate).getDate());
+                let dateB = new Date(2000, new Date(b.BirthDate).getMonth(), new Date(b.BirthDate).getDate());
 
-            return dateA - dateB;
-        });
-        let birthListCount = 0;
-        res.forEach(function (p) {
+                return dateA - dateB;
+            });
+            let birthListCount = 0;
+            res.forEach(function (p) {
 
-            if (p.Status === 0) { 
-                PersonalCount++;
-            }// Personel Sayısı Alanı
-            if (p.PersonalDetails && p.PersonalDetails.Salary && p.Status === 0) { 
-                SalaryCount += parseFloat(p.PersonalDetails.Salary);
-            }// Maaş Alanı
-            if (p.Gender === 'Erkek' && p.Status === 0) {
-                erkekSayisi++;
-            }else if (p.Gender === 'Kadın' && p.Status === 0) { // Cinsiyet Alanı
-                kadinSayisi++;
-            }
-            //Gıda Yardım Alanı
-            if (p.FoodAid && p.Status === 0){
-                FoodAidCount += parseFloat(p.FoodAid)
-            }
-            if (p.BirthDate && p.Status === 0) {
-                let birthDate = new Date(p.BirthDate);
-                let dogumgununtarihi = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
-                let kalanGunSayisi = Math.ceil((dogumgununtarihi - today) / (1000 * 60 * 60 * 24));
-                if (kalanGunSayisi <= 10 && kalanGunSayisi >= 0) {
-                    birthListCount++;
-                    birthSection(birthDate,kalanGunSayisi,p.NameSurname);
+                if (p.Status === 0) {
+                    PersonalCount++;
+                }// Personel Sayısı Alanı
+                if (p.PersonalDetails && p.PersonalDetails.Salary && p.Status === 0) {
+                    SalaryCount += parseFloat(p.PersonalDetails.Salary);
+                }// Maaş Alanı
+                if (p.Gender === 'Erkek' && p.Status === 0) {
+                    erkekSayisi++;
+                }else if (p.Gender === 'Kadın' && p.Status === 0) { // Cinsiyet Alanı
+                    kadinSayisi++;
                 }
-            } //Doğum gunu alanı 
-            if (p.Status === 0) {
-                //Eğitim Durumu Alanı Dinamik
-                let educationStatus = p.PersonalDetails.EducationStatus ? p.PersonalDetails.EducationStatus : 'Yok';
-                if (!educationCounts[educationStatus]) {
-                    educationCounts[educationStatus] = { count: 0 };
+                //Gıda Yardım Alanı
+                if (p.FoodAid && p.Status === 0){
+                    FoodAidCount += parseFloat(p.FoodAid)
                 }
-                educationCounts[educationStatus].count++;
-            //Eğitim Durumu Alanı Dinamik
+                if (p.BirthDate && p.Status === 0) {
+                    let birthDate = new Date(p.BirthDate);
+                    let dogumgununtarihi = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+                    let kalanGunSayisi = Math.ceil((dogumgununtarihi - today) / (1000 * 60 * 60 * 24));
+                    if (kalanGunSayisi <= 10 && kalanGunSayisi >= 0) {
+                        birthListCount++;
+                        birthSection(birthDate,kalanGunSayisi,p.NameSurname);
+                    }
+                } //Doğum gunu alanı 
+                if (p.Status === 0) {
+                    //Eğitim Durumu Alanı Dinamik
+                    let educationStatus = p.PersonalDetails.EducationStatus ? p.PersonalDetails.EducationStatus : 'Yok';
+                    if (!educationCounts[educationStatus]) {
+                        educationCounts[educationStatus] = { count: 0 };
+                    }
+                    educationCounts[educationStatus].count++;
+                    //Eğitim Durumu Alanı Dinamik
+                }
+            });
+            if (birthListCount <= 0){
+                $('#birthListEmptyText').removeClass('d-none')
             }
-        });
-        if (birthListCount <= 0){
-            $('#birthListEmptyText').removeClass('d-none')
-        }
-        PersonalCountSec(PersonalCount);
-        SalarySum(SalaryCount);
-        FoodAidSum(FoodAidCount);
-        WorkPowerTable(res);
-        genderPie(erkekSayisi, kadinSayisi)
-        educationPie(educationCounts);
-        
-    });
-    //Şube sayısı ajax metoddu
-    $.ajax({
-        type: "GET",
-        url: "/query/sube-sayisi?$select=name,id&$orderby=name"
-    }).done(function (res) {
-        $('#branchCount').text(res.length === 0 ? "Yok" : res.length);
+            PersonalCountSec(PersonalCount);
+            SalarySum(SalaryCount);
+            FoodAidSum(FoodAidCount);
+            WorkPowerTable(res);
+            genderPie(erkekSayisi, kadinSayisi)
+            educationPie(educationCounts);
 
-        $('[name="filterBranch"]').empty();
-        $.each(res, function (index , branch) {
-            $('[name="filterBranch"]').append(`<option value='${branch.ID}'>${branch.Name}</option>`);
         });
-        let branchTomSelect = new TomSelect($('[name="filterBranch"]'),{
-            plugins: {
-                'clear_button':{
-                    'title':'Tüm Şubeleri Temizle',
+        //Şube sayısı ajax metoddu
+        $.ajax({
+            type: "GET",
+            url: "/query/sube-sayisi?$select=name,id&$orderby=name"
+        }).done(function (res) {
+            $('#branchCount').text(res.length === 0 ? "Yok" : res.length);
+
+            $('[name="filterBranch"]').empty();
+            $.each(res, function (index , branch) {
+                $('[name="filterBranch"]').append(`<option value='${branch.ID}'>${branch.Name}</option>`);
+            });
+            let branchTomSelect = new TomSelect($('[name="filterBranch"]'),{
+                plugins: {
+                    'clear_button':{
+                        'title':'Tüm Şubeleri Temizle',
+                    },
+                    remove_button:{
+                        title:'Şubeyi Temizle',
+                    }
                 },
-                remove_button:{
-                    title:'Şubeyi Temizle',
-                }
-            }, 
+            });
+            branchTomSelect.clear();
         });
-        branchTomSelect.clear();
-    });
-    //Ünvan sayısı ajax metoddu
-    $.ajax({
-        type: "GET",
-        url: "/query/unvan-sayisi"
-    }).done(function (res) {
-        $('#positionCount').text(res.length === 0 ? "Yok" : res.length);
-    });
-    //Bekleyen İzinler ajax metodu
-    $.ajax({
-        type:"GET",
-        url: "/query/bekleyen-izinler-dashboard?$expand=Personal($select=ID,NameSurname;)&$select=id,createdAt,offdaystatus,Personal&$filter=Personal/Status eq 'Online'&$orderby=createdAt desc",
-    }).done(function (res) {
-        $('#waitingOffDaySpinner').hide();
-        if (res.length > 0){
-            res.forEach(data=> {
-                let listItem = document.createElement('div');
-                listItem.className = 'list-group-item';
-                let row = document.createElement('div');
-                row.className = 'row';
-                let avatarCol = document.createElement('div');
-                avatarCol.className = 'col-auto';
-                avatarCol.innerHTML = `<span class="avatar">${data.Personal.NameSurname.charAt(0)}</span>`;
-                let infoCol = document.createElement('div');
-                infoCol.className = 'col';
-                infoCol.innerHTML = `
-                <div class="text-truncate">
-                    <strong>${data.Personal.NameSurname}</strong> adlı personele ait bekleyen izin var.
-                </div>
-                <div class="text-secondary">Oluşturulma Tarihi - ${new Date(data.CreatedAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
-            `;
-
-                row.appendChild(avatarCol);
-                row.appendChild(infoCol);
-                let badgeCol = document.createElement('div');
-                badgeCol.className = 'col-auto align-self-center';
-                let badgeDiv = document.createElement('div');
-                if(data.OffDayStatus === 1){
-                    badgeDiv.className = 'badge bg-primary';
-                    badgeDiv.textContent =  "GM Onayı Bekliyor";
-                    badgeCol.appendChild(badgeDiv)
-                    listItem.className += " active";
-                }
-                else{
-                    badgeDiv.className = 'badge bg-yellow';
-                    badgeDiv.textContent =  "IK Onayı Bekliyor";
-                    badgeCol.appendChild(badgeDiv)
-                    listItem.className += " active";
-                    listItem.style.borderLeftColor = "rgb(245 159 0)"
-                }
-                row.appendChild(badgeCol);
-                listItem.appendChild(row);
-                offDayList.appendChild(listItem);
-            })
-        }
-        else{
-            $('#waitingOffDayEmptyText').removeClass('d-none'); 
-        }
-    })
-    //Eksik Gün istirahat ajax metodu
-    $.ajax({
-        type:"GET",
-        url: "/query/eksik-gun-dashboard?$expand=Personal($select=NameSurname,Status;)&$select=id,EndOffDayDate,Personal,EndOffDayDate,Reason&$filter=Personal/Status eq 'Online'and Reason eq 'İstirahat (01)'&$orderby=EndOffDayDate asc",
-    }).done(function (res) {
-        $('#missingDaySpinner').hide();
-        if (res.length > 0) {
-            res.forEach(data => {
-                let raporTarihi = new Date(data.EndOffDayDate)
-                let kalanGunSayisi = Math.ceil((raporTarihi - today) / (1000 * 60 * 60 * 24));
-                if (kalanGunSayisi <= 5 && kalanGunSayisi >= 0) {
-                    let remainingText = (raporTarihi.getDate() - today.getDate() === 0) ? "Bugün" :
-                        (raporTarihi.getDate() - today.getDate() === 1) ? "Yarın" :
-                            `${kalanGunSayisi} Gün Sonra`;
+        //Ünvan sayısı ajax metoddu
+        $.ajax({
+            type: "GET",
+            url: "/query/unvan-sayisi"
+        }).done(function (res) {
+            $('#positionCount').text(res.length === 0 ? "Yok" : res.length);
+        });
+        //Bekleyen İzinler ajax metodu
+        $.ajax({
+            type:"GET",
+            url: "/query/bekleyen-izinler-dashboard?$expand=Personal($select=ID,NameSurname;)&$select=id,createdAt,offdaystatus,Personal&$filter=Personal/Status eq 'Online'&$orderby=createdAt desc",
+        }).done(function (res) {
+            $('#waitingOffDaySpinner').hide();
+            if (res.length > 0){
+                res.forEach(data=> {
                     let listItem = document.createElement('div');
                     listItem.className = 'list-group-item';
                     let row = document.createElement('div');
@@ -440,33 +386,92 @@
                     infoCol.className = 'col';
                     infoCol.innerHTML = `
                 <div class="text-truncate">
-                    <strong>${data.Personal.NameSurname}</strong> adlı personele ait rapor tarihi yaklaşıyor.
+                    <strong>${data.Personal.NameSurname}</strong> adlı personele ait bekleyen izin var.
                 </div>
-                <div class="text-secondary">Rapor Bitiş Tarihi: ${new Date(data.EndOffDayDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' })} - ${remainingText}</div>
+                <div class="text-secondary">Oluşturulma Tarihi - ${new Date(data.CreatedAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}</div>
             `;
 
                     row.appendChild(avatarCol);
                     row.appendChild(infoCol);
-                    if (raporTarihi.getDate() - today.getDate() === 0) {
-                        let badgeCol = document.createElement('div');
-                        badgeCol.className = 'col-auto align-self-center';
-                        badgeCol.innerHTML = '<div class="badge bg-success"></div>';
-                        row.appendChild(badgeCol);
+                    let badgeCol = document.createElement('div');
+                    badgeCol.className = 'col-auto align-self-center';
+                    let badgeDiv = document.createElement('div');
+                    if(data.OffDayStatus === 1){
+                        badgeDiv.className = 'badge bg-primary';
+                        badgeDiv.textContent =  "GM Onayı Bekliyor";
+                        badgeCol.appendChild(badgeDiv)
                         listItem.className += " active";
-                        listItem.style.borderLeftColor = "rgb(47, 179, 68)"
                     }
+                    else{
+                        badgeDiv.className = 'badge bg-yellow';
+                        badgeDiv.textContent =  "IK Onayı Bekliyor";
+                        badgeCol.appendChild(badgeDiv)
+                        listItem.className += " active";
+                        listItem.style.borderLeftColor = "rgb(245 159 0)"
+                    }
+                    row.appendChild(badgeCol);
                     listItem.appendChild(row);
-                    missDayList.appendChild(listItem);
-                }
+                    waitingOffDayList.appendChild(listItem);
+                })
+            }
+            else{
+                $('#waitingOffDayEmptyText').removeClass('d-none');
+            }
+        });
+        var nextWeek = new Date();
+        nextWeek.setDate(nextWeek.getDate() + 7);
+        // Tarihleri ISO formatına dönüştürme
+        var todayISO = today.toISOString().split('T')[0];
+        var nextWeekISO = nextWeek.toISOString().split('T')[0];
+        let approvedUrl = "/query/onaylanan-izinler-dashboard?$expand=Personal($select=NameSurname;)&$select=id,StartDate,Personal,Status&$filter=Personal/Status eq 'Online' and Status eq 'Online'and StartDate ge "+todayISO+" and StartDate le "+nextWeekISO+"&$orderby=StartDate asc"
+        $.ajax({
+            type:"GET",
+            url: approvedUrl
+        }).done(function (res) {
+            console.log(res)
+            $('#approvedOffDaySpinner').hide();
+            if (res.length > 0){
+                res.forEach(data=> {
+                    let remainingText = new Date(data.StartDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })
+                    let raporTarihi = new Date(data.StartDate)
+                    let kalanGunSayisi = Math.ceil((raporTarihi - today) / (1000 * 60 * 60 * 24));
+                    if (kalanGunSayisi <= 7 && kalanGunSayisi >= 0) {
+                        remainingText = (raporTarihi.getDate() - today.getDate() === 0) ? "Bugün" :
+                            (raporTarihi.getDate() - today.getDate() === 1) ? "Yarın" :
+                                `${kalanGunSayisi} Gün Sonra`;
+                    }
+                    let listItem = document.createElement('div');
+                    listItem.className = 'list-group-item';
+                    let row = document.createElement('div');
+                    row.className = 'row';
+                    let avatarCol = document.createElement('div');
+                    avatarCol.className = 'col-auto';
+                    avatarCol.innerHTML = `<span class="avatar">${data.Personal.NameSurname.charAt(0)}</span>`;
+                    let infoCol = document.createElement('div');
+                    infoCol.className = 'col';
+                    infoCol.innerHTML = `
+                <div class="text-truncate">
+                    <strong>${data.Personal.NameSurname}</strong> adlı personel yakında izine çıkacak.
+                </div>
+                <div class="text-secondary">İzin Başlangıç Tarihi - ${remainingText}</div>
+            `;
 
-            })
+               row.appendChild(avatarCol);
+               row.appendChild(infoCol);
+               listItem.className += " active";
+               listItem.style.borderLeftColor = "rgb(214, 51, 108)"
+               listItem.appendChild(row);
+               approvedOffDayList.appendChild(listItem);
+                })
+            }
+            else{
+                $('#approvedOffDayEmptyText').removeClass('d-none');
+            }
+        });
+       
         }
-        else {
-            $('#missingDayEmptyText').removeClass('d-none');
-            
-          
-        }
-    })
+        
+    
     //İş gücü veri tablosu filtrele butonu tıklandığında calısan metod
     $('#yearButton').on('click',function () {
         $('#tableBody').empty();
@@ -475,4 +480,5 @@
         let selectedBranches = $('[name="filterBranch"]').val()
         WorkPowerTable(personalResponse,selectedYearInput,selectedBranches);
     });
+    
 });

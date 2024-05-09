@@ -20,14 +20,13 @@ public class WriteUpdatePersonalDto
     public string? Phonenumber { get; set; }
     public bool RetiredOrOld { get; set; }
     public DateTime? RetiredDate { get; set; }
+    public bool IsYearLeaveRetired { get; set; }
     [Required]
     public double TotalTakenLeave { get; set; }
     [Required]
     public string Gender { get; set; }
     [Required]
     public int TotalYearLeave { get; set; }
-    [Required]
-    public int UsedYearLeave { get; set; } 
     [Required] 
     public int FoodAid { get; set; }
     [Required] 
@@ -37,5 +36,4 @@ public class WriteUpdatePersonalDto
     [Required]
     public Guid Position_Id { get; set; }
     public WriteUpdatePersonalDetailDto PersonalDetails { get; set; }
-    public List<int>? CumulativeFormulaInput { get; set; }
 }

@@ -7,6 +7,8 @@
     let MaritalStatusSelect = $('#MaritalStatusSelect');
     let BodySizeSelect = $('#BodySizeSelect');
     let BloodGroupSelect = $('#BloodGroupSelect');
+    const updateButton = $('button[data-updateBtn]')
+    const enableEditButton = $('button[data-enableEditBtn]')
     $.ajax({
         type: "GET",
         url: `/get-personel-detaylari${window.location.search}`
@@ -45,10 +47,10 @@
                 }
             }
             fillpersonalDetailsInputs(res.data);
-            getKumulatifInputs(new Date(res.data.yearLeaveDate),res.data.cumulativeFormula)
-            kalanIzinKumulatif(res.data.usedYearLeave,res.data.cumulativeFormula,new Date(res.data.yearLeaveDate).getFullYear());
             onClickEvents(res.data);
-            console.log(res.data.cumulativeFormula)
+            console.log(res.data)
+            fillCumulativeTable(res.data.personalCumulatives,new Date(res.data.yearLeaveDate),res.data.status === 0)
+            kalanIzinKumulatif(res.data.personalCumulatives , res.data.status === 0);
         } else {
             $('#error-modal-message').text(res.message)
             $('#error-modal').modal('show')
@@ -111,13 +113,12 @@
             $('textarea[name="PersonalDetails.Address"]').val(data.personalDetails.address);
             //Manuel Ayarlar
             $('[data-takenLeave]').val(data.totalTakenLeave); // Manuel Alacak İzin alanı
-            $('[data-usedYearLeave]').val(parseInt(data.usedYearLeave, 10))
             $('[data-yearLeaveDate]').text(new Date(data.yearLeaveDate).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' }))
             if (!data.isYearLeaveRetired){
                 $('#isYearLeaveRetiredDefault').remove()
             }
             else{
-                $('#isYearLeaveRetiredDefault').text("Yıllık İzin Yenilenirken Emeklilik Durumu baz alınacaktır.")
+                $('#isYearLeaveRetiredDefault').text("Yıllık İzin Yenilenirken 20 günden yenilenecektir.")
             }
             if (data.yearLeaveDate === data.startJobDate){
                 $('#yearLeaveDateIsDefault').text("Yıllık İzin Yenilenme Tarihi Varsayılan olarak İşe Başlangıç Tarihinden Alındı.") 
@@ -368,6 +369,7 @@
         // Emeklilik ve engellilik durumlarının işaretlenmesi
         function setCheckboxes() {
             data.personalDetails.handicapped ? $('input[name="PersonalDetails.Handicapped"]').prop('checked', true) : "";
+            data.isYearLeaveRetired ? $('input[name="IsYearLeaveRetired"]').prop('checked', true) : "";
             if (data.retiredOrOld) {
                 let emeklilikLabel = $('label[for="RetiredOrOldInput"]');
                 let emeklilikCheckBox = $('input[name="RetiredOrOld"]');
@@ -393,71 +395,86 @@
 
 
     }
-    function kalanIzinKumulatif(kullanilanYillikIzin, cumulativeFormula,yearLeaveDateYear) {
-        let outputDiv = document.getElementById("balanceYearLeaveDetail");
-        //cumulativeFormula = cumulativeFormula.substring(0, cumulativeFormula.length - 1);
-        let izinListesi = cumulativeFormula.split("+");
-        console.log(izinListesi)
-        // Kullanılan izin miktarını string değerlerden düş
-        for (let i = 0; i < izinListesi.length && kullanilanYillikIzin > 0; i++) {
-            if (izinListesi[i] <= kullanilanYillikIzin) {
-                kullanilanYillikIzin -= izinListesi[i];
-                izinListesi[i] = 0;
-            } else {
-                izinListesi[i] -= kullanilanYillikIzin;
-                kullanilanYillikIzin = 0;
-            }
-
-        }
-        
-        izinListesi.forEach(i=> {
-            console.log(i)
-            if (i !== ''){
-                outputDiv.innerHTML += "Yıl: " + yearLeaveDateYear + ", Kalan: " + i  + "<br>";  
-            }
-            else{
-                outputDiv.innerHTML += "Yıl: " + yearLeaveDateYear + ", Bekliyor" + "<br>";
-            }
-            
-            yearLeaveDateYear++;
-        })
-    }
-    function getKumulatifInputs(yearLeaveDate,cumulativeFormula) {
-        let values = cumulativeFormula.split("+")
-        let counter = 0
-        const inputSection = $('#cumulative-inputs-section');
+    function kalanIzinKumulatif(cumulativeList , isPersonalWorking) {
         let outputDiv = document.getElementById("balanceYearLeaveDetail");
         let todayDate = new Date()
-        
-        for (let year = yearLeaveDate.getFullYear();year <= new Date().getFullYear(); year++){
-            let YearRefreshDate = new Date(year,yearLeaveDate.getMonth(),yearLeaveDate.getDate())
-            let inputRow = `
-                    <div class="row mb-3 pe-8 ps-8">
-                        <div class="col">
-                            <div class="input-group input-group-merge">
-                                <span class="input-group-text">
-                                    ${year} -->
-                                </span>
-                                ${
-
-                                (year === todayDate.getFullYear() && YearRefreshDate > todayDate) ?
-                                    `<span class="form-control disabled">Bekliyor</span>` :
-                                    `<input type="number" data-deneme name="cumulativeFormulaInput" value="${values[counter] ? values[counter] : 0}" class="form-control" disabled/>`
-                                
-                                }
-                                
-                                
-                                <span class="input-group-text">
-                                    Gün
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-            `
-            inputSection.append(inputRow)
-            counter += 1
+        cumulativeList.forEach(i=> {
+                outputDiv.innerHTML += "Yıl: " + i.year + ", Kalan: " + i.remainYearLeave  + "<br>";
+        })
+        if(isPersonalWorking && !cumulativeList.find(p=> p.year === todayDate.getFullYear())){
+            outputDiv.innerHTML += "Yıl: " + todayDate.getFullYear() + ", Bekliyor" + "<br>";
         }
         
+    }
+    function fillCumulativeTable(cumulativeList,yearLeaveDate , isPersonalWorking){
+        const inputSection = $('#cumulative-inputs-section');
+        
+        let todayDate = new Date()
+        let tempDate = new Date(todayDate.getFullYear(),yearLeaveDate.getMonth(),yearLeaveDate.getDate())
+        if(cumulativeList.length > 0){
+            cumulativeList.forEach(p=>{
+                // if (p.year === todayDate.getFullYear() && tempDate > todayDate) {
+                //     let inputRow = `
+                //    <tr>
+                //     <input type="hidden" data-cumulativeId value="${p.id}">
+                //     <td><span class="input-group-text">${p.year}</span></td>
+                //     <td><input type="number" data-earnedYearLeave name="cumulativeFormulaInput" value="${p.earnedYearLeave}" class="form-control" /></td>
+                //     <td><input type="number" data-remainYearLeave name="cumulativeFormulaInput" value="${p.remainYearLeave}" class="form-control" /></td>
+                //     <td class="text-center"><input type="checkbox" data-isReportCompleted name="cumulativeFormulaInput" value="${p.isReportCompleted}" ${p.isReportCompleted ? "checked" : ""} class="form-check-input"/></td>
+                //     <td class="text-center"><input type="checkbox" data-isNotificationExist name="cumulativeFormulaInput" value="${p.isNotificationExist}" ${p.isNotificationExist ? "checked" : ""} class="form-check-input"/></td>
+                //     <td class="text-center">
+                //         <div class="btn-group">
+                //             <button data-cumulativeUpdateBtn type="button" class="btn btn-pill btn-sm btn-green">Güncelle</button >
+                //            
+                //         </div>
+                //     </td>
+                //    </tr>
+                // `
+                //     inputSection.append(inputRow)
+                // }
+                // else{
+                //     let inputRow = `
+                //     <tr>
+                //         <input type="hidden" data-cumulativeId value="${p.id}">
+                //         <td><span class="input-group-text">${p.year}</span></td>
+                //         <td><input type="number" data-earnedYearLeave name="cumulativeFormulaInput" value="${p.earnedYearLeave}" class="form-control" /></td>
+                //         <td><input type="number" data-remainYearLeave name="cumulativeFormulaInput" value="${p.remainYearLeave}" class="form-control" /></td>
+                //         <td class="text-center"><input type="checkbox" data-isReportCompleted name="cumulativeFormulaInput" value="${p.isReportCompleted}" ${p.isReportCompleted ? "checked" : ""} class="form-check-input"/></td>
+                //         <td class="text-center"><input type="checkbox" data-isNotificationExist name="cumulativeFormulaInput" value="${p.isNotificationExist}" ${p.isNotificationExist ? "checked" : ""} class="form-check-input"/></td>
+                //         <td class="text-center"><button data-cumulativeUpdateBtn type="button" class="btn btn-pill btn-sm btn-green">Güncelle</button ></td>
+                //     </tr>
+                // `
+                //     inputSection.append(inputRow)
+                // }
+                let inputRow = `
+                    <tr>
+                        <input type="hidden" data-cumulativeId value="${p.id}">
+                        <td><span class="input-group-text">${p.year}</span></td>
+                        <td><input type="number" data-earnedYearLeave name="cumulativeFormulaInput" value="${p.earnedYearLeave}" class="form-control" /></td>
+                        <td><input type="number" data-remainYearLeave name="cumulativeFormulaInput" value="${p.remainYearLeave}" class="form-control" /></td>
+                        <td class="text-center"><input type="checkbox" data-isReportCompleted name="cumulativeFormulaInput" value="${p.isReportCompleted}" ${p.isReportCompleted ? "checked" : ""} class="form-check-input"/></td>
+                        <td class="text-center"><input type="checkbox" data-isNotificationExist name="cumulativeFormulaInput" value="${p.isNotificationExist}" ${p.isNotificationExist ? "checked" : ""} class="form-check-input"/></td>
+                        <td class="text-center"><button data-cumulativeUpdateBtn type="button" class="btn btn-pill btn-sm btn-green" ${!isPersonalWorking ? "disabled" : ""}>Güncelle</button ></td>
+                    </tr>
+                `
+                inputSection.append(inputRow)
+                
+                
+            })
+        }
+        if(isPersonalWorking && !cumulativeList.find(p=> p.year === todayDate.getFullYear())){
+            let inputRow = `
+                   <tr>
+                    <td><span class="input-group-text">${todayDate.getFullYear()}</span></td>
+                    <td><span class="input-group-text">Bekliyor</span></td>
+                    <td><span class="input-group-text">Bekliyor</span></td>
+                    <td class="text-center"><input type="checkbox" data-isReportCompleted value="false"  class="form-check-input" disabled/></td>
+                    <td class="text-center"><input type="checkbox" data-isNotificationExist value="false"  class="form-check-input" disabled/></td>
+                    <td class="text-center"><button type="button" data-cumulativeShowEditBtn class="btn btn-pill btn-sm btn-yellow">Düzenlemeyi Etkinleştir</button></td>
+                    </tr>
+            `
+            inputSection.append(inputRow)
+        }
     }
     //Validasyon Fonksiyonu
     function checkRequiredFields() {
@@ -471,8 +488,102 @@
         return isValid;
     }
     function onClickEvents(data) {
+        $(function() { 
+            // Kümülatif Güncelle butonu
+            $(document).on('click', 'button[data-cumulativeUpdateBtn]', function(event) {
+                let clickedButton = $(this)
+                spinnerStart(clickedButton)
+                let row = $(this).closest('tr'); // Tıklanan butonun bulunduğu tablo satırını bul
+                let id = row.find('input[data-cumulativeId]').val();
+                let year = row.find('span.input-group-text').text();
+                let earnedYearLeave = row.find('input[data-earnedYearLeave]').val();
+                let remainYearLeave = row.find('input[data-remainYearLeave]').val();
+                let isReportCompleted = row.find('input[data-isReportCompleted]').prop('checked');
+                let isNotificationExist = row.find('input[data-isNotificationExist]').prop('checked');
+                let personalId = document.querySelector("input[name='ID']").value;
+                let formData = {
+                            ID : id,
+                            Year : year,
+                            EarnedYearLeave : earnedYearLeave,
+                            RemainYearLeave : remainYearLeave,
+                            IsReportCompleted : isReportCompleted,
+                            IsNotificationExist : isNotificationExist,
+                            Personal_Id : personalId
+                        }
+                $.ajax({
+                    type: "POST",
+                    url: "/personel-detaylari-kumulatif-guncelle",
+                    data: formData
+                }).done(function (res) {
+                    spinnerEnd(clickedButton)
+                    if (res.isSuccess) {
+                        $('#success-modal-message').text("Kümülatif Başarılı Bir Şekilde Güncellendi.")
+                        $('#success-modal').modal('show');
+                        $('#success-modal').on('hidden.bs.modal', function () {
+                            window.location.reload();
+                        })
+                    } else {
+                        $('#error-modal-message').text(res.message)
+                        $('#error-modal').modal('show');
+                    }
+                });
+            });
+            // Kumulatif şimdiki yıl manuel etkinleştirme aksiyonu
+            $(document).on('click', 'button[data-cumulativeShowEditBtn]', function(event) {
+                let clickedButton = $(this)
+                let row = clickedButton.closest('tr'); // Tıklanan butonun bulunduğu tablo satırını bul
+                row.find('td:nth-child(2) span').replaceWith('<input type="number" data-earnedYearLeave name="cumulativeFormulaInput" value="0" class="form-control">'); // İkinci sütundaki span'ı input ile değiştirin
+                row.find('td:nth-child(3) span').replaceWith('<input type="number" data-remainYearLeave name="cumulativeFormulaInput" value="0" class="form-control">'); // Üçüncü sütundaki span'ı input ile değiştirin
+                row.find('td:nth-child(4) input').prop('disabled', false); // Dördüncü sütundaki inputları etkinleştirin
+                row.find('td:nth-child(5) input').prop('disabled', false); // Beşinci sütundaki inputları etkinleştirin
+                clickedButton.replaceWith('<button type="button" data-cumulativeAddBtn class="btn btn-pill btn-sm btn-blue">Manuel Yıllık İzin Ekle</button>')
+                $(document).on('click', 'button[data-cumulativeAddBtn]', function(event) {
+                    let clickedButton = $(this)
+                    let row = clickedButton.closest('tr'); // Tıklanan butonun bulunduğu tablo satırını bul
+                    $('#cumulative-add-modal').modal('show')
+                    $('#cumulative-modal-button-add').click(function () {
+                        let year = row.find('span.input-group-text').text();
+                        let earnedYearLeave = row.find('input[data-earnedYearLeave]').val();
+                        let remainYearLeave = row.find('input[data-remainYearLeave]').val();
+                        let isReportCompleted = row.find('input[data-isReportCompleted]').prop('checked');
+                        let isNotificationExist = row.find('input[data-isNotificationExist]').prop('checked');
+                        let personalId = document.querySelector("input[name='ID']").value;
+                        let formData = {
+                            Year : year,
+                            EarnedYearLeave : earnedYearLeave,
+                            RemainYearLeave : remainYearLeave,
+                            IsReportCompleted : isReportCompleted,
+                            IsNotificationExist : isNotificationExist,
+                            Personal_Id : personalId
+                        }
+                        let modalClickButton = $(this)
+                        spinnerStart(modalClickButton)
+                        $.ajax({
+                            type: "POST",
+                            url: "/personel-detaylari-kumulatif-guncelle",
+                            data: formData
+                        }).done(function (res) {
+                            spinnerEnd(modalClickButton)
+                            if (res.isSuccess) {
+                                $('#success-modal-message').text("Kümülatif Başarılı Bir Şekilde Eklendi.")
+                                $('#success-modal').modal('show');
+                                $('#success-modal').on('hidden.bs.modal', function () {
+                                    window.location.reload();
+                                })
+                            } else {
+                                $('#error-modal-message').text(res.message)
+                                $('#error-modal').modal('show');
+                            }
+                        });
+                    });
+                        
+                    
+                });
+                
+            });
+        });
         //Düzenlemeyi Etkinleştir Butonu Tıklandığında
-        $('#enableEditButton').on('click', function () {
+        enableEditButton.on('click', function () {
             let inputs = $('#updatePersonalForm input');
             inputs.prop('disabled', false);
             $('[data-hourInput]').prop('disabled', false);
@@ -489,8 +600,8 @@
             new TomSelect(MaritalStatusSelect); // Seçilen select'i alın
             new TomSelect(BodySizeSelect); // Seçilen select'i alın
             new TomSelect(BloodGroupSelect); // Seçilen select'i alın
-            $('#enableEditButton').prop('disabled', true);
-            $('#updatePersonalButton').prop('disabled', false);
+            enableEditButton.prop('disabled', true);
+            updateButton.prop('disabled', false);
         });
         //Alacak İzin Saat Ekle tıklandığında çalışan metod
         $('[data-addHour]').on('click', function () {
@@ -555,35 +666,29 @@
             }
         });
         //Personeli Güncelle Butonu Tıklandığında
-        $('#updatePersonalButton').on('click', function () {
-            spinnerStart($('#updatePersonalButton'))
+        updateButton.on('click', function () {
+            spinnerStart(updateButton)
             let formData = $("#updatePersonalForm").serializeArray();
-            let usedYearLeaveValue = formData.find(item => item.name === "UsedYearLeave").value
             let foodAidValue = formData.find(item => item.name === "FoodAid").value
             if (!checkRequiredFields()) {
-                spinnerEnd($('#updatePersonalButton'))
+                spinnerEnd(updateButton)
                 $('#error-modal-message').text("Lütfen Zorunlu Alanları Girdiğinizden Emin Olunuz.")
                 $('#error-modal').modal('show');
                 return; // Fonksiyondan çık
             }
-            if (usedYearLeaveValue > data.totalYearLeave) {
-                spinnerEnd($('#updatePersonalButton'))
-                $('#error-modal-message').text("Kullanılan Yıllık İzin Hak edilenden büyük olamaz.")
-                $('#error-modal').modal('show');
-                return true;
-            }
-            if (usedYearLeaveValue < 0) {
-                spinnerEnd($('#updatePersonalButton'))
-                $('#error-modal-message').text("Kullanılan Yıllık İzin 0 dan küçük olamaz.")
-                $('#error-modal').modal('show');
-                return true;
-            }
             if (foodAidValue < 0) {
-                spinnerEnd($('#updatePersonalButton'))
+                spinnerEnd(updateButton)
                 $('#error-modal-message').text("Gıda Yardımı 0 dan küçük olamaz.")
                 $('#error-modal').modal('show');
                 return true;
             }
+            if(formData.some(p=> p.name === "IsYearLeaveRetired" && p.value === "on") && !formData.some(p=> p.name === "RetiredOrOld" && p.value === "on")){
+                spinnerEnd(updateButton)
+                $('#error-modal-message').text("Yıllık izin yenilenirken emeklilik tarihi baz alınsın işaretlenir ise emeklilik durumu açık ve tarih girilmesi zorunludur.")
+                $('#error-modal').modal('show');
+                return true;
+            }
+            
             formData.forEach(function (f) {
                 if (f.value === "on") {
                     f.value = true;
@@ -611,7 +716,7 @@
                 url: "/personel-detaylari",
                 data: formData // Form verilerini al
             }).done(function (res) {
-                spinnerEnd($('#updatePersonalButton'))
+                spinnerEnd(updateButton)
                 if (res.isSuccess) {
                     $('#success-modal-message').text("Personel Başarılı Bir Şekilde Güncellendi.")
                     $('#success-modal').modal('show');

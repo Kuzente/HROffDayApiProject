@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Core;
 using Core.DTOs;
 using Core.DTOs.BranchDTOs;
 using Core.Enums;
@@ -83,10 +84,40 @@ public class QueryController : ODataController
     }
     [HttpGet]
     [EnableQuery]
+    [Route("onaylanan-izinler-dashboard")]
+    public async Task<IActionResult> GetApprovedOffDays()
+    {
+        bool directorRole = false;
+        var userRole = User.FindFirst(ClaimTypes.Role).Value;
+        if (!string.IsNullOrEmpty(userRole) && userRole == nameof(UserRoleEnum.Director))
+        {
+            directorRole = true;
+            var branchesResult = await _readUserService.GetUserBranches(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty));
+            if (!branchesResult.IsSuccess) return Redirect("/404");
+            var result = await _readOdataService.GetApprovedDaysService(directorRole,branchesResult.Data);
+            return Ok(result);
+        }
+        else
+        {
+            var result = await _readOdataService.GetApprovedDaysService(directorRole,null);
+            return Ok(result);  
+        }
+    }
+    [HttpGet]
+    [EnableQuery]
     [Route("eksik-gun-dashboard")]
     public async Task<IActionResult> GetMissingDayList()
     {
         var result = await _readOdataService.GetMissingDayService();
         return Ok(result);
     }
+    [HttpGet]
+    [EnableQuery]
+    [Route("kumulatif-bildirim-dashboard")]
+    public async Task<IActionResult> GetNotificationCumulativeList()
+    {
+        var result = await _readOdataService.GetPersonalCumulativesService();
+        return Ok(result);
+    }
+    
 }

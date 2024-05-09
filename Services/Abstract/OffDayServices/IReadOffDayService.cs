@@ -14,7 +14,7 @@ public interface IReadOffDayService
     Task<ResultWithPagingDataDto<ReadApprovedOffDayDto>> GetApprovedOffDaysListService(OffdayQuery query); //Onaylanan izinler liste servisi
     Task<ResultWithPagingDataDto<List<ReadDeletedOffDayListDto>>> GetDeletedOffDaysListService(OffdayQuery query); //Silinen izinler liste servisi
     Task<ResultWithPagingDataDto<List<ReadPersonalOffDayListDto>>> GetPersonalOffDaysListService(OffdayQuery query); //Personele göre izinler liste servisi
-    Task<IResultWithDataDto<ReadWaitingOffDayEditDto>> GetOffDayByIdService(Guid id);// ilk onaylacanak bekleyen izinler düzenleme get servisi
+    Task<IResultWithDataDto<ReadWaitingOffDayEditDto>> GetOffDayEditService(Guid id);// Bekleyen İzin Güncelleme Get Servisi
     Task<IResultWithDataDto<List<ReadApprovedOffDayListDto>>> GetExcelApprovedOffDayListService(OffdayQuery query);// Excel Alma Servisi
     Task<IResultWithDataDto<ReadApprovedOffDayFormExcelExportDto>> GetApprovedOffDayExcelFormService(Guid id);// Onaylanan İzin Form Get Servisi
     

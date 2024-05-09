@@ -69,7 +69,7 @@ public class OffDayController : Controller
 	[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.SuperAdmin)}")]
 	public async Task<IActionResult> WaitingOffDayEdit(Guid id , string returnUrl)
     {
-        var result = await _readOffDayService.GetOffDayByIdService(id);
+        var result = await _readOffDayService.GetOffDayEditService(id);
         ViewData["ReturnUrl"] = returnUrl;
         return View(result);
     }
@@ -156,7 +156,17 @@ public class OffDayController : Controller
         }
         else
         {
-            result = await _writeOffDayService.UpdateWaitingOffDayService(dto);
+	        if(dto.StartDate > dto.EndDate)
+		        return Ok(result.SetStatus(false).SetErr("StartDate is bigger than EndDate").SetMessage("İzin başlangıç tarihi bitişten büyük olamaz!")); 
+	        if(dto.CountLeave != ((dto.EndDate - dto.StartDate).Days + 1))
+		        return Ok(result.SetStatus(false).SetErr("Date and Count not equal").SetMessage("Girdiğiniz Tarih Aralığı İle İzin Günleri Uyuşmuyor."));
+	        if(dto.CountLeave <= 0)
+		        return Ok(result.SetStatus(false).SetErr("Count Leave is not equal or smaller than zero").SetMessage("Lütfen İzin Girdiğinize Emin Olunuz!"));
+	        if(dto.LeaveByYear < 0 || dto.LeaveByTaken < 0 || dto.LeaveByTravel < 0 || dto.LeaveByWeek < 0 || dto.LeaveByFreeDay < 0 || dto.LeaveByPublicHoliday < 0)
+		        return Ok(result.SetStatus(false).SetErr("Negative Values").SetMessage("Negatif Değer Girilemez."));
+            result = dto.OffDayStatus == OffDayStatusEnum.Approved 
+	            ? await _writeOffDayService.UpdateApprovedOffDayService(dto) 
+	            : await _writeOffDayService.UpdateWaitingOffDayService(dto);
         }
         return Ok(result);
     }

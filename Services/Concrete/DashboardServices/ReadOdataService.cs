@@ -44,10 +44,22 @@ public class ReadOdataService : IReadOdataService
             directorRole ? (p.OffDayStatus == OffDayStatusEnum.WaitingForSecond && branches.Any(a=> p.BranchId == a)) : (p.OffDayStatus ==OffDayStatusEnum.WaitingForFirst || p.OffDayStatus ==OffDayStatusEnum.WaitingForSecond));
         return query;
     }
+    public async Task<IQueryable> GetApprovedDaysService(bool directorRole,List<Guid>? branches)
+    {
+        var query = _unitOfWork.ReadOffDayRepository.GetAll(predicate: p =>
+            directorRole ? (p.OffDayStatus == OffDayStatusEnum.Approved && branches.Any(a=> p.BranchId == a)) : (p.OffDayStatus ==OffDayStatusEnum.Approved));
+        return query;
+    }
 
     public async Task<IQueryable> GetMissingDayService()
     {
         var query = _unitOfWork.ReadMissingDayRepository.GetAll(predicate: p =>
+            p.Status == EntityStatusEnum.Online);
+        return query;
+    }
+    public async Task<IQueryable> GetPersonalCumulativesService()
+    {
+        var query = _unitOfWork.ReadPersonalCumulativeRepository.GetAll(predicate: p =>
             p.Status == EntityStatusEnum.Online);
         return query;
     }

@@ -6,5 +6,7 @@ public interface IReadOdataService
     Task<IQueryable> GetPositionOdataService(); // Odata Şube Servisi
     Task<IQueryable> GetPersonalOdataService(); // Odata Şube Servisi
     Task<IQueryable> GetWaitingOffDaysService(bool directorRole,List<Guid>? branches); // Odata Şube Servisi
+    Task<IQueryable> GetApprovedDaysService(bool directorRole,List<Guid>? branches); // Odata Şube Servisi
     Task<IQueryable> GetMissingDayService(); // Odata Şube Servisi
+    Task<IQueryable> GetPersonalCumulativesService(); // Odata Şube Servisi
 }

@@ -203,26 +203,29 @@ else
         <table class="table table-nowrap">
                 <thead>
                 <tr>
-                    <th>PDF</th>
-                    <th>
+                    <th class="text-center">
+                        <button class="table-sort" data-sort="sort-documentNumber">Döküman<br />No</button>
+                    </th>
+                    <th class="text-center">PDF</th>
+                    <th class="text-center">
                         <button class="table-sort" data-sort="sort-nameSurname">Personel<br> Adı Soyadı</button>
                     </th>
-                    <th>
+                    <th class="text-center">
                         <button class="table-sort" data-sort="sort-branchName">Şube</button>
                     </th>
-                    <th>
+                    <th class="text-center">
                         <button class="table-sort" data-sort="sort-positionName">Ünvan</button>
                     </th>
-                    <th>İzin Başlangıç Tarihi /<br> İzin Bitiş Tarihi</th>
-                    <th>
+                    <th class="text-center">İzin Başlangıç Tarihi /<br> İzin Bitiş Tarihi</th>
+                    <th class="text-center">
                         <button class="table-sort" data-sort="sort-countLeave">Toplam <br/> Alınan Gün</button>
                     </th>
-                    <th>Detaylı <br/>İzin Günleri</th>
-                    <th>
+                    <th class="text-center">Detaylı <br/>İzin Günleri</th>
+                    <th class="text-center">
                         <button class="table-sort" data-sort="sort-createdAt">Oluşturulma Tarihi</button>
                     </th>
-                    <th>Düzenle</th>
-                    <th>Sil</th>
+                    <th class="text-center">Düzenle</th>
+                    <th class="text-center">Sil</th>
         
                 </tr>
                 </thead>
@@ -230,6 +233,9 @@ else
                 @foreach (var data in Model.Data.ReadApprovedOffDayListDtos)
                 {
                     <tr class="@(data.Personal.IsBackToWork ? "bg-green-lt" : (data.Personal.Status == EntityStatusEnum.Offline ? "bg-danger-lt" : ""))">
+                        <td class="col-1 text-center">
+                            @data.DocumentNumber
+                        </td>
                         <td class="col-1">
                             <form action="/create-pdf" method="post">
                                 <input type="hidden" name="id" value="@data.ID">

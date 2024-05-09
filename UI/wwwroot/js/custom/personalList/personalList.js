@@ -141,7 +141,7 @@
         let emeklilikLabel = $('label[for="RetiredOrOldInput"]');
         if($(this).is(':checked')){
             emeklilikLabel.addClass("required")
-            $(this).closest('.d-flex.flex-column').append(`<input class="form-control m-2 flatpickr-input" data-required="true" type="date" name="RetiredDate" id="RetiredDateInput" placeholder="Emeklilik Tarihi">`);
+            $(this).closest('.d-flex.flex-column').append(`<input class="form-control justify-content-center m-2 mb-4 flatpickr-input" data-required="true" type="date" name="RetiredDate" id="RetiredDateInput" placeholder="Emeklilik Tarihi">`);
             flatpickr(document.getElementById('RetiredDateInput'), {
                 altInput: true,
                 altFormat: "d F Y",
@@ -159,13 +159,24 @@
                     clear: 'Temizle'
                 }
             });
+            let isYearLeaveRetiredElement = `
+            <div id="IsYearLeaveRetiredElement" class="mb-3">
+                <label class="form-check">
+                    <input type="checkbox" class="form-check-input" data-required="false" name="IsYearLeaveRetired">
+                    <span class="form-check-label">Yıllık İzin Yenilemelerinde Emeklilik Durumu Baz Alınsın Mı?</span>
+                </label>
+            </div>
+            `
+            $(this).closest('.d-flex.flex-column').append(isYearLeaveRetiredElement)
         }
         else{
             emeklilikLabel.removeClass("required")
             let retiredDateInput = document.getElementById('RetiredDateInput');
+            let isYearLeaveRetiredElement = document.getElementById('IsYearLeaveRetiredElement');
             let fpInstance = flatpickr(retiredDateInput);
             fpInstance.destroy();
             retiredDateInput.remove();
+            isYearLeaveRetiredElement.remove();
         }
     });
     //Maaş İnputu Regex Kontrolu

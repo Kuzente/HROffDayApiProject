@@ -1,4 +1,5 @@
-﻿document.addEventListener('DOMContentLoaded',function () {
+﻿document.addEventListener('DOMContentLoaded', function () {
+
     let BranchListDirector = [];
     let BranchListBranchManager = [];
     let searchParams = new URLSearchParams(window.location.search);

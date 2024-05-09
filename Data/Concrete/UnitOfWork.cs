@@ -5,6 +5,7 @@ using Data.Abstract.DailyFoodLogRepositories;
 using Data.Abstract.DailyYearLogRepositories;
 using Data.Abstract.MissingDayRepositories;
 using Data.Abstract.OffDayRepositories;
+using Data.Abstract.PersonalCumulativeRepositories;
 using Data.Abstract.PersonalRepositories;
 using Data.Abstract.PositionRepositories;
 using Data.Abstract.TransferPersonalRepositories;
@@ -15,6 +16,7 @@ using Data.Concrete.DailyFoodLogRepositories;
 using Data.Concrete.DailyYearLogRepositories;
 using Data.Concrete.MissingDayRepositories;
 using Data.Concrete.OffDayRepositories;
+using Data.Concrete.PersonalCumulativeRepositories;
 using Data.Concrete.PersonalRepositories;
 using Data.Concrete.PositionRepositories;
 using Data.Concrete.TransferPersonalRepositories;
@@ -53,6 +55,8 @@ public class UnitOfWork : IUnitOfWork
 	public IReadTransferPersonalRepository ReadTransferPersonalRepository { get; private set; }
 	public IWriteMissingDayRepository WriteMissingDayRepository { get; private set; }
 	public IReadMissingDayRepository ReadMissingDayRepository { get; private set; }
+	public IWritePersonalCumulativeRepository WritePersonalCumulativeRepository { get; private set; }
+	public IReadPersonalCumulativeRepository ReadPersonalCumulativeRepository { get; private set; }
 	
 
 	public UnitOfWork(DataContext context)
@@ -78,6 +82,8 @@ public class UnitOfWork : IUnitOfWork
 		WriteTransferPersonalRepository = new WriteTransferPersonalRepository(_context);
 		ReadMissingDayRepository = new ReadMissingDayRepository(_context);
 		WriteMissingDayRepository = new WriteMissingDayRepository(_context);
+		ReadPersonalCumulativeRepository = new ReadPersonalCumulativeRepository(_context);
+		WritePersonalCumulativeRepository = new WritePersonalCumulativeRepository(_context);
 		_transaction = _context.Database.BeginTransaction();
 	}
 

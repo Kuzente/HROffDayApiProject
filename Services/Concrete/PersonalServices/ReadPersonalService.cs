@@ -17,6 +17,7 @@ using Data.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Services.Abstract.PersonalServices;
+using Services.HelperServices;
 
 namespace Services.Concrete.PersonalServices;
 
@@ -202,7 +203,7 @@ public class ReadPersonalService : IReadPersonalService
 		try
 		{
 			var resultData = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate:p=>p.ID == id,
-				include: p=> p.Include(a=>a.PersonalDetails)
+				include: p=> p.Include(a=>a.PersonalDetails).Include(a=>a.PersonalCumulatives.OrderBy(pc=> pc.Year))
 			);
 			var mapData = _mapper.Map<ReadUpdatePersonalDto>(resultData);
 			mapData.Positions = await Task.Run(() => _unitOfWork.ReadPositionRepository

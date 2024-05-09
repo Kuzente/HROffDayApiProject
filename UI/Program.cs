@@ -84,6 +84,8 @@ app.MapControllerRoute(name: "personalMissingDayPage", pattern: "personel-eksik-
 app.MapControllerRoute(name: "personalMissingDayDelete", pattern: "personel-eksik-gun-sil", defaults: new { controller = "PersonalDetail", action = "PersonalMissingDayDelete" });
 app.MapControllerRoute(name: "personalMissingDayAdd", pattern: "personel-eksik-gun-ekle", defaults: new { controller = "PersonalDetail", action = "PersonalMissingDayAdd" });
 app.MapControllerRoute(name: "personalMissingDayExcel", pattern: "personel-eksik-gun-excel", defaults: new { controller = "PersonalDetail", action = "PersonalMissingDayExportExcel" });
+app.MapControllerRoute(name: "personalDetailsCumulativeAddOrUpdatePost", pattern: "personel-detaylari-kumulatif-guncelle", defaults: new { controller = "PersonalDetail", action = "UpdateCumulative" });
+app.MapControllerRoute(name: "personalDetailsCumulativeDeletePost", pattern: "personel-detaylari-kumulatif-sil", defaults: new { controller = "PersonalDetail", action = "DeleteCumulative" });
 #endregion
 #region BranchList
 app.MapControllerRoute(name: "branchListGet", pattern: "subeler", defaults: new { controller = "Branch", action = "Index" });
@@ -152,6 +154,11 @@ app.MapControllerRoute(name: "loginPage", pattern: "/create-pdf", defaults: new 
 
 #endregion
 
+#region Dashboard
+app.MapControllerRoute(name: "postCumulativeNotification", pattern: "post-kumulatif-bildirim", defaults: new { controller = "Home", action = "PostCumulativeNotification" });
+
+
+#endregion
 #region DetailedFilter
 app.MapControllerRoute(name: "detailedFilterPage", pattern: "detayli-filtre", defaults: new { controller = "DetailedFilter", action = "Index" });
 

@@ -183,7 +183,7 @@
                     <div class="col">
                         <div class="dropdown filter-dropdown">
                             <button class="btn btn-teal" data-bs-toggle="dropdown" data-bs-trigger="hover" data-bs-auto-close="outside">Detay</button>
-                            <div class="dropdown-menu dropdown-menu-start">
+                            <div class="dropdown-menu dropdown-menu-start" style="z-index: 10000">
                                 <div class="dropdown-header" style="width: 250px;">Detaylı Kalan İzin Grafiği</div>
 
                                 <div id="balanceYearLeaveDetail" class="p-4"></div>
@@ -210,6 +210,9 @@
         <li class="nav-item" role="presentation">
             <a href="#tabs-profile-1" class="nav-link" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab">Diğer Bilgiler</a>
         </li>
+        <li class="nav-item" role="presentation">
+            <a href="#tabs-profile-2" class="nav-link" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab">Yıllık İzin Kümülatif Bilgileri</a>
+        </li>
         <li class="nav-item ms-auto" role="presentation">
             <a href="#tabs-settings-1" class="nav-link" title="Settings" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -220,13 +223,14 @@
         </li>
     </ul>
 </div>
+
+<div class="card-body">
 <form id="updatePersonalForm" method="POST" onsubmit="return false">
+<div class="tab-content">
+
 <input type="hidden" name="ID">
 <input type="hidden" name="PersonalDetails.ID">
 <input type="hidden" name="returnUrl" value="@returnUrl">
-<div class="card-body">
-<div class="tab-content">
-
 <div class="tab-pane active show" id="tabs-home-1" role="tabpanel">
     <div class="hr-text mb-3 text-black">Personel Bilgileri</div>
     <div class="card-body">
@@ -425,6 +429,10 @@
 
         </div>
     </div>
+    <div class=" text-end">
+        <button id="enableEditButton" data-enableEditBtn class="btn btn-secondary">Düzenlemeyi Etkinleştir</button>
+        <button disabled id="updatePersonalButton" data-updateBtn class="btn btn-lime">Personeli Güncelle</button>
+    </div>
 </div>
 <div class="tab-pane mb-3" id="tabs-profile-1" role="tabpanel">
     <div class="hr-text mb-3 text-black">Diğer Bilgiler</div>
@@ -620,34 +628,15 @@
             </div>
         </div>
     </div>
+    <div class=" text-end">
+        <button id="enableEditButton" data-enableEditBtn class="btn btn-secondary">Düzenlemeyi Etkinleştir</button>
+        <button disabled id="updatePersonalButton" data-updateBtn class="btn btn-lime">Personeli Güncelle</button>
+    </div>
 </div>
-
 <div class="tab-pane" id="tabs-settings-1" role="tabpanel">
-
     <div class="row mb-3 mt-3">
         <div class="col pe-5">
             <label class="form-label text-center mb-3">Yıllık İzin ve Gıda Yardımı</label>
-            <div class="row mb-3">
-                <div class="col">
-                    <div class="input-group input-group-merge">
-                        <span class="input-group-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M12.5 21h-6.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v8"></path>
-                                <path d="M16 3v4"></path>
-                                <path d="M8 3v4"></path>
-                                <path d="M4 11h16"></path>
-                                <path d="M16 19h6"></path>
-                            </svg>
-                        </span>
-                        <input type="number" data-usedYearLeave name="UsedYearLeave" class="form-control" disabled/>
-                        <span class="input-group-text">
-                            Kullanılan Yıllık İzin Miktarı
-                        </span>
-                    </div>
-                    <small id="isYearLeaveRetiredDefault" class="form-hint"></small>
-                </div>
-            </div>
             <div class="row mb-3">
                 <div class="col">
                     <div class="input-group input-group-merge">
@@ -662,6 +651,7 @@
                         </span>
                     </div>
                     <small id="yearLeaveDateIsDefault" class="form-hint"></small>
+                    
                 </div>
             </div>
             <div class="row mb-3">
@@ -695,50 +685,86 @@
                     <small id="foodAidIsDefault" class="form-hint"></small>
                 </div>
             </div>
-            <label class="form-label text-center">Toplam Alacak İzin</label>
             <div class="row mb-3">
                 <div class="col">
                     <div class="input-group input-group-merge">
                         <span class="input-group-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-clock-hour-4">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M12 12l3 2"/><path d="M12 7v5"/>
-                            </svg>
+                            <label class="form-switch">
+                                <input id="IsYearLeaveRetiredInput" class="form-check-input" type="checkbox" name="IsYearLeaveRetired" disabled>
+                            </label>
                         </span>
-                        <input type="number" data-takenLeave name="TotalTakenLeave" class="form-control" readonly/>
-                        <span class="input-group-text">
-                            Saat
-                        </span>
+                        <span class="input-group-text d-flex flex-grow-1">Yıllık İzin Yenilenirken Emeklilik Baz Alınsın.</span>
                     </div>
+                    <small id="isYearLeaveRetiredDefault" class="form-hint"></small>
                 </div>
-
             </div>
-            <div class="row mb-3">
-                <div class="col">
-                    <div class="input-group input-group-merge">
-                        <input data-hourInput type="number" placeholder="Saat Giriniz" disabled class="form-control"/>
-                        <button data-addHour class="btn btn-success" disabled>Saat Ekle</button>
-                        <button data-removeHour class="btn btn-danger" disabled>Saat Çıkart</button>
+        </div>
+        <div class="col ps-5 border-start border-info">
+            <label class="form-label text-center mb-3">Toplam Alacak İzin</label>
+            <div class="row mb-3 ">
+                <div class="row mb-3">
+                    <div class="col">
+                        <div class="input-group input-group-merge">
+                            <span class="input-group-text">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-clock-hour-4">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M12 12l3 2"/><path d="M12 7v5"/>
+                                </svg>
+                            </span>
+                            <input type="number" data-takenLeave name="TotalTakenLeave" class="form-control" readonly/>
+                            <span class="input-group-text">
+                                Saat
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <div class="input-group input-group-merge">
+                            <input data-hourInput type="number" placeholder="Saat Giriniz" disabled class="form-control"/>
+                            <button data-addHour class="btn btn-success" disabled>Saat Ekle</button>
+                            <button data-removeHour class="btn btn-danger" disabled>Saat Çıkart</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <div class="col border-start border-info">
-            <label class="form-label text-center mb-3">Yıllık İzin Hak Edişinin Yıllara Göre Hesaplanması</label>
-            <div id="cumulative-inputs-section" class="row scroll-y mb-3" style="max-height: 400px">
-                
+    </div>
+    <div class=" text-end">
+        <button id="enableEditButton" data-enableEditBtn class="btn btn-secondary">Düzenlemeyi Etkinleştir</button>
+        <button disabled id="updatePersonalButton" data-updateBtn class="btn btn-lime">Personeli Güncelle</button>
+    </div>
+</div>
+
+
+
+</div>
+</form>
+<div class="tab-content">
+    <div class="tab-pane mb-3" id="tabs-profile-2" role="tabpanel">
+        <div class="card-body">
+            <div class="col table-responsive " style="max-height: 400px">
+                <table class="table table-nowrap">
+                    <thead class="sticky-top">
+                    <tr>
+                        <th class="text-center" scope="col">Yıl</th>
+                        <th class="text-center" scope="col">Hak Edilen Yıllık İzin Miktarı</th>
+                        <th class="text-center" scope="col">Kalan Yıllık İzin Miktarı</th>
+                        <th class="text-center" scope="col">İzin Föyü <br>İmzalandı Mı</th>
+                        <th class="text-center" scope="col">Bildirim<br>Açık Mı</th>
+                        <th class="text-center" scope="col">Güncelle</th>
+                    </tr>
+                    </thead>
+                        <tbody id="cumulative-inputs-section">
+
+                        </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
+</div>
 
-</div>
-<div class=" text-end">
-    <button id="enableEditButton" class="btn btn-secondary">Düzenlemeyi Etkinleştir</button>
-    <button disabled id="updatePersonalButton" class="btn btn-lime">Personeli Güncelle</button>
-</div>
-</div>
-</form>
 <!-- /Main Card -->
 <!-- /Account Delete -->
 <div class="card">
@@ -881,12 +907,6 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-check">
-                                    <input type="checkbox" class="form-check-input" name="IsYearLeaveDateProtected">
-                                    <span class="form-check-label">Yıllık İzin Yenilenme Tarihini Koru <span class="form-help" data-bs-toggle="tooltip" data-bs-placement="right" title="Yeni personelin yıllık izin yenilenme tarihi eski personelin işe giriş tarihi olarak baz alınsın mı? İşaretlenmediği durumda yeni personelin yıllık izinleri girmiş olduğunuz işe başlangıç tarihinde yenilenecektir.">?</span></span>
-                                </label>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-check">
                                     <input type="checkbox" class="form-check-input" name="IsTakenLeaveProtected">
                                     <span class="form-check-label">Alacak İzin Sayısını Koru <span class="form-help" data-bs-toggle="tooltip" data-bs-placement="right" title="Alacak izin verisi korunsun mu?">?</span></span>
                                 </label>
@@ -923,6 +943,74 @@
     </div>
 </div>
 <!--PersonalIşe Geri Al Modal-->
+<!--Kumulatif Ekle Modal-->
+<div class="modal modal-blur fade" id="cumulative-add-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-status bg-blue"></div>
+            <div class="modal-body text-center py-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-blue icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>
+                </svg>
+                <h3>Manuel Yıllık İzin Ekle</h3>
+                <div class="text-muted">
+                    İlgili yıla ait yıllık izin miktarını erkenden eklemek istediğinize emin misiniz? Yıllık izin miktarını eklemeniz durumunda günlük otomasyonda tekrar yenilenmeyecektir!
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="w-100">
+                    <div class="row">
+                        <div class="col">
+                            <a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                İptal
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a id="cumulative-modal-button-add" href="#" class="btn btn-blue w-100" data-bs-dismiss="modal">
+                                Evet Ekle
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Kumulatif Ekle Modal-->
+<!--Kumulatif Sil Modal-->
+<div class="modal modal-blur fade" id="cumulative-delete-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-status bg-danger"></div>
+            <div class="modal-body text-center py-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>
+                </svg>
+                <h3>Yıllık İzin Hakkını Sil</h3>
+                <div class="text-muted">
+                    İlgili yıla ait yıllık izin miktarını silmek istediğinize emin misiniz? Yıllık izin miktarını silmeniz durumunda günlük otomasyonda yenilenmesi gereken miktarlar ile yenilenecektir!
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="w-100">
+                    <div class="row">
+                        <div class="col">
+                            <a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                İptal
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a id="cumulative-modal-button-delete" href="#" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                                Evet Sil
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Kumulatif Sil Modal-->
 
 
 @section Scripts

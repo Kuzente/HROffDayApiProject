@@ -3,6 +3,7 @@ using Core.Entities;
 using Core.Enums;
 using Core.Interfaces;
 using Data.Abstract;
+using Microsoft.EntityFrameworkCore;
 using Services.Abstract.DailyCounterServices;
 
 namespace Services.Concrete.DailyCounterServices;
@@ -25,7 +26,8 @@ public class WriteDailyCounterService : IWriteDailyCounterService
                 predicate: p =>
                     p.YearLeaveDate.Month == DateTime.UtcNow.AddHours(3).Month && 
                     p.YearLeaveDate.Day == DateTime.UtcNow.AddHours(3).Day &&
-                    p.Status == EntityStatusEnum.Online).ToList();
+                    p.Status == EntityStatusEnum.Online,
+                include:i=> i.Include(p=>p.PersonalCumulatives)).ToList();
             if (!todayStartPersonals.Any())
             {
                 var log = new DailyYearLog
@@ -47,51 +49,71 @@ public class WriteDailyCounterService : IWriteDailyCounterService
                 todayStartPersonals.ForEach(a =>
                 {
                     var log = new DailyYearLog();
-                    int yearsSinceStart = (int)((DateTime.Now - a.YearLeaveDate).TotalDays / 365);
-                    int yearsSinceBirth = (int)((DateTime.Now - a.BirthDate).TotalDays / 365);
-                    switch (yearsSinceStart)
+                    if (!a.PersonalCumulatives.Any(p=> p.Year == DateTime.Now.Year))
                     {
-                        case >= 1 when (yearsSinceBirth >= 50 || yearsSinceBirth < 18 || a.IsYearLeaveRetired):
-                            a.CumulativeFormula += "20+";
-                            a.TotalYearLeave += 20;
-                            log.AddedYearLeave = 20;
-                            log.AddedYearLeaveDescription =
-                                yearsSinceBirth >= 50
-                                    ? "Personel 50 yaşından büyük olduğu için 20 gün eklendi"
-                                    : (yearsSinceBirth < 18
-                                        ? "Personel 18 yaşından küçük olduğu için 20 gün eklendi"
-                                        : "Personel İyaş Bünyesinde Emekli olduğu için 20 gün eklendi");
-                            break;
-                        case >= 1 and <= 5:
-                            a.TotalYearLeave += 14;
-                            a.CumulativeFormula += "14+";
-                            log.AddedYearLeave = 14;
-                            log.AddedYearLeaveDescription =
-                                $"{yearsSinceStart} yıl hizmet süresi olduğu için 14 gün eklendi";
-                            break;
-                        case > 5 and < 15:
-                            a.TotalYearLeave += 20;
-                            a.CumulativeFormula += "20+";
-                            log.AddedYearLeave = 20;
-                            log.AddedYearLeaveDescription =
-                                $"{yearsSinceStart} yıl hizmet süresi olduğu için 20 gün eklendi";
-                            break;
-                        case >= 15:
-                            a.TotalYearLeave += 26;
-                            a.CumulativeFormula += "26+";
-                            log.AddedYearLeave = 26;
-                            log.AddedYearLeaveDescription =
-                                $"{yearsSinceStart} yıl hizmet süresi olduğu için 26 gün eklendi";
-                            break;
-                        default:
-                            log.AddedYearLeave = 0;
-                            a.TotalYearLeave = 0;
-                            a.CumulativeFormula = "0+";
-                            log.AddedYearLeaveDescription =
-                                "Personel 1 seneyi doldurmadı. Ekleme Yapılmadı.";
-                            break;
+                        var personalCumulative = new PersonalCumulative
+                        {
+                            IsReportCompleted = false,
+                            IsNotificationExist = false,
+                            Year = DateTime.Now.Year
+                        };
+                        int yearsSinceStart = (int)((DateTime.Now - a.YearLeaveDate).TotalDays / 365);
+                        int yearsSinceBirth = (int)((DateTime.Now - a.BirthDate).TotalDays / 365);
+                        switch (yearsSinceStart)
+                        {
+                            case >= 1 when (yearsSinceBirth >= 50 || yearsSinceBirth < 18 || a.IsYearLeaveRetired):
+                                personalCumulative.EarnedYearLeave = 20;
+                                personalCumulative.RemainYearLeave = 20;
+                                a.TotalYearLeave += 20;
+                                log.AddedYearLeave = 20;
+                                log.AddedYearLeaveDescription =
+                                    yearsSinceBirth >= 50
+                                        ? "Personel 50 yaşından büyük olduğu için 20 gün eklendi"
+                                        : (yearsSinceBirth < 18
+                                            ? "Personel 18 yaşından küçük olduğu için 20 gün eklendi"
+                                            : "Personel İyaş Bünyesinde Emekli olduğu için 20 gün eklendi");
+                                break;
+                            case >= 1 and <= 5:
+                                a.TotalYearLeave += 14;
+                                personalCumulative.EarnedYearLeave = 14;
+                                personalCumulative.RemainYearLeave = 14;
+                                log.AddedYearLeave = 14;
+                                log.AddedYearLeaveDescription =
+                                    $"{yearsSinceStart} yıl hizmet süresi olduğu için 14 gün eklendi";
+                                break;
+                            case > 5 and < 15:
+                                a.TotalYearLeave += 20;
+                                personalCumulative.EarnedYearLeave = 20;
+                                personalCumulative.RemainYearLeave = 20;
+                                log.AddedYearLeave = 20;
+                                log.AddedYearLeaveDescription =
+                                    $"{yearsSinceStart} yıl hizmet süresi olduğu için 20 gün eklendi";
+                                break;
+                            case >= 15:
+                                a.TotalYearLeave += 26;
+                                personalCumulative.EarnedYearLeave = 26;
+                                personalCumulative.RemainYearLeave = 26;
+                                log.AddedYearLeave = 26;
+                                log.AddedYearLeaveDescription =
+                                    $"{yearsSinceStart} yıl hizmet süresi olduğu için 26 gün eklendi";
+                                break;
+                            default:
+                                log.AddedYearLeave = 0;
+                                a.TotalYearLeave += 0;
+                                personalCumulative.EarnedYearLeave = 0;
+                                personalCumulative.RemainYearLeave = 0;
+                                log.AddedYearLeaveDescription =
+                                    "Personel 1 seneyi doldurmadı. Ekleme Yapılmadı.";
+                                break;
+                        }
+                        a.PersonalCumulatives.Add(personalCumulative);
                     }
-
+                    else
+                    {
+                        var currentYearCumulative = a.PersonalCumulatives.First(p => p.Year == DateTime.Now.Year && p.Status == EntityStatusEnum.Online);
+                        log.AddedYearLeave = currentYearCumulative.EarnedYearLeave;
+                        log.AddedYearLeaveDescription = "Personele ait yıllık izin manuel olarak eklendiği için otomasyonda tekrar yenilenmedi.";
+                    }
                     log.CreatedAt = DateTime.Now;
                     log.NameSurname = a.NameSurname;
                     logList.Add(log);

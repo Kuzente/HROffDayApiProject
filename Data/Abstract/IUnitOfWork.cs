@@ -4,6 +4,7 @@ using Data.Abstract.DailyFoodLogRepositories;
 using Data.Abstract.DailyYearLogRepositories;
 using Data.Abstract.MissingDayRepositories;
 using Data.Abstract.OffDayRepositories;
+using Data.Abstract.PersonalCumulativeRepositories;
 using Data.Abstract.PersonalRepositories;
 using Data.Abstract.PositionRepositories;
 using Data.Abstract.TransferPersonalRepositories;
@@ -33,5 +34,7 @@ public interface IUnitOfWork : IDisposable
 	IWriteTransferPersonalRepository WriteTransferPersonalRepository { get;  }
 	IReadMissingDayRepository ReadMissingDayRepository { get;  }
 	IWriteMissingDayRepository WriteMissingDayRepository { get;  }
+	IReadPersonalCumulativeRepository ReadPersonalCumulativeRepository { get;  }
+	IWritePersonalCumulativeRepository WritePersonalCumulativeRepository { get;  }
 	bool Commit(bool state = true);
 }

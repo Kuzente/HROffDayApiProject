@@ -8,4 +8,5 @@ public interface IWriteUserService
     Task<IResultDto> AddUserService(AddUserDto dto);
     Task<IResultDto> UpdateUserService(WriteUpdateUserDto dto);
     Task<IResultDto> DeleteUserService(Guid id);
+    
 }

@@ -1,11 +1,12 @@
 ﻿using Core.DTOs.BranchDTOs;
+using Core.DTOs.PersonalCumulativeDtos.ReadDtos;
 using Core.DTOs.PersonalDetailDto.ReadDtos;
 using Core.DTOs.PositionDTOs;
 using Core.Enums;
 
 namespace Core.DTOs.PersonalDTOs.ReadDtos;
 
-public class ReadUpdatePersonalDto
+public partial class ReadUpdatePersonalDto
 {
     public Guid ID { get; set; }
     public string NameSurname { get; set; }
@@ -21,16 +22,19 @@ public class ReadUpdatePersonalDto
     public string Gender { get; set; }
     public int TotalYearLeave { get; set; }
     public double TotalTakenLeave { get; set; }
-    public string CumulativeFormula { get; set; }
     public int UsedYearLeave { get; set; }
     public int FoodAid { get; set; }
-    public Guid Branch_Id { get; set; }
-    public Guid Position_Id { get; set; }
-    public List<BranchNameDto> Branches { get; set; }
-    public List<PositionNameDto> Positions { get; set; }
-    public ReadUpdatePersonalDetailsDto PersonalDetails { get; set; }
     public EntityStatusEnum Status { get; set; }
     public bool IsBackToWork { get; set; }
     public DateTime YearLeaveDate { get; set; }
     public bool IsYearLeaveRetired { get; set; }
+}
+public partial class ReadUpdatePersonalDto
+{
+    public ReadUpdatePersonalDetailsDto PersonalDetails { get; set; }
+    public Guid Branch_Id { get; set; }
+    public List<BranchNameDto> Branches { get; set; }
+    public Guid Position_Id { get; set; }
+    public List<PositionNameDto> Positions { get; set; }
+    public List<ReadUpdatePersonalCumulativeDto> PersonalCumulatives { get; set; }
 }

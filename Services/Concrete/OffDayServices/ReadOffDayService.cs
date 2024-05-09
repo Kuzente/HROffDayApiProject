@@ -193,6 +193,9 @@ public class ReadOffDayService : IReadOffDayService
 						{
 							orderedOffdays = query.sortName switch
 							{
+								"documentNumber" => query.sortBy == "asc"
+									? p.OrderBy(a => a.DocumentNumber)
+									: p.OrderByDescending(a => a.DocumentNumber),
 								"nameSurname" => query.sortBy == "asc"
 									? p.OrderBy(a => a.Personal.NameSurname)
 									: p.OrderByDescending(a => a.Personal.NameSurname),
@@ -411,35 +414,28 @@ public class ReadOffDayService : IReadOffDayService
 		return res;
 	}
 
-	public async Task<IResultWithDataDto<ReadWaitingOffDayEditDto>> GetOffDayByIdService(Guid id)
+	public async Task<IResultWithDataDto<ReadWaitingOffDayEditDto>> GetOffDayEditService(Guid id)
 	{
 		IResultWithDataDto<ReadWaitingOffDayEditDto> res = new ResultWithDataDto<ReadWaitingOffDayEditDto>();
 		try
 		{
-			var resultData = await _unitOfWork.ReadOffDayRepository.GetSingleAsync(
+			var getOffDay = await _unitOfWork.ReadOffDayRepository.GetSingleAsync(
 				predicate: p => 
 						p.ID == id && 
 						p.Personal.Status == EntityStatusEnum.Online,
 				include: p=> p
 						.Include(a=>a.Personal)
-						.Include(a=>a.Personal));
-			var branchList = await Task.Run(() => _unitOfWork.ReadBranchRepository
-				.GetAll()
-				.Select(a=> new { a.Name,a.ID , a.Status}));
-			var positionList = await Task.Run(() => _unitOfWork.ReadPositionRepository
-				.GetAll()
-				.Select(a=> new { a.Name,a.ID, a.Status}));
-			if(resultData is null||branchList is null || positionList is null)
+				);
+			if(getOffDay is null)
 				return res.SetStatus(false).SetErr("OffDay Not Found").SetMessage("İlgili Personele Ait İzin Bulunamadı!!!");
-			
-			var mapData = _mapper.Map<ReadWaitingOffDayEditDto>(resultData);
-				var branch = branchList.FirstOrDefault(b => b.ID == resultData.BranchId);
-				var position = positionList.FirstOrDefault(p => p.ID == resultData.PositionId);
-				if (branch is not null && position is not null)
-				{
-					mapData.BranchName = branch.Status == EntityStatusEnum.Archive ? $"{branch.Name} (Silinmiş)" : branch.Name;
-					mapData.PositionName = position.Status == EntityStatusEnum.Archive ? $"{position.Name} (Silinmiş)" : position.Name;
-				}
+			//Burada Şube ve Ünvanı Ekstra olarak almamızın sebebi OffDay üzerine hangi şube veya ünvan ile işlem yapıldıysa onu yakalamak için
+			var offDayBranch = await _unitOfWork.ReadBranchRepository.GetSingleAsync(predicate:p=> p.ID == getOffDay.BranchId);
+			var offDayPosition = await _unitOfWork.ReadPositionRepository.GetSingleAsync(predicate:p=> p.ID == getOffDay.PositionId);
+			if(offDayBranch is null || offDayPosition is null)
+				return res.SetStatus(false).SetErr("Branch or Position Not Found").SetMessage("İlgili Personele Şube veya Ünvan Bulunamadı!!!");
+			var mapData = _mapper.Map<ReadWaitingOffDayEditDto>(getOffDay);
+			mapData.BranchName = offDayBranch.Status == EntityStatusEnum.Archive ? $"{offDayBranch.Name} (Silinmiş)" : offDayBranch.Name;
+			mapData.PositionName = offDayPosition.Status == EntityStatusEnum.Archive ? $"{offDayPosition.Name} (Silinmiş)" : offDayPosition.Name;
 			res.SetData(mapData);
 		}
 		catch (Exception e)

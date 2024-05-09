@@ -1,5 +1,6 @@
 ﻿using Core.DTOs.BaseDTOs;
 using Core.DTOs.PersonalDetailDto.WriteDtos;
+using Core.Entities;
 
 namespace Core.DTOs.PersonalDTOs;
 
@@ -25,4 +26,5 @@ public class AddRangePersonalDto : BaseDto
     public Guid Branch_Id { get; set; }
     public Guid Position_Id { get; set; }
     public AddRangePersonalDetailDto PersonalDetails { get; set; }
+    public List<PersonalCumulative> PersonalCumulatives { get; set; }
 }

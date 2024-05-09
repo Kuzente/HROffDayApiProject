@@ -262,7 +262,7 @@ else
             <div class="col-5 p-3 text-end">
                 <div class="row d-inline-flex">
 
-                    <div class="col-4">
+                    <div class="col-2">
                         <span class="">
                             <form method="post" action="/personel-eksik-gun-excel">
                                 <button type="submit" class="btn btn-icon btn-green">
@@ -285,7 +285,7 @@ else
                         </span>
                     </div>
 
-                    <div class="col-8">
+                    <div class="col-10">
                         @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && kvp.Key != "id" && !string.IsNullOrEmpty(kvp.Value)))
                         {
                             <button type="button" class="btn">

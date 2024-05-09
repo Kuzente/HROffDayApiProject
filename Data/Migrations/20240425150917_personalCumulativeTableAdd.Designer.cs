@@ -4,6 +4,7 @@ using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240425150917_personalCumulativeTableAdd")]
+    partial class personalCumulativeTableAdd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -302,6 +305,10 @@ namespace Data.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("CumulativeFormula")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -618,12 +625,12 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("0e74704a-bfca-4236-aa38-14a317567123"),
-                            CreatedAt = new DateTime(2024, 4, 28, 23, 7, 32, 151, DateTimeKind.Local).AddTicks(6847),
+                            ID = new Guid("d3f934a8-0661-41ae-90ab-05aa5c144cb3"),
+                            CreatedAt = new DateTime(2024, 4, 25, 18, 9, 16, 995, DateTimeKind.Local).AddTicks(3095),
                             DeletedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "superadmin@superadmin.com",
                             IsDefaultPassword = true,
-                            ModifiedAt = new DateTime(2024, 4, 28, 23, 7, 32, 151, DateTimeKind.Local).AddTicks(6856),
+                            ModifiedAt = new DateTime(2024, 4, 25, 18, 9, 16, 995, DateTimeKind.Local).AddTicks(3104),
                             Password = "superadmin",
                             Role = 3,
                             Status = 0,

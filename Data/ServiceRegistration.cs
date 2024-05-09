@@ -5,6 +5,7 @@ using Data.Abstract.DailyFoodLogRepositories;
 using Data.Abstract.DailyYearLogRepositories;
 using Data.Abstract.MissingDayRepositories;
 using Data.Abstract.OffDayRepositories;
+using Data.Abstract.PersonalCumulativeRepositories;
 using Data.Abstract.PersonalRepositories;
 using Data.Abstract.PositionRepositories;
 using Data.Abstract.TransferPersonalRepositories;
@@ -16,6 +17,7 @@ using Data.Concrete.DailyFoodLogRepositories;
 using Data.Concrete.DailyYearLogRepositories;
 using Data.Concrete.MissingDayRepositories;
 using Data.Concrete.OffDayRepositories;
+using Data.Concrete.PersonalCumulativeRepositories;
 using Data.Concrete.PersonalRepositories;
 using Data.Concrete.PositionRepositories;
 using Data.Concrete.TransferPersonalRepositories;
@@ -54,6 +56,8 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(IWriteTransferPersonalRepository),typeof(WriteTransferPersonalRepository));
 		services.AddScoped(typeof(IReadMissingDayRepository),typeof(ReadMissingDayRepository));
 		services.AddScoped(typeof(IWriteMissingDayRepository),typeof(WriteMissingDayRepository));
+		services.AddScoped(typeof(IReadPersonalCumulativeRepository),typeof(ReadPersonalCumulativeRepository));
+		services.AddScoped(typeof(IWritePersonalCumulativeRepository),typeof(WritePersonalCumulativeRepository));
 
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Core.Enums;
 
 namespace Core.DTOs.OffDayDTOs.WriteDtos;
 
@@ -31,6 +32,7 @@ public class WriteUpdateWatingOffDayDto
     public Guid PositionId { get; set; }
     public string? HrName { get; set; }
     public string? DirectorName { get; set; }
+    public OffDayStatusEnum OffDayStatus { get; set; }
     
     public List<string>? LeaveByMarriedFatherDead { get; set; }
     [Required]

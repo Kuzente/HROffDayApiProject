@@ -1,5 +1,9 @@
-﻿@{
+﻿@using System.Security.Claims
+@using Core.Enums
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@{
     ViewData["Title"] = "Home Page";
+    var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
 }
 
 <div class="page-header d-print-none">
@@ -144,6 +148,64 @@
         </div>
     </div>
 </div>
+    @if (userRole == UserRoleEnum.HumanResources.ToString() || userRole == UserRoleEnum.SuperAdmin.ToString())
+    {
+        <div class="col-lg-6">
+
+            <div class="col-12">
+                <div class="card" style="height: 24rem">
+
+                    <div class="card-header d-flex justify-content-start">
+                        <div>
+                            <h4 class="card-title">Onaylanması Gereken Kümülatif Raporları</h4>
+                        </div>
+                    </div>
+                    <div class=" card-body-scrollable card-body-scrollable-shadow">
+                        <div class="d-flex justify-content-center">
+                            <div id="cumulativeSpinner" class="spinner-border text-blue m-5" role="status"></div>
+                            <div id="cumulativeEmptyText" class="d-none text-secondary m-5">Herhangi onaylanması gereken kümülatif rapor bulunmamaktadır.</div>
+                        </div>
+                        <div class="divide-y">
+
+                            <div id="cumulativeList" class="list-group list-group-flush list-group-hoverable">
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>  
+        <div class="col-lg-6">
+
+            <div class="col-12">
+                <div class="card" style="height: 24rem">
+
+                    <div class="card-header d-flex justify-content-start">
+                        <div>
+                            <h4 class="card-title">Eksik Gün Yaklaşan Raporlar (İstirahat 01)</h4>
+                        </div>
+                    </div>
+                    <div class=" card-body-scrollable card-body-scrollable-shadow">
+                        <div class="d-flex justify-content-center">
+                            <div id="missingDaySpinner" class="spinner-border text-blue m-5" role="status"></div>
+                            <div id="missingDayEmptyText" class="d-none text-secondary m-5">Herhangi bir yaklaşan rapor bulunmamaktadır.</div>
+                        </div>
+                        <div class="divide-y">
+
+                            <div id="missingDayList" class="list-group list-group-flush list-group-hoverable">
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    
+
+
 <div class="col-lg-6">
 
     <div class="col-12">
@@ -170,32 +232,32 @@
         </div>
     </div>
 </div>
-<div class="col-lg-6">
+    <div class="col-lg-6">
 
-    <div class="col-12">
-        <div class="card" style="height: 24rem">
+        <div class="col-12">
+            <div class="card" style="height: 24rem">
 
-            <div class="card-header d-flex justify-content-start">
-                <div>
-                    <h4 class="card-title">Eksik Gün Yaklaşan Raporlar (İstirahat 01)</h4>
+                <div class="card-header d-flex justify-content-start">
+                    <div>
+                        <h4 class="card-title">Yaklaşan Onaylanan İzinler</h4>
+                    </div>
                 </div>
-            </div>
-            <div class=" card-body-scrollable card-body-scrollable-shadow">
-                <div class="d-flex justify-content-center">
-                    <div id="missingDaySpinner" class="spinner-border text-blue m-5" role="status"></div>
-                    <div id="missingDayEmptyText" class="d-none text-secondary m-5">Herhangi bir yaklaşan rapor bulunmamaktadır.</div>
-                </div>
-                <div class="divide-y">
+                <div class=" card-body-scrollable card-body-scrollable-shadow">
+                    <div class="d-flex justify-content-center">
+                        <div id="approvedOffDaySpinner" class="spinner-border text-blue m-5" role="status"></div>
+                        <div id="approvedOffDayEmptyText" class="d-none text-secondary m-5">Herhangi bir yaklaşan izin bulunmamaktadır.</div>
+                    </div>
+                    <div class="divide-y">
 
-                    <div id="missingDayList" class="list-group list-group-flush list-group-hoverable">
+                        <div id="approvedOffDayList" class="list-group list-group-flush list-group-hoverable">
+
+                        </div>
 
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
-</div>
 <div class="col-lg-6">
 
     <div class="col-12">
@@ -329,4 +391,132 @@
 @section Scripts
 {
     <script src="/js/custom/dashboard/dashboard.js"></script>
+    @if (userRole == UserRoleEnum.HumanResources.ToString() || userRole == UserRoleEnum.SuperAdmin.ToString())
+    {
+        <script>
+            const missDayList = document.getElementById('missingDayList')
+            const cumulativeList = document.getElementById('cumulativeList')
+            let today = new Date();
+            //Eksik Gün istirahat ajax metodu
+            $.ajax({
+                type:"GET",
+                url: "/query/eksik-gun-dashboard?$expand=Personal($select=NameSurname,Status;)&$select=id,EndOffDayDate,Personal,EndOffDayDate,Reason&$filter=Personal/Status eq 'Online'and Reason eq 'İstirahat (01)'&$orderby=EndOffDayDate asc",
+            }).done(function (res) {
+                $('#missingDaySpinner').hide();
+                if (res.length > 0) {
+                    res.forEach(data => {
+                        let raporTarihi = new Date(data.EndOffDayDate)
+                        let kalanGunSayisi = Math.ceil((raporTarihi - today) / (1000 * 60 * 60 * 24));
+                        if (kalanGunSayisi <= 5 && kalanGunSayisi >= 0) {
+                            let remainingText = (raporTarihi.getDate() - today.getDate() === 0) ? "Bugün" :
+                                (raporTarihi.getDate() - today.getDate() === 1) ? "Yarın" :
+                                    `${kalanGunSayisi} Gün Sonra`;
+                            let listItem = document.createElement('div');
+                            listItem.className = 'list-group-item';
+                            let row = document.createElement('div');
+                            row.className = 'row';
+                            let avatarCol = document.createElement('div');
+                            avatarCol.className = 'col-auto';
+                            avatarCol.innerHTML = `<span class="avatar">${data.Personal.NameSurname.charAt(0)}</span>`;
+                            let infoCol = document.createElement('div');
+                            infoCol.className = 'col';
+                            infoCol.innerHTML = `
+                <div class="text-truncate">
+                    <strong>${data.Personal.NameSurname}</strong> adlı personele ait rapor tarihi yaklaşıyor.
+                </div>
+                <div class="text-secondary">Rapor Bitiş Tarihi: ${new Date(data.EndOffDayDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' })} - ${remainingText}</div>
+            `;
+
+                            row.appendChild(avatarCol);
+                            row.appendChild(infoCol);
+                            if (raporTarihi.getDate() - today.getDate() === 0) {
+                                let badgeCol = document.createElement('div');
+                                badgeCol.className = 'col-auto align-self-center';
+                                badgeCol.innerHTML = '<div class="badge bg-success"></div>';
+                                row.appendChild(badgeCol);
+                                listItem.className += " active";
+                                listItem.style.borderLeftColor = "rgb(47, 179, 68)"
+                            }
+                            listItem.appendChild(row);
+                            missDayList.appendChild(listItem);
+                        }
+
+                    })
+                }
+                else {
+                    $('#missingDayEmptyText').removeClass('d-none');
+                }
+            });
+            //Kumulatif Rapor Metodları
+            $.ajax({
+                type:"GET",
+                url: "/query/kumulatif-bildirim-dashboard?$expand=Personal($select=NameSurname;)&$select=id,Year,Personal,IsReportCompleted,IsNotificationExist,Personal_Id&$filter=Personal/Status eq 'Online'and IsNotificationExist eq true&$orderby=Year asc",
+            }).done(function (res) {
+                $('#cumulativeSpinner').hide();
+                if (res.length > 0){
+                    
+                    res.forEach(data=> {
+
+                        let listItem = document.createElement('div');
+                        listItem.className = 'list-group-item';
+                        let row = document.createElement('div');
+                        row.className = 'row';
+                        let avatarCol = document.createElement('div');
+                        avatarCol.className = 'col-auto';
+                        avatarCol.innerHTML = `<span class="avatar">${data.Personal.NameSurname.charAt(0)}</span>`;
+                        let infoCol = document.createElement('div');
+                        infoCol.className = 'col';
+                        infoCol.innerHTML = `
+                <div class="text-truncate">
+                    <strong><a href="/personel-detaylari?id=${data.Personal_Id}">${data.Personal.NameSurname}</a></strong> adlı personele ait kümülatif rapor.
+                </div>
+                <div class="text-secondary">Kümülatif Yılı: ${data.Year} - İmzalandı Mı?: ${data.IsReportCompleted ? "İmzalandı" : "İmza Bekliyor"}</div>
+            `;
+
+                        row.appendChild(avatarCol);
+                        row.appendChild(infoCol);
+                        if (data.IsReportCompleted) {
+                            let buttonCol = document.createElement('div');
+                            buttonCol.className = 'col-auto align-self-center';
+                            buttonCol.innerHTML = `<button type="button" data-cumulativeBtn data-cumulativeId="${data.ID}" class="btn btn-sm btn-pill btn-success">Bildirimi Kapat</button>`;
+                            row.appendChild(buttonCol);
+                            listItem.className += " active";
+                            listItem.style.borderLeftColor = "rgb(47, 179, 68)"
+                        }else{
+                            let buttonCol = document.createElement('div');
+                            buttonCol.className = 'col-auto align-self-center';
+                            buttonCol.innerHTML = `<button type="button" data-cumulativeBtn data-cumulativeId="${data.ID}" class="btn btn-sm btn-pill btn-danger">İmzalandı</button>`;
+                            row.appendChild(buttonCol);
+                            listItem.className += " active";
+                            listItem.style.borderLeftColor = "rgb(214 57 57)"
+                        }
+                        listItem.appendChild(row);
+                        cumulativeList.appendChild(listItem);
+
+                    })
+                }else{
+                    $('#cumulativeEmptyText').removeClass('d-none');
+                }
+            });
+            $(document).on('click', 'button[data-cumulativeBtn]', function(event) {
+                let clickedButton = $(this)
+                let cumulativeId = clickedButton.attr("data-cumulativeId")
+                let listDiv = clickedButton.closest('.list-group-item')
+                $.ajax({
+                    type:"POST",
+                    url: "/post-kumulatif-bildirim",
+                    data: {id : cumulativeId}
+                }).done(function (res) {
+                    if (res.isSuccess){
+                        $('#success-modal-message').text("Kümülatif Başarılı Bir Şekilde Güncellendi.")
+                        $('#success-modal').modal('show');
+                        listDiv.remove()
+                    }else {
+                        $('#error-modal-message').text(res.message)
+                        $('#error-modal').modal('show');
+                    }
+                })
+            });
+        </script>
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.DTOs.MissingDayDtos.WriteDtos;
+using Core.DTOs.PersonalCumulativeDtos.WriteDtos;
 using Core.DTOs.PersonalDetailDto.WriteDtos;
 using Core.DTOs.PersonalDTOs.WriteDtos;
 using Core.Enums;
@@ -107,9 +108,37 @@ public class PersonalDetailController : Controller
         }
         else
         {
+            if (dto.RetiredOrOld == false && dto.IsYearLeaveRetired) return Ok(result.SetStatus(false).SetErr("ModelState is not valid").SetMessage("Yıllık izin yenilemesi emeklilik durumu baz alınsın istiyor iseniz personele ait emeklilik durumunu güncellemeniz gerekmektedir."));
+            if (dto.RetiredOrOld && !dto.RetiredDate.HasValue) return Ok(result.SetStatus(false).SetErr("Personal retired but retired date is null").SetMessage("Emeklilik durumu açık ise emeklilik tarihi girmek zorunludur!"));
             result = await _writePersonalService.UpdateAsync(dto);
         }
         
+        return Ok(result);
+    }
+    /// <summary>
+    /// Personel Kümülatif Güncelleme Post Metodu
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<IActionResult> UpdateCumulative(WriteUpdateCumulativeDto dto)
+    {
+        IResultDto result = new ResultDto();
+        if (!ModelState.IsValid) return Ok(result.SetStatus(false).SetErr("Modelstate is not valid").SetMessage("Lütfen Zorunlu Alanların Girildiğinden Emin Olunuz."));
+        if(dto.EarnedYearLeave < dto.RemainYearLeave) return Ok(result.SetStatus(false).SetErr("Math Error").SetMessage("Hak Edilen İzin, kalan izin miktarından küçük olamaz."));
+        if(dto.EarnedYearLeave < 0 || dto.RemainYearLeave < 0) return Ok(result.SetStatus(false).SetErr("Math Error").SetMessage("Negatif Değer Girilemez!"));
+        result = await _writePersonalService.UpdatePersonalCumulativeAsyncService(dto);
+        
+        
+        return Ok(result);
+    }
+    /// <summary>
+    /// Personel Kümülatif Güncelleme Post Metodu
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<IActionResult> DeleteCumulative(Guid personalId,Guid cumulativeId)
+    { 
+        var result = await _writePersonalService.DeletePersonalCumulativeAsyncService(personalId, cumulativeId);
         return Ok(result);
     }
     /// <summary>
@@ -206,6 +235,10 @@ public class PersonalDetailController : Controller
         }
         return Redirect(returnUrl);
     }
+    /// <summary>
+    /// Personal Eksik Gün Excel Raporu Alma
+    /// </summary>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> PersonalMissingDayExportExcel(MissingDayQuery query , string returnUrl)
     {
