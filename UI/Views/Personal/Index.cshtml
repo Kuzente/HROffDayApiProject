@@ -484,19 +484,19 @@ else
     <div class="row">
         <div class="col mb-3">
             <label class="form-label required">Ünvan / Görev</label>
-            <select id="positionSelectModal" data-required="true" class="form-select" name="Position_Id">
+            <select id="positionSelectModal" data-required="true" class="form-select" name="Position_Id" placeholder="Şube Seçiniz">
             </select>
         </div>
         <div class="col mb-3">
             <label class="form-label required">Şube</label>
-            <select id="branchSelectModal" data-required="true" class="form-select" name="Branch_Id">
+            <select id="branchSelectModal" data-required="true" class="form-select" name="Branch_Id" placeholder="Ünvan Seçiniz">
             </select>
         </div>
     </div>
     <div class="row">
         <div class="col-6 mb-3">
             <label class="form-label required">Departman</label>
-            <select id="departmantNameSelect" data-required="true" class="form-select selectListTom" data-departmantSelect name="PersonalDetails.DepartmantName">
+            <select id="departmantNameSelect" data-required="true" class="form-select" data-departmantSelect name="PersonalDetails.DepartmantName" placeholder="Departman Seçiniz">
             </select>
         </div>
     </div>
@@ -614,16 +614,8 @@ else
                         <path d="M6 10.6v5.4a6 3 0 0 0 12 0v-5.4"/>
                     </svg>
                 </span>
-                <select id="EducationStatusSelect" class="form-select" name="PersonalDetails.EducationStatus">
-                    <option value="">Eğitim Durumu</option>
-                    <option value="İlkokul">İlkokul</option>
-                    <option value="Ortaokul">Ortaokul</option>
-                    <option value="Lise">Lise</option>
-                    <option value="Meslek Lisesi">Meslek Lisesi</option>
-                    <option value="Mes. Tek. Lisesi">Mes. Tek. Lisesi</option>
-                    <option value="Ön Lisans">Ön Lisans</option>
-                    <option value="Lisans">Lisans</option>
-                    <option value="Yüksek Lisans">Yüksek Lisans</option>
+                <select id="EducationStatusSelect" class="form-select" name="PersonalDetails.EducationStatus" placeholder="Eğitim Durumu Seçiniz">
+                    
                 </select>
             </div>
 
@@ -643,14 +635,8 @@ else
                         <path d="M16 16l3.923 -.98"/>
                     </svg>
                 </span>
-                <select id="PersonalGroupSelect" class="form-select" name="PersonalDetails.PersonalGroup">
-                    <option value="">Personelin Bulunduğu Grup</option>
-                    <option value="A Grup Üst Düzey">A Grup Üst Düzey</option>
-                    <option value="B Grup Müdür">B Grup Müdür</option>
-                    <option value="C Grup Müdür Yardımcısı">C Grup Müdür Yardımcısı</option>
-                    <option value="D Grup Şef-Sorumlu">D Grup Şef-Sorumlu</option>
-                    <option value="E Grup Asgari Ücretli">E Grup Asgari Ücretli</option>
-                    <option value="Yönetici">Yönetici</option>
+                <select id="PersonalGroupSelect" class="form-select" name="PersonalDetails.PersonalGroup" placeholder="Personel Grubu Seçiniz">
+                    
                 </select>
             </div>
         </div>
@@ -680,11 +666,8 @@ else
                         <path d="M14 12v-6.5a1.5 1.5 0 0 1 3 0v6.5"/>
                     </svg>
                 </span>
-                <select id="MaritalStatusSelect" class="form-select" name="PersonalDetails.MaritalStatus">
-                    <option value="">Medeni Hali</option>
-                    <option value="Bekar">Bekar</option>
-                    <option value="Evli">Evli</option>
-                    <option value="Dul">Dul</option>
+                <select id="MaritalStatusSelect" class="form-select" name="PersonalDetails.MaritalStatus" placeholder="Medeni Durumu Seçiniz">
+                    
                 </select>
             </div>
 
@@ -703,15 +686,8 @@ else
                         <path d="M15 8v2"/>
                     </svg>
                 </span>
-                <select id="BodySizeSelect" class="form-select" name="PersonalDetails.BodySize">
-                    <option value="">Beden Ölçüsü</option>
-                    <option value="XS">XS</option>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                    <option value="XXL">XXL</option>
-                    <option value="3XL">3XL</option>
+                <select id="BodySizeSelect" class="form-select" name="PersonalDetails.BodySize" placeholder="Beden Ölçüsü Seçiniz">
+                    
                 </select>
             </div>
 
@@ -731,16 +707,8 @@ else
                         <path d="M3 21l3 -3"/>
                     </svg>
                 </span>
-                <select id="BloodGroupSelect" class="form-select" name="PersonalDetails.BloodGroup">
-                    <option value="">Kan Grubu</option>
-                    <option value="A Rh+">A Rh+</option>
-                    <option value="A Rh-">A Rh-</option>
-                    <option value="B Rh+">B Rh+</option>
-                    <option value="B Rh-">B Rh-</option>
-                    <option value="AB Rh+">AB Rh+</option>
-                    <option value="AB Rh-">AB Rh-</option>
-                    <option value="0 Rh+">0 Rh+</option>
-                    <option value="0 Rh-">0 Rh-</option>
+                <select id="BloodGroupSelect" class="form-select" name="PersonalDetails.BloodGroup" placeholder="Kan Grubu Seçiniz">
+                    
                 </select>
             </div>
 

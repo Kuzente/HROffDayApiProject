@@ -216,8 +216,10 @@ public class ReadOffDayService : IReadOffDayService
 						return orderedOffdays;
 					}
 				));
-			var branchList = await Task.Run(() => _unitOfWork.ReadBranchRepository.GetAll().Select(a=> new { a.Name,a.ID , a.Status}));
-			var positionList = await Task.Run(() => _unitOfWork.ReadPositionRepository.GetAll().Select(a=> new { a.Name,a.ID, a.Status}));
+			var branchListquery = await Task.Run(() => _unitOfWork.ReadBranchRepository.GetAll().Select(a=> new { a.Name,a.ID , a.Status}));
+			var positionListquery = await Task.Run(() => _unitOfWork.ReadPositionRepository.GetAll().Select(a=> new { a.Name,a.ID, a.Status}));
+			var branchList = branchListquery.ToList();
+			var positionList = positionListquery.ToList();
 			ReadApprovedOffDayDto mapDataDto = new()
 			{
 				ReadApprovedOffDayListDtos = new(),

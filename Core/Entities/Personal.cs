@@ -22,7 +22,7 @@ public partial class Personal : BaseEntity
 	public int RegistirationNumber { get; set; }
 	[DisplayName("Telefon No")]
 	public string? Phonenumber { get; set; }
-	[DisplayName("Özel Durum")]
+	[DisplayName("Emeklilik Durumu")]
 	public bool RetiredOrOld { get; set; }
 	[DisplayName("Emeklilik Tarihi")]
 	public DateTime? RetiredDate { get; set; }

@@ -1,0 +1,216 @@
+﻿{
+  "bloodGroup": [
+    { "Name": "A Rh+", "Value": "A Rh+" },
+    { "Name": "A Rh-", "Value": "A Rh-" },
+    { "Name": "B Rh+", "Value": "B Rh+" },
+    { "Name": "B Rh-", "Value": "B Rh-" },
+    { "Name": "AB Rh+", "Value": "AB Rh+" },
+    { "Name": "AB Rh-", "Value": "AB Rh-" },
+    { "Name": "0 Rh+", "Value": "0 Rh+" },
+    { "Name": "0 Rh-", "Value": "0 Rh-" }
+  ],
+  "bodySize": [
+    { "Name": "XS", "Value": "XS" },
+    { "Name": "S", "Value": "S" },
+    { "Name": "M", "Value": "M" },
+    { "Name": "L", "Value": "L" },
+    { "Name": "XL", "Value": "XL" },
+    { "Name": "XXL", "Value": "XXL" },
+    { "Name": "3XL", "Value": "3XL" }
+  ],
+  "educationStatus": [
+    { "Name": "İlkokul", "Value": "İlkokul" },
+    { "Name": "Ortaokul", "Value": "Ortaokul" },
+    { "Name": "Lise", "Value": "Lise" },
+    { "Name": "Meslek Lisesi", "Value": "Meslek Lisesi" },
+    { "Name": "Mes.Tek.Lisesi", "Value": "Mes.Tek.Lisesi" },
+    { "Name": "Ön Lisans", "Value": "Ön Lisans" },
+    { "Name": "Lisans", "Value": "Lisans" },
+    { "Name": "Yüksek Lisans", "Value": "Yüksek Lisans" }
+  ],
+  "maritalStatus": [
+    { "Name": "Bekar", "Value": "Bekar" },
+    { "Name": "Dul", "Value": "Dul" },
+    { "Name": "Evli", "Value": "Evli" }
+  ],
+  "personalGroup": [
+    { "Name": "Yönetici", "Value": "Yönetici" },
+    { "Name": "A Grup Üst Düzey", "Value": "A Grup Üst Düzey" },
+    { "Name": "B Grup Müdür", "Value": "B Grup Müdür" },
+    { "Name": "C Grup Müdür Yardımcısı", "Value": "C Grup Müdür Yardımcısı" },
+    { "Name": "D Grup Şef-Sorumlu", "Value": "D Grup Şef-Sorumlu" },
+    { "Name": "E Grup Asgari Ücretli", "Value": "E Grup Asgari Ücretli" }
+  ],
+  "departments": [
+    {
+      "Name": "Yönetim",
+      "Value": "Yönetim"
+    },
+    {
+      "Name": "Satın Alma Departmanı",
+      "Value": "Satın Alma Departmanı"
+    },
+    {
+      "Name": "Muhasebe Servisi",
+      "Value": "Muhasebe Servisi"
+    },
+    {
+      "Name": "Genel Müdür",
+      "Value": "Genel Müdür"
+    },
+    {
+      "Name": "Bilgi İşlem Servisi",
+      "Value": "Bilgi İşlem Servisi"
+    },
+    {
+      "Name": "Finans Müdürü",
+      "Value": "Finans Müdürü"
+    },
+    {
+      "Name": "Santral Görevlisi",
+      "Value": "Santral Görevlisi"
+    },
+
+
+    {
+      "Name": "Depo",
+      "Value": "Depo"
+    },
+    {
+      "Name": "Ortaklar Servisi",
+      "Value": "Ortaklar Servisi"
+    },
+    {
+      "Name": "Otel",
+      "Value": "Otel"
+    },
+    {
+      "Name": "Vezne",
+      "Value": "Vezne"
+    },
+    {
+      "Name": "Çay Servisi",
+      "Value": "Çay Servisi"
+    },
+    {
+      "Name": "İnsan Kaynakları Departmanı",
+      "Value": "İnsan Kaynakları Departmanı"
+    },
+    {
+      "Name": "E-Ticaret",
+      "Value": "E-Ticaret"
+    },
+    {
+      "Name": "Basın ve Reklam Birimi",
+      "Value": "Basın ve Reklam Birimi"
+    },
+    {
+      "Name": "Kasap",
+      "Value": "Kasap"
+    },
+    {
+      "Name": "Şarküteri",
+      "Value": "Şarküteri"
+    },
+    {
+      "Name": "Süpermarket Sorumlusu",
+      "Value": "Süpermarket Sorumlusu"
+    },
+    {
+      "Name": "Kasiyer",
+      "Value": "Kasiyer"
+    },
+    {
+      "Name": "Ara Eleman",
+      "Value": "Ara Eleman"
+    },
+    {
+      "Name": "Kozmetik",
+      "Value": "Kozmetik"
+    },
+    {
+      "Name": "E-Ticaret Ürün Hazırlama",
+      "Value": "E-Ticaret Ürün Hazırlama"
+    },
+    {
+      "Name": "İnşaat / Teknik",
+      "Value": "İnşaat / Teknik"
+    },
+    {
+      "Name": "Kuruyemiş",
+      "Value": "Kuruyemiş"
+    },
+    {
+      "Name": "İş Takibi",
+      "Value": "İş Takibi"
+    },
+    {
+      "Name": "Araba Toplama (Sepetçi)",
+      "Value": "Araba Toplama (Sepetçi)"
+    },
+    {
+      "Name": "Personel Yemekhanesi",
+      "Value": "Personel Yemekhanesi"
+    },
+    {
+      "Name": "Kısmi Süreli",
+      "Value": "Kısmi Süreli"
+    },
+    {
+      "Name": "Avm Market Şubesi",
+      "Value": "Avm Market Şubesi"
+    },
+    {
+      "Name": "Ayazmana Şubesi",
+      "Value": "Ayazmana Şubesi"
+    },
+    {
+      "Name": "Bulvar Şubesi",
+      "Value": "Bulvar Şubesi"
+    },
+    {
+      "Name": "Burdur Şubesi",
+      "Value": "Burdur Şubesi"
+    },
+    {
+      "Name": "Çünür Şubesi",
+      "Value": "Çünür Şubesi"
+    },
+    {
+      "Name": "Dinar Şubesi",
+      "Value": "Dinar Şubesi"
+    },
+    {
+      "Name": "Gölcük Şubesi",
+      "Value": "Gölcük Şubesi"
+    },
+    {
+      "Name": "Halıkent Şubesi",
+      "Value": "Halıkent Şubesi"
+    },
+    {
+      "Name": "Iyaş Park İdari",
+      "Value": "Iyaş Park İdari"
+    },
+    {
+      "Name": "Kesikbaş Şubesi",
+      "Value": "Kesikbaş Şubesi"
+    },
+    {
+      "Name": "Kongre Merkezi",
+      "Value": "Kongre Merkezi"
+    },
+    {
+      "Name": "Nokta Şubesi",
+      "Value": "Nokta Şubesi"
+    },
+    {
+      "Name": "Akaryakıt (Shell)",
+      "Value": "Akaryakıt (Shell)"
+    },
+    {
+      "Name": "Part-Time",
+      "Value": "Part-Time"
+    }
+  ]
+}

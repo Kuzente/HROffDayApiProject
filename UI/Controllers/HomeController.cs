@@ -35,9 +35,9 @@ namespace UI.Controllers
             
             return View();
         }
-        public IActionResult ErrorPage()
+        public IActionResult ErrorPage(ErrorViewModel vm)
         {
-            return View();
+            return View(vm);
         }
         public IActionResult AccessDeniedPage()
         {

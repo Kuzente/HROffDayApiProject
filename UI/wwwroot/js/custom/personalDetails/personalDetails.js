@@ -48,7 +48,6 @@
             }
             fillpersonalDetailsInputs(res.data);
             onClickEvents(res.data);
-            console.log(res.data)
             fillCumulativeTable(res.data.personalCumulatives,new Date(res.data.yearLeaveDate),res.data.status === 0)
             kalanIzinKumulatif(res.data.personalCumulatives , res.data.status === 0);
         } else {
@@ -176,183 +175,34 @@
             $.each(data.positions, function (index, position) {
                 positionSelect.append(`<option value='${position.id}'>${position.name}</option>`);
             });
-            const departmantsJson = `
-        [
-  {
-    "Name": "Yönetim",
-    "Value": "Yönetim"
-  },
-   {
-    "Name": "Satın Alma Departmanı",
-    "Value": "Satın Alma Departmanı"
-  },
-   {
-    "Name": "Muhasebe Servisi",
-    "Value": "Muhasebe Servisi"
-  },
-   {
-    "Name": "Genel Müdür",
-    "Value": "Genel Müdür"
-  },
-   {
-    "Name": "Bilgi İşlem Servisi",
-    "Value": "Bilgi İşlem Servisi"
-  },
-   {
-    "Name": "Finans Müdürü",
-    "Value": "Finans Müdürü"
-  },
-   {
-    "Name": "Santral Görevlisi",
-    "Value": "Santral Görevlisi"
-  },
-    
-
-  {
-    "Name": "Depo",
-    "Value": "Depo"
-  },
-  {
-    "Name": "Ortaklar Servisi",
-    "Value": "Ortaklar Servisi"
-  },
-  {
-    "Name": "Otel",
-    "Value": "Otel"
-  },
-  {
-    "Name": "Vezne",
-    "Value": "Vezne"
-  },
-  {
-    "Name": "Çay Servisi",
-    "Value": "Çay Servisi"
-  },
-  {
-    "Name": "İnsan Kaynakları Departmanı",
-    "Value": "İnsan Kaynakları Departmanı"
-  },
-  {
-    "Name": "E-Ticaret",
-    "Value": "E-Ticaret"
-  },
-  {
-    "Name": "Basın ve Reklam Birimi",
-    "Value": "Basın ve Reklam Birimi"
-  },
-  {
-    "Name": "Kasap",
-    "Value": "Kasap"
-  },
-  {
-    "Name": "Şarküteri",
-    "Value": "Şarküteri"
-  },
-  {
-    "Name": "Süpermarket Sorumlusu",
-    "Value": "Süpermarket Sorumlusu"
-  },
-  {
-    "Name": "Kasiyer",
-    "Value": "Kasiyer"
-  },
-  {
-    "Name": "Ara Eleman",
-    "Value": "Ara Eleman"
-  },
-  {
-    "Name": "Kozmetik",
-    "Value": "Kozmetik"
-  },
-  {
-    "Name": "E-Ticaret Ürün Hazırlama",
-    "Value": "E-Ticaret Ürün Hazırlama"
-  },
-  {
-    "Name": "İnşaat / Teknik",
-    "Value": "İnşaat / Teknik"
-  },
-  {
-    "Name": "Kuruyemiş",
-    "Value": "Kuruyemiş"
-  },
-  {
-    "Name": "İş Takibi",
-    "Value": "İş Takibi"
-  },
-  {
-    "Name": "Araba Toplama (Sepetçi)",
-    "Value": "Araba Toplama (Sepetçi)"
-  },
-  {
-    "Name": "Personel Yemekhanesi",
-    "Value": "Personel Yemekhanesi"
-  },
-  {
-    "Name": "Kısmi Süreli",
-    "Value": "Kısmi Süreli"
-  },
-  {
-    "Name": "Avm Market Şubesi",
-    "Value": "Avm Market Şubesi"
-  },
-  {
-    "Name": "Ayazmana Şubesi",
-    "Value": "Ayazmana Şubesi"
-  },
-  {
-    "Name": "Bulvar Şubesi",
-    "Value": "Bulvar Şubesi"
-  },
-  {
-    "Name": "Burdur Şubesi",
-    "Value": "Burdur Şubesi"
-  },
-  {
-    "Name": "Çünür Şubesi",
-    "Value": "Çünür Şubesi"
-  },
-  {
-    "Name": "Dinar Şubesi",
-    "Value": "Dinar Şubesi"
-  },
-  {
-    "Name": "Gölcük Şubesi",
-    "Value": "Gölcük Şubesi"
-  },
-  {
-    "Name": "Halıkent Şubesi",
-    "Value": "Halıkent Şubesi"
-  },
-  {
-    "Name": "Iyaş Park İdari",
-    "Value": "Iyaş Park İdari"
-  },
-  {
-    "Name": "Kesikbaş Şubesi",
-    "Value": "Kesikbaş Şubesi"
-  },
-  {
-    "Name": "Kongre Merkezi",
-    "Value": "Kongre Merkezi"
-  },
-  {
-    "Name": "Nokta Şubesi",
-    "Value": "Nokta Şubesi"
-  },
-  {
-    "Name": "Akaryakıt (Shell)",
-    "Value": "Akaryakıt (Shell)"
-  },
-  {
-    "Name": "Part-Time",
-    "Value": "Part-Time"
-  }
-]
-        `
-            const departmants = JSON.parse(departmantsJson);
-            $.each(departmants, function (index, departmant) {
-                departmantSelect.append(`<option value='${departmant.Value}'>${departmant.Value}</option>`);
+            $.ajax({
+                type: "GET",
+                url:"json/personal-selects-data.json",
+                dataType: 'json',
+                success: function (response) {
+                    $.each(response.bloodGroup, function (index, item) {
+                        BloodGroupSelect.append(`<option value='${item.Value}'>${item.Name}</option>`);
+                    });
+                    $.each(response.bodySize, function (index, item) {
+                        BodySizeSelect.append(`<option value='${item.Value}'>${item.Name}</option>`);
+                    });
+                    $.each(response.educationStatus, function (index, item) {
+                        EducationStatusSelect.append(`<option value='${item.Value}'>${item.Name}</option>`);
+                    });
+                    $.each(response.maritalStatus, function (index, item) {
+                        MaritalStatusSelect.append(`<option value='${item.Value}'>${item.Name}</option>`);
+                    });
+                    $.each(response.personalGroup, function (index, item) {
+                        PersonalGroupSelect.append(`<option value='${item.Value}'>${item.Name}</option>`);
+                    });
+                    $.each(response.departments, function (index, item) {
+                        departmantSelect.append(`<option value='${item.Value}'>${item.Name}</option>`);
+                    });
+                },
+                error: function () {
+                    $('#error-modal-message').text("Personel Detaylarına ait liste verileri getirilirken bir hata oluştu!")
+                    $('#error-modal').modal('show');
+                }
             });
             branchSelect.val(data.branch_Id);
             positionSelect.val(data.position_Id);
@@ -413,39 +263,6 @@
         let tempDate = new Date(todayDate.getFullYear(),yearLeaveDate.getMonth(),yearLeaveDate.getDate())
         if(cumulativeList.length > 0){
             cumulativeList.forEach(p=>{
-                // if (p.year === todayDate.getFullYear() && tempDate > todayDate) {
-                //     let inputRow = `
-                //    <tr>
-                //     <input type="hidden" data-cumulativeId value="${p.id}">
-                //     <td><span class="input-group-text">${p.year}</span></td>
-                //     <td><input type="number" data-earnedYearLeave name="cumulativeFormulaInput" value="${p.earnedYearLeave}" class="form-control" /></td>
-                //     <td><input type="number" data-remainYearLeave name="cumulativeFormulaInput" value="${p.remainYearLeave}" class="form-control" /></td>
-                //     <td class="text-center"><input type="checkbox" data-isReportCompleted name="cumulativeFormulaInput" value="${p.isReportCompleted}" ${p.isReportCompleted ? "checked" : ""} class="form-check-input"/></td>
-                //     <td class="text-center"><input type="checkbox" data-isNotificationExist name="cumulativeFormulaInput" value="${p.isNotificationExist}" ${p.isNotificationExist ? "checked" : ""} class="form-check-input"/></td>
-                //     <td class="text-center">
-                //         <div class="btn-group">
-                //             <button data-cumulativeUpdateBtn type="button" class="btn btn-pill btn-sm btn-green">Güncelle</button >
-                //            
-                //         </div>
-                //     </td>
-                //    </tr>
-                // `
-                //     inputSection.append(inputRow)
-                // }
-                // else{
-                //     let inputRow = `
-                //     <tr>
-                //         <input type="hidden" data-cumulativeId value="${p.id}">
-                //         <td><span class="input-group-text">${p.year}</span></td>
-                //         <td><input type="number" data-earnedYearLeave name="cumulativeFormulaInput" value="${p.earnedYearLeave}" class="form-control" /></td>
-                //         <td><input type="number" data-remainYearLeave name="cumulativeFormulaInput" value="${p.remainYearLeave}" class="form-control" /></td>
-                //         <td class="text-center"><input type="checkbox" data-isReportCompleted name="cumulativeFormulaInput" value="${p.isReportCompleted}" ${p.isReportCompleted ? "checked" : ""} class="form-check-input"/></td>
-                //         <td class="text-center"><input type="checkbox" data-isNotificationExist name="cumulativeFormulaInput" value="${p.isNotificationExist}" ${p.isNotificationExist ? "checked" : ""} class="form-check-input"/></td>
-                //         <td class="text-center"><button data-cumulativeUpdateBtn type="button" class="btn btn-pill btn-sm btn-green">Güncelle</button ></td>
-                //     </tr>
-                // `
-                //     inputSection.append(inputRow)
-                // }
                 let inputRow = `
                     <tr>
                         <input type="hidden" data-cumulativeId value="${p.id}">

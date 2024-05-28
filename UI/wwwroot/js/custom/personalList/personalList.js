@@ -1,11 +1,12 @@
 ﻿document.addEventListener('DOMContentLoaded',function () {
     let branchSelectModal;
     let positionSelectModal ;
-    let PersonalGroupSelect = new TomSelect($("#PersonalGroupSelect"))
-    let EducationStatusSelect = new TomSelect($("#EducationStatusSelect"))
-    let MaritalStatusSelect = new TomSelect($("#MaritalStatusSelect"));
-    let BodySizeSelect = new TomSelect($("#BodySizeSelect"));
-    let BloodGroupSelect =   new TomSelect($("#BloodGroupSelect"));
+    let DepartmantsSelect = new TomSelect($("#departmantNameSelect"),{maxOptions : null})
+    let PersonalGroupSelect = new TomSelect($("#PersonalGroupSelect"),{maxOptions : null})
+    let EducationStatusSelect = new TomSelect($("#EducationStatusSelect"),{maxOptions : null})
+    let MaritalStatusSelect = new TomSelect($("#MaritalStatusSelect"),{maxOptions : null});
+    let BodySizeSelect = new TomSelect($("#BodySizeSelect"),{maxOptions : null});
+    let BloodGroupSelect =   new TomSelect($("#BloodGroupSelect"),{maxOptions : null});
     let searchParams = new URLSearchParams(window.location.search);
     if (searchParams.has("search")){
         $('#searchInput').val(searchParams.get('search'))
@@ -85,7 +86,6 @@
         let currentUrl = new URL(window.location.href);
         let pageParam = currentUrl.searchParams.get("sayfa");
         currentUrl.searchParams.set("sayfa", $(this).text());
-
         window.location.href = currentUrl.toString();
     });
     
@@ -109,10 +109,10 @@
             $('#positionSelectModal').append(`<option value='${position.id}'>${position.name}</option>`);
             $('#positionSelect').append(`<option value='${position.name}'>${position.name}</option>`);
         });
-        branchSelectModal = new TomSelect($("#branchSelectModal"));
-        let branchSelect = new TomSelect($("#branchSelect"));
-        positionSelectModal = new TomSelect($("#positionSelectModal"));
-        let positionSelect = new TomSelect($("#positionSelect"));
+        branchSelectModal = new TomSelect($("#branchSelectModal"),{maxOptions : null});
+        let branchSelect = new TomSelect($("#branchSelect"),{maxOptions : null});
+        positionSelectModal = new TomSelect($("#positionSelectModal"),{maxOptions : null});
+        let positionSelect = new TomSelect($("#positionSelect"),{maxOptions : null});
         positionSelectModal.clear();
         positionSelect.clear();
         branchSelectModal.clear();
@@ -123,6 +123,54 @@
         }
         if (searchParams.has('branch')){
             branchSelect.setValue([searchParams.get('branch')])
+        }
+    });
+    //Static Selects ajax get metodu
+    $.ajax({
+        type: "GET",
+        url:"json/personal-selects-data.json",
+        dataType: 'json',
+        success: function (data) {
+            data.bloodGroup.forEach((item) => {
+                BloodGroupSelect.addOption({
+                    value: item.Value,
+                    text: item.Value
+                })
+            });
+            data.bodySize.forEach((item) => {
+                BodySizeSelect.addOption({
+                    value: item.Value,
+                    text: item.Value
+                })
+            });
+            data.educationStatus.forEach((item) => {
+                EducationStatusSelect.addOption({
+                    value: item.Value,
+                    text: item.Value
+                })
+            });
+            data.maritalStatus.forEach((item) => {
+                MaritalStatusSelect.addOption({
+                    value: item.Value,
+                    text: item.Value
+                })
+            });
+            data.personalGroup.forEach((item) => {
+                PersonalGroupSelect.addOption({
+                    value: item.Value,
+                    text: item.Value
+                })
+            });
+            data.departments.forEach((item) => {
+                DepartmantsSelect.addOption({
+                    value: item.Value,
+                    text: item.Value
+                })
+            });
+        },
+        error: function () {
+            $('#error-modal-message').text("Personel Detaylarına ait liste verileri getirilirken bir hata oluştu!")
+            $('#error-modal').modal('show');
         }
     });
     //Zorunlu Alanların Validasyon fonksiyonu
@@ -199,6 +247,7 @@
         positionSelectModal.clear();
         branchSelectModal.clear();
         PersonalGroupSelect.clear();
+        DepartmantsSelect.clear();
         EducationStatusSelect.clear();
         MaritalStatusSelect.clear();
         BodySizeSelect.clear();

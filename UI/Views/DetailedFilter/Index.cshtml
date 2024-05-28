@@ -1,11 +1,47 @@
 ﻿
-
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
 }
-
-<div class="card container-xl mt-3 table-responsive">
+<div class="card m-5 mb-0">
+    <div class="accordion" id="accordion-example">
+        <div class="accordion-item bg-azure">
+            <h1 class="accordion-header">
+                <button class="accordion-button collapsed" style="color: white" type="button" data-bs-toggle="collapse" data-bs-target="#filterAccordion" aria-expanded="false">
+                    Filtre Alanı
+                </button>
+            </h1>
+            <div id="filterAccordion" class="accordion-collapse collapse" data-bs-parent="#accordion-example">
+                <div class="accordion-body p bg-white">
+                    <div class="row mb-2">
+                        <div class="col">
+                            <label class="form-label">Filtre Uygulamak İstediğiniz Tabloyu Seçiniz</label>
+                            <select class="selectListTom" placeholder="Tablo Seçiniz" name="entityName" id="entitySelect">
+                                <option value=""></option>
+                                <option value="Personal">Personeller</option>
+                                <option value="Branch">Şubeler</option>
+                                <option value="Position">Ünvanlar</option>
+                                <option value="Offday">İzinler</option>
+                            </select>
+                        </div>
+                        <div class="col align-content-end text-end">
+                            <button id="sendFiltersBtn" class="btn btn-green d-none">Sonucu Getir</button>
+                        </div>
+                    </div>
+                    <div id="filtersRowSection">
+                        
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col align-content-end">
+                            <button id="addFilterBtn" class="btn btn-purple d-none">Filtre Ekle</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card table-responsive m-5 mt-3">
     <table class="table table-nowrap">
         <thead>
                 
@@ -21,6 +57,38 @@
              
         </tr>
         </thead>
+        <tbody>
+        <tr>
+            <td>deneme1</td>
+            <td>deneme2</td>
+            <td>deneme3</td>
+            <td>deneme4</td>
+            <td>deneme5</td>
+            <td>deneme6</td>
+            <td>deneme7</td>
+            <td>deneme8</td>
+        </tr>
+        <tr>
+            <td>deneme1</td>
+            <td>deneme2</td>
+            <td>deneme3</td>
+            <td>deneme4</td>
+            <td>deneme5</td>
+            <td>deneme6</td>
+            <td>deneme7</td>
+            <td>deneme8</td>
+        </tr>
+        <tr>
+            <td>deneme1</td>
+            <td>deneme2</td>
+            <td>deneme3</td>
+            <td>deneme4</td>
+            <td>deneme5</td>
+            <td>deneme6</td>
+            <td>deneme7</td>
+            <td>deneme8</td>
+        </tr>
+        </tbody>
     </table>
 </div>
 <script src="/js/custom/detailedFilter/main.js"></script>

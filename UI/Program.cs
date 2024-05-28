@@ -35,9 +35,9 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
     conf.EnableQueryFeatures();
 });
 //Test DB
-//builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("NewMssql"),builder.Configuration.GetConnectionString("NewMssql"));
+builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("NewMssql"),builder.Configuration.GetConnectionString("NewMssql"));
 //Test DB
-builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("Mssql"), builder.Configuration.GetConnectionString("Mssql"));
+//builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("Mssql"), builder.Configuration.GetConnectionString("Mssql"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -161,6 +161,7 @@ app.MapControllerRoute(name: "postCumulativeNotification", pattern: "post-kumula
 #endregion
 #region DetailedFilter
 app.MapControllerRoute(name: "detailedFilterPage", pattern: "detayli-filtre", defaults: new { controller = "DetailedFilter", action = "Index" });
+app.MapControllerRoute(name: "detailedFilterPagePost", pattern: "detayli-filtre-sonuc", defaults: new { controller = "DetailedFilter", action = "FilteredResultPost" });
 
 
 #endregion
