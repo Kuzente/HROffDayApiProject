@@ -169,6 +169,7 @@
             branchSelect.empty();
             positionSelect.empty();
             departmantSelect.empty();
+            BloodGroupSelect.empty();
             $.each(data.branches, function (index, branch) {
                 branchSelect.append(`<option value='${branch.id}'>${branch.name}</option>`);
             });
@@ -198,6 +199,12 @@
                     $.each(response.departments, function (index, item) {
                         departmantSelect.append(`<option value='${item.Value}'>${item.Name}</option>`);
                     });
+                    departmantSelect.val(data.personalDetails.departmantName)
+                    PersonalGroupSelect.val(data.personalDetails.personalGroup);
+                    EducationStatusSelect.val(data.personalDetails.educationStatus);
+                    MaritalStatusSelect.val(data.personalDetails.maritalStatus);
+                    BodySizeSelect.val(data.personalDetails.bodySize);
+                    BloodGroupSelect.val(data.personalDetails.bloodGroup);
                 },
                 error: function () {
                     $('#error-modal-message').text("Personel Detaylarına ait liste verileri getirilirken bir hata oluştu!")
@@ -206,12 +213,6 @@
             });
             branchSelect.val(data.branch_Id);
             positionSelect.val(data.position_Id);
-            departmantSelect.val(data.personalDetails.departmantName)
-            PersonalGroupSelect.val(data.personalDetails.personalGroup);
-            EducationStatusSelect.val(data.personalDetails.educationStatus);
-            MaritalStatusSelect.val(data.personalDetails.maritalStatus);
-            BodySizeSelect.val(data.personalDetails.bodySize);
-            BloodGroupSelect.val(data.personalDetails.bloodGroup);
         }
 
         

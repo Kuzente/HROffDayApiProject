@@ -2,9 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using Core.Attributes;
 
 namespace Core.Entities;
-
+[EntityField(EntityName = "İzinler",IsShow = true,Sort = 4)]
 public partial class OffDay : BaseEntity
 {
 	[Required, DisplayName("İzin Başlangıç Tarihi")]

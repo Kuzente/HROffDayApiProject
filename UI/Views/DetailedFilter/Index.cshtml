@@ -1,10 +1,32 @@
 ﻿
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Detaylı Filtre";
     Layout = "_Layout";
 }
+<style>
+    /* Sayfalama kontrolleri */
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        display: inline-block;
+        padding: 0.5em 1em;
+        margin: 0 0.1em;
+        cursor: pointer;
+        color: #333;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        background-color: #ddd;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background-color: #206bc4;
+        color: #fff;
+        border: 1px solid #206bc4;
+    }
+</style>
 <div class="card m-5 mb-0">
-    <div class="accordion" id="accordion-example">
+    <div class="accordion p-3" id="accordion-example">
         <div class="accordion-item bg-azure">
             <h1 class="accordion-header">
                 <button class="accordion-button collapsed" style="color: white" type="button" data-bs-toggle="collapse" data-bs-target="#filterAccordion" aria-expanded="false">
@@ -40,55 +62,66 @@
             </div>
         </div>
     </div>
+    <div class="p-3 mb-5">
+        <label for="propertiesViewSelect">Getirilecek Özellikler:</label>
+        <select id="propertiesViewSelect" class="" name="propertiesView" multiple placeholder="Getirmek istediğiniz kolonları seçiniz!">
+            <optgroup label="Personel Kolonları">
+                <option value="NameSurname">Adı-Soyadı</option>
+                <option class="personalDetailProp" value="PersonalDetails/BirthPlace">Doğum Yeri</option>
+                <option value="IdentificationNumber">Tc Kimlik Numarası</option>
+                <option class="personalDetailProp" value="PersonalDetails/SskNumber">SSK Numarası</option>
+                <option class="personalDetailProp" value="PersonalDetails/SgkCode">SGK Kodu</option>
+                <option value="Phonenumber">Telefon</option>
+                <option class="personalDetailProp" value="PersonalDetails/FatherName">Baba Adı</option>
+                <option class="personalDetailProp" value="PersonalDetails/MotherName">Anne Adı</option>
+                <option class="personalDetailProp" value="PersonalDetails/IBAN">IBAN</option>
+                <option class="personalDetailProp" value="PersonalDetails/BankAccount">Banka Hesap No</option>
+                <option class="personalDetailProp" value="PersonalDetails/Address">Adres</option>
+            </optgroup>
+            <optgroup label="Şube Kolonları">
+                <option class="branchProp" value="Branch/Name">Şube Adı</option>
+            </optgroup>
+            <optgroup label="Ünvan Kolonları">
+                <option class="positionProp" value="Position/Name">Ünvan / Görev Adı</option>
+            </optgroup>
+            <optgroup label="Diğer">
+                <option value="Gender">Cinsiyet</option>
+                <option class="personalDetailProp" value="PersonalDetails/DepartmantName">Departman</option>
+                <option class="personalDetailProp" value="PersonalDetails/BloodGroup">Kan Grubu</option>
+                <option class="personalDetailProp" value="PersonalDetails/MaritalStatus">Medeni Durumu</option>
+                <option class="personalDetailProp" value="PersonalDetails/EducationStatus">Eğitim Durumu</option>
+                <option class="personalDetailProp" value="PersonalDetails/PersonalGroup">Personelin Bulunduğu Grup</option>
+                <option class="personalDetailProp" value="PersonalDetails/BodySize">Beden Ölçüsü</option>
+                <option value="TotalYearLeave">Hak Edilen Yıllık İzin Miktarı</option>
+                <option value="UsedYearLeave">Kullanılan Yıllık İzin Miktarı</option>
+                <option value="RegistirationNumber">Sicil Numarası</option>
+                <option value="FoodAid">Gıda Yardımı Miktarı</option>
+                <option value="TotalTakenLeave">Mevcut Alacak İzin Miktarı</option>
+                <option class="personalDetailProp" value="PersonalDetails/Salary">Maaş</option>
+                <option value="BirthDate">Doğum Tarihi</option>
+                <option value="StartJobDate">İşe Başlama Tarihi</option>
+                <option value="EndJobDate">İşten Çıkış Tarihi</option>
+                <option value="YearLeaveDate">Yıllık İzin Yenilenme Tarihi</option>
+                <option value="RetiredDate">Emeklilik Tarihi</option>
+                <option value="FoodAidDate">Gıda Yardımı Yenilenme Tarihi</option>
+                <option value="CreatedAt">Oluşturulma Tarihi</option>
+                <option value="RetiredOrOld">Emeklilik Durumu</option>
+                <option value="IsYearLeaveRetired">Yıllık İzini Emeklilik Durumu İle Yenilenenler</option>
+                <option class="personalDetailProp" value="PersonalDetails/Handicapped">Engellilik Durumu</option>
+                <option value="IsBackToWork">İşe Geri Alınma Durumu</option>
+                <option class="personalCumulativeProp" value="PersonalCumulatives/EarnedYearLeave">Kümülatif Hak Edilen İzin Sayısı</option>
+                <option class="personalCumulativeProp" value="PersonalCumulatives/RemainYearLeave">Kümülatif Kalan İzin Sayısı</option>
+            </optgroup>
+            
+        </select>
+    </div>
 </div>
-<div class="card table-responsive m-5 mt-3">
-    <table class="table table-nowrap">
-        <thead>
-                
-        <tr>
-            <th>deneme1</th>
-            <th>deneme2</th>
-            <th>deneme3</th>
-            <th>deneme4</th>
-            <th>deneme5</th>
-            <th>deneme6</th>
-            <th>deneme7</th>
-            <th>deneme8</th>
-             
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>deneme1</td>
-            <td>deneme2</td>
-            <td>deneme3</td>
-            <td>deneme4</td>
-            <td>deneme5</td>
-            <td>deneme6</td>
-            <td>deneme7</td>
-            <td>deneme8</td>
-        </tr>
-        <tr>
-            <td>deneme1</td>
-            <td>deneme2</td>
-            <td>deneme3</td>
-            <td>deneme4</td>
-            <td>deneme5</td>
-            <td>deneme6</td>
-            <td>deneme7</td>
-            <td>deneme8</td>
-        </tr>
-        <tr>
-            <td>deneme1</td>
-            <td>deneme2</td>
-            <td>deneme3</td>
-            <td>deneme4</td>
-            <td>deneme5</td>
-            <td>deneme6</td>
-            <td>deneme7</td>
-            <td>deneme8</td>
-        </tr>
-        </tbody>
-    </table>
+<div id="results">
+    
 </div>
 <script src="/js/custom/detailedFilter/main.js"></script>
+
+@section Scripts
+{
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js"></script> 
+}

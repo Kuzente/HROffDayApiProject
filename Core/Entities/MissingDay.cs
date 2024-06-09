@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Core.Attributes;
 
 namespace Core.Entities;
-
+[EntityField(EntityName = "Eksik Günler",IsShow = false)]
 public class MissingDay : BaseEntity
 {
     [Required]

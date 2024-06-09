@@ -21,12 +21,23 @@ public class ReadOdataService : IReadOdataService
         
         return query;
     }
+    public async Task<IQueryable> GetAllBranchesOdataService()
+    {
+        var query = _unitOfWork.ReadBranchRepository.GetAll();
+        
+        return query;
+    }
 
     public async Task<IQueryable> GetPositionOdataService()
     {
         var query = _unitOfWork.ReadPositionRepository.GetAll(predicate: p =>
             p.Status == EntityStatusEnum.Online || p.Status == EntityStatusEnum.Offline);
 	    
+        return query;
+    }
+    public async Task<IQueryable> GetAllPositionOdataService()
+    {
+        var query = _unitOfWork.ReadPositionRepository.GetAll();
         return query;
     }
 

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Services.Abstract.BranchServices;
 using Services.Abstract.DashboardServices;
+using Services.Abstract.DetailedFilterServices;
 using Services.Abstract.UserServices;
 
 namespace UI.Controllers;
@@ -22,13 +23,15 @@ public class QueryController : ODataController
 {
     private readonly IReadOdataService _readOdataService;
     private readonly IReadUserService _readUserService;
+    private readonly IReadDetailedFilterService _readDetailedFilterService;
     private readonly IMapper _mapper;
 
-    public QueryController(IMapper mapper, IReadOdataService readOdataService, IReadUserService readUserService)
+    public QueryController(IMapper mapper, IReadOdataService readOdataService, IReadUserService readUserService, IReadDetailedFilterService readDetailedFilterService)
     {
         _mapper = mapper;
         _readOdataService = readOdataService;
         _readUserService = readUserService;
+        _readDetailedFilterService = readDetailedFilterService;
     }
     // GET
     // public IActionResult Index()
@@ -47,10 +50,26 @@ public class QueryController : ODataController
     }
     [HttpGet]
     [EnableQuery]
+    [Route("tum-subeler")]
+    public async Task<IActionResult> GetAllBranches()
+    {
+        var result = await _readOdataService.GetAllBranchesOdataService();
+        return Ok(result);
+    }
+    [HttpGet]
+    [EnableQuery]
     [Route("unvan-sayisi")]
     public async Task<IActionResult> GetPositionCount()
     {
         var result = await _readOdataService.GetPositionOdataService();
+        return Ok(result);
+    }
+    [HttpGet]
+    [EnableQuery]
+    [Route("tum-unvanlar")]
+    public async Task<IActionResult> GetAllPositions()
+    {
+        var result = await _readOdataService.GetAllPositionOdataService();
         return Ok(result);
     }
     [HttpGet]
@@ -117,6 +136,21 @@ public class QueryController : ODataController
     public async Task<IActionResult> GetNotificationCumulativeList()
     {
         var result = await _readOdataService.GetPersonalCumulativesService();
+        return Ok(result);
+    }
+    [EnableQuery]
+    [HttpPost]
+    [Route("detayli-filtre/{entityName}")]
+    public async Task<IActionResult> Get(string entityName)
+    {
+        // var entityType = Type.GetType($"Core.Entities.{entityName}", throwOnError: true);
+        //
+        // if (entityType == null)
+        // {
+        //     return BadRequest("Invalid entity name");
+        // }
+
+        var result = await _readDetailedFilterService.GetDetailedFilterOdataService(entityName);
         return Ok(result);
     }
     
