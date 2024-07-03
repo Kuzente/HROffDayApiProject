@@ -24,10 +24,9 @@
     let datatableLanguage;
     let allBranchList;
     let allPositionList;
-    let propertiesViewSelect = new TomSelect($('#propertiesViewSelect'),{
-        plugins: ['drag_drop'],
-        maxOptions : null
-    })
+    moment.locale('tr');
+    
+   
     $.ajax({
         type: "GET",
         url: "json/datatable-tr.json",
@@ -46,7 +45,6 @@
         dataType: 'json',
         success: function (data) {
             allBranchList = data;
-            console.log(allBranchList)
         },
         error: function () {
             $('#error-modal-message').text("Şube verileri getirilirken bir hata oluştu!!")
@@ -59,7 +57,6 @@
         dataType: 'json',
         success: function (data) {
             allPositionList = data;
-            console.log(allPositionList)
         },
         error: function () {
             $('#error-modal-message').text("Ünvan verileri getirilirken bir hata oluştu!!")
@@ -86,20 +83,102 @@
     // <--Static Data Section -->
     //Tablonun Değişmesi Durumunda Çalışan Fonksiyon
     $(document).on('change', '#entitySelect', function() {
+        let propertyViewSelectElement;
+        let propertyViewSelectDiv = $('#propertiesViewSelectDiv')
         let selectedEntityName = $(this).find('option:selected').text()
         let selectedEntityValue = $(this).find('option:selected').val()
         const addFilterBtn = $('#addFilterBtn')
         const sendFilterBtn = $('#sendFiltersBtn')
         let filtersRowSection = $('#filtersRowSection')
         filtersRowSection.empty()
+        let alertSection = $('#alert_section')
+        alertSection.empty()
+        propertyViewSelectDiv.empty()
         addFilterBtn.addClass('d-none')
         sendFilterBtn.addClass('d-none')
         if (selectedEntityValue){
             addFilterBtn.removeClass('d-none')
             sendFilterBtn.removeClass('d-none')
+            if (selectedEntityValue === "Personal") {
+                alertSection.append(`
+                        <div class="alert alert-info " role="alert">
+                                <h4 class="alert-title">Bilgilendirme!</h4>
+                                <div class="text-secondary">
+                                    Personeller Tablosunda yaptığınız filtreleme işlemlerinde varsayılan olarak:
+                                    <ul>
+                                        <li><b>Aktif</b> Çalışan Personeller</li>
+                                        <li><b>Aktif</b> Şubeler</li>
+                                        <li><b>Aktif</b> Ünvanlar</li>
+                                    </ul>
+                                    üzerinde arama yapılmaktadır. Bunlar dışında bir arama yapmak isterseniz, lütfen filtre ekle bölümünden ilgili alanları seçiniz!
+                                </div>
+                            </div>
+                `)
+                propertyViewSelectElement = `
+                <label for="propertiesViewSelect">Getirilecek Özellikler:</label>
+                                    <select id="propertiesViewSelect" class="" name="propertiesView" multiple placeholder="Getirmek istediğiniz kolonları seçiniz!">
+                                        <optgroup label="Personel Bilgi Kolonları">
+                                            <option value="NameSurname">Adı-Soyadı</option>
+                                            <option class="personalDetailProp" value="PersonalDetails/BirthPlace">Doğum Yeri</option>
+                                            <option value="IdentificationNumber">Tc Kimlik Numarası</option>
+                                            <option class="personalDetailProp" value="PersonalDetails/SskNumber">SSK Numarası</option>
+                                            <option class="personalDetailProp" value="PersonalDetails/SgkCode">SGK Kodu</option>
+                                            <option value="Phonenumber">Telefon</option>
+                                            <option class="personalDetailProp" value="PersonalDetails/FatherName">Baba Adı</option>
+                                            <option class="personalDetailProp" value="PersonalDetails/MotherName">Anne Adı</option>
+                                            <option class="personalDetailProp" value="PersonalDetails/IBAN">IBAN</option>
+                                            <option class="personalDetailProp" value="PersonalDetails/BankAccount">Banka Hesap No</option>
+                                            <option class="personalDetailProp" value="PersonalDetails/Address">Adres</option>
+                                            <option value="Gender">Cinsiyet</option>
+                                            <option class="personalDetailProp" value="PersonalDetails/DepartmantName">Departman</option>
+                                            <option class="personalDetailProp" value="PersonalDetails/BloodGroup">Kan Grubu</option>
+                                            <option class="personalDetailProp" value="PersonalDetails/MaritalStatus">Medeni Durumu</option>
+                                            <option class="personalDetailProp" value="PersonalDetails/EducationStatus">Eğitim Durumu</option>
+                                            <option class="personalDetailProp" value="PersonalDetails/PersonalGroup">Personelin Bulunduğu Grup</option>
+                                            <option class="personalDetailProp" value="PersonalDetails/BodySize">Beden Ölçüsü</option>
+                                            <option value="RegistirationNumber">Sicil Numarası</option>
+                                            <option value="FoodAid">Gıda Yardımı Miktarı</option>
+                                            <option class="personalDetailProp" value="PersonalDetails/Salary">Maaş</option>
+                                            <option value="BirthDate">Doğum Tarihi</option>
+                                            <option value="StartJobDate">İşe Başlama Tarihi</option>
+                                            <option value="EndJobDate">İşten Çıkış Tarihi</option>
+                                            <option value="RetiredDate">Emeklilik Tarihi</option>
+                                            <option value="FoodAidDate">Gıda Yardımı Yenilenme Tarihi</option>
+                                            <option value="CreatedAt">Oluşturulma Tarihi</option>
+                                            <option value="RetiredOrOld">Emeklilik Durumu</option>
+                                            <option class="personalDetailProp" value="PersonalDetails/Handicapped">Engellilik Durumu</option>
+                                            <option value="IsBackToWork">İşe Geri Alınma Durumu</option>
+                                        </optgroup>
+                                        <optgroup label="Personel İzin Kolonları">
+                                            <option value="TotalYearLeave">Toplam Hak Edilen Yıllık İzin Miktarı</option>
+                                            <option value="UsedYearLeave">Toplam Kullanılan Yıllık İzin Miktarı</option>
+                                            <option value="TotalTakenLeave">Toplam Alacak İzin Miktarı (Saat)</option>
+                                            <option value="YearLeaveDate">Yıllık İzin Yenilenme Tarihi</option>
+                                            <option value="IsYearLeaveRetired">Yıllık İzini Emeklilik Durumu İle Yenilenenler</option>
+                                            <option class="personalCumulativeProp" value="PersonalCumulatives/EarnedYearLeave">Yıllara Göre Kümülatif Hak Edilen İzin Sayısı</option>
+                                            <option class="personalCumulativeProp" value="PersonalCumulatives/RemainYearLeave">Yıllara Göre Kümülatif Kalan İzin Sayısı</option>
+                                        </optgroup>
+                                        <optgroup label="Şube Kolonları">
+                                            <option class="branchProp" value="Branch/Name">Şube Adı</option>
+                                        </optgroup>
+                                        <optgroup label="Ünvan Kolonları">
+                                            <option class="positionProp" value="Position/Name">Ünvan / Görev Adı</option>
+                                        </optgroup>
+                                    </select>
+            `
+                propertyViewSelectDiv.append(propertyViewSelectElement);
+                let propertiesViewSelect = new TomSelect($('#propertiesViewSelect'),{
+                    plugins: ['drag_drop'],
+                    maxOptions : null,
+                });
+                propertiesViewSelect.clear()
+            }
         }
+        
         //Seçili getirilecek kolon yerini sıfırlar
-        propertiesViewSelect.clear() 
+        
+        
+        
         //Datatable alanınını sıfırlar
         $('#results').empty().removeClass()
     });
@@ -108,10 +187,10 @@
     //Filtre Ekle butonuna ait function
     $('#addFilterBtn').click(function() {
         let selectedEntityVal = $('#entitySelect').find('option:selected').val()
-        let newRow;
+        let filterSelectElement;
         let selectId = "select_" + generateGUID()
         if (selectedEntityVal === 'Personal'){
-            newRow = `
+            filterSelectElement = `
                     <div class="row mt-3 filter-row">
                         <div class="col d-flex align-items-end">
                             <button class="btn btn-danger btn-icon remove-filter">x</button>
@@ -175,19 +254,19 @@
                                         <option data-type="List" value="Position/ID">Ünvan / Görev Adı</option>
                                         <option data-type="List" value="Position/Status">Ünvan / Görev Durumu</option>
                                     </optgroup>
-                                </select>
+                                   </select>
                             </div>
                             <div class="ms-5 d-inline-block border-start border-3 border-dark ps-4 filtersDetailsSection">
                             
                             </div>
                         </div>
                     </div>`; 
-        }
-        $('#filtersRowSection').append(newRow);
-        let select = new TomSelect($(`#${selectId}`),{
+                   }
+        $('#filtersRowSection').append(filterSelectElement);
+        let filterSelect = new TomSelect($(`#${selectId}`),{
             maxOptions : null,
         });
-        select.clear()
+        filterSelect.clear();
         
     });
     //Row silme işlemine ait function
@@ -591,7 +670,7 @@
                         isFormValid = false;
                         return false;
                     }
-                    odataFilters.push(`${selectedPropValue} ${comparisonType} ${amount}`);
+                    odataFilters.push(`(${selectedPropValue} ${comparisonType} ${amount})`);
                 }
             }
             else if(selectedType === 'Radio') {
@@ -609,6 +688,8 @@
         });
 
         if (isFormValid){ //validasyonlar ok mi kontrolu
+            $('#mainDiv').addClass('d-none');
+            $('#page-loader').removeClass('d-none')
             let personalProperties = [];
             let personalDetailsProperties = [];
             let branchProperties = [];
@@ -651,12 +732,10 @@
                         Data : []
                     }
                 }
-                
             });
             let personalDetailsSelectQuery = personalDetailsProperties.length > 0 ? `PersonalDetails($select=${personalDetailsProperties.join(',')})` : `PersonalDetails($select=ID)`;
             let branchSelectQuery = branchProperties.length > 0 ? `Branch($select=${branchProperties.join(',')})` : `Branch($select=ID)`;
             let positionSelectQuery = positionProperties.length > 0 ? `Position($select=${positionProperties.join(',')})` : `Position($select=ID)`;
-            //let personalCumulativeSelectQuery = personalCumulativeProperties.length > 0 ? `PersonalCumulatives($select=Year,${personalCumulativeProperties.join(',')})` : `PersonalCumulatives($select=ID)`;
             let personalCumulativeSelectQuery = personalCumulativeProperties.length > 0 ? `PersonalCumulatives($select=Year,${personalCumulativeProperties.join(',')}),` : ``;
             let personalSelectQuery = personalProperties.length > 0 ? `&$select=${personalProperties.join(',')}` : `&$select=ID`
             //Gelen filtreler üzerinde Status durumu ile alakalı bir veri yoksa default olarak online olanları getir
@@ -675,6 +754,8 @@
                 type: "POST",
                 url: `/query/detayli-filtre/${tableName}?${odataQuery}`,
                 success: function(res) {
+                    $('#mainDiv').removeClass('d-none');
+                    $('#page-loader').addClass('d-none')
                     if (res) {
                         console.log(res)
                         // Verilerle tableDic'i doldurun
@@ -688,7 +769,6 @@
                             }
                         });
                         console.log(tableDic)
-                        formatDates(tableDic)
                         createDynamicTable(tableDic,personalCumulativeProperties,res);
                     } else {
                         $('#error-modal-message').text(res.message);
@@ -696,6 +776,8 @@
                     }
                 },
                 error: function() {
+                    $('#mainDiv').removeClass('d-none');
+                    $('#page-loader').addClass('d-none')
                     $('#error-modal-message').text("İşleminiz sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyinizx!");
                     $('#error-modal').modal('show');
                 }
@@ -716,22 +798,6 @@
         }
         return value;
     }
-    function formatDates(data) {
-        for (let key in data) {
-            if (data[key].Text.toLowerCase().includes('tarih')) {
-                moment.locale("tr");
-                data[key].Data = data[key].Data.map(date =>
-                {
-                    if (date && moment(date, moment.ISO_8601, true).isValid()) {
-                        return moment(date).format('DD MMMM YYYY');
-                    } else {
-                        return null; // veya başka bir değer
-                    }
-                });
-            }
-        }
-        return data;
-    }
     function createDynamicTable(tableDic,personalCumulativeProperties,data) {
         $('#results').addClass("card table-responsive m-5 mt-3")
         let table = '<table id="dynamicTable" class="table"><thead><tr>';
@@ -739,10 +805,8 @@
         // Başlıkları ekleyin
         for (let key in tableDic) {
             table += `<th>
-                    <button class="table-sort" data-sort="${key}">${tableDic[key].Text}</button>
-                    <button class="table-sort asc d-none" data-sort="${key}">${tableDic[key].Text}</button>
-                    <button class="table-sort desc d-none" data-sort="${key}">${tableDic[key].Text}</button>
-            </th>`;
+                    <button class="table-sort" data-order="default" data-sort="${key}">${tableDic[key].Text}</button>
+                    </th>`;
             columns.push(key);
         }
         let maxYears = [];
@@ -759,10 +823,8 @@
                 personalCumulativeProperties.forEach(prop => {
                     prop = prop === "EarnedYearLeave" ? "Hak Edilen" : (prop=== "RemainYearLeave" ? "Kalan İzin" : "")
                     table += `<th>
-                        <button class="table-sort" data-sort="${year}-${prop}">${year}<br> ${prop}</button>
-                        <button class="table-sort asc d-none" data-sort="${year}-${prop}">${year}<br> ${prop}</button>
-                        <button class="table-sort desc d-none" data-sort="${year}-${prop}">${year}<br> ${prop}</button>
-                    </th>`;
+                        <button class="table-sort" data-order="default" data-sort="${year}-${prop}">${year}<br> ${prop}</button>
+                        </th>`;
                     columns.push(`${year}-${prop}`);
                 });
             });
@@ -801,32 +863,52 @@
         $('#results').html(table);
         //Datatable Section
         let tableElement = $('#dynamicTable').DataTable({
+            dom: 'lfBtip',
+            buttons: [
+                {
+                    extend: 'excelHtml5',
+                    text: `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-spreadsheet" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                                    <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                                    <path d="M8 11h8v7h-8z"></path>
+                                    <path d="M8 15h8"></path>
+                                    <path d="M11 11v7"></path>
+                                </svg>Excel Raporu`,
+                    titleAttr: 'Excel'
+                }
+            ],
             "language": datatableLanguage,
             "paging": true,
             "searching": true,
             "ordering": true,
             "pageLength": 10,
             "lengthMenu": [5, 10, 25, 50, 100],
-            columnDefs: [
+            "columnDefs": [
                 {
                     targets: '_all', // Apply to all columns
                     render: function(data, type, row) {
-                        if (type === 'sort' || type === 'type') {
-                            // Check if the data matches the date format
-                            if (moment(data, 'DD MMMM YYYY', true).isValid()) {
-                                console.log("Evet")
-                                return moment(data, 'DD MMMM YYYY').format('YYYYMMDD');
+                        if (moment(data, "YYYY-MM-DDTHH:mm:ss", true).isValid()) {
+                            if (type === 'display') {
+                                // Display format: '1 Ocak 1974'
+                                return moment(data, moment.ISO_8601).format('DD MMMM YYYY');
+                            } else if (type === 'sort' || type === 'type') {
+                                // Sort format: 'YYYYMMDD'
+                                return moment(data, moment.ISO_8601).format('YYYYMMDD');
                             }
                         }
-                        return data;
+                        return data; 
                     },
                     type: 'turkish-string', // Custom sort type
                 },
                 
             ],
-            "initComplete": function() {
+            "initComplete": function () {
+                let excelButton = $('.dt-buttons button')
                 $('#dynamicTable_wrapper').addClass('p-3')
                 $('.dataTables_filter input').addClass('form-control');
+                $('.dataTables_filter').append(excelButton)
+                excelButton.removeClass().addClass('btn btn-success ms-2')
                 new TomSelect($('.dataTables_length select'))
                 let dataTableTopContainer = $('<div class="d-flex justify-content-between mb-3"></div>');
                 $('.dataTables_length').appendTo(dataTableTopContainer);
@@ -838,10 +920,17 @@
                 dataTableBottomContainer.insertAfter('#dynamicTable');
             },
             
+            
         });
         // Datatable üzerinde sorting yaparken türkçe karakter sorunu çözümü
         $.fn.dataTable.ext.type.order['turkish-string-pre'] = function(d) {
-            return d.toLowerCase().replace(/ç/g, 'c').replace(/ğ/g, 'g').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ş/g, 's').replace(/ü/g, 'u');
+            return d.toLowerCase()
+                .replace(/ç/g, 'c')
+                .replace(/ğ/g, 'g')
+                .replace(/ı/g, 'i')
+                .replace(/ö/g, 'o')
+                .replace(/ş/g, 's')
+                .replace(/ü/g, 'u');
         };
         // Sıralama butonları için olay dinleyici ekleme
         $('button.table-sort').on('click', function() {
@@ -849,18 +938,17 @@
             let order = $(this).hasClass('asc') ? 'asc' : 'desc';
 
             // Tüm butonları default hale getir
-            $('button.table-sort').removeClass('d-none');
-            $('button.table-sort.asc, button.table-sort.desc').addClass('d-none');
-
+            $('button.table-sort.asc').removeClass('asc');
+            $('button.table-sort.desc').removeClass('desc');
             // Şu anki butonu gizle ve sıralama yapılan butonu göster
-            if (order === 'asc') {
-                $(`button.table-sort[data-sort="${sortColumn}"]`).addClass('d-none');
-                $(`button.table-sort.desc[data-sort="${sortColumn}"]`).removeClass('d-none');
+            if (order === 'desc') {
+                $(`button.table-sort[data-sort="${sortColumn}"]`).addClass('asc').removeClass('desc');
+            } else if(order === 'asc') {
+                $(`button.table-sort[data-sort="${sortColumn}"]`).addClass('desc').removeClass('asc');
             } else {
-                $(`button.table-sort[data-sort="${sortColumn}"]`).addClass('d-none');
-                $(`button.table-sort.asc[data-sort="${sortColumn}"]`).removeClass('d-none');
+                $(`button.table-sort[data-sort="${sortColumn}"]`).addClass('asc').removeClass('desc');
             }
-            // DataTables ile sıralama işlemini gerçekleştirme
+            //// DataTables ile sıralama işlemini gerçekleştirme
             tableElement.order([columns.indexOf(sortColumn), order]).draw();
         });
     }

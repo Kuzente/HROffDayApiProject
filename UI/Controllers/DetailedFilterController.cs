@@ -12,8 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.DetailedFilterServices;
 
 namespace UI.Controllers;
-//[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
-[AllowAnonymous]
+[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
 public class DetailedFilterController : Controller
 {
     private readonly IReadDetailedFilterService _readDetailedFilterService;
@@ -30,15 +29,5 @@ public class DetailedFilterController : Controller
         return View();
     }
     
-    [HttpPost]
-    public async Task<IActionResult> FilteredResultPost(ReadDetailFilterDto dto)
-    {
-        IResultDto result = new ResultDto();
-        if (!ModelState.IsValid) return Ok(result.SetStatus(false).SetErr("Not Valid").SetMessage("Filtrenin boş olmadığından emin olunuz!"));
-        
-        if (!dto.IsValid(out var errors)) return Ok(result.SetStatus(false).SetErr("Not Valid").SetMessage(errors.First()));
-        await _readDetailedFilterService.GetFilteredResultService(dto);
-        return Ok(result);
-    }
     
 }

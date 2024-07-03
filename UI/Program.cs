@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.OData;
 using QuestPDF.Infrastructure;
 using Services;
 using Services.HangfireFilter;
+using UI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -161,9 +162,6 @@ app.MapControllerRoute(name: "postCumulativeNotification", pattern: "post-kumula
 #endregion
 #region DetailedFilter
 app.MapControllerRoute(name: "detailedFilterPage", pattern: "detayli-filtre", defaults: new { controller = "DetailedFilter", action = "Index" });
-app.MapControllerRoute(name: "detailedFilterPagePost", pattern: "detayli-filtre-sonuc", defaults: new { controller = "DetailedFilter", action = "FilteredResultPost" });
-
-
 #endregion
 #region ErrorPages
 app.MapControllerRoute(name: "error404page", pattern: "404", defaults: new { controller = "Home", action = "ErrorPage" });
