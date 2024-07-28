@@ -25,8 +25,8 @@
     let allBranchList;
     let allPositionList;
     moment.locale('tr');
-    
-   
+
+
     $.ajax({
         type: "GET",
         url: "json/datatable-tr.json",
@@ -63,23 +63,23 @@
             $('#error-modal').modal('show')
         }
     });
-   $.ajax({
-       type: "GET",
-       url: "json/personal-selects-data.json",
-       dataType: 'json',
-       success: function (data) {
-           bloodGroupList = data.bloodGroup;
-           bodySize = data.bodySize;
-           educationStatus = data.educationStatus;
-           maritalStatus = data.maritalStatus
-           personalGroup = data.personalGroup
-           departments = data.departments
-       },
-       error: function () {
-           $('#error-modal-message').text("Personel Detaylarına ait kan grupları, personel grupları, eğitim durumları vs. getirilirken bir hata oluştu!")
-           $('#error-modal').modal('show')  
-       }
-   });
+    $.ajax({
+        type: "GET",
+        url: "json/personal-selects-data.json",
+        dataType: 'json',
+        success: function (data) {
+            bloodGroupList = data.bloodGroup;
+            bodySize = data.bodySize;
+            educationStatus = data.educationStatus;
+            maritalStatus = data.maritalStatus
+            personalGroup = data.personalGroup
+            departments = data.departments
+        },
+        error: function () {
+            $('#error-modal-message').text("Personel Detaylarına ait kan grupları, personel grupları, eğitim durumları vs. getirilirken bir hata oluştu!")
+            $('#error-modal').modal('show')
+        }
+    });
     // <--Static Data Section -->
     //Tablonun Değişmesi Durumunda Çalışan Fonksiyon
     $(document).on('change', '#entitySelect', function() {
@@ -116,7 +116,7 @@
                 `)
                 propertyViewSelectElement = `
                 <label for="propertiesViewSelect">Getirilecek Özellikler:</label>
-                                    <select id="propertiesViewSelect" class="" name="propertiesView" multiple placeholder="Getirmek istediğiniz kolonları seçiniz!">
+                                    <select id="propertiesViewSelect" class="form-control" name="propertiesView" multiple placeholder="Getirmek istediğiniz kolonları seçiniz!">
                                         <optgroup label="Personel Bilgi Kolonları">
                                             <option value="NameSurname">Adı-Soyadı</option>
                                             <option class="personalDetailProp" value="PersonalDetails/BirthPlace">Doğum Yeri</option>
@@ -168,22 +168,30 @@
             `
                 propertyViewSelectDiv.append(propertyViewSelectElement);
                 let propertiesViewSelect = new TomSelect($('#propertiesViewSelect'),{
-                    plugins: ['drag_drop'],
+                    plugins: {
+                        'drag_drop':{},
+                        'clear_button':{
+                            'title':'Tüm Öğeleri Temizle',
+                        },
+                        'remove_button':{
+                            title:"Öğeyi Kaldır"
+                        }
+                    },
                     maxOptions : null,
                 });
                 propertiesViewSelect.clear()
             }
         }
-        
+
         //Seçili getirilecek kolon yerini sıfırlar
-        
-        
-        
+
+
+
         //Datatable alanınını sıfırlar
         $('#results').empty().removeClass()
     });
-    
-    
+
+
     //Filtre Ekle butonuna ait function
     $('#addFilterBtn').click(function() {
         let selectedEntityVal = $('#entitySelect').find('option:selected').val()
@@ -196,7 +204,7 @@
                             <button class="btn btn-danger btn-icon remove-filter">x</button>
                             <div class="ms-2 d-inline-block">
                                 <label class="form-label">Filtre Uygulamak İstediğiniz Kolonu Seçiniz</label>
-                                <select class="form-select propertySelect" placeholder="Kolon Seçiniz!!!" name="propertyName" id="${selectId}">
+                                <select class="form-control propertySelect" placeholder="Kolon Seçiniz!!!" name="propertyName" id="${selectId}">
                                     <option value=""></option>
                                     <optgroup label="Personel Metin Kolonları">
                                         <option data-type="Text" value="NameSurname">Adı-Soyadı</option>
@@ -260,14 +268,14 @@
                             
                             </div>
                         </div>
-                    </div>`; 
-                   }
+                    </div>`;
+        }
         $('#filtersRowSection').append(filterSelectElement);
         let filterSelect = new TomSelect($(`#${selectId}`),{
             maxOptions : null,
         });
         filterSelect.clear();
-        
+
     });
     //Row silme işlemine ait function
     $(document).on('click', '.remove-filter', function() {
@@ -284,11 +292,19 @@
         if (selectedType === 'Text') {
             let input = `
                 <label class="form-label">${selectedPropName} içerisinde arama yapın.</label>
-                <select multiple class="form-select TextSelect" placeholder="${selectedPropName} Giriniz" name="TextSelect">
+                <select multiple class="form-control TextSelect" placeholder="${selectedPropName} Giriniz" name="TextSelect">
                 </select>
             `;
             filtersDetailsSection.append(input)
             new TomSelect(filtersDetailsSection.find('select'),{
+                plugins: {
+                    'clear_button':{
+                        'title':'Tüm Öğeleri Temizle',
+                    },
+                    'remove_button':{
+                        title:"Öğeyi Kaldır"
+                    }
+                },
                 create: true,
                 maxOptions: null,
                 onItemRemove: function(value) {
@@ -299,12 +315,20 @@
         else if (selectedType === 'List') {
             let input = `
                 <label class="form-label">${selectedPropName} göre seçim yapınız.</label>
-                <select multiple class="form-select ListSelect" placeholder="${selectedPropName} Seçin" name="ListSelect">
+                <select multiple class="form-control ListSelect" placeholder="${selectedPropName} Seçin" name="ListSelect">
                            <option value=""></option>
                 </select>
             `;
             filtersDetailsSection.append(input)
             let selectTom = new TomSelect(filtersDetailsSection.find('select'),{
+                plugins: {
+                    'clear_button':{
+                        'title':'Tüm Öğeleri Temizle',
+                    },
+                    'remove_button':{
+                        title:"Öğeyi Kaldır"
+                    }
+                },
                 maxOptions : null
             });
             let printArray;
@@ -359,13 +383,13 @@
                     text: item.Name + (item.Status === 0 ? "" : (item.Status === 1 ? " (Pasif)" : (item.Status === 2 ? " (Silinmiş)" : "")))
                 });
             });
-            
+
         }
         else if (['Number', 'Double', 'Date'].includes(selectedType)){
             let comparisonSelect = `
                 <div class="d-inline-block">
                     <label class="form-label">${selectedPropName} göre filtre uygulayınız.</label>
-                    <select class="form-select comparisonSelect" data-property-type="${selectedType}" placeholder="Karşılaştırma Seçin" name="comparisonType">
+                    <select class="form-control comparisonSelect" data-property-type="${selectedType}" placeholder="Karşılaştırma Seçin" name="comparisonType">
                              <option data-propname="${selectedPropValue}" value=""></option>
                              <option data-propname="${selectedPropValue}" value="eq">Eşit</option>
                              <option data-propname="${selectedPropValue}" value="ne">Eşit Değil</option>
@@ -395,7 +419,7 @@
                 </div>
                 </div>
             `;
-                filtersDetailsSection.append(radios) 
+                filtersDetailsSection.append(radios)
             }
             else if (selectedPropValue === 'IsYearLeaveRetired'){
                 let radios = `
@@ -445,7 +469,7 @@
             `;
                 filtersDetailsSection.append(radios)
             }
-            
+
         }
         else {
         }
@@ -458,10 +482,10 @@
         let comparisonSection = $(this).closest(".row").find('.comparisonSection')
         comparisonSection.remove()
         if (!selectedValue){
-            
+
         }
         else if(selectedValue === 'between'){
-            
+
             let input1 = `
             <div class="ms-2 d-inline-block comparisonSection">
                 <input 
@@ -501,9 +525,9 @@
                         today: 'Bugün',
                         clear: 'Temizle'
                     }
-                });  
+                });
             }
-            
+
         }
         else{
             let input = `
@@ -732,19 +756,19 @@
                     }
                 }
             });
-            
+
             let personalDetailsSelectQuery = personalDetailsProperties.length > 0 ? `PersonalDetails($select=${personalDetailsProperties.join(',')})` : ``;
             let branchSelectQuery = branchProperties.length > 0 ? `Branch($select=${branchProperties.join(',')})` : ``;
             let positionSelectQuery = positionProperties.length > 0 ? `Position($select=${positionProperties.join(',')})` : ``;
             let personalCumulativeSelectQuery = personalCumulativeProperties.length > 0 ? `PersonalCumulatives($select=Year,${personalCumulativeProperties.join(',')})` : ``;
-            
+
             let expandQueries = [];
             if (personalDetailsSelectQuery) expandQueries.push(personalDetailsSelectQuery);
             if (branchSelectQuery) expandQueries.push(branchSelectQuery);
             if (positionSelectQuery) expandQueries.push(positionSelectQuery);
             if (personalCumulativeSelectQuery) expandQueries.push(personalCumulativeSelectQuery);
             let expandQuery = expandQueries.length > 0 ? `&expand=${expandQueries.join(',')}` : "";
-            
+
             let personalSelectQuery = personalProperties.length > 0 ? `&$select=${personalProperties.join(',')}` : `&$select=ID`
             //Gelen filtreler üzerinde Status durumu ile alakalı bir veri yoksa default olarak online olanları getir
             if (!odataFilters.some(item => /(^|[^\/])Status($|[^\/])/.test(item))) {
@@ -758,117 +782,97 @@
             }
             let odataQuery = `${odataFilters.length > 0 ? `$filter=${odataFilters.join(' and ')}` : ''}${expandQuery}${personalSelectQuery}`;
             console.log(odataQuery); // OData query string
+            // $.ajax({
+            //     type: "GET",
+            //     url: `/query/detayli-filtre/${tableName}?${odataQuery}`,
+            //     success: function (res) {
+            //         $('#mainDiv').removeClass('d-none');
+            //         $('#page-loader').addClass('d-none')
+            //         if (res) {
+            //             console.log(res)
+            //             // Verilerle tableDic'i doldurun
+            //             res.forEach(row => {
+            //                 for (let key in tableDic) {
+            //                     let path = tableDic[key].Path;
+            //                     let value = findValueByKey(row, path);
+            //                     if (value !== undefined) {
+            //                         tableDic[key].Data.push(value);
+            //                     }
+            //                 }
+            //             });
+            //             console.log(tableDic)
+            //             createDynamicTable(tableDic, personalCumulativeProperties, res);
+            //         } else {
+            //             $('#error-modal-message').text(res.message);
+            //             $('#error-modal').modal('show');
+            //         }
+            //     },
+            //     error: function () {
+            //         $('#mainDiv').removeClass('d-none');
+            //         $('#page-loader').addClass('d-none')
+            //         $('#error-modal-message').text("İşleminiz sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyinizx!");
+            //         $('#error-modal').modal('show');
+            //     }
+            // });
             $.ajax({
-                type: "GET",
-                url: `/query/detayli-filtre/${tableName}?${odataQuery}`,
-                success: function (res) {
-                    $('#mainDiv').removeClass('d-none');
-                    $('#page-loader').addClass('d-none')
-                    if (res) {
-                        console.log(res)
-                        // Verilerle tableDic'i doldurun
-                        res.forEach(row => {
-                            for (let key in tableDic) {
-                                let path = tableDic[key].Path;
-                                let value = findValueByKey(row, path);
-                                if (value !== undefined) {
-                                    tableDic[key].Data.push(value);
-                                }
-                            }
-                        });
-                        console.log(tableDic)
-                        createDynamicTable(tableDic, personalCumulativeProperties, res);
-                    } else {
-                        $('#error-modal-message').text(res.message);
-                        $('#error-modal').modal('show');
-                    }
+                url: "/query/detayli-filtre/Personal?$apply=filter(" + `${odataFilters.join(' and ')}` + ")/aggregate($count as TotalCount)",
+                success: function (resultCount) {
+                    console.log(resultCount)
+                    createDynamicTable(odataQuery,resultCount[0].TotalCount)
                 },
-                error: function () {
-                    $('#mainDiv').removeClass('d-none');
-                    $('#page-loader').addClass('d-none')
-                    $('#error-modal-message').text("İşleminiz sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyinizx!");
-                    $('#error-modal').modal('show');
+                error: function (xhr, status, error) {
+                    console.error("Count fetch error: ", error);
                 }
             });
-
+            $('#mainDiv').removeClass('d-none');
+            $('#page-loader').addClass('d-none')
 
         }
     });
-    function findValueByKey(obj, path) {
-        let keys = path.includes('/') ? path.split('/') : [path];
-        let value = obj;
-        for (let key of keys) {
-            if (value && value.hasOwnProperty(key)) {
-                value = value[key];
-            } else {
-                return undefined;
-            }
-        }
-        return value;
-    }
-    function createDynamicTable(tableDic, personalCumulativeProperties, data) {
+    
+    function createDynamicTable(odataQuery,resultCount) {
         $('#results').addClass("card table-responsive m-5 mt-3")
-        let table = '<table id="dynamicTable" class="table"><thead><tr>';
-        let columns = []
-        // Başlıkları ekleyin
-        for (let key in tableDic) {
-            table += `<th>
-                    <button class="table-sort" data-order="default" data-sort="${key}">${tableDic[key].Text}</button>
-                    </th>`;
-            columns.push(key);
-        }
-        let maxYears = [];
-        if (personalCumulativeProperties.length > 0) {
-            // En uzun yıllar listesini bulalım
-            data.forEach(person => {
-                let personYears = person.PersonalCumulatives.map(c => c.Year);
-                if (personYears.length > maxYears.length) {
-                    maxYears = personYears;
-                }
-            });
-            maxYears = maxYears.sort((a, b) => b - a)
-            maxYears.forEach(year => {
-                personalCumulativeProperties.forEach(prop => {
-                    prop = prop === "EarnedYearLeave" ? "Hak Edilen" : (prop === "RemainYearLeave" ? "Kalan İzin" : "")
-                    table += `<th>
-                        <button class="table-sort" data-order="default" data-sort="${year}-${prop}">${year}<br> ${prop}</button>
-                        </th>`;
-                    columns.push(`${year}-${prop}`);
-                });
-            });
-        }
-        table += '</tr></thead><tbody>';
-
-        let numRows = Object.values(tableDic)[0].Data.length;
-        for (let i = 0; i < numRows; i++) {
-            table += '<tr>';
-            for (let key in tableDic) {
-                let cellData = tableDic[key].Data[i];
-                let cellText = (cellData === null || cellData === undefined)
-                    ? "Yok"
-                    : (typeof cellData === 'boolean')
-                        ? (cellData ? "Evet" : "Hayır")
-                        : cellData;
-                table += `<td>${cellText}</td>`;
-            }
-            // Personel Cumulative Değerleri
-            if (personalCumulativeProperties.length > 0) {
-                let personCumulativeData = data[i].PersonalCumulatives || [];
-                maxYears.forEach(year => {
-                    personalCumulativeProperties.forEach(prop => {
-                        let yearData = personCumulativeData.find(c => c.Year === year);
-                        let value = yearData ? yearData[prop] : undefined;
-                        table += `<td>${value !== undefined ? value : 'Yok'}</td>`;
-                    });
-                });
-            }
-            table += '</tr>';
-
-        }
-
-        table += '</tbody></table>';
-
+        let table = '<table id="dynamicTable" class="table card-table table-vcenter text-nowrap"><thead><tr id="dynamic-headers"></tr></thead><tbody></tbody></table>';
         $('#results').html(table);
+        let columns = []
+        var headers = $('#dynamic-headers');
+        console.log(headers)
+        // Başlıkları ekleyin
+        $('#propertiesViewSelect option:selected').each(function () {
+            if ($(this).hasClass('personalDetailProp')) {
+                
+                columns.push({
+                    data: $(this).val().split("/").join("."),
+                    title: $(this).text()
+                })
+            }
+            else if ($(this).hasClass('branchProp')) {
+                columns.push({
+                    data: $(this).val().split("/").join("."),
+                    title: $(this).text()
+                })
+            }
+            else if ($(this).hasClass('positionProp')) {
+                columns.push({
+                    data: $(this).val().split("/").join("."),
+                    title: $(this).text()
+                })
+            }
+            else if ($(this).hasClass('personalCumulativeProp')) {
+                columns.push({
+                    data: $(this).val().split("/").join("."),
+                    title: $(this).text()
+                })
+            }
+            else {
+                columns.push({
+                    data: $(this).val(),
+                    title: $(this).text()
+                })
+            }
+            headers.append('<th><button class="header-button" id="btn-' + 32 + '">' + 32 + '</button></th>');
+        });
+        
         //Datatable Section
         let tableElement = $('#dynamicTable').DataTable({
             dom: 'lfBtip',
@@ -886,18 +890,45 @@
                     titleAttr: 'Excel'
                 }
             ],
+            "processing" : true,
+            "serverSide": true,
+            "ajax": function (data,callback,settings) {
+                var pageSize = data.length;
+                var start = data.start;
+                var page = start / pageSize + 1;
+                        // Data query to get the data with filter
+                        $.ajax({
+                            url: "/query/detayli-filtre/Personal?" + odataQuery + "&$skip=" + start + (pageSize === -1 ? "" : "&$top=" + pageSize),
+                            success: function (result) {
+                                console.log(result)
+                                callback({
+                                    draw: data.draw,
+                                    recordsTotal: resultCount,
+                                    recordsFiltered: resultCount,
+                                    data: result
+                                });
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("Data fetch error: ", error);
+                            }
+                        });
+            },
             "language": datatableLanguage,
             "paging": true,
             "searching": true,
             "ordering": true,
             "pageLength": 10,
-            "lengthMenu": [5, 10, 25, 50, 100],
+            "lengthMenu": [
+                [ 10, 25, 50, -1 ],
+                [ '10', '25', '50', 'Hepsini Göster' ]
+            ],
+            "columns" : columns,
             "columnDefs": [
                 {
                     targets: '_all',
                     type: 'turkish-string', // Custom sort type
                     render: function (data, type, row) {
-                        
+
                         let formats = ["YYYY-MM-DDTHH:mm:ss.SSSSSSS", "YYYY-MM-DDTHH:mm:ss"];
                         let validFormat = formats.find(format => moment(data, format, true).isValid());
                         if (validFormat) {
@@ -943,23 +974,35 @@
                 .replace(/ü/g, 'u');
         };
         // Sıralama butonları için olay dinleyici ekleme
-        $('button.table-sort').on('click', function () {
-            let sortColumn = $(this).data('sort');
-            let order = $(this).hasClass('asc') ? 'asc' : 'desc';
-
-            // Tüm butonları default hale getir
-            $('button.table-sort.asc').removeClass('asc');
-            $('button.table-sort.desc').removeClass('desc');
-            // Şu anki butonu gizle ve sıralama yapılan butonu göster
-            if (order === 'desc') {
-                $(`button.table-sort[data-sort="${sortColumn}"]`).addClass('asc').removeClass('desc');
-            } else if (order === 'asc') {
-                $(`button.table-sort[data-sort="${sortColumn}"]`).addClass('desc').removeClass('asc');
+        // $('button.table-sort').on('click', function () {
+        //     let sortColumn = $(this).data('sort');
+        //     let order = $(this).hasClass('asc') ? 'asc' : 'desc';
+        //
+        //     // Tüm butonları default hale getir
+        //     $('button.table-sort.asc').removeClass('asc');
+        //     $('button.table-sort.desc').removeClass('desc');
+        //     // Şu anki butonu gizle ve sıralama yapılan butonu göster
+        //     if (order === 'desc') {
+        //         $(`button.table-sort[data-sort="${sortColumn}"]`).addClass('asc').removeClass('desc');
+        //     } else if (order === 'asc') {
+        //         $(`button.table-sort[data-sort="${sortColumn}"]`).addClass('desc').removeClass('asc');
+        //     } else {
+        //         $(`button.table-sort[data-sort="${sortColumn}"]`).addClass('asc').removeClass('desc');
+        //     }
+        //     //// DataTables ile sıralama işlemini gerçekleştirme
+        //     tableElement.order([columns.indexOf(sortColumn), order]).draw();
+        // });
+    }
+    function findValueByKey(obj, path) {
+        let keys = path.includes('/') ? path.split('/') : [path];
+        let value = obj;
+        for (let key of keys) {
+            if (value && value.hasOwnProperty(key)) {
+                value = value[key];
             } else {
-                $(`button.table-sort[data-sort="${sortColumn}"]`).addClass('asc').removeClass('desc');
+                return undefined;
             }
-            //// DataTables ile sıralama işlemini gerçekleştirme
-            tableElement.order([columns.indexOf(sortColumn), order]).draw();
-        });
+        }
+        return value;
     }
 });

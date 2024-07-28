@@ -354,7 +354,7 @@
                 row.find('td:nth-child(3) span').replaceWith('<input type="number" data-remainYearLeave name="cumulativeFormulaInput" value="0" class="form-control">'); // Üçüncü sütundaki span'ı input ile değiştirin
                 row.find('td:nth-child(4) input').prop('disabled', false); // Dördüncü sütundaki inputları etkinleştirin
                 row.find('td:nth-child(5) input').prop('disabled', false); // Beşinci sütundaki inputları etkinleştirin
-                clickedButton.replaceWith('<button type="button" data-cumulativeAddBtn class="btn btn-pill btn-sm btn-blue">Manuel Yıllık İzin Ekle</button>')
+                clickedButton.replaceWith('<button type="button" data-cumulativeAddBtn class="btn btn-pill btn-sm btn-blue">Erkenden Yıllık İzin Ekle</button>')
                 $(document).on('click', 'button[data-cumulativeAddBtn]', function(event) {
                     let clickedButton = $(this)
                     let row = clickedButton.closest('tr'); // Tıklanan butonun bulunduğu tablo satırını bul

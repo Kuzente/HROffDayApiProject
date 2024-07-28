@@ -139,7 +139,7 @@ public class QueryController : ODataController
         return Ok(result);
     }
     [EnableQuery]
-    [HttpPost]
+    [HttpGet]
     [Route("detayli-filtre/{entityName}")]
     public async Task<IActionResult> Get(string entityName)
     {

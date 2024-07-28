@@ -16,7 +16,7 @@ QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(180);
         options.SlidingExpiration = true;
         options.LoginPath = "/giris-yap";
         options.Cookie.Name = "user";
@@ -25,7 +25,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 builder.Services.AddSession(options =>
 {
-    options.Cookie.MaxAge = TimeSpan.FromMinutes(60);
+    options.Cookie.MaxAge = TimeSpan.FromMinutes(180);
     options.Cookie.HttpOnly = true;
 });
 builder.Services.AddControllers().AddJsonOptions(opt =>

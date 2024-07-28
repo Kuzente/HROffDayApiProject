@@ -107,10 +107,13 @@ public class OffDayController : Controller
 	[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.SuperAdmin)}")]
 	public async Task<IActionResult> ApprovedOffDayList(OffdayQuery query)
     {
-        var userRole = User.FindFirst(ClaimTypes.Role).Value;
-        if (!string.IsNullOrEmpty(userRole) && userRole == nameof(UserRoleEnum.Director))
+        var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userRole) || string.IsNullOrEmpty(userId)) return Redirect("/403");
+        if (userRole == nameof(UserRoleEnum.Director))
         {
-            var branchesResult = await _readUserService.GetUserBranches(Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty));
+	        if (!Guid.TryParse(userId, out var userGuid)) return Redirect("/404"); // Veya uygun bir hata sayfası
+            var branchesResult = await _readUserService.GetUserBranches(userGuid);
             if (!branchesResult.IsSuccess) return Redirect("/404");;
             query.UserBranches = branchesResult.Data;
         }
