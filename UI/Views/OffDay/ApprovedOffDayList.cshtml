@@ -133,7 +133,14 @@ else
                                                     <option></option>
                                                     @foreach (var data in Model.Data.ReadApprovedOffDayGetPositionsList)
                                                     {
-                                                        <!option value="@data.PositionNameValue" @(data.PositionNameValue == selectedPositionValue ? "selected" : "")>@data.PositionName</!option>
+                                                        @if (data.PositionId.ToString().Equals(selectedPositionValue))
+                                                        {
+                                                            <option value="@data.PositionId" selected>@data.PositionName</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@data.PositionId">@data.PositionName</option>
+                                                        }
                                                     }
 
                                                 </select>
@@ -147,7 +154,14 @@ else
                                                     <option></option>
                                                     @foreach (var data in Model.Data.ReadApprovedOffDayGetBranchesList)
                                                     {
-                                                        <!option value="@data.BranchNameValue"@(data.BranchNameValue == selectedBranchValue ? "selected" : "")>@data.BranchName</!option>
+                                                        @if (data.BranchId.ToString().Equals(selectedBranchValue))
+                                                        {
+                                                            <option value="@data.BranchId" selected>@data.BranchName</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@data.BranchId">@data.BranchName</option>
+                                                        }
                                                     }
 
                                                 </select>
@@ -259,10 +273,10 @@ else
         
                         </td>
                         <td class="col-2">
-                            @data.BranchName
+                            @data.Personal.Branch.Name
                         </td>
                         <td class="col-2">
-                            @data.PositionName
+                            @data.Personal.Position.Name
                         </td>
                         <td class="col-2">
                             <span class="status status-dark mb-1">@data.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span><br>

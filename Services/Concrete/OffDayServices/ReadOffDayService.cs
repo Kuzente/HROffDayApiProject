@@ -170,22 +170,33 @@ public class ReadOffDayService : IReadOffDayService
 	public async Task<ResultWithPagingDataDto<ReadApprovedOffDayDto>> GetApprovedOffDaysListService(OffdayQuery query)
 	{
 		ResultWithPagingDataDto<ReadApprovedOffDayDto> res = new ResultWithPagingDataDto<ReadApprovedOffDayDto>(query.sayfa,query.search);
+		ReadApprovedOffDayDto mapDataDto = new()
+		{
+			ReadApprovedOffDayListDtos = new(),
+			ReadApprovedOffDayGetBranchesList = new(),
+			ReadApprovedOffDayGetPositionsList = new()
+		};
 		try
 		{
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadOffDayRepository.GetAll(
 					predicate: a =>
-						a.Status == EntityStatusEnum.Online &&
-						 a.OffDayStatus == OffDayStatusEnum.Approved  &&
-						(a.Personal.Status == EntityStatusEnum.Online ||
-						 a.Personal.Status == EntityStatusEnum.Offline) &&
-						(query.UserBranches.IsNullOrEmpty() || query.UserBranches.Any(q=>q == a.BranchId)) &&
-						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear || a.EndDate.Year == query.filterYear) &&
-						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth || a.EndDate.Month == query.filterMonth)&&
-						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower()))&&
-						(string.IsNullOrEmpty(query.isFreedayLeave) || a.LeaveByFreeDay > 0),
+						a.Status == EntityStatusEnum.Online && // İzin silinmemiş ise
+						a.OffDayStatus == OffDayStatusEnum.Approved  && // İzin onaylanmış ise
+						(a.Personal.Status == EntityStatusEnum.Online || a.Personal.Status == EntityStatusEnum.Offline) && // İzne ait personel çalışan veya işten çıkarılmış ise
+						(query.UserBranches.IsNullOrEmpty() || query.UserBranches.Any(q=>q == a.BranchId)) && //Sisteme giren kullanıcıya ait atanmış şubeler var ise
+						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear || a.EndDate.Year == query.filterYear) && // Filtre üzerinde yıl seçilmiş ise
+						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth || a.EndDate.Month == query.filterMonth)&& // Filtre üzerinde ay seçilmiş ise
+						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower()))&& // Filtre üzerinde arama yapılmış ise
+						(string.IsNullOrEmpty(query.positionName) || a.Personal.Position.ID.ToString() == query.positionName)&& // Filtre üzerinde ünvan seçili ise
+						(string.IsNullOrEmpty(query.branchName) || a.Personal.Branch.ID.ToString() == query.branchName)&& // Filtre üzerinde şube seçili ise
+						(string.IsNullOrEmpty(query.isFreedayLeave) || a.LeaveByFreeDay > 0), // Filtre üzerinde ücretsiz izin seçili ise
 					
-					include: p=>p.Include(a=>a.Personal),
+					include: p=>
+						p.Include(a=>a.Personal)
+							.ThenInclude(b=> b.Branch)
+							.Include(a=>a.Personal)
+							.ThenInclude(b=>b.Position),
 					orderBy: p =>
 					{
 						IOrderedQueryable<OffDay> orderedOffdays;
@@ -205,6 +216,12 @@ public class ReadOffDayService : IReadOffDayService
 								"createdAt" => query.sortBy == "asc"
 									? p.OrderBy(a => a.CreatedAt)
 									: p.OrderByDescending(a => a.CreatedAt),
+								"branchName" => query.sortBy == "asc"
+									? p.OrderBy(a=>a.Personal.Branch.Name)
+									: p.OrderByDescending(a=>a.Personal.Branch.Name),
+								"positionName" => query.sortBy == "asc"
+									? p.OrderBy(a=>a.Personal.Position.Name)
+									: p.OrderByDescending(a=>a.Personal.Position.Name),
 								_ => p.OrderByDescending(a=> a.CreatedAt)
 							};
 						}
@@ -216,77 +233,34 @@ public class ReadOffDayService : IReadOffDayService
 						return orderedOffdays;
 					}
 				));
-			var branchListquery = await Task.Run(() => _unitOfWork.ReadBranchRepository.GetAll().Select(a=> new { a.Name,a.ID , a.Status}));
-			var positionListquery = await Task.Run(() => _unitOfWork.ReadPositionRepository.GetAll().Select(a=> new { a.Name,a.ID, a.Status}));
-			var branchList = branchListquery.ToList();
-			var positionList = positionListquery.ToList();
-			ReadApprovedOffDayDto mapDataDto = new()
-			{
-				ReadApprovedOffDayListDtos = new(),
-				ReadApprovedOffDayGetBranchesList = new(),
-				ReadApprovedOffDayGetPositionsList = new()
-			};
-			if(allData is null||branchList is null || positionList is null)
-				res.SetStatus(false).SetErr("Branch or Position or OffDay is not found").SetMessage("İzinler Bulunamadı...");
-			foreach (var item in allData.Select(a=>a.BranchId).Distinct().ToList())
-			{
-				var branch = branchList.FirstOrDefault(b => b.ID == item);
-				if (branch is not null)
-				{
-					mapDataDto.ReadApprovedOffDayGetBranchesList.Add(new ReadApprovedOffDayGetBranches
-					{
-						BranchName = branch.Status == EntityStatusEnum.Archive ? $"{branch.Name} (Silinmiş)" : branch.Name,
-						BranchNameValue = branch.Name,
-					});
-				}
-			}
-			foreach (var item in allData.Select(a=>a.PositionId).Distinct().ToList())
-			{
-				var position = positionList.FirstOrDefault(p => p.ID == item);
-				if (position is not null)
-				{
-					mapDataDto.ReadApprovedOffDayGetPositionsList.Add(new ReadApprovedOffDayGetPositions()
-					{
-						PositionName = position.Status == EntityStatusEnum.Archive ? $"{position.Name} (Silinmiş)" : position.Name,
-						PositionNameValue = position.Name
-					});
-				}
-			}
-			if (!string.IsNullOrEmpty(query.branchName))
-			{
-				allData = allData.Where(a => branchList.Any(b => b.ID == a.BranchId && b.Name.Contains(query.branchName)));
-			}
-			if (!string.IsNullOrEmpty(query.positionName))
-			{
-				allData = allData.Where(a => positionList.Any(b => b.ID == a.PositionId && b.Name.Contains(query.positionName)));
-			}
-			if (query.sortBy is not null && query.sortName is "branchName" or "positionName")
-			{
-				allData = query.sortName switch
-				{
-					"branchName" => query.sortBy == "asc"
-						? allData.OrderBy(a => branchList.FirstOrDefault(b => b.ID == a.BranchId).Name)
-						: allData.OrderByDescending(a => branchList.FirstOrDefault(b => b.ID == a.BranchId).Name),
-					"positionName" => query.sortBy == "asc"
-						? allData.OrderBy(a => positionList.FirstOrDefault(p => p.ID == a.PositionId).Name)
-						: allData.OrderByDescending(a => positionList.FirstOrDefault(p => p.ID == a.PositionId).Name),
-					_ => allData.OrderByDescending(a=> a.DeletedAt)
-				};
-			}
 			var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)
 				.Take(res.PageSize).ToList();
 			mapDataDto.ReadApprovedOffDayListDtos = _mapper.Map<List<ReadApprovedOffDayListDto>>(resultData);
-			foreach (var item in mapDataDto.ReadApprovedOffDayListDtos)
-			{
-				var branch = branchList.FirstOrDefault(b => b.ID == item.BranchId);
-				var position = positionList.FirstOrDefault(p => p.ID == item.PositionId);
-				if (branch is not null && position is not null)
-				{
-					item.BranchName = branch.Status == EntityStatusEnum.Archive ? $"{branch.Name} (Silinmiş)" : branch.Name;
-					item.PositionName = position.Status == EntityStatusEnum.Archive ? $"{position.Name} (Silinmiş)" : position.Name;
-				}
-			}
+			var branchListquery = await Task.Run(() => _unitOfWork.ReadBranchRepository
+				.GetAll(
+					predicate:p=> (query.UserBranches.IsNullOrEmpty() || query.UserBranches.Any(b=> b == p.ID)),
+					orderBy:o=> o.OrderBy(p=> p.Name))
+				.Select(a=> new { a.Name,a.ID , a.Status}));
 			
+			foreach (var branch in branchListquery)
+			{
+				mapDataDto.ReadApprovedOffDayGetBranchesList.Add(new ReadApprovedOffDayGetBranches
+				{
+					BranchName = branch.Status == EntityStatusEnum.Archive ? $"{branch.Name} (Silinmiş)" : branch.Name,
+					BranchId = branch.ID,
+				});
+			}
+			var positionListquery = await Task.Run(() => _unitOfWork.ReadPositionRepository
+				.GetAll(orderBy:o=> o.OrderBy(p=> p.Name))
+				.Select(a=> new { a.Name,a.ID, a.Status}));
+			foreach (var position in positionListquery)
+			{
+				mapDataDto.ReadApprovedOffDayGetPositionsList.Add(new ReadApprovedOffDayGetPositions
+				{
+					PositionName = position.Status == EntityStatusEnum.Archive ? $"{position.Name} (Silinmiş)" : position.Name,
+					PositionId = position.ID,
+				});
+			}
 			res.SetData(mapDataDto);
 			res.TotalRecords = allData.Count();
 			res.TotalPages = Convert.ToInt32(Math.Ceiling((double)res.TotalRecords / (double)res.PageSize));

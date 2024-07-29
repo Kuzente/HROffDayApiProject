@@ -31,6 +31,8 @@ public class OffDayProfile : Profile
 		#region Onaylanan İzinler
 		CreateMap<OffDay, ReadApprovedOffDayListDto>();
 		CreateMap<Personal, ReadApprovedOffDayListSubPersonalDto>();
+		CreateMap<Branch, ReadApprovedOffDayListSubBranchDto>();
+		CreateMap<Position, ReadApprovedOffDayListSubPositionDto>();
 
 
 		CreateMap<OffDay, ReadApprovedOffDayFormExcelExportDto>();

@@ -3,5 +3,5 @@
 public class ReadApprovedOffDayGetBranches
 {
     public string BranchName { get; set; }
-    public string BranchNameValue { get; set; }
+    public Guid BranchId { get; set; }
 }

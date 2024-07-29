@@ -42,5 +42,18 @@ public class ReadApprovedOffDayListSubPersonalDto
     public string NameSurname { get; set; }
     public EntityStatusEnum Status { get; set; }
     public bool IsBackToWork { get; set; }
+    public ReadApprovedOffDayListSubBranchDto Branch { get; set; }
+    public ReadApprovedOffDayListSubPositionDto Position { get; set; }
 }
+public class ReadApprovedOffDayListSubBranchDto
+{
+    public Guid ID { get; set; }
+    public string Name { get; set; }
+}
+public class ReadApprovedOffDayListSubPositionDto
+{
+    public Guid ID { get; set; }
+    public string Name { get; set; }
+}
+
 
