@@ -1,6 +1,8 @@
-﻿using Core;
+﻿using System.Security.Claims;
+using Core;
 using Core.DTOs;
 using Core.DTOs.BranchDTOs;
+using Core.Entities;
 using Core.Enums;
 using Core.Interfaces;
 using Core.Querys;
@@ -12,8 +14,8 @@ using Services.ExcelDownloadServices.BranchServices;
 
 namespace UI.Controllers
 {
-    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
-    public class BranchController : Controller
+    //[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
+    public class BranchController : BaseController
     {
         private readonly IReadBranchService _readBranchService;
         private readonly IWriteBranchService _writeBranchService;
@@ -55,7 +57,7 @@ namespace UI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> AddBranch(BranchDto dto, string returnUrl)
+        public async Task<IActionResult> AddBranch(BranchDto dto)
         {
             IResultDto result = new ResultDto();
             if (!ModelState.IsValid)
@@ -64,7 +66,8 @@ namespace UI.Controllers
             }
             else
             { 
-                result = await _writeBranchService.AddAsync(dto); 
+                if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+                result = await _writeBranchService.AddAsync(dto,GetClientUserId().Value,GetClientIpAddress()); 
             }
             
             return Ok(result);
@@ -83,7 +86,8 @@ namespace UI.Controllers
             }
             else
             {
-                result = await _writeBranchService.UpdateAsync(dto.Data);
+                if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+                result = await _writeBranchService.UpdateAsync(dto.Data,GetClientUserId().Value,GetClientIpAddress());
             }
            
             return Ok(result);
@@ -95,7 +99,8 @@ namespace UI.Controllers
         [HttpPost]
         public async Task<IActionResult> ArchiveBranch(Guid id, string returnUrl)
         {
-            var result = await _writeBranchService.DeleteAsync(id);
+            if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+            var result = await _writeBranchService.DeleteAsync(id,GetClientUserId().Value,GetClientIpAddress());
             return Ok(result);
         }
         /// <summary>

@@ -172,12 +172,14 @@
         });
         //İşten Çıkar MODAL Butonu Tıklandığında
         $('#istenCikarSubmitButton').on("click", function () {
+            spinnerStart($('#istenCikarSubmitButton'))
             $("#istenCikarForm input[name='ID']").val(data.id)
             let formData = $("#istenCikarForm").serializeArray();
             let hasEmptyField = false;
             $("#istenCikarForm input[name='ID'], #istenCikarForm input[name='EndJobDate']").each(function () {
                 if ($(this).val().trim() === "") {
                     hasEmptyField = true;
+                    spinnerEnd($('#istenCikarSubmitButton'))
                     return false; // Döngüyü sonlandır
                 }
             });
@@ -190,6 +192,7 @@
                     url: `/personel-durumu`,
                     data: formData
                 }).done(function (res) {
+                    spinnerEnd($('#istenCikarSubmitButton'))
                     if (res.isSuccess) {
                         $('#success-modal-message').text("Personel Başarılı Bir Şekilde İşten Çıkarıldı.")
                         $('#success-modal').modal('show')
@@ -214,6 +217,7 @@
         });
         //İşe Geri Al MODAL Butonu Tıklandığında
         $('#iseGeriAlSubmitButton').on("click", function () {
+            spinnerStart($('#iseGeriAlSubmitButton'))
             $("#iseGeriAlForm input[name='ID']").val(data.id)
             let formData = $("#iseGeriAlForm").serializeArray();
             formData.forEach(function (f) {
@@ -225,6 +229,7 @@
             $("#iseGeriAlForm input[name='ID'], #iseGeriAlForm input[name='StartJobDate']").each(function () {
                 if ($(this).val().trim() === "") {
                     hasEmptyField = true;
+                    spinnerEnd($('#iseGeriAlSubmitButton'))
                     return false; // Döngüyü sonlandır
                 }
             });
@@ -237,6 +242,7 @@
                     url: `/personel-durumu`,
                     data: formData
                 }).done(function (res) {
+                    spinnerEnd($('#iseGeriAlSubmitButton'))
                     if (res.isSuccess) {
                         $('#success-modal-message').text("Personel Başarılı Bir Şekilde Geri İşe Alındı.")
                         $('#success-modal').modal('show')

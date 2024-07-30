@@ -9,6 +9,7 @@ using Data.Abstract.PersonalCumulativeRepositories;
 using Data.Abstract.PersonalRepositories;
 using Data.Abstract.PositionRepositories;
 using Data.Abstract.TransferPersonalRepositories;
+using Data.Abstract.UserLogRepositories;
 using Data.Abstract.UserRepositories;
 using Data.Concrete.BranchRepositories;
 using Data.Concrete.BranchUserRepositories;
@@ -20,6 +21,7 @@ using Data.Concrete.PersonalCumulativeRepositories;
 using Data.Concrete.PersonalRepositories;
 using Data.Concrete.PositionRepositories;
 using Data.Concrete.TransferPersonalRepositories;
+using Data.Concrete.UserLogRepositories;
 using Data.Concrete.UserRepositories;
 using Data.Context;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -57,6 +59,7 @@ public class UnitOfWork : IUnitOfWork
 	public IReadMissingDayRepository ReadMissingDayRepository { get; private set; }
 	public IWritePersonalCumulativeRepository WritePersonalCumulativeRepository { get; private set; }
 	public IReadPersonalCumulativeRepository ReadPersonalCumulativeRepository { get; private set; }
+	public IWriteUserLogRepository WriteUserLogRepository { get; private set; }
 	
 
 	public UnitOfWork(DataContext context)
@@ -84,6 +87,7 @@ public class UnitOfWork : IUnitOfWork
 		WriteMissingDayRepository = new WriteMissingDayRepository(_context);
 		ReadPersonalCumulativeRepository = new ReadPersonalCumulativeRepository(_context);
 		WritePersonalCumulativeRepository = new WritePersonalCumulativeRepository(_context);
+		WriteUserLogRepository = new WriteUserLogRepository(_context);
 		_transaction = _context.Database.BeginTransaction();
 	}
 

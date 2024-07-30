@@ -370,9 +370,10 @@ public class ReadOffDayService : IReadOffDayService
 				_unitOfWork.ReadOffDayRepository.GetAll(
 					predicate: a =>
 						(a.Status == EntityStatusEnum.Online && a.OffDayStatus == OffDayStatusEnum.Approved) &&
-						a.Personal.Status == EntityStatusEnum.Online && a.Personal_Id == query.id &&
+						(a.Personal.Status == EntityStatusEnum.Online || a.Personal.Status == EntityStatusEnum.Offline) && a.Personal_Id == query.id &&
 						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear || a.EndDate.Year == query.filterYear) &&
 						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth || a.EndDate.Month == query.filterMonth),
+					include: p=> p.Include(a=>a.Personal),
 					orderBy: p => p.OrderByDescending(a => a.CreatedAt)
 				));
 			var resultData = allData.Skip((res.PageNumber - 1) * res.PageSize)

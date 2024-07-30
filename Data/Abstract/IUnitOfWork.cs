@@ -8,6 +8,7 @@ using Data.Abstract.PersonalCumulativeRepositories;
 using Data.Abstract.PersonalRepositories;
 using Data.Abstract.PositionRepositories;
 using Data.Abstract.TransferPersonalRepositories;
+using Data.Abstract.UserLogRepositories;
 using Data.Abstract.UserRepositories;
 
 namespace Data.Abstract;
@@ -36,5 +37,6 @@ public interface IUnitOfWork : IDisposable
 	IWriteMissingDayRepository WriteMissingDayRepository { get;  }
 	IReadPersonalCumulativeRepository ReadPersonalCumulativeRepository { get;  }
 	IWritePersonalCumulativeRepository WritePersonalCumulativeRepository { get;  }
+	IWriteUserLogRepository WriteUserLogRepository { get;  }
 	bool Commit(bool state = true);
 }

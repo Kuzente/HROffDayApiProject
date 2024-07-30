@@ -27,7 +27,7 @@ public class WritePersonalService : IWritePersonalService
 		_mapper = mapper;
 	}
 
-	public async Task<IResultDto> AddAsync(AddPersonalDto writePersonalDto)
+	public async Task<IResultDto> AddAsync(AddPersonalDto writePersonalDto,Guid userId,string ipAddress)
 	{
 		IResultDto res = new ResultDto();
 		try
@@ -42,7 +42,17 @@ public class WritePersonalService : IWritePersonalService
 				.Sum();
 			var personalCumulatives = CalculateCumulativeHelper.GetCumulativeList(cumulativeFormula, mapSet.YearLeaveDate.Year, 0);
 			mapSet.PersonalCumulatives = personalCumulatives;
-			var resultData = await _unitOfWork.WritePersonalRepository.AddAsync(mapSet);
+			await _unitOfWork.WritePersonalRepository.AddAsync(mapSet);
+			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+			if(user is null) return res.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "Personal",
+				LogType = LogType.Add,
+				Description = $"{user.Username} tarafından {mapSet.NameSurname} adlı Personel Eklendi.",
+				IpAddress = ipAddress,
+				UserID = user.ID,
+			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
@@ -54,13 +64,12 @@ public class WritePersonalService : IWritePersonalService
 		return res;
 	}
 
-	public async Task<IResultDto> AddRangeAsync(List<AddRangePersonalDto> writeDto)
+	public async Task<IResultDto> AddRangeAsync(List<AddRangePersonalDto> writeDto,Guid userId,string ipAddress)
 	{
 		IResultDto res = new ResultDto();
 		try
 		{
-			if(writeDto == null || writeDto.Count <= 0)
-                return res.SetStatus(false).SetErr("Not Found").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+			if(writeDto == null || writeDto.Count <= 0) return res.SetStatus(false).SetErr("Not Found").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
             writeDto.ForEach(p =>
             {
 	            var personalCumulatives = CalculateCumulativeHelper.GetCumulativeList(p.CumulativeFormula, p.YearLeaveDate.Year, p.UsedYearLeave);
@@ -68,6 +77,16 @@ public class WritePersonalService : IWritePersonalService
             });
             var mapSet = _mapper.Map<List<Personal>>(writeDto);
 			await _unitOfWork.WritePersonalRepository.AddRangeAsync(mapSet);
+			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+			if(user is null) return res.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "Personal",
+				LogType = LogType.Add,
+				Description = $"{user.Username} tarafından sisteme toplu personel yüklemesi yapıldı.",
+				IpAddress = ipAddress,
+				UserID = user.ID,
+			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
@@ -79,9 +98,11 @@ public class WritePersonalService : IWritePersonalService
 		return res;
 	}
 
-	public async Task<IResultDto> UpdateAsync(WriteUpdatePersonalDto writeDto)
+	public async Task<IResultDto> UpdateAsync(WriteUpdatePersonalDto writeDto,Guid userId,string ipAddress)
 	{
 		IResultDto result = new ResultDto();
+		string logDescription = string.Empty;
+		List<string> logDescriptions = new List<string>();
 		try
 		{
 			var getPersonal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate:p=> p.ID == writeDto.ID,include:a=>a.Include(b=>b.Branch).Include(c=>c.Position));
@@ -102,6 +123,11 @@ public class WritePersonalService : IWritePersonalService
 					Personal_Id = getPersonal.ID,
 				};
 				await _unitOfWork.WriteTransferPersonalRepository.AddAsync(transferObject);
+				if (!transferObject.OldBranch.Equals(transferObject.NewBranch))
+					logDescriptions.Add($"{transferObject.OldBranch} adlı şubeden {transferObject.NewBranch} adlı şubeye transferi yapıldı.");
+				if(!transferObject.OldPosition.Equals(transferObject.NewPosition))
+					logDescriptions.Add($"{transferObject.OldPosition} adlı ünvandan {transferObject.NewPosition} adlı ünvana transferi yapıldı.");
+				logDescription = string.Join(" ve ", logDescriptions);
 			}
 			var mapSet = _mapper.Map<Personal>(writeDto);
 			mapSet.ID = getPersonal.ID;
@@ -110,6 +136,16 @@ public class WritePersonalService : IWritePersonalService
 			mapSet.UsedYearLeave = getPersonal.UsedYearLeave;
 			mapSet.YearLeaveDate = getPersonal.YearLeaveDate;
 			await _unitOfWork.WritePersonalRepository.Update(mapSet);
+			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+			if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "Personal",
+				LogType = LogType.Update,
+				Description = $"{user.Username} tarafından {mapSet.NameSurname} adlı Personel Güncellendi. {logDescription}",
+				IpAddress = ipAddress,
+				UserID = user.ID,
+			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
@@ -122,7 +158,7 @@ public class WritePersonalService : IWritePersonalService
 	}
 	
 
-	public async Task<IResultDto> DeleteAsync(Guid id)
+	public async Task<IResultDto> DeleteAsync(Guid id,Guid userId,string ipAddress)
 	{
 		IResultDto res = new ResultDto();
 		try
@@ -131,6 +167,16 @@ public class WritePersonalService : IWritePersonalService
 			var data = await findData.FirstOrDefaultAsync();
 			if (data is null)  return res.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Veri Bulunamadı!!!");;
 			await _unitOfWork.WritePersonalRepository.DeleteAsync(data);
+			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+			if(user is null) return res.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "Personal",
+				LogType = LogType.Delete,
+				Description = $"{user.Username} tarafından {data.NameSurname} adlı Personel Silindi.",
+				IpAddress = ipAddress,
+				UserID = user.ID,
+			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");;
@@ -142,9 +188,10 @@ public class WritePersonalService : IWritePersonalService
 		return res;
 	}
 	
-	public async Task<IResultDto> ChangeStatus(WritePersonalChangeStatusDto dto)
+	public async Task<IResultDto> ChangeStatus(WritePersonalChangeStatusDto dto,Guid userId,string ipAddress)
 	{
 		IResultDto res = new ResultDto();
+		LogType logtype;
 		try
 		{
 			var data = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate:p=> 
@@ -157,8 +204,9 @@ public class WritePersonalService : IWritePersonalService
 				// Eğer "online" ise "offline" yapın
 				data.Status = EntityStatusEnum.Offline;
 				data.EndJobDate = dto.EndJobDate;
+				logtype = LogType.Fired;
 			}
-			else if (data.Status == EntityStatusEnum.Offline)
+			else
 			{
 				if (data.EndJobDate > dto.StartJobDate) return res.SetStatus(false).SetErr("Invalid StartJobDate").SetMessage("İşe başlangıç tarihi işten çıkış tarihinden önce olamaz!");
 				var newPersonel = new Personal
@@ -245,7 +293,20 @@ public class WritePersonalService : IWritePersonalService
 				newPersonel.FoodAidDate = dto.FoodAidDate.Year > 1000 ? dto.FoodAidDate : dto.StartJobDate;
 				
 				await _unitOfWork.WritePersonalRepository.AddAsync(newPersonel);
+				logtype = LogType.BackToWork;
 			}
+			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+			if(user is null) return res.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "Personal",
+				LogType = logtype,
+				Description = logtype == LogType.Fired 
+					? $"{user.Username} tarafından {data.NameSurname} adlı Personel işten çıkarıldı." 
+					: $"{user.Username} tarafından {data.NameSurname} adlı Personel işe geri alındı.",
+				IpAddress = ipAddress,
+				UserID = user.ID,
+			});
 			await _unitOfWork.WritePersonalRepository.Update(data);
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -259,20 +320,27 @@ public class WritePersonalService : IWritePersonalService
 		return res;
 	}
 
-	public async Task<IResultDto> RecoverAsync(Guid id)
+	public async Task<IResultDto> RecoverAsync(Guid id,Guid userId,string ipAddress)
 	{
 		IResultDto res = new ResultDto();
 		try
 		{
+			var getPersonal = await _unitOfWork.ReadPersonalRepository.GetByIdAsync(id);
+			if(getPersonal.FirstOrDefault() is null)res.SetStatus(false).SetErr("Personal Not Found").SetMessage("İlgili Personel Bulunamadı!!!");
 			var result = await _unitOfWork.WritePersonalRepository.RecoverAsync(id);
-			if (!result)
-				res.SetStatus(false).SetErr("Data Layer Error")
-					.SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
-			
+			if (!result) res.SetStatus(false).SetErr("Data Layer Error").SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+			if(user is null) return res.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "Personal",
+				LogType = LogType.Recover,
+				Description = $"{user.Username} tarafından {getPersonal.FirstOrDefault().NameSurname} adlı Personelin silinmiş kartı geri döndürüldü.",
+				IpAddress = ipAddress,
+				UserID = user.ID,
+			});
 			var resultCommit = _unitOfWork.Commit();
-			if (!resultCommit)
-				return res.SetStatus(false).SetErr("Commit Fail")
-					.SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+			if (!resultCommit) return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
 		}
 		catch (Exception ex)
 		{
@@ -281,9 +349,10 @@ public class WritePersonalService : IWritePersonalService
 		return res;
 	}
 
-	public async Task<IResultDto> UpdatePersonalCumulativeAsyncService(WriteUpdateCumulativeDto dto)
+	public async Task<IResultDto> UpdatePersonalCumulativeAsyncService(WriteUpdateCumulativeDto dto,Guid userId,string ipAddress)
 	{
 		IResultDto result = new ResultDto();
+		string logDescription = string.Empty;
 		try
 		{
 			var personal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate: p =>
@@ -303,6 +372,7 @@ public class WritePersonalService : IWritePersonalService
 					Year = DateTime.Now.Year
 				};
 				personal.PersonalCumulatives.Add(personalCumulative);
+				logDescription = $"adlı personelin {personalCumulative.Year} yılı kümülatifi erkenden eklendi.";
 			}
 			else
 			{
@@ -312,6 +382,7 @@ public class WritePersonalService : IWritePersonalService
 				personalCumulative.EarnedYearLeave = dto.EarnedYearLeave;
 				personalCumulative.IsNotificationExist = dto.IsNotificationExist;
 				personalCumulative.IsReportCompleted = dto.IsReportCompleted;
+				logDescription = $"adlı personelin {personalCumulative.Year} yılı kümülatifi güncellendi.";
 			}
 
 			int totalGainedYearLeave = 0;
@@ -325,6 +396,16 @@ public class WritePersonalService : IWritePersonalService
 			personal.TotalYearLeave = totalGainedYearLeave;
 			personal.UsedYearLeave = totalUsedYearLeave;
 			await _unitOfWork.WritePersonalRepository.Update(personal);
+			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+			if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "PersonalCumulative",
+				LogType = LogType.Update,
+				Description = $"{user.Username} tarafından {personal.NameSurname} {logDescription}",
+				IpAddress = ipAddress,
+				UserID = user.ID,
+			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit) return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
 
@@ -337,7 +418,7 @@ public class WritePersonalService : IWritePersonalService
 		return result;
 	}
 
-	public async Task<IResultDto> UpdatePersonalCumulativeNotificationAsyncService(Guid id)
+	public async Task<IResultDto> UpdatePersonalCumulativeNotificationAsyncService(Guid id,Guid userId,string ipAddress)
 	{
 		IResultDto result = new ResultDto();
 		try
@@ -358,6 +439,16 @@ public class WritePersonalService : IWritePersonalService
 				personalCumulative.IsNotificationExist = false;
 			}
 			await _unitOfWork.WritePersonalCumulativeRepository.Update(personalCumulative);
+			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+			if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "PersonalCumulative",
+				LogType = LogType.Update,
+				Description = $"{user.Username} tarafından {personalCumulative.Personal.NameSurname} adlı personelin {personalCumulative.Year} yılı kümülatifi güncellendi.",
+				IpAddress = ipAddress,
+				UserID = user.ID,
+			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit) return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
 		}
@@ -365,34 +456,6 @@ public class WritePersonalService : IWritePersonalService
 		{
 			result.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
 		}
-		return result;
-	}
-
-	public async Task<IResultDto> DeletePersonalCumulativeAsyncService(Guid personalId, Guid cumulativeId)
-	{
-		IResultDto result = new ResultDto();
-		try
-		{
-			var personal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate: p =>
-					p.ID == personalId && 
-					p.Status == EntityStatusEnum.Online &&
-					p.PersonalCumulatives.Any(c => c.ID == cumulativeId && c.Status == EntityStatusEnum.Online),
-				include: p=> p.Include(c=>c.PersonalCumulatives));
-			if(personal is null) return result.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Personel Bulunamadı!!!");
-				var deletedCumulative = personal.PersonalCumulatives.First(p => p.ID == cumulativeId);
-				personal.TotalYearLeave -= deletedCumulative.EarnedYearLeave;
-				personal.UsedYearLeave -= (deletedCumulative.EarnedYearLeave - deletedCumulative.RemainYearLeave);
-				await _unitOfWork.WritePersonalCumulativeRepository.RemoveAsync(deletedCumulative);
-				await _unitOfWork.WritePersonalRepository.Update(personal);
-				var resultCommit = _unitOfWork.Commit();
-				if (!resultCommit) return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-			
-		}
-		catch (Exception ex)
-		{
-			result.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
-		}
-
 		return result;
 	}
 }

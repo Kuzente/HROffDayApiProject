@@ -22,32 +22,7 @@ public class WriteOffDayService : IWriteOffDayService
 		_unitOfWork = unitOfWork;
 		_mapper = mapper;
 	}
-
-	
-	
-
-	public async Task<bool> ChangeOffDayStatus(Guid id,bool isApproved)
-	{
-		var findData = await _unitOfWork.ReadOffDayRepository.GetByIdAsync(id);
-		if (findData.FirstOrDefault() is null) return false;
-		var data = findData.First();
-		if (isApproved)
-		{
-			data.OffDayStatus = OffDayStatusEnum.Approved;
-			await _unitOfWork.WriteOffDayRepository.Update(data);
-			var resultCommit = _unitOfWork.Commit();
-			return resultCommit;
-		}
-		else
-		{
-			data.OffDayStatus = OffDayStatusEnum.Rejected;
-			await _unitOfWork.WriteOffDayRepository.Update(data);
-			var resultCommit = _unitOfWork.Commit();
-			return resultCommit;
-		}
-	}
-
-	public async Task<IResultDto> AddOffDayService(WriteAddOffDayDto dto)
+	public async Task<IResultDto> AddOffDayService(WriteAddOffDayDto dto,Guid userId,string ipAddress)
 	{
 		IResultDto result = new ResultDto();
 		try
@@ -57,10 +32,8 @@ public class WriteOffDayService : IWriteOffDayService
 			if(dto.CountLeave != ((dto.EndDate - dto.StartDate).Days + 1))
 				return result.SetStatus(false).SetErr("Date and Count not equal").SetMessage("Girdiğiniz Tarih Aralığı İle İzin Günleri Uyuşmuyor."); 
 			var personal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate: p => p.ID == dto.Personal_Id && p.Status == EntityStatusEnum.Online);
-			if(personal is null)
-				return result.SetStatus(false).SetErr("Personal Is Not Found").SetMessage("İlgili Personel Bulunamadı.");
-			if((personal.TotalYearLeave - personal.UsedYearLeave) < dto.LeaveByYear)
-				return result.SetStatus(false).SetErr("Personal Total Year Leave Not Enought").SetMessage("Personelin yıllık izini yetersiz.Lütfen daha küçük bir değer giriniz");
+			if(personal is null) return result.SetStatus(false).SetErr("Personal Is Not Found").SetMessage("İlgili Personel Bulunamadı.");
+			if((personal.TotalYearLeave - personal.UsedYearLeave) < dto.LeaveByYear) return result.SetStatus(false).SetErr("Personal Total Year Leave Not Enought").SetMessage("Personelin yıllık izini yetersiz.Lütfen daha küçük bir değer giriniz");
 			var mappedResult = _mapper.Map<OffDay>(dto);
 			if (dto.LeaveByMarriedFatherDead is not null)
 			{
@@ -76,6 +49,16 @@ public class WriteOffDayService : IWriteOffDayService
 			}
 
 			await _unitOfWork.WriteOffDayRepository.AddAsync(mappedResult);
+			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+			if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "OffDay",
+				LogType = LogType.Add,
+				Description = $"{user.Username} tarafından {personal.NameSurname} adlı Personele izin talebi oluşturuldu.",
+				IpAddress = ipAddress,
+				UserID = user.ID,
+			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
@@ -89,7 +72,7 @@ public class WriteOffDayService : IWriteOffDayService
 		return result;
 	}
 
-	public async Task<IResultDto> UpdateWaitingOffDayService(WriteUpdateWatingOffDayDto dto)
+	public async Task<IResultDto> UpdateWaitingOffDayService(WriteUpdateWatingOffDayDto dto,Guid userId,string ipAddress)
 	{
 		IResultDto result = new ResultDto();
 		try
@@ -122,6 +105,16 @@ public class WriteOffDayService : IWriteOffDayService
 				});
 			}
 			await _unitOfWork.WriteOffDayRepository.Update(mappedResult);
+			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+			if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "OffDay",
+				LogType = LogType.Update,
+				Description = $"{user.Username} tarafından {offDay.Personal.NameSurname} adlı Personele ait bekleyen izin güncellendi.",
+				IpAddress = ipAddress,
+				UserID = user.ID,
+			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
@@ -134,7 +127,7 @@ public class WriteOffDayService : IWriteOffDayService
 		return result;
 	}
 
-	public async Task<IResultDto> UpdateApprovedOffDayService(WriteUpdateWatingOffDayDto dto)
+	public async Task<IResultDto> UpdateApprovedOffDayService(WriteUpdateWatingOffDayDto dto,Guid userId,string ipAddress)
 	{
 		IResultDto result = new ResultDto();
 		try
@@ -258,6 +251,16 @@ public class WriteOffDayService : IWriteOffDayService
 			offDay.LeaveByPublicHoliday = dto.LeaveByPublicHoliday;
 			offDay.CountLeave = dto.CountLeave;
 			await _unitOfWork.WriteOffDayRepository.Update(offDay);
+			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+			if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "OffDay",
+				LogType = LogType.Update,
+				Description = $"{user.Username} tarafından {offDay.Personal.NameSurname} adlı Personele ait onaylanmış izin güncellendi.",
+				IpAddress = ipAddress,
+				UserID = user.ID,
+			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
@@ -271,9 +274,10 @@ public class WriteOffDayService : IWriteOffDayService
 		return result;
 	}
 
-	public async Task<IResultDto> UpdateFirstWaitingStatusOffDayService(Guid id,bool status,string username)
+	public async Task<IResultDto> UpdateFirstWaitingStatusOffDayService(Guid id,bool status,string username,Guid userId,string ipAddress)
 	{
 		IResultDto result = new ResultDto();
+		string logDescription = string.Empty;
 		try
 		{
 			var offday = await _unitOfWork.ReadOffDayRepository.GetSingleAsync(predicate: p => 
@@ -286,13 +290,25 @@ public class WriteOffDayService : IWriteOffDayService
 				if (offday.LeaveByYear > 0 && (offday.Personal.TotalYearLeave - offday.Personal.UsedYearLeave) < offday.LeaveByYear)
 					return result.SetStatus(false).SetErr("Personal Year Leave Insufficient").SetMessage("Personele ait yıllık izin sayısı yetersiz.");
 				offday.OffDayStatus = OffDayStatusEnum.WaitingForSecond;
+				logDescription = $"{offday.Personal.NameSurname} adlı Personele ait bekleyen izin onaylandı.";
 			}
 			else
 			{
 				offday.OffDayStatus = OffDayStatusEnum.Rejected;
+				logDescription = $"{offday.Personal.NameSurname} adlı Personele ait bekleyen izin reddedildi.";
 			}
 			offday.HrName = username;
 			await _unitOfWork.WriteOffDayRepository.Update(offday);
+			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+			if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "OffDay",
+				LogType = LogType.Update,
+				Description = $"{user.Username} tarafından {logDescription}",
+				IpAddress = ipAddress,
+				UserID = user.ID,
+			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
@@ -305,9 +321,10 @@ public class WriteOffDayService : IWriteOffDayService
 		return result;
 	}
 
-	public async Task<IResultDto> UpdateSecondWaitingStatusOffDayService(Guid id, bool status,string username)
+	public async Task<IResultDto> UpdateSecondWaitingStatusOffDayService(Guid id, bool status,string username,Guid userId,string ipAddress)
 	{
 		IResultDto result = new ResultDto();
+		string logDescription = string.Empty;
 		try
 		{
 			var offday = await _unitOfWork.ReadOffDayRepository.GetSingleAsync(
@@ -317,8 +334,9 @@ public class WriteOffDayService : IWriteOffDayService
 			if(offday is null) return result.SetStatus(false).SetErr("OffDay Is Not Found").SetMessage("İlgili İzin Bulunamadı.");
 			if (status) // Eğer onaylanmış ise
 			{
-				if (offday.LeaveByYear > 0 && !((offday.Personal.TotalYearLeave - offday.Personal.UsedYearLeave) < offday.LeaveByYear)) // Eğer İzin Raporunda Yıllık İzin dolu ise
+				if (offday.LeaveByYear > 0) // Eğer İzin Raporunda Yıllık İzin dolu ise
 				{
+					if(((offday.Personal.TotalYearLeave - offday.Personal.UsedYearLeave) < offday.LeaveByYear)) return result.SetStatus(false).SetErr("Personal Year Leave Insufficient").SetMessage("Personele ait yıllık izin sayısı yetersiz.");
 					offday.Personal.UsedYearLeave += offday.LeaveByYear;
 					var addedLeaveYear = offday.LeaveByYear; // Sıfırlanana kadar döngü içinde eksilt
 					foreach (var personalCumulative in offday.Personal.PersonalCumulatives.OrderBy(pc => pc.Year))
@@ -346,9 +364,7 @@ public class WriteOffDayService : IWriteOffDayService
 					}
 					
 				}
-				else
-					return result.SetStatus(false).SetErr("Personal Year Leave Insufficient").SetMessage("Personele ait yıllık izin sayısı yetersiz.");
-
+				
 				if (offday.LeaveByTaken > 0)
 				{
 					offday.Personal.TotalTakenLeave -= (offday.LeaveByTaken * 8);
@@ -363,16 +379,28 @@ public class WriteOffDayService : IWriteOffDayService
 
 				offday.DocumentNumber = getMaxDocNumber!.Value + 1;
 				offday.OffDayStatus = OffDayStatusEnum.Approved;
+				logDescription = $"{offday.Personal.NameSurname} adlı Personele ait bekleyen izin onaylandı.";
 			}
 			else
 			{
 				offday.OffDayStatus = OffDayStatusEnum.Rejected;
+				logDescription = $"{offday.Personal.NameSurname} adlı Personele ait bekleyen izin reddedildi.";
 			}
 			offday.PdfUsedYearLeave = offday.Personal.UsedYearLeave;
 			offday.PdfRemainYearLeave = (offday.Personal.TotalYearLeave - offday.Personal.UsedYearLeave);
 			offday.PdfRemainTakenLeave = offday.Personal.TotalTakenLeave;
 			offday.DirectorName = username;
 			await _unitOfWork.WriteOffDayRepository.Update(offday);
+			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+			if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "OffDay",
+				LogType = LogType.Update,
+				Description = $"{user.Username} tarafından {logDescription}",
+				IpAddress = ipAddress,
+				UserID = user.ID,
+			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
@@ -385,7 +413,7 @@ public class WriteOffDayService : IWriteOffDayService
 		return result;
 	}
 
-	public async Task<IResultDto> DeleteOffDayService(Guid id)
+	public async Task<IResultDto> DeleteOffDayService(Guid id,Guid userId,string ipAddress)
 	{
 		IResultDto result = new ResultDto();
 		try
@@ -439,6 +467,16 @@ public class WriteOffDayService : IWriteOffDayService
 			offDay.Status = EntityStatusEnum.Deleted;
 			offDay.DeletedAt = DateTime.Now;
 			await _unitOfWork.WriteOffDayRepository.Update(offDay);
+			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+			if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "OffDay",
+				LogType = LogType.Delete,
+				Description = $"{user.Username} tarafından {offDay.Personal.NameSurname} adlı Personele ait onaylanmış izin iptal edildi.",
+				IpAddress = ipAddress,
+				UserID = user.ID,
+			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");

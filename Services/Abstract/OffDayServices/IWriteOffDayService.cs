@@ -6,13 +6,12 @@ namespace Services.Abstract.OffDayServices;
 
 public interface IWriteOffDayService
 {
-    Task<bool> ChangeOffDayStatus(Guid id,bool isApproved);
-    Task<IResultDto> AddOffDayService(WriteAddOffDayDto dto);
-    Task<IResultDto> UpdateWaitingOffDayService(WriteUpdateWatingOffDayDto dto);
-    Task<IResultDto> UpdateApprovedOffDayService(WriteUpdateWatingOffDayDto dto);
+    Task<IResultDto> AddOffDayService(WriteAddOffDayDto dto,Guid userId,string ipAddress);
+    Task<IResultDto> UpdateWaitingOffDayService(WriteUpdateWatingOffDayDto dto,Guid userId,string ipAddress);
+    Task<IResultDto> UpdateApprovedOffDayService(WriteUpdateWatingOffDayDto dto,Guid userId,string ipAddress);
 
-    Task<IResultDto> UpdateFirstWaitingStatusOffDayService(Guid id,bool status,string username);
-    Task<IResultDto> UpdateSecondWaitingStatusOffDayService(Guid id,bool status,string username);
-    Task<IResultDto> DeleteOffDayService(Guid id);
+    Task<IResultDto> UpdateFirstWaitingStatusOffDayService(Guid id,bool status,string username,Guid userId,string ipAddress);
+    Task<IResultDto> UpdateSecondWaitingStatusOffDayService(Guid id,bool status,string username,Guid userId,string ipAddress);
+    Task<IResultDto> DeleteOffDayService(Guid id,Guid userId,string ipAddress);
     
 }

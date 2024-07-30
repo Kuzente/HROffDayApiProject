@@ -18,6 +18,7 @@ public class PersonalDetailsProfile : Profile
         #region Personel İzinleri
 
         CreateMap<OffDay, ReadPersonalOffDayListDto>();
+        CreateMap<Personal, ReadPersonalOffDayListDtoSubPersonal>();
         CreateMap<Personal, ReadPersonalDetailsHeaderDto>();
         CreateMap<Branch, ReadPersonalDetailsHeaderSubBranchDto>();
         CreateMap<Position, ReadPersonalDetailsHeaderSubPositionDto>();

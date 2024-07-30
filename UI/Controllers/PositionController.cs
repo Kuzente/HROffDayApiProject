@@ -1,6 +1,8 @@
-﻿using Core;
+﻿using System.Security.Claims;
+using Core;
 using Core.DTOs.PositionDTOs;
 using Core.DTOs;
+using Core.Entities;
 using Core.Enums;
 using Core.Interfaces;
 using Core.Querys;
@@ -12,7 +14,7 @@ using Services.ExcelDownloadServices.PositionServices;
 namespace UI.Controllers
 {
 	[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
-	public class PositionController : Controller
+	public class PositionController : BaseController
     {
         private readonly IReadPositionService _readPositionService;
         private readonly IWritePositionService _writePositionService;
@@ -62,7 +64,8 @@ namespace UI.Controllers
             }
             else
             {
-                result = await _writePositionService.AddAsync(dto); 
+                if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+                result = await _writePositionService.AddAsync(dto,GetClientUserId().Value,GetClientIpAddress()); 
             }
             return Ok(result);
         }
@@ -80,7 +83,8 @@ namespace UI.Controllers
             }
             else
             {
-                result = await _writePositionService.UpdateAsync(dto.Data);
+                if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+                result = await _writePositionService.UpdateAsync(dto.Data,GetClientUserId().Value,GetClientIpAddress());
             }
            
             return Ok(result);
@@ -92,7 +96,8 @@ namespace UI.Controllers
         [HttpPost]
         public async Task<IActionResult> ArchivePosition(Guid id, string returnUrl)
         {
-            var result = await _writePositionService.DeleteAsync(id);
+            if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+            var result = await _writePositionService.DeleteAsync(id,GetClientUserId().Value,GetClientIpAddress());
             return Ok(result);
         }
         /// <summary>

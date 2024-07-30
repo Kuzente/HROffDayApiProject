@@ -10,7 +10,7 @@ using Services.Abstract.UserServices;
 
 namespace UI.Controllers;
 [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
-public class UserController : Controller
+public class UserController : BaseController
 {
     private readonly IWriteUserService _writeUserService;
     private readonly IReadUserService _readUserService;
@@ -22,6 +22,9 @@ public class UserController : Controller
     }
 
     // GET
+
+    #region Page Returns
+
     public async Task<IActionResult> UsersList(UserQuery query)
     {
         var result = await _readUserService.GetUsersListService(query);
@@ -42,6 +45,9 @@ public class UserController : Controller
         var result = await _readUserService.GetUpdateUserService(id);
         return View(result);
     }
+
+    #endregion
+   
     /// <summary>
     /// Kullanıcı Ekleme Post Metodu
     /// </summary>
@@ -52,7 +58,8 @@ public class UserController : Controller
         IResultDto result = new ResultDto();
         if (!ModelState.IsValid) return Ok(result.SetStatus(false).SetErr("ModelState is not valid").SetMessage("Lütfen Tüm Alanları Girdiğinizden Emin Olunuz."));
         if(dto.Role is UserRoleEnum.Director or UserRoleEnum.BranchManager && dto.BranchNames is null) return Ok(result.SetStatus(false).SetErr("ModelState is not valid").SetMessage("Lütfen Tüm Alanları Girdiğinizden Emin Olunuz."));
-        result = await _writeUserService.AddUserService(dto);
+        if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+        result = await _writeUserService.AddUserService(dto,GetClientUserId().Value,GetClientIpAddress());
         
         return Ok(result);
     }
@@ -66,7 +73,8 @@ public class UserController : Controller
         IResultDto result = new ResultDto();
         if (!ModelState.IsValid) return Ok(result.SetStatus(false).SetErr("ModelState is not valid").SetMessage("Lütfen Tüm Alanları Girdiğinizden Emin Olunuz."));
         if(dto.Role is UserRoleEnum.Director or UserRoleEnum.BranchManager && dto.BranchNames is null) return Ok(result.SetStatus(false).SetErr("ModelState is not valid").SetMessage("Lütfen Tüm Alanları Girdiğinizden Emin Olunuz."));
-        result = await _writeUserService.UpdateUserService(dto);
+        if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+        result = await _writeUserService.UpdateUserService(dto,GetClientUserId().Value,GetClientIpAddress());
         
         return Ok(result);
     }
@@ -77,7 +85,8 @@ public class UserController : Controller
     [HttpPost]
     public async Task<IActionResult> DeleteUser(Guid id, string returnUrl)
     {
-        var result = await _writeUserService.DeleteUserService(id);
+        if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+        var result = await _writeUserService.DeleteUserService(id,GetClientUserId().Value,GetClientIpAddress());
         return Ok(result);
     }
 }

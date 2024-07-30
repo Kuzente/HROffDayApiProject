@@ -1,4 +1,5 @@
-﻿using Core.Enums;
+﻿using System.Security.Claims;
+using Core.Enums;
 using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ using Services.Abstract.PositionServices;
 
 namespace UI.Controllers;
 [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
-public class RecoveryController : Controller
+public class RecoveryController : BaseController
 {
     private readonly IReadBranchService _readBranchService;
     private readonly IWriteBranchService _writeBranchService;
@@ -79,7 +80,8 @@ public class RecoveryController : Controller
     [HttpPost]
     public async Task<IActionResult> RecoverBranch(Guid id,  string returnUrl) 
     {
-        var result = await _writeBranchService.RecoverAsync(id);
+        if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+        var result = await _writeBranchService.RecoverAsync(id,GetClientUserId().Value,GetClientIpAddress());
         return Ok(result);
     }
     /// <summary>
@@ -89,8 +91,8 @@ public class RecoveryController : Controller
     [HttpPost]
     public async Task<IActionResult> RecoverPosition(Guid id, string returnUrl)
     {
-        var result = await _writePositionService.RecoverAsync(id);
-       
+        if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+        var result = await _writePositionService.RecoverAsync(id,GetClientUserId().Value,GetClientIpAddress());
         return Ok(result);
     }
     /// <summary>
@@ -100,7 +102,8 @@ public class RecoveryController : Controller
     [HttpPost]
     public async Task<IActionResult> RecoverPersonal(Guid id, string returnUrl)
     {
-        var result = await _writePersonalService.RecoverAsync(id);
+        if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+        var result = await _writePersonalService.RecoverAsync(id,GetClientUserId().Value,GetClientIpAddress());
         
         return Ok(result);
     }

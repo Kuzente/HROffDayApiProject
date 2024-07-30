@@ -5,8 +5,8 @@ namespace Services.Abstract.UserServices;
 
 public interface IWriteUserService
 {
-    Task<IResultDto> AddUserService(AddUserDto dto);
-    Task<IResultDto> UpdateUserService(WriteUpdateUserDto dto);
-    Task<IResultDto> DeleteUserService(Guid id);
+    Task<IResultDto> AddUserService(AddUserDto dto,Guid userId,string ipAddress);
+    Task<IResultDto> UpdateUserService(WriteUpdateUserDto dto,Guid userId,string ipAddress);
+    Task<IResultDto> DeleteUserService(Guid id,Guid userId,string ipAddress);
     
 }

@@ -66,6 +66,8 @@
     });
     //İzni Onayla butonuna tıklandığında calısan metod
     $('[data-approveButton]').on('click',function (e) {
+        $('#mainDiv').addClass('d-none');
+        $('#page-loader').removeClass('d-none')
         e.preventDefault();
         let actionForm = $(this).closest('form[data-approveForm]').attr("action")
         let formData = $(this).closest('form[data-approveForm]').serializeArray();
@@ -82,6 +84,8 @@
                 });
             }
             else{
+                $('#mainDiv').removeClass('d-none');
+                $('#page-loader').addClass('d-none')
                 $('#error-modal-message').text(res.message)
                 $('#error-modal').modal('show')
             }
@@ -89,6 +93,8 @@
     });
     //İzni Reddet butonuna tıklandığında calısan metod
     $('[data-rejectButton]').on('click',function (e) {
+        $('#mainDiv').addClass('d-none');
+        $('#page-loader').removeClass('d-none')
         e.preventDefault();
         let actionForm = $(this).closest('form[data-rejectForm]').attr("action")
         let formData = $(this).closest('form[data-rejectForm]').serializeArray();
@@ -105,6 +111,8 @@
                 });
             }
             else{
+                $('#mainDiv').removeClass('d-none');
+                $('#page-loader').addClass('d-none')
                 $('#error-modal-message').text(res.message)
                 $('#error-modal').modal('show')
             }

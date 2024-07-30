@@ -23,5 +23,11 @@ public class ReadPersonalOffDayListDto
     public Guid Personal_Id { get; set; }
     public Guid BranchId { get; set; }
     public Guid PositionId { get; set; }
+    public ReadPersonalOffDayListDtoSubPersonal Personal { get; set; }
+}
+
+public class ReadPersonalOffDayListDtoSubPersonal
+{
+    public EntityStatusEnum Status { get; set; }
 }
 

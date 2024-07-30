@@ -20,6 +20,7 @@ public class DataContext : DbContext
 	public DbSet<TransferPersonal> TransferPersonals => Set<TransferPersonal>();
 	public DbSet<MissingDay> MissingDays => Set<MissingDay>();
 	public DbSet<PersonalCumulative> PersonalCumulatives => Set<PersonalCumulative>();
+	public DbSet<UserLog> UserLogs => Set<UserLog>();
 	public override int SaveChanges()
 	{
 		var datas = ChangeTracker.Entries<BaseEntity>();

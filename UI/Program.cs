@@ -86,7 +86,6 @@ app.MapControllerRoute(name: "personalMissingDayDelete", pattern: "personel-eksi
 app.MapControllerRoute(name: "personalMissingDayAdd", pattern: "personel-eksik-gun-ekle", defaults: new { controller = "PersonalDetail", action = "PersonalMissingDayAdd" });
 app.MapControllerRoute(name: "personalMissingDayExcel", pattern: "personel-eksik-gun-excel", defaults: new { controller = "PersonalDetail", action = "PersonalMissingDayExportExcel" });
 app.MapControllerRoute(name: "personalDetailsCumulativeAddOrUpdatePost", pattern: "personel-detaylari-kumulatif-guncelle", defaults: new { controller = "PersonalDetail", action = "UpdateCumulative" });
-app.MapControllerRoute(name: "personalDetailsCumulativeDeletePost", pattern: "personel-detaylari-kumulatif-sil", defaults: new { controller = "PersonalDetail", action = "DeleteCumulative" });
 #endregion
 #region BranchList
 app.MapControllerRoute(name: "branchListGet", pattern: "subeler", defaults: new { controller = "Branch", action = "Index" });

@@ -20,7 +20,7 @@ using Services.ExcelDownloadServices.TransferPersonalServices;
 namespace UI.Controllers;
 
 [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
-public class PersonalDetailController : Controller
+public class PersonalDetailController : BaseController
 {
     private readonly IReadPersonalService _readPersonalService;
     private readonly IReadOffDayService _readOffDayService;
@@ -110,7 +110,8 @@ public class PersonalDetailController : Controller
         {
             if (dto.RetiredOrOld == false && dto.IsYearLeaveRetired) return Ok(result.SetStatus(false).SetErr("ModelState is not valid").SetMessage("Yıllık izin yenilemesi emeklilik durumu baz alınsın istiyor iseniz personele ait emeklilik durumunu güncellemeniz gerekmektedir."));
             if (dto.RetiredOrOld && !dto.RetiredDate.HasValue) return Ok(result.SetStatus(false).SetErr("Personal retired but retired date is null").SetMessage("Emeklilik durumu açık ise emeklilik tarihi girmek zorunludur!"));
-            result = await _writePersonalService.UpdateAsync(dto);
+            if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+            result = await _writePersonalService.UpdateAsync(dto,GetClientUserId().Value,GetClientIpAddress());
         }
         
         return Ok(result);
@@ -126,19 +127,8 @@ public class PersonalDetailController : Controller
         if (!ModelState.IsValid) return Ok(result.SetStatus(false).SetErr("Modelstate is not valid").SetMessage("Lütfen Zorunlu Alanların Girildiğinden Emin Olunuz."));
         if(dto.EarnedYearLeave < dto.RemainYearLeave) return Ok(result.SetStatus(false).SetErr("Math Error").SetMessage("Hak Edilen İzin, kalan izin miktarından küçük olamaz."));
         if(dto.EarnedYearLeave < 0 || dto.RemainYearLeave < 0) return Ok(result.SetStatus(false).SetErr("Math Error").SetMessage("Negatif Değer Girilemez!"));
-        result = await _writePersonalService.UpdatePersonalCumulativeAsyncService(dto);
-        
-        
-        return Ok(result);
-    }
-    /// <summary>
-    /// Personel Kümülatif Güncelleme Post Metodu
-    /// </summary>
-    /// <returns></returns>
-    [HttpPost]
-    public async Task<IActionResult> DeleteCumulative(Guid personalId,Guid cumulativeId)
-    { 
-        var result = await _writePersonalService.DeletePersonalCumulativeAsyncService(personalId, cumulativeId);
+        if (!GetClientUserId().HasValue) return Redirect("/404");
+        result = await _writePersonalService.UpdatePersonalCumulativeAsyncService(dto,GetClientUserId().Value,GetClientIpAddress());
         return Ok(result);
     }
     /// <summary>
@@ -148,7 +138,8 @@ public class PersonalDetailController : Controller
     [HttpPost]
     public async Task<IActionResult> ArchivePersonal(Guid id)
     {
-        var result = await _writePersonalService.DeleteAsync(id);
+        if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+        var result = await _writePersonalService.DeleteAsync(id,GetClientUserId().Value,GetClientIpAddress());
         return Ok(result);
     }
     /// <summary>
@@ -158,7 +149,8 @@ public class PersonalDetailController : Controller
     [HttpPost]
     public async Task<IActionResult> PersonalTransferDelete(Guid id)
     {
-        var result = await _writeTransferPersonalService.DeleteTransferPersonalService(id);
+        if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+        var result = await _writeTransferPersonalService.DeleteTransferPersonalService(id,GetClientUserId().Value,GetClientIpAddress());
         return Ok(result);
     }
     /// <summary>
@@ -175,7 +167,8 @@ public class PersonalDetailController : Controller
         }
         else
         {
-            result = await _writeMissingDayService.AddMissingDayService(dto);
+            if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+            result = await _writeMissingDayService.AddMissingDayService(dto,GetClientUserId().Value,GetClientIpAddress());
         }
         
         return Ok(result);
@@ -187,7 +180,8 @@ public class PersonalDetailController : Controller
     [HttpPost]
     public async Task<IActionResult> PersonalMissingDayDelete(Guid id)
     {
-        var result = await _writeMissingDayService.DeleteMissingDayService(id);
+        if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+        var result = await _writeMissingDayService.DeleteMissingDayService(id,GetClientUserId().Value,GetClientIpAddress());
         return Ok(result);
     }
     /// <summary>
@@ -197,7 +191,8 @@ public class PersonalDetailController : Controller
     [HttpPost]
     public async Task<IActionResult> ChangeStatus(WritePersonalChangeStatusDto dto)
     {
-        var result = await _writePersonalService.ChangeStatus(dto);
+        if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+        var result = await _writePersonalService.ChangeStatus(dto,GetClientUserId().Value,GetClientIpAddress());
         return Ok(result);
     }
     /// <summary>

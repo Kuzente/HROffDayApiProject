@@ -10,7 +10,7 @@ using Services.ExcelDownloadServices;
 namespace UI.Controllers;
 
 [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
-public class MultipleUploadController : Controller
+public class MultipleUploadController : BaseController
 {
     private readonly IWritePersonalService _writePersonalService;
     private readonly IReadBranchService _readBranchService;
@@ -73,9 +73,9 @@ public class MultipleUploadController : Controller
     public async Task<IActionResult> PersonalUpload(IFormFile file)
     {
         var resultExcel = await _readExcelServices.ImportDataFromExcel(file);
-        if (!resultExcel.IsSuccess)
-            return Ok(resultExcel);
-        var result = await _writePersonalService.AddRangeAsync(resultExcel.Data);
+        if (!resultExcel.IsSuccess) return Ok(resultExcel);
+        if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+        var result = await _writePersonalService.AddRangeAsync(resultExcel.Data,GetClientUserId().Value,GetClientIpAddress());
         
 
         return Ok(result);

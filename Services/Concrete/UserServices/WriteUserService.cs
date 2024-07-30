@@ -21,7 +21,7 @@ public class WriteUserService : IWriteUserService
         _mapper = mapper;
     }
 
-    public async Task<IResultDto> AddUserService(AddUserDto dto)
+    public async Task<IResultDto> AddUserService(AddUserDto dto,Guid userId,string ipAddress)
     {
         IResultDto result = new ResultDto();
         try
@@ -62,6 +62,16 @@ public class WriteUserService : IWriteUserService
                     await _unitOfWork.WriteBranchUserRepository.AddAsync(branchUser);
                 }
             }
+            var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+            if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+            await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+            {
+                EntityName = "User",
+                LogType = LogType.Add,
+                Description = $"{user.Username} tarafından {mappedResult.Username} adlı Kullanıcı sisteme Eklendi.",
+                IpAddress = ipAddress,
+                UserID = user.ID,
+            });
             var resultCommit = _unitOfWork.Commit();
             if (!resultCommit) return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
 
@@ -74,7 +84,7 @@ public class WriteUserService : IWriteUserService
         return result;
     }
 
-    public async Task<IResultDto> UpdateUserService(WriteUpdateUserDto dto)
+    public async Task<IResultDto> UpdateUserService(WriteUpdateUserDto dto,Guid userId,string ipAddress)
     {
         IResultDto result = new ResultDto();
         try
@@ -121,7 +131,16 @@ public class WriteUserService : IWriteUserService
             user.BranchUsers = newBranchUserList;
             
             await _unitOfWork.WriteUserRepository.Update(user);
-            
+            var clientUser = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+            if(clientUser is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+            await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+            {
+                EntityName = "User",
+                LogType = LogType.Update,
+                Description = $"{clientUser.Username} tarafından {user.Username} adlı kullanıcı Güncellendi.",
+                IpAddress = ipAddress,
+                UserID = clientUser.ID,
+            });
             var resultCommit = _unitOfWork.Commit();
             if (!resultCommit) return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
         }
@@ -133,15 +152,25 @@ public class WriteUserService : IWriteUserService
         return result;
     }
 
-    public async Task<IResultDto> DeleteUserService(Guid id)
+    public async Task<IResultDto> DeleteUserService(Guid id,Guid userId,string ipAddress)
     {
         IResultDto res = new ResultDto();
         try
         {
             var getResult = await _unitOfWork.ReadUserRepository.GetByIdAsync(id);
-            if(getResult is null) return res.SetStatus(false).SetErr("User Not Found").SetMessage("Kullanıcı Bulunamadı");
+            if(getResult.FirstOrDefault() is null) return res.SetStatus(false).SetErr("User Not Found").SetMessage("Kullanıcı Bulunamadı");
             var result = await _unitOfWork.WriteUserRepository.RemoveByIdAsync(id);
             if (!result) return res.SetStatus(false).SetErr("Data Layer Error").SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+            var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
+            if(user is null) return res.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+            await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+            {
+                EntityName = "User",
+                LogType = LogType.Delete,
+                Description = $"{user.Username} tarafından {getResult.FirstOrDefault().Username} adlı Kullanıcı sistemden silindi.",
+                IpAddress = ipAddress,
+                UserID = user.ID,
+            });
             var resultCommit = _unitOfWork.Commit();
             if (!resultCommit) return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
         }

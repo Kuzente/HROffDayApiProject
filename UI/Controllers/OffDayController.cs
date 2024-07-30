@@ -19,7 +19,7 @@ using Services.PdfDownloadServices;
 
 namespace UI.Controllers;
 [Authorize]
-public class OffDayController : Controller
+public class OffDayController : BaseController
 {
     private readonly IReadPersonalService _readPersonalService;
     private readonly IWriteOffDayService _writeOffDayService;
@@ -80,6 +80,7 @@ public class OffDayController : Controller
     [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.Director)},{nameof(UserRoleEnum.BranchManager)},{nameof(UserRoleEnum.SuperAdmin)}")]
     public async Task<IActionResult> AddOffDay(Guid id)
     {
+	    
         var personalResult = await _readPersonalService.GetAllPersonalByBranchIdService(id);
         return View(personalResult);
     }
@@ -109,11 +110,10 @@ public class OffDayController : Controller
     {
         var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
         var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userRole) || string.IsNullOrEmpty(userId)) return Redirect("/403");
+        if (string.IsNullOrEmpty(userRole) || !GetClientUserId().HasValue) return Redirect("/403");
         if (userRole == nameof(UserRoleEnum.Director))
         {
-	        if (!Guid.TryParse(userId, out var userGuid)) return Redirect("/404"); // Veya uygun bir hata sayfası
-            var branchesResult = await _readUserService.GetUserBranches(userGuid);
+            var branchesResult = await _readUserService.GetUserBranches(GetClientUserId().Value);
             if (!branchesResult.IsSuccess) return Redirect("/404");;
             query.UserBranches = branchesResult.Data;
         }
@@ -139,7 +139,8 @@ public class OffDayController : Controller
         }
         else
         {
-            result = await _writeOffDayService.AddOffDayService(dto); 
+	        if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+            result = await _writeOffDayService.AddOffDayService(dto,GetClientUserId().Value,GetClientIpAddress()); 
         }
         
         return Ok(result);
@@ -167,9 +168,10 @@ public class OffDayController : Controller
 		        return Ok(result.SetStatus(false).SetErr("Count Leave is not equal or smaller than zero").SetMessage("Lütfen İzin Girdiğinize Emin Olunuz!"));
 	        if(dto.LeaveByYear < 0 || dto.LeaveByTaken < 0 || dto.LeaveByTravel < 0 || dto.LeaveByWeek < 0 || dto.LeaveByFreeDay < 0 || dto.LeaveByPublicHoliday < 0)
 		        return Ok(result.SetStatus(false).SetErr("Negative Values").SetMessage("Negatif Değer Girilemez."));
+	        if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
             result = dto.OffDayStatus == OffDayStatusEnum.Approved 
-	            ? await _writeOffDayService.UpdateApprovedOffDayService(dto) 
-	            : await _writeOffDayService.UpdateWaitingOffDayService(dto);
+	            ? await _writeOffDayService.UpdateApprovedOffDayService(dto,GetClientUserId().Value,GetClientIpAddress()) 
+	            : await _writeOffDayService.UpdateWaitingOffDayService(dto,GetClientUserId().Value,GetClientIpAddress());
         }
         return Ok(result);
     }
@@ -187,7 +189,8 @@ public class OffDayController : Controller
         {
             return Redirect("/404");
         }
-        result = await _writeOffDayService.UpdateFirstWaitingStatusOffDayService(id,status,username);
+        if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+        result = await _writeOffDayService.UpdateFirstWaitingStatusOffDayService(id,status,username,GetClientUserId().Value,GetClientIpAddress());
         return Ok(result);
     }
 	/// <summary>
@@ -204,7 +207,8 @@ public class OffDayController : Controller
         {
             return Redirect("/404");
         }
-        result = await _writeOffDayService.UpdateSecondWaitingStatusOffDayService(id,status,username);
+        if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+        result = await _writeOffDayService.UpdateSecondWaitingStatusOffDayService(id,status,username,GetClientUserId().Value,GetClientIpAddress());
         return Ok(result);
     }
 	/// <summary>
@@ -215,7 +219,8 @@ public class OffDayController : Controller
 	[HttpPost]
     public async Task<IActionResult> DeleteOffDay(Guid id, string returnUrl)
     {
-        var result = await _writeOffDayService.DeleteOffDayService(id);
+	    if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
+        var result = await _writeOffDayService.DeleteOffDayService(id,GetClientUserId().Value,GetClientIpAddress());
         return Ok(result);
     }
 	/// <summary>

@@ -7,9 +7,9 @@ namespace Services.Abstract.PositionServices;
 
 public interface IWritePositionService
 {
-    Task<IResultDto> AddAsync(PositionDto writeDto);
-    Task<IResultWithDataDto<PositionDto>> UpdateAsync(PositionDto writeDto);
-    Task<IResultDto> DeleteAsync(Guid id);
-    Task<IResultDto> RecoverAsync(Guid id);
+    Task<IResultDto> AddAsync(PositionDto writeDto,Guid userId,string ipAddress);
+    Task<IResultWithDataDto<PositionDto>> UpdateAsync(PositionDto writeDto,Guid userId,string ipAddress);
+    Task<IResultDto> DeleteAsync(Guid id,Guid userId,string ipAddress);
+    Task<IResultDto> RecoverAsync(Guid id,Guid userId,string ipAddress);
     
 }

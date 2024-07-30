@@ -85,19 +85,7 @@
 
     </div>
 </div>
-<div id="page-loader" class="page page-center d-none">
-    <div  class="container container-slim py-4 ">
-        <div class="text-center">
-            <div class="mb-3">
-                <a href="." class="navbar-brand navbar-brand-autodark"><img src="/logonew.png" height="108" alt=""></a>
-            </div>
-            <div class="text-secondary mb-3">Lütfen Bekleyiniz!</div>
-            <div class="progress progress-sm">
-                <div class="progress-bar progress-bar-indeterminate"></div>
-            </div>
-        </div>
-    </div>
-</div>
+@await Html.PartialAsync("_PageLoader")
 @* <script src="/js/custom/detailedFilter/main.js"></script> *@
 <script src="/js/custom/detailedFilter/test.js"></script>
 

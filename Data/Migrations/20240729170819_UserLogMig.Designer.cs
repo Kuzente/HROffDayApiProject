@@ -4,6 +4,7 @@ using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240729170819_UserLogMig")]
+    partial class UserLogMig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -618,12 +621,12 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("f5e22260-81ab-4d8f-9366-b7b724d4665a"),
-                            CreatedAt = new DateTime(2024, 7, 29, 20, 19, 8, 14, DateTimeKind.Local).AddTicks(7984),
+                            ID = new Guid("67461e8c-95ac-47f7-99f3-9db32e29aa82"),
+                            CreatedAt = new DateTime(2024, 7, 29, 20, 8, 19, 3, DateTimeKind.Local).AddTicks(9317),
                             DeletedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "superadmin@superadmin.com",
                             IsDefaultPassword = true,
-                            ModifiedAt = new DateTime(2024, 7, 29, 20, 19, 8, 14, DateTimeKind.Local).AddTicks(7992),
+                            ModifiedAt = new DateTime(2024, 7, 29, 20, 8, 19, 3, DateTimeKind.Local).AddTicks(9327),
                             Password = "superadmin",
                             Role = 3,
                             Status = 0,

@@ -27,6 +27,7 @@
     }
        
     $('[data-id="submitButton"]').on('click',function () {
+        spinnerStart($('[data-id="submitButton"]'))
         let selectedFatherDeadMarried = $('#LeaveByMarriedFatherDead').find(":selected").val();
         let form = $("#formAuthentication");
         let startDate = $('[name="StartDate"]').val();
@@ -63,21 +64,27 @@
         if(!startDate || !endDate){
             $('#error-modal-message').text("Lütfen Tarih Seçtiğinizden Emin Olunuz.")
             $('#error-modal').modal('show')
+            spinnerEnd($('[data-id="submitButton"]'))
         }else if(endDate < startDate){
             $('#error-modal-message').text("Başlangıç Tarihi Bitiş Tarihinden Sonra Olamaz.")
             $('#error-modal').modal('show')
+            spinnerEnd($('[data-id="submitButton"]'))
         }else if (totalValue <= 0 && !selectedFatherDeadMarried){
             $('#error-modal-message').text("Lütfen İzin Günü Giriniz.")
             $('#error-modal').modal('show')
+            spinnerEnd($('[data-id="submitButton"]'))
         }else if (negativeValues){
             $('#error-modal-message').text("Lütfen İzin Alanlarını Kontrol Ediniz.Negatif Değer Girilemez.")
             $('#error-modal').modal('show')
+            spinnerEnd($('[data-id="submitButton"]'))
         }  else if (YearLeaveCount < yearLeaveInput){
             $('#error-modal-message').text("Personelin Yıllık İzin Günü Yetersiz.Lütfen daha küçük bir değer giriniz.")
             $('#error-modal').modal('show')
+            spinnerEnd($('[data-id="submitButton"]'))
         }else if (totalValue !== differenceInDays){
             $('#error-modal-message').text("Girdiğiniz Tarih Aralığı İle İzin Günleri Uyuşmuyor.")
             $('#error-modal').modal('show')
+            spinnerEnd($('[data-id="submitButton"]'))
         }else{
             $('[name="CountLeave"]').val(totalValue);
             let formData = form.serializeArray();
@@ -86,6 +93,7 @@
                 url: "/izin-duzenle",
                 data: formData
             }).done(function (res) {
+                spinnerEnd($('[data-id="submitButton"]'))
                 if (res.isSuccess){
                     $('#success-modal-message').text("İzin Başarılı Bir Şekilde Güncellendi.")
                     $('#success-modal').modal('show')

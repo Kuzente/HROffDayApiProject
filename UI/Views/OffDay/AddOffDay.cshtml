@@ -44,7 +44,7 @@ else
         <div class=" authentication-basic container-p-y">
             <div class="">
                 <!-- Register Card -->
-                <div class="card">
+                <div id="mainDiv" class="card">
                     <div class="card-body">
                         <!-- Logo -->
                         <div class="d-flex row text-center">
@@ -241,6 +241,7 @@ else
                     </div>
                 </div>
                 <!-- Register Card -->
+                @await Html.PartialAsync("_PageLoader")
             </div>
         </div>
     </div>

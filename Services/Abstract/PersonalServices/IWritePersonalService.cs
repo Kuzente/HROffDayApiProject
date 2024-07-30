@@ -9,13 +9,12 @@ namespace Services.Abstract.PersonalServices;
 
 public interface IWritePersonalService 
 {
-    Task<IResultDto> AddAsync(AddPersonalDto writeDto);
-    Task<IResultDto> AddRangeAsync(List<AddRangePersonalDto> writeDto);
-    Task<IResultDto> UpdateAsync(WriteUpdatePersonalDto writeDto);
-    Task<IResultDto> DeleteAsync(Guid id);
-    Task<IResultDto> ChangeStatus(WritePersonalChangeStatusDto dto);
-    Task<IResultDto> RecoverAsync(Guid id);
-    Task<IResultDto> UpdatePersonalCumulativeAsyncService(WriteUpdateCumulativeDto dto);
-    Task<IResultDto> UpdatePersonalCumulativeNotificationAsyncService(Guid id);
-    Task<IResultDto> DeletePersonalCumulativeAsyncService(Guid personalId,Guid cumulativeId);
+    Task<IResultDto> AddAsync(AddPersonalDto writeDto,Guid userId,string ipAddress);
+    Task<IResultDto> AddRangeAsync(List<AddRangePersonalDto> writeDto,Guid userId,string ipAddress);
+    Task<IResultDto> UpdateAsync(WriteUpdatePersonalDto writeDto,Guid userId,string ipAddress);
+    Task<IResultDto> DeleteAsync(Guid id,Guid userId,string ipAddress);
+    Task<IResultDto> ChangeStatus(WritePersonalChangeStatusDto dto,Guid userId,string ipAddress);
+    Task<IResultDto> RecoverAsync(Guid id,Guid userId,string ipAddress);
+    Task<IResultDto> UpdatePersonalCumulativeAsyncService(WriteUpdateCumulativeDto dto,Guid userId,string ipAddress);
+    Task<IResultDto> UpdatePersonalCumulativeNotificationAsyncService(Guid id,Guid userId,string ipAddress);
 }

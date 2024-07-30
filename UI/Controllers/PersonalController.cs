@@ -14,7 +14,7 @@ using Services.ExcelDownloadServices.PersonalServices;
 namespace UI.Controllers
 {
 	[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
-	public class PersonalController : Controller
+	public class PersonalController : BaseController
     {
         private readonly IReadPersonalService _readPersonalService;
         private readonly IWritePersonalService _writePersonalService;
@@ -76,8 +76,9 @@ namespace UI.Controllers
                 result.SetStatus(false).SetErr("ModelState is not Valid").SetMessage("Zorunlu Alanları Doldurduğunuzdan Emin Olunuz");
             }
             else
-            { 
-                result = await _writePersonalService.AddAsync(dto);
+            {
+                if (!GetClientUserId().HasValue) return Redirect("/404");
+                result = await _writePersonalService.AddAsync(dto,GetClientUserId().Value,GetClientIpAddress());
             }
            
             return Ok(result);

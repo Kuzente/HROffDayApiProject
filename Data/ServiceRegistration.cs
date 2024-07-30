@@ -9,6 +9,7 @@ using Data.Abstract.PersonalCumulativeRepositories;
 using Data.Abstract.PersonalRepositories;
 using Data.Abstract.PositionRepositories;
 using Data.Abstract.TransferPersonalRepositories;
+using Data.Abstract.UserLogRepositories;
 using Data.Abstract.UserRepositories;
 using Data.Concrete;
 using Data.Concrete.BranchRepositories;
@@ -21,6 +22,7 @@ using Data.Concrete.PersonalCumulativeRepositories;
 using Data.Concrete.PersonalRepositories;
 using Data.Concrete.PositionRepositories;
 using Data.Concrete.TransferPersonalRepositories;
+using Data.Concrete.UserLogRepositories;
 using Data.Concrete.UserRepositories;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -58,6 +60,7 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(IWriteMissingDayRepository),typeof(WriteMissingDayRepository));
 		services.AddScoped(typeof(IReadPersonalCumulativeRepository),typeof(ReadPersonalCumulativeRepository));
 		services.AddScoped(typeof(IWritePersonalCumulativeRepository),typeof(WritePersonalCumulativeRepository));
+		services.AddScoped(typeof(IWriteUserLogRepository),typeof(WriteUserLogRepository));
 
 	}
 }

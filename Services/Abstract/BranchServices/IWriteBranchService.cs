@@ -6,9 +6,9 @@ namespace Services.Abstract.BranchServices;
 
 public interface IWriteBranchService 
 {
-    Task<IResultDto> AddAsync(BranchDto writeDto);
-    Task<IResultWithDataDto<BranchDto>> UpdateAsync(BranchDto writeDto);
-    Task<IResultDto> DeleteAsync(Guid id);
-    Task<IResultDto> RecoverAsync(Guid id);
+    Task<IResultDto> AddAsync(BranchDto writeDto,Guid userId,string ipAddress);
+    Task<IResultWithDataDto<BranchDto>> UpdateAsync(BranchDto writeDto,Guid userId,string ipAddress);
+    Task<IResultDto> DeleteAsync(Guid id,Guid userId,string ipAddress);
+    Task<IResultDto> RecoverAsync(Guid id,Guid userId,string ipAddress);
     Task<IResultDto> RemoveAsync(Guid id);
 }

@@ -1,4 +1,6 @@
-﻿@model ResultWithPagingDataDto<List<ReadPersonalOffDayListDto>>
+﻿@using Core.Enums
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ResultWithPagingDataDto<List<ReadPersonalOffDayListDto>>
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
@@ -364,10 +366,10 @@ else
                         </td>
                         <td class="col-1">
                             <!--TODO RETURN URL-->
-                            <a href='/izin-duzenle?id=@data.ID&returnUrl=@returnUrl' class="btn btn-dark btn-sm text-white btn-pill">Güncelle</a>
+                            <a href='/izin-duzenle?id=@data.ID&returnUrl=@returnUrl' class="btn btn-dark btn-sm text-white btn-pill @(data.Personal.Status == EntityStatusEnum.Offline ? "disabled" : "")">Güncelle</a>
                         </td>
                         <td class="col-1">
-                            <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="">İptal Et</button>
+                            <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal=""@(data.Personal.Status == EntityStatusEnum.Offline ? "disabled" : "")>İptal Et</button>
                         </td>
                     </tr>
                 }

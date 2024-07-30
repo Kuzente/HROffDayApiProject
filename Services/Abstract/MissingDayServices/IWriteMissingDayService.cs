@@ -5,6 +5,6 @@ namespace Services.Abstract.MissingDayServices;
 
 public interface IWriteMissingDayService
 {
-   Task<IResultDto> AddMissingDayService(WriteAddMissingDayDto dto);
-   Task<IResultDto> DeleteMissingDayService(Guid id);
+   Task<IResultDto> AddMissingDayService(WriteAddMissingDayDto dto,Guid userId,string ipAddress);
+   Task<IResultDto> DeleteMissingDayService(Guid id,Guid userId,string ipAddress);
 }

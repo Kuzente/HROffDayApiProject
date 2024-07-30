@@ -19,4 +19,5 @@ public partial class User : BaseEntity
 public partial class User
 {
     public ICollection<BranchUser> BranchUsers { get; set; }
+    public ICollection<UserLog> UserLogs { get; set; }
 }

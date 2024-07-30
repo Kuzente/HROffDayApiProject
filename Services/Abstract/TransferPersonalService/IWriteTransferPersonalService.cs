@@ -4,5 +4,5 @@ namespace Services.Abstract.TransferPersonalService;
 
 public interface IWriteTransferPersonalService
 {
-    Task<IResultDto> DeleteTransferPersonalService(Guid id);
+    Task<IResultDto> DeleteTransferPersonalService(Guid id,Guid userId,string ipAddress);
 }
