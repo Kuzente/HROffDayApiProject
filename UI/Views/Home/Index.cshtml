@@ -397,10 +397,11 @@
             const missDayList = document.getElementById('missingDayList')
             const cumulativeList = document.getElementById('cumulativeList')
             let today = new Date();
+            let controlDate = new Date().toISOString().split('T')[0];
             //Eksik Gün istirahat ajax metodu
             $.ajax({
                 type:"GET",
-                url: "/query/eksik-gun-dashboard?$expand=Personal($select=NameSurname,Status;)&$select=id,EndOffDayDate,Personal,EndOffDayDate,Reason&$filter=Personal/Status eq 'Online'and Reason eq 'İstirahat (01)'&$orderby=EndOffDayDate asc",
+                url: `/query/eksik-gun-dashboard?$expand=Personal($select=NameSurname,Status;)&$select=id,EndOffDayDate,Personal,EndOffDayDate,Reason&$filter=Personal/Status eq 'Online'and Reason eq 'İstirahat (01)' and EndOffDayDate ge ${controlDate}&$orderby=EndOffDayDate asc`,
             }).done(function (res) {
                 $('#missingDaySpinner').hide();
                 if (res.length > 0) {

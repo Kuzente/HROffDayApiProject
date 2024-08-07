@@ -20,7 +20,7 @@ public static class CalculateCumulativeHelper
                 {
                     cumulativeString += "0+";
                 }
-                else if (age is >= 50 or < 18 || (isYearLeaveRetired && retiredDate.HasValue && iseBaslamaKontrolDate > retiredDate))
+                else if (age is < 18 || (isYearLeaveRetired && retiredDate.HasValue && iseBaslamaKontrolDate > retiredDate))
                 {
                     if (iseBaslamaKontrolDate < oldControlYear)
                     {

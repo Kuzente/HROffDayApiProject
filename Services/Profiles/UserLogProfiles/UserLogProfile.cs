@@ -1,6 +1,18 @@
-﻿namespace Services.Profiles.UserLogProfiles;
+﻿using AutoMapper;
+using Core.DTOs.UserLogDTOs.ReadDtos;
+using Core.Entities;
 
-public class UserLogProfile
+namespace Services.Profiles.UserLogProfiles;
+
+public class UserLogProfile: Profile
 {
-    
+    public UserLogProfile()
+    {
+        CreateMap<UserLog, HeaderLastFiveLogDto>()
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username));
+		;
+		CreateMap<UserLog, UsersLogListDto>()
+			.ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.Username));
+		;
+	}
 }

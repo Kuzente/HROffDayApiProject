@@ -8,6 +8,8 @@ public class TransferPersonalProfile : Profile
 {
     public TransferPersonalProfile()
     {
-        CreateMap<TransferPersonal, ReadTransferPersonalDto>();
+        CreateMap<TransferPersonal, ReadTransferPersonalDto>()
+			.ForMember(dest => dest.PersonalNameSurname, opt => opt.MapFrom(src => src.Personal.NameSurname));
+		;
     }
 }

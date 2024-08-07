@@ -11,29 +11,32 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.BranchServices;
 using Services.ExcelDownloadServices.BranchServices;
+using Services.ExcelDownloadServices.PersonalCountsServices;
 
 namespace UI.Controllers
 {
-    //[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
+    [Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
     public class BranchController : BaseController
     {
         private readonly IReadBranchService _readBranchService;
         private readonly IWriteBranchService _writeBranchService;
         private readonly BranchExcelExport _branchExcelExport;
+        private readonly PersonalCountExcelExport _personalCountExcelExport;
 
-        public BranchController(IReadBranchService readBranchService, IWriteBranchService writeBranchService, BranchExcelExport branchExcelExport)
-        {
-            _readBranchService = readBranchService;
-            _writeBranchService = writeBranchService;
-            _branchExcelExport = branchExcelExport;
-        }
+		public BranchController(IReadBranchService readBranchService, IWriteBranchService writeBranchService, BranchExcelExport branchExcelExport, PersonalCountExcelExport personalCountExcelExport)
+		{
+			_readBranchService = readBranchService;
+			_writeBranchService = writeBranchService;
+			_branchExcelExport = branchExcelExport;
+			_personalCountExcelExport = personalCountExcelExport;
+		}
 
-        #region PageActions
-        /// <summary>
-        /// Şubeler Listesi Sayfası 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IActionResult> Index(BranchQuery query)
+		#region PageActions
+		/// <summary>
+		/// Şubeler Listesi Sayfası 
+		/// </summary>
+		/// <returns></returns>
+		public async Task<IActionResult> Index(BranchQuery query)
         {
             var resultSearch = await _readBranchService.GetBranchListService(query);
             return View(resultSearch);
@@ -126,8 +129,24 @@ namespace UI.Controllers
             // _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
             return Redirect(returnUrl);
         }
-        #endregion
+		
+		public async Task<IActionResult> ExportExcelDepartment(string returnUrl)
+		{
+
+			var result = await _readBranchService.GetDepartmantCountsByBranchService();
+			if (result.IsSuccess)
+			{
+				byte[] excelData = _personalCountExcelExport.ExportToExcel(result.Data); // Entity listesini Excel verisi olarak alın.
+				var response = HttpContext.Response;
+				response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+				response.Headers.Add("Content-Disposition", "attachment; filename=NormKadro.xlsx");
+				await response.Body.WriteAsync(excelData, 0, excelData.Length);
+				return new EmptyResult();
+			}
+			return Redirect("404");
+		}
+		#endregion
 
 
-    }
+	}
 }

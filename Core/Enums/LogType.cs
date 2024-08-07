@@ -9,5 +9,8 @@ public enum LogType
     Delete = 4,
     Recover = 5,
     Fired = 6,
-    BackToWork = 7
+    BackToWork = 7,
+    OffDayCreate = 8,
+    ResetPass = 9,
+    ForgotPassMail = 10,
 }

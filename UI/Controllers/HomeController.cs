@@ -44,7 +44,8 @@ namespace UI.Controllers
         {
             return View();
         }
-        [HttpPost]
+		[Authorize(Roles = $"{nameof(UserRoleEnum.HumanResources)},{nameof(UserRoleEnum.SuperAdmin)}")]
+		[HttpPost]
         public async Task<IActionResult> PostCumulativeNotification(Guid id)
         {
             if (!GetClientUserId().HasValue) return Redirect("/404");

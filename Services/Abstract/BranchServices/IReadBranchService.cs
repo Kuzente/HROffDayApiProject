@@ -14,7 +14,7 @@ public interface IReadBranchService
 	Task<ResultWithPagingDataDto<List<BranchDto>>> GetDeletedBranchListService(BranchQuery query); // Silinen Şubeler Listesi Servisi
 	Task<IResultWithDataDto<BranchDto>> GetUpdateBranchService(Guid id); // Şube Güncelleme Get Servisi
     Task<List<BranchNameDto>> GetAllJustNames();
-    
 
+	Task<IResultWithDataDto<List<DepartmentCountDto>>> GetDepartmantCountsByBranchService(); // Aktif Şubeler Excel Servisi
 
 }

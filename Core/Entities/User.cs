@@ -13,6 +13,10 @@ public partial class User : BaseEntity
     public string Password { get; set; }
     [Required]
     public bool IsDefaultPassword { get; set; }
+    [Required]
+    public string MailVerificationToken { get; set; }
+    [Required]
+    public DateTime TokenExpiredDate { get; set; }
     [Required] 
     public UserRoleEnum Role { get; set; }
 }

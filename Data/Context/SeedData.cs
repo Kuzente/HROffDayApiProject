@@ -20,7 +20,9 @@ public static class SeedData
                 CreatedAt = DateTime.Now,
                 ModifiedAt = DateTime.Now,
                 DeletedAt = DateTime.MinValue,
-                IsDefaultPassword = true
+                IsDefaultPassword = true,
+                MailVerificationToken = "-",
+                TokenExpiredDate = DateTime.MaxValue,
                 // Diğer özellikler
             }
         );

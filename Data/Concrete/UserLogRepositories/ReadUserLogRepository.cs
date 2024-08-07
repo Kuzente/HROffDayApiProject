@@ -1,6 +1,12 @@
-﻿namespace Data.Concrete.UserLogRepositories;
+﻿using Core.Entities;
+using Data.Abstract.UserLogRepositories;
+using Data.Context;
 
-public class ReadUserLogRepository
+namespace Data.Concrete.UserLogRepositories;
+
+public class ReadUserLogRepository: ReadRepository<UserLog>, IReadUserLogRepository
 {
-    
+    public ReadUserLogRepository(DataContext context) : base(context)
+    {
+    }
 }

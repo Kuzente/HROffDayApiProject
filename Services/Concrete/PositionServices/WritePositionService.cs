@@ -29,15 +29,13 @@ public class WritePositionService : IWritePositionService
 		{
 			var mapSet = _mapper.Map<Position>(writePositionDto);
 			var resultData = await _unitOfWork.WritePositionRepository.AddAsync(mapSet);
-			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
-			if(user is null) return res.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
 			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
 			{
 				EntityName = "Position",
 				LogType = LogType.Add,
-				Description = $"{user.Username} tarafından {mapSet.Name} adlı Ünvan Eklendi",
+				Description = $"{mapSet.Name} adlı Ünvan Eklendi",
 				IpAddress = ipAddress,
-				UserID = user.ID,
+				UserID = userId,
 			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -61,15 +59,13 @@ public class WritePositionService : IWritePositionService
 			if (getResult.Personals.Any()) return res.SetStatus(false).SetErr("Position have Personals").SetMessage("Silmek İstediğiniz Ünvan Altında Personeller Mevcut Lütfen Nakil İşlemlerini Yaptıktan Sonra Tekrar Deneyiniz.");
 			var result = await _unitOfWork.WritePositionRepository.DeleteByIdAsync(id);
 			if (!result) res.SetStatus(false).SetErr("Data Layer Error").SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
-			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
-			if(user is null) return res.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
 			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
 			{
 				EntityName = "Position",
 				LogType = LogType.Delete,
-				Description = $"{user.Username} tarafından {getResult.Name} adlı Ünvan Silindi",
+				Description = $"{getResult.Name} adlı Ünvan Silindi",
 				IpAddress = ipAddress,
-				UserID = user.ID,
+				UserID = userId,
 			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit) return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
@@ -90,15 +86,14 @@ public class WritePositionService : IWritePositionService
 			if(getResult is null) return res.SetStatus(false).SetErr("Position Not Found").SetMessage("Ünvan Bulunamadı");
 			var result = await _unitOfWork.WritePositionRepository.RecoverAsync(id);
 			if (!result) res.SetStatus(false).SetErr("Data Layer Error").SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
-			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
-			if(user is null) return res.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			
 			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
 			{
 				EntityName = "Position",
 				LogType = LogType.Recover,
-				Description = $"{user.Username} tarafından {getResult.Name} adlı Ünvan Geri Döndürüldü",
+				Description = $"{getResult.Name} adlı Ünvan Geri Döndürüldü",
 				IpAddress = ipAddress,
-				UserID = user.ID,
+				UserID = userId,
 			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit) return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
@@ -123,15 +118,14 @@ public class WritePositionService : IWritePositionService
             mapset.ID = getData.ID;
             mapset.CreatedAt = getData.CreatedAt;
             var resultData = await _unitOfWork.WritePositionRepository.Update(mapset);
-            var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
-            if(user is null) return res.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+         
             await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
             {
 	            EntityName = "Position",
 	            LogType = LogType.Update,
-	            Description = $"{user.Username} tarafından {resultData.Name} adlı Ünvan Güncellendi",
+	            Description = $"{resultData.Name} adlı Ünvan Güncellendi",
 	            IpAddress = ipAddress,
-	            UserID = user.ID,
+	            UserID = userId,
             });
             var resultCommit = _unitOfWork.Commit();
             if (!resultCommit) return res.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");

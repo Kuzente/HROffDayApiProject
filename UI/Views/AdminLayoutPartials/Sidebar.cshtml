@@ -1,6 +1,9 @@
 ﻿@using System.Security.Claims
 @using Core.Enums
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@{ 
+    var returnUrl = Context.Request.GetDisplayUrl();
+}
 <aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="Toggle navigation">
@@ -184,6 +187,115 @@
                 </div>
                 @if (User.FindFirst(ClaimTypes.Role).Value == UserRoleEnum.HumanResources.ToString() || User.FindFirst(ClaimTypes.Role).Value == UserRoleEnum.SuperAdmin.ToString())
                 {
+                    <li class="nav-item " data-sidebarListItem>
+                        <a class="nav-link" href="/gorevlendirmeler">
+                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-transform"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 6a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M21 11v-3a2 2 0 0 0 -2 -2h-6l3 3m0 -6l-3 3" /><path d="M3 13v3a2 2 0 0 0 2 2h6l-3 -3m0 6l3 -3" /><path d="M15 18a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
+                            </span>
+                            <span class="nav-link-title">
+                                Görevlendirmeler
+                            </span>
+                        </a>
+                    </li>
+                    @*<li class="nav-item " data-sidebarListItem>
+                            <a class="nav-link" href="/detayli-filtre">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye-question"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M14.071 17.764a8.989 8.989 0 0 1 -2.071 .236c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.346 0 6.173 1.727 8.482 5.182" /><path d="M19 22v.01" /><path d="M19 19a2.003 2.003 0 0 0 .914 -3.782a1.98 1.98 0 0 0 -2.414 .483" /></svg>
+                                </span>
+                                <span class="nav-link-title">
+                                    Eksik Gün
+                                </span>
+                            </a>
+                        </li>*@
+                    <li class="nav-item " data-sidebarListItem>
+                        <a class="nav-link" href="/detayli-filtre">
+                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-filter-plus">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M12 20l-3 1v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v3" />
+                                    <path d="M16 19h6" />
+                                    <path d="M19 16v6" />
+                                </svg>
+                            </span>
+                            <span class="nav-link-title">
+                                Detaylı Filtre
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item " data-sidebarListItem>
+                        <a class="nav-link" href="/norm-kadro?returnUrl=@returnUrl">
+                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-data"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /><path d="M9 17v-4" /><path d="M12 17v-1" /><path d="M15 17v-2" /><path d="M12 17v-1" /></svg>
+                            </span>
+                            <span class="nav-link-title">
+                                Norm Kadro Döküman
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item " data-sidebarListItem>
+                        <a class="nav-link" href="/toplu-islemler">
+                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-upload">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                    <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                                    <path d="M12 11v6" />
+                                    <path d="M9.5 13.5l2.5 -2.5l2.5 2.5" />
+                                </svg>
+                            </span>
+                            <span class="nav-link-title">
+                                Toplu İşlemler
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item " data-sidebarListItem>
+                        <a class="nav-link" href="/gunluk-takip">
+                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-terminal" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M5 7l5 5l-5 5" />
+                                    <path d="M12 19l7 0" />
+                                </svg>
+                            </span>
+                            <span class="nav-link-title">
+                                Günlük Otomasyon Takip
+                            </span>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-item " data-sidebarListItem>
+                        <a class="nav-link" href="/kullanici-listesi">
+                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-lock-cog" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M12 21h-5a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2h10c.564 0 1.074 .234 1.437 .61" />
+                                    <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
+                                    <path d="M8 11v-4a4 4 0 1 1 8 0v4" />
+                                    <path d="M19.001 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                    <path d="M19.001 15.5v1.5" />
+                                    <path d="M19.001 21v1.5" />
+                                    <path d="M22.032 17.25l-1.299 .75" />
+                                    <path d="M17.27 20l-1.3 .75" />
+                                    <path d="M15.97 17.25l1.3 .75" />
+                                    <path d="M20.733 20l1.3 .75" />
+                                </svg>
+                            </span>
+                            <span class="nav-link-title">
+                                Kullanıcı İşlemleri
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item " data-sidebarListItem>
+                        <a class="nav-link" href="/kullanici-hareketleri">
+                            <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-activity"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12h4l3 8l4 -16l3 8h4" /></svg>
+                            </span>
+                            <span class="nav-link-title">
+                                Kullanıcı Hareketleri
+                            </span>
+                        </a>
+                    </li>
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="true" role="button" aria-expanded="true">
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -270,75 +382,17 @@
                             </div>
                         </div>
                     </div>
-                    <li class="nav-item " data-sidebarListItem>
-                        <a class="nav-link" href="/detayli-filtre">
-                            <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-filter-plus">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M12 20l-3 1v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v3" />
-                                    <path d="M16 19h6" />
-                                    <path d="M19 16v6" />
-                                </svg>
-                            </span>
-                            <span class="nav-link-title">
-                                Detaylı Filtre
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item " data-sidebarListItem>
-                        <a class="nav-link" href="/kullanici-listesi">
-                            <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-lock-cog" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M12 21h-5a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2h10c.564 0 1.074 .234 1.437 .61" />
-                                    <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
-                                    <path d="M8 11v-4a4 4 0 1 1 8 0v4" />
-                                    <path d="M19.001 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                                    <path d="M19.001 15.5v1.5" />
-                                    <path d="M19.001 21v1.5" />
-                                    <path d="M22.032 17.25l-1.299 .75" />
-                                    <path d="M17.27 20l-1.3 .75" />
-                                    <path d="M15.97 17.25l1.3 .75" />
-                                    <path d="M20.733 20l1.3 .75" />
-                                </svg>
-                            </span>
-                            <span class="nav-link-title">
-                                Kullanıcı İşlemleri
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item " data-sidebarListItem>
-                        <a class="nav-link" href="/gunluk-takip">
-                            <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-terminal" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M5 7l5 5l-5 5" />
-                                    <path d="M12 19l7 0" />
-                                </svg>
-                            </span>
-                            <span class="nav-link-title">
-                                Günlük Otomasyon Takip
-                            </span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item " data-sidebarListItem>
-                        <a class="nav-link" href="/toplu-islemler">
-                            <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-upload">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-                                    <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
-                                    <path d="M12 11v6" />
-                                    <path d="M9.5 13.5l2.5 -2.5l2.5 2.5" />
-                                </svg>
-                            </span>
-                            <span class="nav-link-title">
-                                Toplu İşlemler
-                            </span>
-                        </a>
-                    </li>
                 }
+                <li class="nav-item" data-sidebarListItem>
+                    <a class="nav-link" href="/cikis-yap">
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-logout"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" /><path d="M9 12h12l-3 -3" /><path d="M18 15l3 -3" /></svg>
+                        </span>
+                        <span class="nav-link-title">
+                            Çıkış Yap
+                        </span>
+                    </a>
+                </li>
                 </ul>
                 </div>
                 </div>

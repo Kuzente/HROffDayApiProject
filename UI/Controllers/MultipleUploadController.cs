@@ -61,8 +61,6 @@ public class MultipleUploadController : BaseController
         response.Headers.Add("Content-Disposition", "attachment; filename=TopluVeriTaslak.xlsx");
         await response.Body.WriteAsync(excelData, 0, excelData.Length);
         return new EmptyResult();
-
-        return Redirect("/toplu-islemler");
     }
 
     /// <summary>
@@ -75,7 +73,7 @@ public class MultipleUploadController : BaseController
         var resultExcel = await _readExcelServices.ImportDataFromExcel(file);
         if (!resultExcel.IsSuccess) return Ok(resultExcel);
         if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
-        var result = await _writePersonalService.AddRangeAsync(resultExcel.Data,GetClientUserId().Value,GetClientIpAddress());
+        var result = await _writePersonalService.AddRangeAsync(resultExcel.Data,GetClientUserId()!.Value,GetClientIpAddress());
         
 
         return Ok(result);

@@ -38,5 +38,6 @@ public interface IUnitOfWork : IDisposable
 	IReadPersonalCumulativeRepository ReadPersonalCumulativeRepository { get;  }
 	IWritePersonalCumulativeRepository WritePersonalCumulativeRepository { get;  }
 	IWriteUserLogRepository WriteUserLogRepository { get;  }
+	IReadUserLogRepository ReadUserLogRepository { get;  }
 	bool Commit(bool state = true);
 }

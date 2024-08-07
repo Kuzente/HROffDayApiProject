@@ -14,4 +14,5 @@ public interface IReadUserService
     Task<IResultWithDataDto<ReadUpdateUserDto>> GetUpdateUserService(Guid id); // Şube Güncelleme Get Servisi
     Task<IResultWithDataDto<ReadUserSignInDto>> SignInService(ReadUserSignInDto dto);
     Task<IResultWithDataDto<List<Guid>>> GetUserBranches(Guid id);
+    Task<IResultWithDataDto<ReadUserDto>> GetUserById(Guid userId);
 }

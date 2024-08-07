@@ -10,4 +10,5 @@ public interface IReadMissingDayService
 {
     Task<ResultWithPagingDataDto<List<ReadMissingDayDto>>> GetMissingDayListByIdService(MissingDayQuery query); // Personel Detayları Eksik Gün Listesi Servisi
     Task<IResultWithDataDto<List<ReadMissingDayDto>>> ExcelGetPersonalMissingDayListByIdService(MissingDayQuery query);// Personel Detayları Eksik Gün Listesi Excel Servisi
+	Task<ResultWithPagingDataDto<List<ReadMissingDayDto>>> GetMissingDayListService(MissingDayQuery query); // Personel Detayları Eksik Gün Listesi Servisi
 }

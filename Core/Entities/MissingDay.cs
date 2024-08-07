@@ -19,4 +19,5 @@ public class MissingDay : BaseEntity
     public Guid Personal_Id { get; set; }
     [ForeignKey(nameof(Personal_Id))]
     public Personal Personal { get; set; }
+	
 }

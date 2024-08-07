@@ -151,7 +151,39 @@ public class ReadBranchService : IReadBranchService
 
     }
 
-    
+	public async Task<IResultWithDataDto<List<DepartmentCountDto>>> GetDepartmantCountsByBranchService()
+	{
+		IResultWithDataDto<List<DepartmentCountDto>> result = new ResultWithDataDto<List<DepartmentCountDto>>();
+		try
+		{
+			var branchQuery = await Task.Run(() => _unitOfWork.ReadBranchRepository.GetAll(
+				predicate: p=> p.Status == EntityStatusEnum.Online,
+				include: b=> b.Include(branch=> branch.Personals.Where(p=> p.Status == EntityStatusEnum.Online)).ThenInclude(personal=> personal.PersonalDetails),
+				orderBy: b=> b.OrderBy(branch=> branch.Name)
+				).ToListAsync());
+			var departmentCounts = branchQuery
+									.SelectMany(b => b.Personals)
+									.GroupBy(p => p.PersonalDetails.DepartmantName)
+									.Select(g => new DepartmentCountDto
+									{
+										DepartmentName = g.Key,
+										Count = g.Count()
+									})
+									.OrderByDescending(d => d.Count)
+									.ToList();
 
-   
+
+			foreach (var dept in departmentCounts)
+			{
+				await Console.Out.WriteLineAsync($"{dept.DepartmentName}------ {dept.Count}");
+				
+			}
+			result.SetData(departmentCounts);
+        }
+		catch (Exception ex)
+		{
+			result.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+		return result;
+	}
 }

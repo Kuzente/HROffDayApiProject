@@ -1,2 +1,68 @@
-﻿@model TModel
+﻿
+@model IResultWithDataDto<List<HeaderLastFiveLogDto>>
+<div class="nav-item dropdown d-none d-md-flex me-3 order-md-last">
+    <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">
+        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-activity"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12h4l3 8l4 -16l3 8h4" /></svg>
+    </a>
+    <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card" style="width:800px;">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Son Hareketler</h3>
+            </div>
+            <div id="logsContainer" class="list-group list-group-flush list-group-hoverable">
+                @if (Model.IsSuccess && Model.Data.Count > 0)
+                {
+                    @foreach (var item in Model.Data)
+                    {
+                        <div class="list-group-item">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <span class="status-dot @(item.LogType switch
+                                                           {
+                                                               LogType.Add => "bg-blue",
+                                                               LogType.Update => "bg-yellow",
+                                                               LogType.Delete => "bg-red",
+                                                               LogType.Recover => "bg-green",
+                                                               LogType.Fired => "bg-purple",
+                                                               LogType.BackToWork => "bg-orange",
+                                                               LogType.OffDayCreate => "bg-pink",
+                                                               LogType.ResetPass => "bg-teal",
+                                                               LogType.ForgotPassMail => "bg-cyan",
+                                                               _ => "bg-grey"
+                                                           }) status-dot-animated d-block"></span>
+                                </div>
+                                <div class="col text-truncate">
+                                    <a href="#" class="text-body d-block text-truncate">@item.Description</a>
+                                    <div class="d-block text-muted text-truncate mt-n1">
+                                        @item.Username - @item.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <span class="status-dot bg-grey status-dot-animated d-block"></span>
+                            </div>
+                            <div class="col text-truncate">
+                                <div class="d-block text-muted text-truncate mt-n1">
+                                    Herhangi bir son hareket bulunmamaktadır.
+                                </div>
+                            </div>
+                            <div class="col-auto">
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
 

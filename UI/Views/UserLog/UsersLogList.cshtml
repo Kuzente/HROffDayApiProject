@@ -1,7 +1,281 @@
-﻿
+﻿@model ResultWithPagingDataDto<List<UsersLogListDto>>
+@using Core.Enums
 @{
     ViewBag.Title = "Kullanıcı Hareketleri";
     Layout = "_Layout";
+    var sayfa = Convert.ToInt32(Context.Request.Query["sayfa"]);
+    var maxVisiblePages = 5;
+    var startPage = Math.Max(1, Model.PageNumber - (maxVisiblePages / 2));
+    var endPage = Math.Min(Model.TotalPages, startPage + (maxVisiblePages - 1));
 }
 
-<h2>title</h2>
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                    IYAŞ PANEL
+                </div>
+                <h2 class="page-title">
+                    Kullanıcı Hareketleri
+                </h2>
+            </div>
+
+        </div>
+    </div>
+</div>
+@if (!Model.IsSuccess)
+{
+    <div class="card container-xl mt-3">
+        <div class="text-center p-5">
+            <h1 class="display-4 text-danger">Üzgünüz</h1>
+            <p>@Model.Message</p>
+            <p>@Model.Err</p>
+        </div>
+    </div>
+}
+else
+{
+    <div class="card container-xl mt-3">
+        <!--Tablo Üst Alan-->
+        <div class="row">
+            <div class="col-6">
+                <div class="p-3">
+                    <!-- Data Filter-->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form id="searchForm" class="d-flex" action="/kullanici-hareketleri">
+                                <input id="searchInput" class="form-control me-2" type="search" placeholder="Ara" name="search" aria-label="Search">
+                                <button class="btn btn-outline-primary" type="submit">Ara</button>
+                            </form>
+                        </div>
+                        <div class="col-md-1">
+                            <form id="filterForm" method="get">
+                                <div class="dropdown filter-dropdown">
+                                    <button class="btn btn-outline-secondary btn-icon" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter-down" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M12 20l-3 1v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v3"></path>
+                                            <path d="M19 16v6"></path>
+                                            <path d="M22 19l-3 3l-3 -3"></path>
+                                        </svg>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-start ">
+                                        <div class="dropdown-header" style="width: 500px;">Detaylı Filtre</div>
+                                        <div class="p-3">
+                                            <div class="row mb-2">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label class="form-label">İşlem Türü</label>
+                                                        <select id="logTypeSelect" class="form-select selectListTom" name="logType" placeholder="İşlem Türü Seçiniz">
+                                                            <option></option>
+                                                            <option value="2">Ekleme</option>
+                                                            <option value="3">Güncelleme</option>
+                                                            <option value="4">Silme</option>
+                                                            <option value="5">Geri Döndürme</option>
+                                                            <option value="6">İşten Çıkarma</option>
+                                                            <option value="7">İşe Geri Alma</option>
+                                                            <option value="8">İzin Talebi</option>
+                                                            <option value="9">Şifre Sıfırlama</option>
+                                                            <option value="10">Şifremi Unuttum</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-6">
+                                                    <label class="form-label">Yıl Seçiniz</label>
+                                                    <select name="filterYear" class="form-select">
+                                                        <option value="">Yıl Seçiniz.</option>
+                                                        @for (var year = 2017; year <= 2050; year++)
+                                                        {
+                                                            <option value="@year">@year</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label">Ay Seçiniz</label>
+                                                    <select name="filterMonth" class="form-select">
+                                                        <option value="">Ay Seçiniz.</option>
+                                                        @{
+                                                            for (int month = 1; month <= 12; month++)
+                                                            {
+                                                                <option value="@month">@(new CultureInfo("tr-TR").DateTimeFormat.GetMonthName(month))</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <button class="btn btn-outline-primary me-4 " type="submit">Filtrele</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!--Temizle Butonu-->
+                        <div class="col-md-5">
+                            @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && kvp.Key != "sortName" && kvp.Key != "sortBy" && !string.IsNullOrEmpty(kvp.Value)))
+                            {
+                                <a href="/kullanici-hareketleri" class="btn btn-outline-secondary ms-3">Temizle</a>
+                            }
+                        </div>
+                        <!--Temizle Butonu-->
+                    </div>
+                    <!-- Data Filter-->
+                </div>
+            </div>
+            <div class="col-2">
+            </div>
+            <div class="col-4 p-3 text-end">
+                @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && kvp.Key != "sortName" && kvp.Key != "sortBy" && !string.IsNullOrEmpty(kvp.Value)))
+                {
+                    <button type="button" class="btn">
+                        Filtrelenen Kullanıcı Hareketleri
+                        <span class="badge bg-green ms-2">@Model.TotalRecords</span>
+                    </button>
+                }
+                else
+                {
+                    <button type="button" class="btn">
+                        Toplam Kullanıcı Hareketleri
+                        <span class="badge bg-green ms-2">@Model.TotalRecords</span>
+                    </button>
+                }
+            </div>
+
+        </div>
+        <!--Table-->
+        <div class="table-responsive">
+            <table class="table card-table table-vcenter text-nowrap">
+                <thead>
+                    <tr>
+                        <th><button class="table-sort" data-sort="sort-username">Kullanıcı Adı</button></th>
+                        <th><button class="table-sort" data-sort="sort-logType">İşlem Türü</button></th>
+                        <th>Açıklama</th>
+                        <th><button class="table-sort" data-sort="sort-createdAt">Oluşturulma Tarihi</button></th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @foreach (var data in Model.Data)
+                    {
+                        <tr>
+                            <td>
+                                @data.Username
+                            </td>
+                            <td>
+                                @{
+                                    switch (data.LogType)
+                                    {
+                                        case LogType.SignIn:
+                                            break;
+                                        case LogType.SignOut:
+                                            break;
+                                        case LogType.Add:
+                                            <span class="badge bg-blue">Ekleme</span>
+                                            break;
+                                        case LogType.Update:
+                                            <span class="badge bg-yellow">Güncelleme</span>
+                                            break;
+                                        case LogType.Delete:
+                                            <span class="badge bg-red">Silme</span>
+                                            break;
+                                        case LogType.Recover:
+                                            <span class="badge bg-green">Geri Döndürme</span>
+                                            break;
+                                        case LogType.Fired:
+                                            <span class="badge bg-purple">İşten Çıkarma</span>
+                                            break;
+                                        case LogType.BackToWork:
+                                            <span class="badge bg-orange">İşe Geri Alma</span>
+                                            break;
+                                        case LogType.OffDayCreate:
+                                            <span class="badge bg-pink">İzin Talebi</span>
+                                            break;
+                                        case LogType.ResetPass:
+                                            <span class="badge bg-teal">Şifre Sıfırlama</span>
+                                            break;
+                                        case LogType.ForgotPassMail:
+                                            <span class="badge bg-cyan">Şifremi Unuttum</span>
+                                            break;
+                                        default:
+                                            <span class="badge bg-grey">Farklı</span>
+                                            break;
+                                    }
+
+                                }
+                            </td>
+                            <td>
+                                @data.Description
+                            </td>
+                            <td>
+                                <span class="badge bg-grey">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!--Pagination-->
+        <div class="border-top pt-3 mx-3 d-flex justify-content-end">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li class="page-item first @(Model.PageNumber <= 1 ? "disabled" : "")">
+                        <a data-firstButton class="w-33 h-px-30 page-link cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-bar-to-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M10 12l10 0"></path>
+                                <path d="M10 12l4 4"></path>
+                                <path d="M10 12l4 -4"></path>
+                                <path d="M4 4l0 16"></path>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="page-item prev @(Model.PageNumber <= 1 ? "disabled" : "")">
+                        <a data-prevButton class="w-33 h-px-30 page-link cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M5 12l14 0"></path>
+                                <path d="M5 12l6 6"></path>
+                                <path d="M5 12l6 -6"></path>
+                            </svg>
+                        </a>
+                    </li>
+                    @for (int i = startPage; i <= endPage; i++)
+                    {
+                        <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                            <a data-paginationButton="@Model.PageNumber" class="w-33 h-px-30 page-link cursor-pointer">@i</a>
+                        </li>
+                    }
+                    <li class="page-item next @(Model.PageNumber >= Model.TotalPages ? "disabled" : "")">
+                        <a data-nextButton class="w-33 h-px-30 page-link cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M5 12l14 0"></path>
+                                <path d="M13 18l6 -6"></path>
+                                <path d="M13 6l6 6"></path>
+                            </svg>
+                        </a>
+                    </li>
+                    <li class="page-item last @(Model.PageNumber >= Model.TotalPages ? "disabled" : "")">
+                        <a data-lastButton="@Model.TotalPages" class="w-33 h-px-30 page-link cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-bar-to-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M14 12l-10 0"></path>
+                                <path d="M14 12l-4 4"></path>
+                                <path d="M14 12l-4 -4"></path>
+                                <path d="M20 4l0 16"></path>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+    @section Scripts {
+        <script src="/js/custom/usersLogs/usersLogsList.js"></script>
+    }
+}

@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.OData;
 using QuestPDF.Infrastructure;
 using Services;
 using Services.HangfireFilter;
+using UI.Middlewares;
 using UI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+var webHostEnvironment = builder.Services.BuildServiceProvider().GetService<IWebHostEnvironment>();
+builder.Configuration.GetSection("RootPath").Value = webHostEnvironment.WebRootPath;
 
 QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -55,6 +58,7 @@ app.UseSession();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<RoleUpdateMiddleware>();
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
 	Authorization = new[] { new HangfireAuthorizationFilter() }
@@ -113,7 +117,7 @@ app.MapControllerRoute(name: "offDayRejectedList", pattern: "reddedilen-izinler"
 app.MapControllerRoute(name: "offDayApprovedList", pattern: "onaylanan-izinler", defaults: new { controller = "OffDay", action = "ApprovedOffDayList" });
 app.MapControllerRoute(name: "offDayWaitingList", pattern: "izin-sil", defaults: new { controller = "OffDay", action = "DeleteOffDay" });
 app.MapControllerRoute(name: "offDayExcel", pattern: "izin-excel", defaults: new { controller = "OffDay", action = "ExportExcel" });
-
+app.MapControllerRoute(name: "offDayPdf", pattern: "/create-pdf", defaults: new { controller = "OffDay", action = "ExportPdf" });
 
 #endregion
 #region RecoveryPages
@@ -148,8 +152,12 @@ app.MapControllerRoute(name: "getDirectorBranchSelect", pattern: "select-branchm
 #endregion
 #region Authentication
 app.MapControllerRoute(name: "loginPage", pattern: "giris-yap", defaults: new { controller = "Authentication", action = "Login" });
-app.MapControllerRoute(name: "loginPage", pattern: "cikis-yap", defaults: new { controller = "Authentication", action = "Logout" });
-app.MapControllerRoute(name: "loginPage", pattern: "/create-pdf", defaults: new { controller = "OffDay", action = "ExportPdf" });
+app.MapControllerRoute(name: "logout", pattern: "cikis-yap", defaults: new { controller = "Authentication", action = "Logout" });
+app.MapControllerRoute(name: "newPasswordPage", pattern: "yeni-parola", defaults: new { controller = "Authentication", action = "NewPassword" });
+app.MapControllerRoute(name: "newPasswordPage", pattern: "parola-sifirla", defaults: new { controller = "Authentication", action = "ResetPassword" });
+app.MapControllerRoute(name: "forgotPasswordPage", pattern: "parolami-unuttum", defaults: new { controller = "Authentication", action = "ForgotPassword" });
+app.MapControllerRoute(name: "forgotPasswordPost", pattern: "parola-sifirlama-baglantisi-gonder", defaults: new { controller = "Authentication", action = "ForgotPasswordPost" });
+
 
 
 #endregion
@@ -158,6 +166,21 @@ app.MapControllerRoute(name: "loginPage", pattern: "/create-pdf", defaults: new 
 app.MapControllerRoute(name: "postCumulativeNotification", pattern: "post-kumulatif-bildirim", defaults: new { controller = "Home", action = "PostCumulativeNotification" });
 
 
+#endregion
+#region UsersLog
+app.MapControllerRoute(name: "usersLogsListPage", pattern: "kullanici-hareketleri", defaults: new { controller = "UserLog", action = "UsersLogList" });
+
+#endregion
+#region TransferPersonal
+app.MapControllerRoute(name: "transferPersonalListPage", pattern: "gorevlendirmeler", defaults: new { controller = "TransferPersonal", action = "TransferPersonalList" });
+app.MapControllerRoute(name: "downloadTransferPersonalExcelListGet", pattern: "gorevlendirmeler-excel", defaults: new { controller = "TransferPersonal", action = "ExportExcel" });
+#endregion
+#region MissingDay
+app.MapControllerRoute(name: "missingDayListPage", pattern: "eksik-gunler", defaults: new { controller = "MissingDay", action = "MissingDayList" });
+app.MapControllerRoute(name: "downloadMissingDayListExcelListGet", pattern: "eksik-gunler-excel", defaults: new { controller = "MissingDay", action = "ExportExcel" });
+#endregion
+#region NormKadro
+app.MapControllerRoute(name: "downloadDepartmentExcelList", pattern: "norm-kadro", defaults: new { controller = "Branch", action = "ExportExcelDepartment" });
 #endregion
 #region DetailedFilter
 app.MapControllerRoute(name: "detailedFilterPage", pattern: "detayli-filtre", defaults: new { controller = "DetailedFilter", action = "Index" });

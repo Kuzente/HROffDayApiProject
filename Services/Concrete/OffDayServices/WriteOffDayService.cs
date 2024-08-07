@@ -9,6 +9,8 @@ using Core.Interfaces;
 using Data.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Services.Abstract.OffDayServices;
+using Services.HelperServices;
+using System.Web;
 
 namespace Services.Concrete.OffDayServices;
 
@@ -16,11 +18,13 @@ public class WriteOffDayService : IWriteOffDayService
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IMapper _mapper;
+	private readonly MailHelper _mailHelper;
 
-	public WriteOffDayService(IUnitOfWork unitOfWork, IMapper mapper)
+	public WriteOffDayService(IUnitOfWork unitOfWork, IMapper mapper, MailHelper mailHelper)
 	{
 		_unitOfWork = unitOfWork;
 		_mapper = mapper;
+		_mailHelper = mailHelper;
 	}
 	public async Task<IResultDto> AddOffDayService(WriteAddOffDayDto dto,Guid userId,string ipAddress)
 	{
@@ -49,16 +53,38 @@ public class WriteOffDayService : IWriteOffDayService
 			}
 
 			await _unitOfWork.WriteOffDayRepository.AddAsync(mappedResult);
-			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
-			if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			
 			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
 			{
 				EntityName = "OffDay",
-				LogType = LogType.Add,
-				Description = $"{user.Username} tarafından {personal.NameSurname} adlı Personele izin talebi oluşturuldu.",
+				LogType = LogType.OffDayCreate,
+				Description = $"{personal.NameSurname} adlı Personele izin talebi oluşturuldu.",
 				IpAddress = ipAddress,
-				UserID = user.ID,
+				UserID = userId,
 			});
+			var getBranchManagerMail = await _unitOfWork.ReadBranchUserRepository.GetSingleAsync(
+				predicate: p => p.BranchID == mappedResult.BranchId && p.User.Role == UserRoleEnum.BranchManager,
+				include: p => p.Include(a => a.User));
+			if (getBranchManagerMail is null || getBranchManagerMail.User is null)
+				return result.SetStatus(false).SetErr(" BranchManager not found").SetMessage("Personele ait şube sorumlusu aranırken bir hata oluştu!!");
+			var hrEmpoyeeList = _unitOfWork.ReadUserRepository.GetAll(predicate: p => p.Role == UserRoleEnum.HumanResources && p.Status == EntityStatusEnum.Online).ToList();
+			if(!hrEmpoyeeList.Any())
+				return result.SetStatus(false).SetErr("Mail Send Fail").SetMessage("Sistem üzerinde insan kaynakları bulunamadı");
+			foreach (var hr in hrEmpoyeeList)
+            {
+				var mailHtml = _mailHelper.GetMailemplateHtml(
+				  "waitingoffday",
+				  hr.Username,
+				  personal.NameSurname,
+				  getBranchManagerMail.User.Username,
+				  "şube sorumlusu",
+				  DateTime.Now);
+				var isMailSendSuccess = await _mailHelper.SendEmail(hr.Email, "İyaş Personel Takip Bekleyen İzin Onayı", mailHtml);
+				if (isMailSendSuccess is false || string.IsNullOrEmpty(mailHtml))
+					return result.SetStatus(false).SetErr("Mail Send Fail").SetMessage("Eposta Gönderilirken Bir Hata oluştu! Lütfen daha sonra tekrar deneyiniz...");
+			}
+           
+			
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
@@ -105,15 +131,14 @@ public class WriteOffDayService : IWriteOffDayService
 				});
 			}
 			await _unitOfWork.WriteOffDayRepository.Update(mappedResult);
-			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
-			if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+		
 			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
 			{
 				EntityName = "OffDay",
 				LogType = LogType.Update,
-				Description = $"{user.Username} tarafından {offDay.Personal.NameSurname} adlı Personele ait bekleyen izin güncellendi.",
+				Description = $"{offDay.Personal.NameSurname} adlı Personele ait bekleyen izin güncellendi.",
 				IpAddress = ipAddress,
-				UserID = user.ID,
+				UserID = userId,
 			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -251,15 +276,14 @@ public class WriteOffDayService : IWriteOffDayService
 			offDay.LeaveByPublicHoliday = dto.LeaveByPublicHoliday;
 			offDay.CountLeave = dto.CountLeave;
 			await _unitOfWork.WriteOffDayRepository.Update(offDay);
-			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
-			if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+			
 			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
 			{
 				EntityName = "OffDay",
 				LogType = LogType.Update,
-				Description = $"{user.Username} tarafından {offDay.Personal.NameSurname} adlı Personele ait onaylanmış izin güncellendi.",
+				Description = $"{offDay.Personal.NameSurname} adlı Personele ait onaylanmış izin güncellendi.",
 				IpAddress = ipAddress,
-				UserID = user.ID,
+				UserID = userId,
 			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -285,29 +309,43 @@ public class WriteOffDayService : IWriteOffDayService
 			p.Status == EntityStatusEnum.Online,
 			include: i=> i.Include(p=> p.Personal));
 			if(offday is null) return result.SetStatus(false).SetErr("OffDay Is Not Found").SetMessage("İlgili İzin Bulunamadı.");
+			offday.HrName = username;
 			if (status)
 			{
 				if (offday.LeaveByYear > 0 && (offday.Personal.TotalYearLeave - offday.Personal.UsedYearLeave) < offday.LeaveByYear)
 					return result.SetStatus(false).SetErr("Personal Year Leave Insufficient").SetMessage("Personele ait yıllık izin sayısı yetersiz.");
 				offday.OffDayStatus = OffDayStatusEnum.WaitingForSecond;
 				logDescription = $"{offday.Personal.NameSurname} adlı Personele ait bekleyen izin onaylandı.";
+				var getDirectorMail = await _unitOfWork.ReadBranchUserRepository.GetSingleAsync(
+				predicate: p => p.BranchID == offday.BranchId && p.User.Role == UserRoleEnum.Director,
+				include: p => p.Include(a => a.User));
+				if (getDirectorMail is null || getDirectorMail.User is null)
+					return result.SetStatus(false).SetErr("Director not found").SetMessage("Personele ait genel müdür aranırken bir hata oluştu!!");
+				var mailHtml = _mailHelper.GetMailemplateHtml(
+					"waitingoffday",
+					getDirectorMail.User.Username,
+					offday.Personal.NameSurname,
+					offday.HrName,
+					"insan kaynakları",
+					DateTime.Now);
+				var isMailSendSuccess = await _mailHelper.SendEmail(getDirectorMail.User.Email, "İyaş Personel Takip Bekleyen İzin Onayı", mailHtml);
+				if (isMailSendSuccess is false || string.IsNullOrEmpty(mailHtml))
+					return result.SetStatus(false).SetErr("Mail Send Fail").SetMessage("Eposta Gönderilirken Bir Hata oluştu! Lütfen daha sonra tekrar deneyiniz...");
 			}
 			else
 			{
 				offday.OffDayStatus = OffDayStatusEnum.Rejected;
 				logDescription = $"{offday.Personal.NameSurname} adlı Personele ait bekleyen izin reddedildi.";
 			}
-			offday.HrName = username;
+			
 			await _unitOfWork.WriteOffDayRepository.Update(offday);
-			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
-			if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
 			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
 			{
 				EntityName = "OffDay",
 				LogType = LogType.Update,
-				Description = $"{user.Username} tarafından {logDescription}",
+				Description = $"{logDescription}",
 				IpAddress = ipAddress,
-				UserID = user.ID,
+				UserID = userId,
 			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -397,9 +435,9 @@ public class WriteOffDayService : IWriteOffDayService
 			{
 				EntityName = "OffDay",
 				LogType = LogType.Update,
-				Description = $"{user.Username} tarafından {logDescription}",
+				Description = $"{logDescription}",
 				IpAddress = ipAddress,
-				UserID = user.ID,
+				UserID = userId,
 			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
@@ -467,15 +505,13 @@ public class WriteOffDayService : IWriteOffDayService
 			offDay.Status = EntityStatusEnum.Deleted;
 			offDay.DeletedAt = DateTime.Now;
 			await _unitOfWork.WriteOffDayRepository.Update(offDay);
-			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
-			if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
 			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
 			{
 				EntityName = "OffDay",
 				LogType = LogType.Delete,
-				Description = $"{user.Username} tarafından {offDay.Personal.NameSurname} adlı Personele ait onaylanmış izin iptal edildi.",
+				Description = $"{offDay.Personal.NameSurname} adlı Personele ait onaylanmış izin iptal edildi.",
 				IpAddress = ipAddress,
-				UserID = user.ID,
+				UserID = userId,
 			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)

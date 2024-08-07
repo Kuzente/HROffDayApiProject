@@ -13,5 +13,6 @@ public class UserProfile : Profile
         CreateMap<User, UserListDto>();
         CreateMap<User, ReadUserSignInDto>();
         CreateMap<User, ReadUpdateUserDto>();
+        CreateMap<User, ReadUserDto>();
     }
 }

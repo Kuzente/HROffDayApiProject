@@ -61,6 +61,7 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(IReadPersonalCumulativeRepository),typeof(ReadPersonalCumulativeRepository));
 		services.AddScoped(typeof(IWritePersonalCumulativeRepository),typeof(WritePersonalCumulativeRepository));
 		services.AddScoped(typeof(IWriteUserLogRepository),typeof(WriteUserLogRepository));
+		services.AddScoped(typeof(IReadUserLogRepository),typeof(ReadUserLogRepository));
 
 	}
 }

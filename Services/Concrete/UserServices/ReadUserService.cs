@@ -10,6 +10,7 @@ using Data.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Services.Abstract.UserServices;
+using Services.HelperServices;
 
 namespace Services.Concrete.UserServices;
 
@@ -17,13 +18,15 @@ public class ReadUserService : IReadUserService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+	private readonly PasswordCryptoHelper _passwordCryptoHelper;
 
-    public ReadUserService(IMapper mapper, IUnitOfWork unitOfWork)
-    {
-        _mapper = mapper;
-        _unitOfWork = unitOfWork;
-    }
-    public async Task<ResultWithPagingDataDto<List<UserListDto>>> GetUsersListService(UserQuery query)
+	public ReadUserService(IMapper mapper, IUnitOfWork unitOfWork, PasswordCryptoHelper passwordCryptoHelper)
+	{
+		_mapper = mapper;
+		_unitOfWork = unitOfWork;
+		_passwordCryptoHelper = passwordCryptoHelper;
+	}
+	public async Task<ResultWithPagingDataDto<List<UserListDto>>> GetUsersListService(UserQuery query)
     {
         ResultWithPagingDataDto<List<UserListDto>> res = new ResultWithPagingDataDto<List<UserListDto>>(query.sayfa,query.search);
         try
@@ -140,7 +143,10 @@ public class ReadUserService : IReadUserService
 	    IResultWithDataDto<ReadUpdateUserDto> result = new ResultWithDataDto<ReadUpdateUserDto>();
 	    try
 	    {
-		    var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == id,include:p=>p.Include(a=>a.BranchUsers).ThenInclude(b=> b.Branch));
+		    var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(
+				predicate: p => p.ID == id,
+				include:p=>p.Include(a=>a.BranchUsers)
+							.ThenInclude(b=> b.Branch));
 		    if (user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Kullanıcı Bulunamadı");
 		    var mappedResult = _mapper.Map<ReadUpdateUserDto>(user);
 		    mappedResult.BranchManagerBranches = new();
@@ -186,10 +192,9 @@ public class ReadUserService : IReadUserService
 	    IResultWithDataDto<ReadUserSignInDto> result = new ResultWithDataDto<ReadUserSignInDto>();
 	    try
 	    {
-    
 		    var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: d => d.Email == dto.Email,include:a=>a.Include(b=>b.BranchUsers).ThenInclude(c=>c.Branch));             
-		    if (user is null ||	 user.Password != "deneme" && user.Password != "superadmin") // _passwordCryptoHelper.DecryptString(user.Password) != dto.Password           
-			    return result.SetStatus(false).SetErr("Not Found User").SetMessage("Girmiş olduğunuz e-posta adresine ait hesap bulunamadı! Lütfen bilgilerinizi kontrol ediniz.");
+		    if (user is null || _passwordCryptoHelper.DecryptString(user.Password) != dto.Password)//TODO         
+				return result.SetStatus(false).SetErr("Not Found User").SetMessage("Lütfen girmiş olduğun eposta veya şifrenizi kontrol ediniz.");
 		    if (user.Status == EntityStatusEnum.Offline) return result.SetStatus(false).SetErr("The User is Banned").SetMessage("Bu bilgilere sahip üyelik pasif duruma alınmıştır.Bir hata olduğunu düşünüyorsanız yetkili ile iletişime geçiniz.");
 		    if((user.Role is UserRoleEnum.BranchManager or  UserRoleEnum.Director) && !user.BranchUsers.Any(a => a.Branch.Status == EntityStatusEnum.Online)) return result.SetStatus(false).SetErr("The User Branches Offline").SetMessage("Bu üyeliğe ait şubeler kapatılmış veya pasife alınmış olabilir.Lütfen yetkili ile iletişime geçiniz.");
 		    var userMap = _mapper.Map<ReadUserSignInDto>(user);
@@ -218,4 +223,25 @@ public class ReadUserService : IReadUserService
 
 	    return result;
     }
+
+	public async Task<IResultWithDataDto<ReadUserDto>> GetUserById(Guid userId)
+	{
+		IResultWithDataDto<ReadUserDto> result = new ResultWithDataDto<ReadUserDto>();
+		try
+		{
+			var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(
+				predicate: p => p.Status == EntityStatusEnum.Online &&
+								p.ID == userId);
+			if(user is null)
+				result.SetStatus(false).SetErr("User not found").SetMessage("Kullanıcı Bulunamadı!");
+			var mappedData = _mapper.Map<ReadUserDto>(user);
+			result.SetData(mappedData);
+		}
+		catch (Exception ex)
+		{
+			result.SetStatus(false).SetErr(ex.Message).SetMessage("Anlık bir sunucu hatası meydana geldi. Lütfen kısa bir süre sonra tekrar deneyin.");
+		}
+
+		return result;
+	}
 }

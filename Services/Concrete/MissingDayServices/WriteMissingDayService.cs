@@ -39,15 +39,14 @@ public class WriteMissingDayService : IWriteMissingDayService
                 StartJobDate = dto.StartJobDate,
             };
             await _unitOfWork.WriteMissingDayRepository.AddAsync(addingMissDay);
-            var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
-            if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+           
             await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
             {
                 EntityName = "MissingDay",
                 LogType = LogType.Add,
-                Description = $"{user.Username} tarafından {queryPersonal.NameSurname} adlı personele Eksik gün kaydı eklendi.",
+                Description = $"{queryPersonal.NameSurname} adlı personele Eksik gün kaydı eklendi.",
                 IpAddress = ipAddress,
-                UserID = user.ID,
+                UserID = userId,
             });
             var resultCommit = _unitOfWork.Commit();
             if (!resultCommit) return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
@@ -76,15 +75,14 @@ public class WriteMissingDayService : IWriteMissingDayService
             if(data is null) return result.SetStatus(false).SetErr("MissingDay Data Is Not Found").SetMessage("İlgili Kayıt Bulunamadı.");
             var resultAction = await _unitOfWork.WriteMissingDayRepository.RemoveByIdAsync(data.ID);
             if(!resultAction) return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-            var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
-            if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
+        
             await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
             {
                 EntityName = "MissingDay",
                 LogType = LogType.Delete,
-                Description = $"{user.Username} tarafından {data.Personal.NameSurname} adlı personele ait eksik gün kaydı silindi.",
+                Description = $"{data.Personal.NameSurname} adlı personele ait eksik gün kaydı silindi.",
                 IpAddress = ipAddress,
-                UserID = user.ID,
+                UserID = userId,
             });
             var resultCommit = _unitOfWork.Commit();
             if (!resultCommit) return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");

@@ -682,9 +682,22 @@
                         isFormValid = false;
                         return false;
                     }
-                    let minAmount = Math.min(amount1, amount2);
-                    let maxAmount = Math.max(amount1, amount2);
-                    odataFilters.push(`${selectedPropValue} ge ${minAmount} and ${selectedPropValue} le ${maxAmount}`);
+                    if (selectedType === 'Date') {
+                        let date1 = new Date(amount1);
+                        let date2 = new Date(amount2);
+                        if (isNaN(date1) || isNaN(date2)) {
+                            $('#error-modal-message').text(`Lütfen geçerli bir tarih giriniz!`);
+                            $('#error-modal').modal('show');
+                            isFormValid = false;
+                            return false;
+                        }
+                        minAmount = date1 < date2 ? date1.toISOString() : date2.toISOString();
+                        maxAmount = date1 > date2 ? date1.toISOString() : date2.toISOString();
+                    } else {
+                        minAmount = Math.min(amount1, amount2);
+                        maxAmount = Math.max(amount1, amount2);
+                    }
+                    odataFilters.push(`(${selectedPropValue} ge ${minAmount} and ${selectedPropValue} le ${maxAmount})`);
                 } else {
                     let amount = $(this).find(selectedType === 'Date' ? 'input[name="Date"]' : 'input[name="Amount"]').val();
                     if (!amount) {
@@ -782,43 +795,11 @@
             }
             let odataQuery = `${odataFilters.length > 0 ? `$filter=${odataFilters.join(' and ')}` : ''}${expandQuery}${personalSelectQuery}`;
             console.log(odataQuery); // OData query string
-            // $.ajax({
-            //     type: "GET",
-            //     url: `/query/detayli-filtre/${tableName}?${odataQuery}`,
-            //     success: function (res) {
-            //         $('#mainDiv').removeClass('d-none');
-            //         $('#page-loader').addClass('d-none')
-            //         if (res) {
-            //             console.log(res)
-            //             // Verilerle tableDic'i doldurun
-            //             res.forEach(row => {
-            //                 for (let key in tableDic) {
-            //                     let path = tableDic[key].Path;
-            //                     let value = findValueByKey(row, path);
-            //                     if (value !== undefined) {
-            //                         tableDic[key].Data.push(value);
-            //                     }
-            //                 }
-            //             });
-            //             console.log(tableDic)
-            //             createDynamicTable(tableDic, personalCumulativeProperties, res);
-            //         } else {
-            //             $('#error-modal-message').text(res.message);
-            //             $('#error-modal').modal('show');
-            //         }
-            //     },
-            //     error: function () {
-            //         $('#mainDiv').removeClass('d-none');
-            //         $('#page-loader').addClass('d-none')
-            //         $('#error-modal-message').text("İşleminiz sırasında bir hata oluştu. Lütfen daha sonra tekrar deneyinizx!");
-            //         $('#error-modal').modal('show');
-            //     }
-            // });
             $.ajax({
                 url: "/query/detayli-filtre/Personal?$apply=filter(" + `${odataFilters.join(' and ')}` + ")/aggregate($count as TotalCount)",
                 success: function (resultCount) {
                     console.log(resultCount)
-                    createDynamicTable(odataQuery,resultCount[0].TotalCount)
+                    createDynamicTable(odataQuery, resultCount[0] ? resultCount[0].TotalCount : 0)
                 },
                 error: function (xhr, status, error) {
                     console.error("Count fetch error: ", error);

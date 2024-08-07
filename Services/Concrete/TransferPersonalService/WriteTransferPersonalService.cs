@@ -29,15 +29,13 @@ public class WriteTransferPersonalService : IWriteTransferPersonalService
             if(data is null) return result.SetStatus(false).SetErr("TransferPersonal Data Is Not Found").SetMessage("İlgili Kayıt Bulunamadı.");
             var resultAction = await _unitOfWork.WriteTransferPersonalRepository.RemoveByIdAsync(data.ID);
             if(!resultAction) return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
-            var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: p => p.ID == userId);
-            if(user is null) return result.SetStatus(false).SetErr("User Not Found").SetMessage("Oturumunuz ile ilgili bir problem olabilir. Lütfen Sisteme tekrar giriş yapınız!");
             await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
             {
                 EntityName = "TransferPersonals",
                 LogType = LogType.Delete,
-                Description = $"{user.Username} tarafından {data.Personal.NameSurname} adlı personele ait görevlendirme kaydı silindi.",
+                Description = $"{data.Personal.NameSurname} adlı personele ait görevlendirme kaydı silindi.",
                 IpAddress = ipAddress,
-                UserID = user.ID,
+                UserID = userId,
             });
             var resultCommit = _unitOfWork.Commit();
             if (!resultCommit) return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");

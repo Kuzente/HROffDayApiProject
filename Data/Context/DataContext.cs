@@ -50,6 +50,6 @@ public class DataContext : DbContext
 		modelBuilder.Seed();
 	}
 
-	
+
 
 }

@@ -60,6 +60,7 @@ public class UnitOfWork : IUnitOfWork
 	public IWritePersonalCumulativeRepository WritePersonalCumulativeRepository { get; private set; }
 	public IReadPersonalCumulativeRepository ReadPersonalCumulativeRepository { get; private set; }
 	public IWriteUserLogRepository WriteUserLogRepository { get; private set; }
+	public IReadUserLogRepository ReadUserLogRepository { get; private set; }
 	
 
 	public UnitOfWork(DataContext context)
@@ -88,6 +89,7 @@ public class UnitOfWork : IUnitOfWork
 		ReadPersonalCumulativeRepository = new ReadPersonalCumulativeRepository(_context);
 		WritePersonalCumulativeRepository = new WritePersonalCumulativeRepository(_context);
 		WriteUserLogRepository = new WriteUserLogRepository(_context);
+		ReadUserLogRepository = new ReadUserLogRepository(_context);
 		_transaction = _context.Database.BeginTransaction();
 	}
 

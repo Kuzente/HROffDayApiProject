@@ -594,6 +594,10 @@ namespace Data.Migrations
                     b.Property<bool>("IsDefaultPassword")
                         .HasColumnType("bit");
 
+                    b.Property<string>("MailVerificationToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -607,6 +611,9 @@ namespace Data.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("TokenExpiredDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -618,15 +625,17 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            ID = new Guid("f5e22260-81ab-4d8f-9366-b7b724d4665a"),
-                            CreatedAt = new DateTime(2024, 7, 29, 20, 19, 8, 14, DateTimeKind.Local).AddTicks(7984),
+                            ID = new Guid("964311b4-df08-4216-be77-e6e4a87fe3fd"),
+                            CreatedAt = new DateTime(2024, 8, 3, 4, 13, 6, 829, DateTimeKind.Local).AddTicks(2610),
                             DeletedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "superadmin@superadmin.com",
                             IsDefaultPassword = true,
-                            ModifiedAt = new DateTime(2024, 7, 29, 20, 19, 8, 14, DateTimeKind.Local).AddTicks(7992),
+                            MailVerificationToken = "-",
+                            ModifiedAt = new DateTime(2024, 8, 3, 4, 13, 6, 829, DateTimeKind.Local).AddTicks(2621),
                             Password = "superadmin",
                             Role = 3,
                             Status = 0,
+                            TokenExpiredDate = new DateTime(9999, 12, 31, 23, 59, 59, 999, DateTimeKind.Unspecified).AddTicks(9999),
                             Username = "superadmin"
                         });
                 });

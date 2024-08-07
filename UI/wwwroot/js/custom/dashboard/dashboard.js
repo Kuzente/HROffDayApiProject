@@ -428,7 +428,6 @@
             type:"GET",
             url: approvedUrl
         }).done(function (res) {
-            console.log(res)
             $('#approvedOffDaySpinner').hide();
             if (res.length > 0){
                 res.forEach(data=> {

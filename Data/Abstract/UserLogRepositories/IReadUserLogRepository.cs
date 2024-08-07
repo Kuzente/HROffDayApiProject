@@ -1,6 +1,8 @@
-﻿namespace Data.Abstract.UserLogRepositories;
+﻿using Core.Entities;
 
-public interface IReadUserLogRepository
+namespace Data.Abstract.UserLogRepositories;
+
+public interface IReadUserLogRepository : IReadRepository<UserLog>
 {
     
 }
