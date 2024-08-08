@@ -1,13 +1,11 @@
 using System.Text.Json.Serialization;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.OData;
 using QuestPDF.Infrastructure;
 using Services;
 using Services.HangfireFilter;
 using UI.Middlewares;
-using UI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();

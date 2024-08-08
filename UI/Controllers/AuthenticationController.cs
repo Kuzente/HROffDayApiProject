@@ -108,10 +108,10 @@ public class AuthenticationController : BaseController
         ResetLoginRequests();
         List<Claim> userClaims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier,res.Data.ID.ToString()),
-            new Claim(ClaimTypes.Name,res.Data.Username),
-            new Claim(ClaimTypes.Email,res.Data.Email),
-            new Claim(ClaimTypes.Role, res.Data.Role.ToString())
+            new(ClaimTypes.NameIdentifier,res.Data.ID.ToString()),
+            new(ClaimTypes.Name,res.Data.Username),
+            new(ClaimTypes.Email,res.Data.Email),
+            new(ClaimTypes.Role, res.Data.Role.ToString())
         };
         var claimsIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
         var authProperties = new AuthenticationProperties

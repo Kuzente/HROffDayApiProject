@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using System.Security.Claims;
-using Core;
 using Core.Enums;
-using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Services.Abstract.PersonalServices;
 using Services.Abstract.UserServices;
@@ -49,7 +46,7 @@ namespace UI.Controllers
         public async Task<IActionResult> PostCumulativeNotification(Guid id)
         {
             if (!GetClientUserId().HasValue) return Redirect("/404");
-            var result = await _writePersonalService.UpdatePersonalCumulativeNotificationAsyncService(id,GetClientUserId().Value,GetClientIpAddress());
+            var result = await _writePersonalService.UpdatePersonalCumulativeNotificationAsyncService(id,GetClientUserId()!.Value,GetClientIpAddress());
             return Ok(result);
         }
         

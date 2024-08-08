@@ -1,13 +1,10 @@
-﻿using System.Security.Claims;
-using Core;
+﻿using Core;
 using Core.DTOs;
 using Core.DTOs.BranchDTOs;
-using Core.Entities;
 using Core.Enums;
 using Core.Interfaces;
 using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.BranchServices;
 using Services.ExcelDownloadServices.BranchServices;
@@ -70,7 +67,7 @@ namespace UI.Controllers
             else
             { 
                 if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
-                result = await _writeBranchService.AddAsync(dto,GetClientUserId().Value,GetClientIpAddress()); 
+                result = await _writeBranchService.AddAsync(dto,GetClientUserId()!.Value,GetClientIpAddress()); 
             }
             
             return Ok(result);
@@ -90,7 +87,7 @@ namespace UI.Controllers
             else
             {
                 if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
-                result = await _writeBranchService.UpdateAsync(dto.Data,GetClientUserId().Value,GetClientIpAddress());
+                result = await _writeBranchService.UpdateAsync(dto.Data,GetClientUserId()!.Value,GetClientIpAddress());
             }
            
             return Ok(result);
@@ -103,7 +100,7 @@ namespace UI.Controllers
         public async Task<IActionResult> ArchiveBranch(Guid id, string returnUrl)
         {
             if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
-            var result = await _writeBranchService.DeleteAsync(id,GetClientUserId().Value,GetClientIpAddress());
+            var result = await _writeBranchService.DeleteAsync(id,GetClientUserId()!.Value,GetClientIpAddress());
             return Ok(result);
         }
         /// <summary>
@@ -123,10 +120,8 @@ namespace UI.Controllers
                 response.Headers.Add("Content-Disposition", "attachment; filename=Subeler.xlsx");
                 await response.Body.WriteAsync(excelData, 0, excelData.Length);
                 return new EmptyResult();
-                // _toastNotification.AddSuccessToastMessage("Başarılı", new ToastrOptions { Title = "Başarılı" });
             }
             
-            // _toastNotification.AddErrorToastMessage(result.Message, new ToastrOptions { Title = "Hata" });
             return Redirect(returnUrl);
         }
 		
