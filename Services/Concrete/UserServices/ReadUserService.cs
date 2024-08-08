@@ -193,7 +193,7 @@ public class ReadUserService : IReadUserService
 	    try
 	    {
 		    var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: d => d.Email == dto.Email,include:a=>a.Include(b=>b.BranchUsers).ThenInclude(c=>c.Branch));             
-		    if (user is null || _passwordCryptoHelper.DecryptString(user.Password) != dto.Password)//TODO         
+		    if (user is null || _passwordCryptoHelper.DecryptString(user.Password) != dto.Password)         
 				return result.SetStatus(false).SetErr("Not Found User").SetMessage("Lütfen girmiş olduğun eposta veya şifrenizi kontrol ediniz.");
 		    if (user.Status == EntityStatusEnum.Offline) return result.SetStatus(false).SetErr("The User is Banned").SetMessage("Bu bilgilere sahip üyelik pasif duruma alınmıştır.Bir hata olduğunu düşünüyorsanız yetkili ile iletişime geçiniz.");
 		    if((user.Role is UserRoleEnum.BranchManager or  UserRoleEnum.Director) && !user.BranchUsers.Any(a => a.Branch.Status == EntityStatusEnum.Online)) return result.SetStatus(false).SetErr("The User Branches Offline").SetMessage("Bu üyeliğe ait şubeler kapatılmış veya pasife alınmış olabilir.Lütfen yetkili ile iletişime geçiniz.");
