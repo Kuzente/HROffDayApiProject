@@ -71,7 +71,25 @@ public class WriteDailyCounterService : IWriteDailyCounterService
                                         ? "Personel 18 yaşından küçük olduğu için 20 gün eklendi"
 										: "Personel İyaş Bünyesinde Emekli olduğu için 20 gün eklendi";
                                 break;
-                            case >= 1 and <= 5:
+							case >= 1 when (yearsSinceBirth >= 50):
+                                if (yearsSinceStart < 15)
+                                {
+									personalCumulative.EarnedYearLeave = 20;
+									personalCumulative.RemainYearLeave = 20;
+									a.TotalYearLeave += 20;
+									log.AddedYearLeave = 20;
+									log.AddedYearLeaveDescription = $"50 yaşından büyük ve {yearsSinceStart} yıl hizmet süresi olduğu için 20 gün eklendi";
+								}
+                                else
+                                {
+									personalCumulative.EarnedYearLeave = 26;
+									personalCumulative.RemainYearLeave = 26;
+									a.TotalYearLeave += 26;
+									log.AddedYearLeave = 26;
+									log.AddedYearLeaveDescription = $"50 yaşından büyük ve {yearsSinceStart} yıl hizmet süresi olduğu için 26 gün eklendi";
+								}
+								break;
+							case >= 1 and <= 5:
                                 a.TotalYearLeave += 14;
                                 personalCumulative.EarnedYearLeave = 14;
                                 personalCumulative.RemainYearLeave = 14;

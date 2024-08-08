@@ -10,10 +10,8 @@ using UI.Middlewares;
 using UI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-// Add services to the container.
 builder.Services.AddControllersWithViews();
-var webHostEnvironment = builder.Services.BuildServiceProvider().GetService<IWebHostEnvironment>();
-builder.Configuration.GetSection("RootPath").Value = webHostEnvironment.WebRootPath;
+builder.Configuration.GetSection("RootPath").Value = builder.Environment.WebRootPath;
 
 QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

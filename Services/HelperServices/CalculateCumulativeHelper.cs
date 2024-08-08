@@ -31,23 +31,54 @@ public static class CalculateCumulativeHelper
                         cumulativeString += "20+";
                     } 
                 }
+                else if (age is >=50 )
+                {
+                    if (calisilanYil < 15)
+                    {
+						if (iseBaslamaKontrolDate < oldControlYear)
+						{
+							cumulativeString += "18+";
+						}
+						else
+						{
+							cumulativeString += "20+";
+						}
+					}
+                    else
+                    {
+						if (iseBaslamaKontrolDate < oldControlYear)
+						{
+							cumulativeString += "24+";
+						}
+						else
+						{
+							cumulativeString += "26+";
+						}
+					}
+                }
                 else
                 {
-                    if (calisilanYil <= 5) {
-                        if (iseBaslamaKontrolDate < oldControlYear){
+                    if (calisilanYil <= 5)
+                    {
+                        if (iseBaslamaKontrolDate < oldControlYear)
+                        {
                             cumulativeString += "12+";
                         }
-                        else{
+                        else
+                        {
                             cumulativeString += "14+";
                         }
-                    } else if (calisilanYil < 15) {
-                        if (iseBaslamaKontrolDate < oldControlYear){
+                    }
+                    else if (calisilanYil < 15)
+                    {
+                        if (iseBaslamaKontrolDate < oldControlYear)
+                        {
                             cumulativeString += "18+";
                         }
-                        else{
+                        else
+                        {
                             cumulativeString += "20+";
                         }
-                        
                     }
                     else
                     {
