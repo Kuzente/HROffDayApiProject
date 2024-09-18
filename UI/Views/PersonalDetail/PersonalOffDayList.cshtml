@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ResultWithPagingDataDto<List<ReadPersonalOffDayListDto>>
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Personele Ait İzinler";
     Layout = "_Layout";
     var sayfa = Convert.ToInt32(Context.Request.Query["sayfa"]);
     var returnUrl = Context.Request.GetDisplayUrl();

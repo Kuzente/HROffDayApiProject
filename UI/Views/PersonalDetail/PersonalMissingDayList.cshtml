@@ -1,7 +1,7 @@
 ﻿@model ResultWithPagingDataDto<List<Core.DTOs.MissingDayDtos.ReadDtos.ReadMissingDayDto>>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Personel Eksik Gün";
     Layout = "_Layout";
     var sayfa = Convert.ToInt32(Context.Request.Query["sayfa"]);
     var returnUrl = Context.Request.GetDisplayUrl();
@@ -311,7 +311,10 @@ else
                         <tr>
                             <th>Adı Soyadı</th>
                             <th>TC Kimlik</th>
-                            <th>Şube</th>
+                            <th>
+                                @*<button class="table-sort" data-sort="sort-branchName">Şube</button>*@
+                                Şube
+                            </th>
                             <th>
                                 <button class="table-sort" data-sort="sort-startOffDayDate">İzin Başlangıç Tarihi</button>
                             </th>

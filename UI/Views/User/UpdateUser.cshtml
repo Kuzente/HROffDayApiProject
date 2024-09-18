@@ -3,12 +3,7 @@
 @model IResultWithDataDto<Core.DTOs.UserDtos.ReadDtos.ReadUpdateUserDto>
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
-}
-
-@{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Kullanıcı Güncelle";
     Layout = "_Layout";
 }
 @if (!Model.IsSuccess)
@@ -30,17 +25,13 @@ else
                     <div class="col">
                         <!-- Page pre-title -->
                         <h2 class="page-title">
-                            Şube Düzenle
+                            Kullanıcı Güncelle
                         </h2>
                     </div>
                     <!-- Page title actions -->
                     <div class="col-auto ms-auto d-print-none">
                         <div class="btn-list">
-                            <span class="d-none d-sm-inline">
-                                <a href="/deneme-url?returnUrl=@ViewData["ReturnUrl"]" class="btn">
-                                    Boş Kutu
-                                </a>
-                            </span>
+                            
 
                             <button id="submitButton" type="button" class="btn btn-warning text-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">

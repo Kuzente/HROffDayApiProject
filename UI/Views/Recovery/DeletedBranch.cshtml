@@ -1,7 +1,7 @@
 ﻿@using Core.Enums
 @model ResultWithPagingDataDto<List<BranchDto>>
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Silinen Şubeler";
     Layout = "_Layout";
     var sayfa = Convert.ToInt32(Context.Request.Query["sayfa"]);
     var returnUrl = Context.Request.QueryString.ToString();

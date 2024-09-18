@@ -117,7 +117,7 @@ public class AuthenticationController : BaseController
         var authProperties = new AuthenticationProperties
         {
             IsPersistent = true, // remember me 
-            ExpiresUtc = DateTime.UtcNow.AddMinutes(120) // Cookie'nin 30 dakika sonra geçerliliğini yitir
+            ExpiresUtc = DateTime.UtcNow.AddHours(10) // Cookie'nin 30 dakika sonra geçerliliğini yitir
         };
         await HttpContext.SignOutAsync();
         await HttpContext.SignInAsync(

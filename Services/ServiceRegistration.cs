@@ -80,6 +80,7 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(TransferPersonalExcelExport));
 		services.AddScoped(typeof(TransferPersonalListExcelExport));
 		services.AddScoped(typeof(MissingDayPersonalExcelExport));
+		services.AddScoped(typeof(MissingDayPersonalListExcelExport));
 		services.AddScoped(typeof(PersonalCountExcelExport));
 		services.AddScoped(typeof(ExcelUploadScheme));
 		#endregion

@@ -47,6 +47,11 @@ public class DataContext : DbContext
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
 		base.OnModelCreating(modelBuilder);
+		modelBuilder.Entity<MissingDay>()
+			.HasOne(m => m.Branch)
+			.WithMany(b => b.MissingDays)
+			.HasForeignKey(m => m.Branch_Id)
+			.OnDelete(DeleteBehavior.Restrict);
 		modelBuilder.Seed();
 	}
 

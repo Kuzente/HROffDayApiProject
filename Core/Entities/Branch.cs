@@ -13,5 +13,6 @@ public class Branch : BaseEntity
 	[PropertyField(PropertyName = "Personeller",PropertyType = PropertyTypeEnum.Class,IsShow = false)]
 	public ICollection<Personal> Personals{ get; set; }
 	public ICollection<BranchUser> BranchUsers { get; set; }
+	public ICollection<MissingDay> MissingDays{ get; set; }
 	
 }

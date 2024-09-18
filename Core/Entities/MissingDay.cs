@@ -15,6 +15,8 @@ public class MissingDay : BaseEntity
     public string Reason { get; set; }
     [Required]
     public Guid Branch_Id { get; set; }
+    [ForeignKey(nameof(Branch_Id))]
+	public Branch Branch { get; set; }
     [Required]
     public Guid Personal_Id { get; set; }
     [ForeignKey(nameof(Personal_Id))]

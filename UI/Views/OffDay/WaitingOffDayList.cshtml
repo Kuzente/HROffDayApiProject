@@ -4,7 +4,7 @@
 @model ResultWithPagingDataDto<List<ReadWaitingOffDayListDto>>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Bekleyen İzinler";
     Layout = "_Layout";
     var sayfa = Convert.ToInt32(Context.Request.Query["sayfa"]);
     var returnUrl = Context.Request.GetDisplayUrl();

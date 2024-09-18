@@ -1,6 +1,6 @@
 ﻿@model ResultWithPagingDataDto<List<PersonalDto>>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Aktif Personeller";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var sayfa = Convert.ToInt32(Context.Request.Query["sayfa"]);
     var returnUrl = Context.Request.QueryString.ToString();

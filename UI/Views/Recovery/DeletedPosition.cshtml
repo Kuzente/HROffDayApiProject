@@ -2,7 +2,7 @@
 @model ResultWithPagingDataDto<List<PositionDto>>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Silinen Ünvanlar";
     Layout = "_Layout";
     var sayfa = Convert.ToInt32(Context.Request.Query["sayfa"]);
     var returnUrl = Context.Request.QueryString.ToString();

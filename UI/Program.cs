@@ -15,7 +15,7 @@ QuestPDF.Settings.License = LicenseType.Community;
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(180);
+        options.ExpireTimeSpan = TimeSpan.FromHours(10);
         options.SlidingExpiration = true;
         options.LoginPath = "/giris-yap";
         options.Cookie.Name = "user";
@@ -24,7 +24,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 builder.Services.AddSession(options =>
 {
-    options.Cookie.MaxAge = TimeSpan.FromMinutes(180);
+    options.Cookie.MaxAge = TimeSpan.FromHours(10);
     options.Cookie.HttpOnly = true;
 });
 builder.Services.AddControllers().AddJsonOptions(opt =>
@@ -35,18 +35,20 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
     conf.EnableQueryFeatures();
 });
 //Test DB
-builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("NewMssql"),builder.Configuration.GetConnectionString("NewMssql"));
+var connectionString = builder.Environment.IsDevelopment()
+	? builder.Configuration.GetConnectionString("Local")
+	: builder.Configuration.GetConnectionString("SomeeConnection");
+builder.Services.AddServiceLayerService(connectionString, connectionString);
 //Test DB
-//builder.Services.AddServiceLayerService(builder.Configuration.GetConnectionString("Mssql"), builder.Configuration.GetConnectionString("Mssql"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+	app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
 //app.UseExceptionHandler("/404");//TODO
 app.UseHttpsRedirection();
 app.UseStaticFiles();

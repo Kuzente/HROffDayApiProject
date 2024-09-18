@@ -1,6 +1,6 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
-    let selectMonth = new TomSelect($('select[name="filterMonth"]'))
-    let selectYear = new TomSelect($('select[name="filterYear"]'))
+    let selectMonth = new TomSelect($('select[name="filterMonth"]'));
+    let selectYear = new TomSelect($('select[name="filterYear"]'));
     let searchParams = new URLSearchParams(window.location.search);
     //Arama Kısmı metod
     if (searchParams.has("search")) {
@@ -22,7 +22,7 @@
     if (searchParams.has("filterYear")) {
         selectYear.setValue(searchParams.get('filterYear'))
     }
-    $('button[data-sort]').click(function () {
+    $('button[data-sort]').click(function() {
         let $btn = $(this)
         let sortValue = $btn.data('sort').split('-')[1];
         let sortOrder = 'asc';
@@ -32,7 +32,7 @@
         searchParams.set('sortName', sortValue);
         searchParams.set('sortBy', sortOrder);
         window.location.href = window.location.pathname + '?' + searchParams.toString()
-    })
+    });
     $('[data-firstButton]').on('click', function () {
         let currentUrl = new URL(window.location.href);
         let pageParam = currentUrl.searchParams.get("sayfa");

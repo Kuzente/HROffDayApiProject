@@ -1,4 +1,6 @@
-﻿namespace Core.DTOs.MissingDayDtos.ReadDtos;
+﻿using Core.Enums;
+
+namespace Core.DTOs.MissingDayDtos.ReadDtos;
 
 public class ReadMissingDayDto
 {
@@ -12,4 +14,6 @@ public class ReadMissingDayDto
     public Guid Branch_Id { get; set; }
     public string BranchName { get; set; }
     public DateTime CreatedAt { get; set; }
+    public EntityStatusEnum PersonalStatus { get; set; }
+    public Guid Personal_Id { get; set; }
 }

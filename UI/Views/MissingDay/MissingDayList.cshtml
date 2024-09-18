@@ -1,6 +1,6 @@
-﻿@model ResultWithPagingDataDto<List<ReadTransferPersonalDto>>
+﻿@model ResultWithPagingDataDto<List<ReadMissingDayDto>>
 @{
-    ViewData["Title"] = "Görevlendirmeler";
+    ViewData["Title"] = "Eksik Günler";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var sayfa = Convert.ToInt32(Context.Request.Query["sayfa"]);
     var maxVisiblePages = 5;
@@ -8,7 +8,6 @@
     var endPage = Math.Min(Model.TotalPages, startPage + (maxVisiblePages - 1));
     var returnUrl = Context.Request.GetDisplayUrl();
 }
-
 <div class="page-header d-print-none">
     <div class="container-xl">
         <div class="row g-2 align-items-center">
@@ -18,21 +17,31 @@
                     IYAŞ PANEL
                 </div>
                 <h2 class="page-title">
-                    Görevlendirmeler
+                    Eksik Günler
                 </h2>
             </div>
             <!-- Page title actions -->
             <div class="col-auto ms-auto d-print-none">
                 <div class="btn-list">
-                    <form id="branchExcelForm" method="post" action="/gorevlendirmeler-excel?returnUrl=@returnUrl">
+                    <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#addModal">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M12 5l0 14"></path>
+                            <path d="M5 12l14 0"></path>
+                        </svg>
+                        Eksik Gün Ekle
+                    </a>
+                    <form id="missingDayExcelForm" method="post" action="/eksik-gunler-excel?returnUrl=@returnUrl">
                         <span class="d-none d-sm-inline">
                             <input type="hidden" name="search" value="@Context.Request.Query["search"]">
+                            <input type="hidden" name="filterBranch" value="@Context.Request.Query["filterBranch"]">
+                            <input type="hidden" name="filterReason" value="@Context.Request.Query["filterReason"]">
                             <input type="hidden" name="filterYear" value="@Context.Request.Query["filterYear"]">
                             <input type="hidden" name="filterMonth" value="@Context.Request.Query["filterMonth"]">
                             <input type="hidden" name="sortName" value="@Context.Request.Query["sortName"]">
                             <input type="hidden" name="sortBy" value="@Context.Request.Query["sortBy"]">
                             <input type="hidden" name="ReturnUrl" value="@returnUrl">
-                            <button id="transferListExcelButton" type="button" class="btn btn-green">
+                            <button id="missingDayExcelButton" type="button" class="btn btn-green">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-spreadsheet" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                     <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
@@ -46,7 +55,7 @@
 
                         </span>
                     </form>
-                   
+
                 </div>
             </div>
         </div>
@@ -72,7 +81,7 @@ else
                     <!-- Data Filter-->
                     <div class="row">
                         <div class="col-md-6">
-                            <form id="searchForm" class="d-flex" action="/gorevlendirmeler">
+                            <form id="searchForm" class="d-flex" action="/eksik-gunler">
                                 <input id="searchInput" class="form-control me-2" type="search" placeholder="Ara" name="search" aria-label="Search">
                                 <button class="btn btn-outline-primary" type="submit">Ara</button>
                             </form>
@@ -115,6 +124,18 @@ else
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div class="row mb-2">
+                                                <div class="col-6">
+                                                    <label class="form-label">Sebep Seçiniz</label>
+                                                    <select id="filterReason" name="filterReason" class="form-select" placeholder="Sebep Seçiniz">
+                                                    </select>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label">Şube Seçiniz</label>
+                                                    <select id="filterBranch" name="filterBranch" class="form-select" placeholder="Şube Seçiniz">
+                                                    </select>
+                                                </div>
+                                            </div>
                                             <div class="d-flex justify-content-end">
                                                 <button class="btn btn-outline-primary me-4 " type="submit">Filtrele</button>
                                             </div>
@@ -127,7 +148,7 @@ else
                         <div class="col-md-5">
                             @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && kvp.Key != "sortName" && kvp.Key != "sortBy" && !string.IsNullOrEmpty(kvp.Value)))
                             {
-                                <a href="/gorevlendirmeler" class="btn btn-outline-secondary ms-3">Temizle</a>
+                                <a href="/eksik-gunler" class="btn btn-outline-secondary ms-3">Temizle</a>
                             }
                         </div>
                         <!--Temizle Butonu-->
@@ -141,14 +162,14 @@ else
                 @if (Context.Request.Query.Any(kvp => kvp.Key != "sayfa" && kvp.Key != "sortName" && kvp.Key != "sortBy" && !string.IsNullOrEmpty(kvp.Value)))
                 {
                     <button type="button" class="btn">
-                        Filtrelenen Görevlendirmeler
+                        Filtrelenen Eksik Günler
                         <span class="badge bg-green ms-2">@Model.TotalRecords</span>
                     </button>
                 }
                 else
                 {
                     <button type="button" class="btn">
-                        Tüm Görevlendirmeler
+                        Tüm Eksik Günler
                         <span class="badge bg-green ms-2">@Model.TotalRecords</span>
                     </button>
                 }
@@ -160,44 +181,72 @@ else
             <table class="table card-table table-vcenter text-nowrap">
                 <thead>
                     <tr>
-                        <th><button class="table-sort" data-sort="sort-nameSurname">Adı-Soyadı</button></th>
-                        <th><button class="table-sort" data-sort="sort-oldBranch">Eski Şube</button></th>
-                        <th><button class="table-sort" data-sort="sort-newBranch">Yeni Şube</button></th>
-                        <th><button class="table-sort" data-sort="sort-oldPosition">Eski Ünvan</button></th>
-                        <th><button class="table-sort" data-sort="sort-newPosition">Yeni Ünvan</button></th>
-                        <th><button class="table-sort" data-sort="sort-createdAt">Nakil Tarihi</button></th>
+                        <th><button class="table-sort" data-sort="sort-nameSurname">Adı Soyadı</button></th>
+                        <th>TC Kimlik</th>
+                        <th>
+                            <button class="table-sort" data-sort="sort-branchName">Şube</button>
+                        </th>
+                        <th>
+                            <button class="table-sort" data-sort="sort-startOffDayDate">İzin Başlangıç Tarihi</button>
+                        </th>
+                        <th>
+                            <button class="table-sort" data-sort="sort-EndOffDayDate">İzin Bitiş Tarihi</button>
+                        </th>
+                        <th>
+                            <button class="table-sort" data-sort="sort-startJobDayDate">İşe Başlama Tarihi</button>
+                        </th>
+                        <th>
+                            <button class="table-sort" data-sort="sort-reason">Sebebi</button>
+                        </th>
+                        <th>
+                            <button class="table-sort" data-sort="sort-createdAt">Oluşturulma Tarihi</button>
+                        </th>
                         <th>Sil</th>
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
                     @foreach (var data in Model.Data)
                     {
-                        <tr>
+                        <tr @(data.PersonalStatus == EntityStatusEnum.Offline ? "class = bg-red-lt" : "")>
                             <td>
-                                @data.PersonalNameSurname
-                                
+                                @{
+                                    if (data.PersonalStatus == EntityStatusEnum.Offline)
+                                    {
+                                        <a href="/personel-detaylari?id=@data.Personal_Id">@($"{data.NameSurname} (İşten Çıkarılmış)") </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="/personel-detaylari?id=@data.Personal_Id">@data.NameSurname</a>
+                                    }
+                                }
+
                             </td>
                             <td>
-                                
-                                <span class="badge bg-grey">@data.OldBranch</span>
+                                @data.IdentificationNumber
                             </td>
                             <td>
-                                <span class="badge bg-success">@data.NewBranch</span>
-                                
+                                @data.BranchName
                             </td>
                             <td>
-                                <span class="badge bg-grey">@data.OldPosition</span>
-                                
+                                <span class="badge bg-grey">@data.StartOffdayDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
                             </td>
                             <td>
-                                <span class="badge bg-blue">@data.NewPosition</span>
-                                
+                                <span class="badge bg-grey">@data.EndOffDayDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
+
+                            </td>
+                            <td>
+                                <span class="badge bg-success">@(data.StartJobDate?.ToString("dd MMMM yyyy", new CultureInfo("tr-TR")) ?? "Belirtilmemiş")</span>
+                            </td>
+                            <td>
+                                @data.Reason
                             </td>
                             <td>
                                 <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
                             </td>
                             <td class="col-1">
-                                <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="@data.PersonalNameSurname">Sil</button>
+                                <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="@data.NameSurname">
+                                    Sil
+                                </button>
                             </td>
                         </tr>
                     }
@@ -262,7 +311,7 @@ else
         </div>
     </div>
     <!--DeleteModal-->
-    <form id="deleteForm" action="/personel-nakil-sil" method="post">
+    <form id="deleteForm" action="/personel-eksik-gun-sil" method="post">
         <div class="modal modal-blur fade" id="archiveModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -300,8 +349,61 @@ else
             </div>
         </div>
     </form>
+    <!--AddModal-->
+    <form id="addMissingDayForm" method="post" action="/personel-eksik-gun-ekle">
+        <div class="modal modal-blur fade" id="addModal" tabindex="-1" style=" padding-left: 0;" aria-hidden="true" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel1">Eksik Gün Ekle</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label class="form-label required">Personel Şubesi</label>
+                                <select id="addModalBranchInput" data-required="true" class="form-select" name="BranchName" placeholder="Şube Seçiniz">
+                                </select>
+                            </div>
+                        </div>
+                        <div id="addModalPersonalSelectRow" class="row">
+
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label class="form-label required">Eksik Gün Nedeni</label>
+                                <select id="addModalReasonInput" data-required="true" class="form-select" name="Reason" placeholder="Eksik Gün Nedeni">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label for="addModalStartOffdayInput" class="form-label required">İzin Başlangıç Tarihi</label>
+                                <input id="addModalStartOffdayInput" type="date" data-required="true" name="StartOffdayDate" class="form-control" placeholder="İzin Başlangıç Tarihi!">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label for="addModalEndOffdayInput" class="form-label required">İzin Bitiş Tarihi</label>
+                                <input id="addModalEndOffdayInput" type="date" data-required="true" name="EndOffDayDate" class="form-control" placeholder="İzin Bitiş Tarihi!">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label class="form-label">İşe Başlama Tarihi (İsteğe Bağlı)</label>
+                                <input id="addModalStartJobDateInput" type="date" data-required="false" name="StartJobDate" class="form-control" placeholder="İşe Başlama Tarihi!">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            Kapat
+                        </button>
+                        <button id="addMissingDayButton" type="submit" class="btn btn-primary">Eksik Gün Ekle</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
     @section Scripts {
-        <script src="/js/custom/transferPersonal/transferPersonalList.js"></script>
+        <script src="/js/custom/missingDay/missingDayList.js"></script>
     }
 }
-

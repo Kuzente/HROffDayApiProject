@@ -4,7 +4,7 @@
 @model IResultWithDataDto<ReadWaitingOffDayEditDto>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = Model.Data.OffDayStatus == OffDayStatusEnum.Approved ? "Onaylanan İzni Güncelle" : "Bekleyen İzni Düzenle";
     Layout = "_Layout";
 }
 

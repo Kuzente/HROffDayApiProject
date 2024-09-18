@@ -129,7 +129,7 @@
     $.ajax({
         type: "GET",
         url:"json/personal-selects-data.json",
-        dataType: 'json',
+        dataType: "json",
         success: function (data) {
             data.bloodGroup.forEach((item) => {
                 BloodGroupSelect.addOption({

@@ -1,7 +1,7 @@
 ﻿@model ResultWithPagingDataDto<List<Core.DTOs.TransferPersonalDtos.ReadDtos.ReadTransferPersonalDto>>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Personel Görevlendirmeler";
     Layout = "_Layout";
     var sayfa = Convert.ToInt32(Context.Request.Query["sayfa"]);
     var returnUrl = Context.Request.GetDisplayUrl();
