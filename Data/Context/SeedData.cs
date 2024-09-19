@@ -6,15 +6,16 @@ namespace Data.Context;
 
 public static class SeedData
 {
-    public static void Seed(this ModelBuilder modelBuilder)
+    public static void Seed(this ModelBuilder modelBuilder,string pass)
     {
+        var sss = 
         modelBuilder.Entity<User>().HasData(
             new User
             {
                 ID = Guid.NewGuid(),
                 Username = "superadmin",
                 Email = "superadmin@superadmin.com",
-                Password = "superadmin",
+                Password = pass,
                 Role = UserRoleEnum.SuperAdmin,
                 Status = EntityStatusEnum.Online,
                 CreatedAt = DateTime.Now,

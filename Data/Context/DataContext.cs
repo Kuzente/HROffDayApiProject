@@ -1,13 +1,17 @@
 ﻿using Core.Entities;
 using Core.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Data.Context;
 
 public class DataContext : DbContext
 {
-	public DataContext(DbContextOptions<DataContext> options) : base(options) { }
-
+	private readonly IConfiguration _configuration;
+	public DataContext(DbContextOptions<DataContext> options, IConfiguration configuration) : base(options)
+	{
+		_configuration = configuration;
+	}
 	public DbSet<Personal> Personals => Set<Personal>();
 	public DbSet<PersonalDetails> PersonalDetails => Set<PersonalDetails>();
 	public DbSet<Branch> Branches => Set<Branch>();
@@ -52,7 +56,7 @@ public class DataContext : DbContext
 			.WithMany(b => b.MissingDays)
 			.HasForeignKey(m => m.Branch_Id)
 			.OnDelete(DeleteBehavior.Restrict);
-		modelBuilder.Seed();
+		modelBuilder.Seed(_configuration.GetSection("SuperadminPass").Value);
 	}
 
 
