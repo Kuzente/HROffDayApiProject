@@ -10,6 +10,7 @@ using Data.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Services.Abstract.OffDayServices;
 using Services.HelperServices;
+using Services.TestMailServices;
 using System.Web;
 
 namespace Services.Concrete.OffDayServices;
@@ -18,13 +19,13 @@ public class WriteOffDayService : IWriteOffDayService
 {
 	private readonly IUnitOfWork _unitOfWork;
 	private readonly IMapper _mapper;
-	private readonly MailHelper _mailHelper;
+	private readonly IEmailService _emailService;
 
-	public WriteOffDayService(IUnitOfWork unitOfWork, IMapper mapper, MailHelper mailHelper)
+	public WriteOffDayService(IUnitOfWork unitOfWork, IMapper mapper,IEmailService emailService)
 	{
 		_unitOfWork = unitOfWork;
 		_mapper = mapper;
-		_mailHelper = mailHelper;
+		_emailService = emailService;
 	}
 	public async Task<IResultDto> AddOffDayService(WriteAddOffDayDto dto,Guid userId,string ipAddress)
 	{
@@ -72,14 +73,14 @@ public class WriteOffDayService : IWriteOffDayService
 				return result.SetStatus(false).SetErr("Mail Send Fail").SetMessage("Sistem üzerinde insan kaynakları bulunamadı");
 			foreach (var hr in hrEmpoyeeList)
             {
-				var mailHtml = _mailHelper.GetMailemplateHtml(
+				var mailHtml = await _emailService.GetMailemplateHtml(
 				  "waitingoffday",
 				  hr.Username,
 				  personal.NameSurname,
 				  getBranchManagerMail.User.Username,
 				  "şube sorumlusu",
 				  DateTime.Now);
-				var isMailSendSuccess = await _mailHelper.SendEmail(hr.Email, "İyaş Personel Takip Bekleyen İzin Onayı", mailHtml);
+				var isMailSendSuccess = await _emailService.SendEmailAsync(hr.Email, "İyaş Personel Takip Bekleyen İzin Onayı", mailHtml);
 				if (isMailSendSuccess is false || string.IsNullOrEmpty(mailHtml))
 					return result.SetStatus(false).SetErr("Mail Send Fail").SetMessage("Eposta Gönderilirken Bir Hata oluştu! Lütfen daha sonra tekrar deneyiniz...");
 			}
@@ -321,14 +322,14 @@ public class WriteOffDayService : IWriteOffDayService
 				include: p => p.Include(a => a.User));
 				if (getDirectorMail is null || getDirectorMail.User is null)
 					return result.SetStatus(false).SetErr("Director not found").SetMessage("Personele ait genel müdür aranırken bir hata oluştu!!");
-				var mailHtml = _mailHelper.GetMailemplateHtml(
+				var mailHtml = await _emailService.GetMailemplateHtml(
 					"waitingoffday",
 					getDirectorMail.User.Username,
 					offday.Personal.NameSurname,
 					offday.HrName,
 					"insan kaynakları",
 					DateTime.Now);
-				var isMailSendSuccess = await _mailHelper.SendEmail(getDirectorMail.User.Email, "İyaş Personel Takip Bekleyen İzin Onayı", mailHtml);
+				var isMailSendSuccess = await _emailService.SendEmailAsync(getDirectorMail.User.Email, "İyaş Personel Takip Bekleyen İzin Onayı", mailHtml);
 				if (isMailSendSuccess is false || string.IsNullOrEmpty(mailHtml))
 					return result.SetStatus(false).SetErr("Mail Send Fail").SetMessage("Eposta Gönderilirken Bir Hata oluştu! Lütfen daha sonra tekrar deneyiniz...");
 			}

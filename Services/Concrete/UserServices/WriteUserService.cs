@@ -10,6 +10,7 @@ using Data.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Services.Abstract.UserServices;
 using Services.HelperServices;
+using Services.TestMailServices;
 using System.Net;
 using System.Web;
 using static SkiaSharp.HarfBuzz.SKShaper;
@@ -21,14 +22,14 @@ public class WriteUserService : IWriteUserService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly PasswordCryptoHelper _passwordCryptoHelper;
-    private readonly MailHelper _mailHelper;
+    private readonly IEmailService _emailService;
 
-	public WriteUserService(IUnitOfWork unitOfWork, IMapper mapper, PasswordCryptoHelper passwordCryptoHelper, MailHelper mailHelper)
+	public WriteUserService(IUnitOfWork unitOfWork, IMapper mapper, PasswordCryptoHelper passwordCryptoHelper,IEmailService emailService)
 	{
 		_unitOfWork = unitOfWork;
 		_mapper = mapper;
 		_passwordCryptoHelper = passwordCryptoHelper;
-		_mailHelper = mailHelper;
+		_emailService = emailService;
 	}
 
 	public async Task<IResultDto> AddUserService(AddUserDto dto,Guid userId,string ipAddress)
@@ -83,15 +84,16 @@ public class WriteUserService : IWriteUserService
                 IpAddress = ipAddress,
                 UserID = userId,
             });
-            var mailHtml = _mailHelper.GetMailemplateHtml(
+            var mailHtml = await _emailService.GetMailemplateHtml(
                 "activation",
                 mappedResult.Username, 
                 HttpUtility.UrlEncode(_passwordCryptoHelper.EncryptString(mappedResult.MailVerificationToken)),
                 HttpUtility.UrlEncode(_passwordCryptoHelper.EncryptString(mappedResult.ID.ToString())),
 				HttpUtility.UrlEncode(_passwordCryptoHelper.EncryptString(mappedResult.Email)), 
                 mappedResult.TokenExpiredDate);
-            var isMailSendSuccess = await _mailHelper.SendEmail(mappedResult.Email, "İyaş Personel Takip Hesap Aktivasyonu", mailHtml);
-            if(isMailSendSuccess is false || string.IsNullOrEmpty(mailHtml))
+            var isMailSendSuccess = await _emailService.SendEmailAsync(mappedResult.Email, "İyaş Personel Takip Hesap Aktivasyonu", mailHtml);
+
+			if (isMailSendSuccess is false || string.IsNullOrEmpty(mailHtml))
 				return result.SetStatus(false).SetErr("Mail Send Fail").SetMessage("Eposta Gönderilirken Bir Hata oluştu! Lütfen daha sonra tekrar deneyiniz...");
 
 			var resultCommit = _unitOfWork.Commit();
@@ -289,14 +291,15 @@ public class WriteUserService : IWriteUserService
 				IpAddress = ipAddress,
 				UserID = user.ID,
 			});
-			var mailHtml = _mailHelper.GetMailemplateHtml(
+			var mailHtml = await _emailService.GetMailemplateHtml(
 				"forgotpassword",
 				user.Username,
 				HttpUtility.UrlEncode(_passwordCryptoHelper.EncryptString(user.MailVerificationToken)),
 				HttpUtility.UrlEncode(_passwordCryptoHelper.EncryptString(user.ID.ToString())),
 				HttpUtility.UrlEncode(_passwordCryptoHelper.EncryptString(user.Email)),
 				user.TokenExpiredDate);
-			var isMailSendSuccess = await _mailHelper.SendEmail(user.Email, "İyaş Personel Takip Şifre Sıfırla", mailHtml);
+			var isMailSendSuccess = await _emailService.SendEmailAsync(user.Email, "İyaş Personel Takip Şifre Sıfırla", mailHtml);
+
 			if (isMailSendSuccess is false || string.IsNullOrEmpty(mailHtml))
 				return res.SetStatus(false).SetErr("Mail Send Fail").SetMessage("Eposta Gönderilirken Bir Hata oluştu! Lütfen daha sonra tekrar deneyiniz...");
 			var resultCommit = _unitOfWork.Commit();

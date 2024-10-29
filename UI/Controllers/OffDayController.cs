@@ -249,7 +249,7 @@ public class OffDayController : BaseController
                 await response.Body.WriteAsync(excelData, 0, excelData.Length);
                 return new EmptyResult();
             }
-            catch (Exception e)
+            catch
             {
                 return Redirect(returnUrl);
             }

@@ -38,6 +38,7 @@ using Services.ExcelDownloadServices.TransferPersonalServices;
 using Services.HelperServices;
 using Services.PdfDownloadServices;
 using Services.ExcelDownloadServices.PersonalCountsServices;
+using Services.TestMailServices;
 
 namespace Services;
 
@@ -87,7 +88,7 @@ public static class ServiceRegistration
 		#region HelperClasses
 		services.AddSingleton(typeof(RecaptchaVerifyHelper));
 		services.AddScoped(typeof(PasswordCryptoHelper));
-		services.AddScoped(typeof(MailHelper));
+		services.AddScoped(typeof(IEmailService), typeof(EmailService));
 		#endregion
 		#region PdfServices
 		services.AddScoped(typeof(OffDayFormPdf));

@@ -37,7 +37,7 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
 //Test DB
 var connectionString = builder.Environment.IsDevelopment()
 	? builder.Configuration.GetConnectionString("Local")
-	: builder.Configuration.GetConnectionString("SomeeConnection");
+	: builder.Configuration.GetConnectionString("ProdDbConnection");
 builder.Services.AddServiceLayerService(connectionString, connectionString);
 //Test DB
 var app = builder.Build();
@@ -48,8 +48,8 @@ if (!app.Environment.IsDevelopment())
 	app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-
 //app.UseExceptionHandler("/404");//TODO
+app.UseHsts();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();

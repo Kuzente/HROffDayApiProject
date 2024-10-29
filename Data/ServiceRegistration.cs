@@ -63,5 +63,10 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(IWriteUserLogRepository),typeof(WriteUserLogRepository));
 		services.AddScoped(typeof(IReadUserLogRepository),typeof(ReadUserLogRepository));
 
+		//using var serviceProvider = services.BuildServiceProvider();
+		//using var scope = serviceProvider.CreateScope();
+		//var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+		//dbContext.Database.Migrate(); // Migration'ları uygular
+
 	}
 }

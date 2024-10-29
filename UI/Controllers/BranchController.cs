@@ -5,6 +5,7 @@ using Core.Enums;
 using Core.Interfaces;
 using Core.Querys;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstract.BranchServices;
 using Services.ExcelDownloadServices.BranchServices;
@@ -36,7 +37,7 @@ namespace UI.Controllers
 		public async Task<IActionResult> Index(BranchQuery query)
         {
             var resultSearch = await _readBranchService.GetBranchListService(query);
-            return View(resultSearch);
+			return View(resultSearch);
         }
         /// <summary>
         /// Şube Güncelle Sayfası

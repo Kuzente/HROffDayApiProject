@@ -192,7 +192,7 @@ public class ReadUserService : IReadUserService
 	    IResultWithDataDto<ReadUserSignInDto> result = new ResultWithDataDto<ReadUserSignInDto>();
 	    try
 	    {
-		    var pass = _passwordCryptoHelper.EncryptString(dto.Password);
+		    //var pass = _passwordCryptoHelper.EncryptString(dto.Password);
 		    var user = await _unitOfWork.ReadUserRepository.GetSingleAsync(predicate: d => d.Email == dto.Email,include:a=>a.Include(b=>b.BranchUsers).ThenInclude(c=>c.Branch));             
 		    if (user is null || _passwordCryptoHelper.DecryptString(user.Password) != dto.Password)         
 				return result.SetStatus(false).SetErr("Not Found User").SetMessage("Lütfen girmiş olduğun eposta veya şifrenizi kontrol ediniz.");
