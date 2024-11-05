@@ -26,7 +26,8 @@
     { "Name": "Mes.Tek.Lisesi", "Value": "Mes.Tek.Lisesi" },
     { "Name": "Ön Lisans", "Value": "Ön Lisans" },
     { "Name": "Lisans", "Value": "Lisans" },
-    { "Name": "Yüksek Lisans", "Value": "Yüksek Lisans" }
+    { "Name": "Yüksek Lisans", "Value": "Yüksek Lisans" },
+    {"Name": "Doktora","Value": "Doktora"}
   ],
   "maritalStatus": [
     { "Name": "Bekar", "Value": "Bekar" },
@@ -35,6 +36,7 @@
   ],
   "personalGroup": [
     { "Name": "Yönetici", "Value": "Yönetici" },
+    { "Name": "Üst", "Value": "Üst" },
     { "Name": "A Grup Üst Düzey", "Value": "A Grup Üst Düzey" },
     { "Name": "B Grup Müdür", "Value": "B Grup Müdür" },
     { "Name": "C Grup Müdür Yardımcısı", "Value": "C Grup Müdür Yardımcısı" },
@@ -211,6 +213,22 @@
     {
       "Name": "Part-Time",
       "Value": "Part-Time"
+    },
+    {
+      "Name": "Balık",
+      "Value": "Balık"
+    },
+    {
+      "Name": "Genel Koordinatör",
+      "Value": "Genel Koordinatör"
+    },
+    {
+      "Name": "Fatih Şubesi",
+      "Value": "Fatih Şubesi"
+    },
+    {
+      "Name": "Halife Sultan Şubesi",
+      "Value": "Halife Sultan Şubesi"
     }
   ]
 }

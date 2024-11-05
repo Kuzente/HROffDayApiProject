@@ -46,7 +46,6 @@ public class EmailService : IEmailService
 	{
 		try
 		{
-			bool isDevelopment = _hostEnvironment.IsDevelopment();
 			var smtpSection = _configuration.GetSection("SmtpOptions");
 			string host = smtpSection.GetSection("Host").Value;
 			int port = Convert.ToInt32(smtpSection.GetSection("Port").Value);
@@ -61,7 +60,7 @@ public class EmailService : IEmailService
 				Text = mailHtml,
 			};
 			using var smtp = new SmtpClient();
-			await smtp.ConnectAsync(host, port,isDevelopment ? SecureSocketOptions.StartTls : SecureSocketOptions.SslOnConnect);
+			await smtp.ConnectAsync(host, port, SecureSocketOptions.StartTls);
 			await smtp.AuthenticateAsync(username, password);
 			await smtp.SendAsync(email);
 			await smtp.DisconnectAsync(true);

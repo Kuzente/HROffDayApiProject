@@ -42,10 +42,11 @@ public class ReadExcelServices : IReadExcelServices
                 if (!Guid.TryParse(positionIdString, out var positionId))
                     return result.SetStatus(false).SetErr("PositionID format is not guid").SetMessage($"{row} satırında Ünvan Kodu Geçersiz Format!!!");
                 personel.Position_Id = positionId;
-                if (string.IsNullOrWhiteSpace(worksheet.Cells[row, 3].GetValue<string>()))
+                string nameSurname = worksheet.Cells[row, 3].GetValue<string>();
+				if (string.IsNullOrWhiteSpace(nameSurname))
                     return result.SetStatus(false).SetErr("Name is null or empty").SetMessage($"{row} satırında Ad Soyad atlanmış personel var!!!");
-                personel.NameSurname = worksheet.Cells[row, 3].GetValue<string>();
-                DateTime startJobDate;
+                personel.NameSurname = nameSurname;
+				DateTime startJobDate;
                 if (!DateTime.TryParseExact(worksheet.Cells[row, 4].Text, "yyyy-M-d", CultureInfo.InvariantCulture, DateTimeStyles.None, out startJobDate))
                 {
                     return result.SetStatus(false).SetErr("StartJobDate is null or empty").SetMessage($"{row} satırında İşe Başlama Tarihi atlanmış personel var!!!");
@@ -130,10 +131,16 @@ public class ReadExcelServices : IReadExcelServices
                 {
                     return result.SetStatus(false).SetErr("TotalYearLeave and Cumulative are not equal").SetMessage($"{row} satırında kullanılan yıllık izin toplam yıllık izin miktarından büyük!!!"); 
                 }
-                personel.TotalTakenLeave = worksheet.Cells[row, 33].GetValue<int>();
-                personel.FoodAid = worksheet.Cells[row, 34].GetValue<int>();
+                var totalTakenLeaveString = worksheet.Cells[row, 33].GetValue<string>();
+				if (!double.TryParse(totalTakenLeaveString, out var totaltakenleave))
+				{
+					return result.SetStatus(false).SetErr("Total Taken Leave format is not valid").SetMessage($"{row} satırında Toplam Alacak İzin formatı geçersiz.");
+				}
+                personel.TotalTakenLeave = totaltakenleave;
+				personel.FoodAid = worksheet.Cells[row, 34].GetValue<int>();
                 personel.FoodAidDate = worksheet.Cells[row, 35].GetValue<DateTime>().Year > 1000 ? worksheet.Cells[row, 35].GetValue<DateTime>() : personel.StartJobDate;
-                personelListesiDto.Add(personel);
+				personel.BirthDate = birthDate;
+				personelListesiDto.Add(personel);
             }
             if (personelListesiDto.Count <= 0)
                 return result.SetStatus(false).SetErr("Personal Count wrong").SetMessage("Excel Boş olamaz!!!");

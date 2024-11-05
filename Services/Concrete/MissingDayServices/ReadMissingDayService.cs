@@ -36,9 +36,13 @@ public class ReadMissingDayService : IReadMissingDayService
                     predicate: a =>
                         a.Personal_Id == query.id &&
                         (a.Status == EntityStatusEnum.Online) &&
-                        (!query.filterYear.HasValue || a.CreatedAt.Year == query.filterYear) &&
-                        (!query.filterMonth.HasValue || a.CreatedAt.Month == query.filterMonth ),
-                    //orderBy: p => p.OrderByDescending(a => a.CreatedAt)
+						(!query.filterYear.HasValue ||
+						a.EndOffDayDate.Year == query.filterYear ||
+						a.StartOffdayDate.Year == query.filterYear) &&
+						(!query.filterMonth.HasValue ||
+						a.EndOffDayDate.Month == query.filterMonth ||
+						a.StartOffdayDate.Month == query.filterMonth
+						),
                     orderBy: p =>
 					{
 						IOrderedQueryable<MissingDay> orderedquery;
@@ -119,8 +123,13 @@ public class ReadMissingDayService : IReadMissingDayService
                     predicate: a =>
                         a.Personal_Id == query.id &&
                         (a.Status == EntityStatusEnum.Online) &&
-                        (!query.filterYear.HasValue || a.CreatedAt.Year == query.filterYear) &&
-                        (!query.filterMonth.HasValue || a.CreatedAt.Month == query.filterMonth ),
+						(!query.filterYear.HasValue ||
+						a.EndOffDayDate.Year == query.filterYear ||
+						a.StartOffdayDate.Year == query.filterYear) &&
+						(!query.filterMonth.HasValue ||
+						a.EndOffDayDate.Month == query.filterMonth ||
+						a.StartOffdayDate.Month == query.filterMonth
+						),
                     orderBy: p =>
 					{
 						IOrderedQueryable<MissingDay> orderedquery;
@@ -199,8 +208,13 @@ public class ReadMissingDayService : IReadMissingDayService
 						(a.Personal.Status == EntityStatusEnum.Online || a.Personal.Status == EntityStatusEnum.Offline) &&
 						(a.Status == EntityStatusEnum.Online) &&
 						a.Branch.Status == EntityStatusEnum.Online &&
-						(!query.filterYear.HasValue || a.CreatedAt.Year == query.filterYear) &&
-						(!query.filterMonth.HasValue || a.CreatedAt.Month == query.filterMonth)&&
+						(!query.filterYear.HasValue ||
+						a.EndOffDayDate.Year == query.filterYear ||
+						a.StartOffdayDate.Year == query.filterYear) &&
+						(!query.filterMonth.HasValue ||
+						a.EndOffDayDate.Month == query.filterMonth ||
+						a.StartOffdayDate.Month == query.filterMonth
+						)&&
 						(string.IsNullOrEmpty(query.filterReason) || a.Reason.Contains(query.filterReason)) &&
 						(string.IsNullOrEmpty(query.filterBranch) || a.Branch_Id.ToString().Contains(query.filterBranch)) &&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower())),
@@ -275,8 +289,13 @@ public class ReadMissingDayService : IReadMissingDayService
 									(a.Personal.Status == EntityStatusEnum.Online || a.Personal.Status == EntityStatusEnum.Offline) &&
 									(a.Status == EntityStatusEnum.Online) &&
 									a.Branch.Status == EntityStatusEnum.Online &&
-									(!query.filterYear.HasValue || a.CreatedAt.Year == query.filterYear) &&
-									(!query.filterMonth.HasValue || a.CreatedAt.Month == query.filterMonth) &&
+									(!query.filterYear.HasValue ||
+									a.EndOffDayDate.Year == query.filterYear ||
+									a.StartOffdayDate.Year == query.filterYear) &&
+									(!query.filterMonth.HasValue ||
+									a.EndOffDayDate.Month == query.filterMonth ||
+									a.StartOffdayDate.Month == query.filterMonth
+									) &&
 									(string.IsNullOrEmpty(query.filterReason) || a.Reason.Contains(query.filterReason)) &&
 									(string.IsNullOrEmpty(query.filterBranch) || a.Branch_Id.ToString().Contains(query.filterBranch)) &&
 									(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower())),

@@ -101,7 +101,7 @@
             sendFilterBtn.removeClass('d-none')
             if (selectedEntityValue === "Personal") {
                 alertSection.append(`
-                        <div class="alert alert-info " role="alert">
+                        <div class="alert alert-warning " role="alert">
                                 <h4 class="alert-title">Bilgilendirme!</h4>
                                 <div class="text-secondary">
                                     Personeller Tablosunda yaptığınız filtreleme işlemlerinde varsayılan olarak:
@@ -110,7 +110,7 @@
                                         <li><b>Aktif</b> Şubeler</li>
                                         <li><b>Aktif</b> Ünvanlar</li>
                                     </ul>
-                                    üzerinde arama yapılmaktadır. Bunlar dışında bir arama yapmak isterseniz, lütfen filtre ekle bölümünden ilgili alanları seçiniz!
+                                     üzerinde arama yapılmaktadır. Bunlar dışında bir arama yapmak isterseniz, lütfen filtre ekle bölümünden ilgili alanları(<b>Personel Durumu veya Şube Durumu veya Ünvan Durumu</b>) seçiniz!
                                 </div>
                             </div>
                 `)
@@ -658,9 +658,25 @@
                         isFormValid = false;
                         return false;
                     }
-                    let minAmount = Math.min(amount1, amount2);
-                    let maxAmount = Math.max(amount1, amount2);
-                    odataFilters.push(`${selectedPropValue} ge ${minAmount} and ${selectedPropValue} le ${maxAmount}`);
+                    //let minAmount = Math.min(amount1, amount2);
+                    //let maxAmount = Math.max(amount1, amount2);
+                    //odataFilters.push(`${selectedPropValue} ge ${minAmount} and ${selectedPropValue} le ${maxAmount}`);
+                    if (selectedType === 'Date') {
+                        let date1 = new Date(amount1);
+                        let date2 = new Date(amount2);
+                        if (isNaN(date1) || isNaN(date2)) {
+                            $('#error-modal-message').text(`Lütfen geçerli bir tarih giriniz!`);
+                            $('#error-modal').modal('show');
+                            isFormValid = false;
+                            return false;
+                        }
+                        minAmount = date1 < date2 ? date1.toISOString() : date2.toISOString();
+                        maxAmount = date1 > date2 ? date1.toISOString() : date2.toISOString();
+                    } else {
+                        minAmount = Math.min(amount1, amount2);
+                        maxAmount = Math.max(amount1, amount2);
+                    }
+                    odataFilters.push(`(${selectedPropValue} ge ${minAmount} and ${selectedPropValue} le ${maxAmount})`);
                 } else {
                     let amount = $(this).find(selectedType === 'Date' ? 'input[name="Date"]' : 'input[name="Amount"]').val();
                     if (!amount) {

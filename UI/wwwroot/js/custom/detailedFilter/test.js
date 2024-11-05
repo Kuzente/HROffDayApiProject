@@ -101,7 +101,7 @@
             sendFilterBtn.removeClass('d-none')
             if (selectedEntityValue === "Personal") {
                 alertSection.append(`
-                        <div class="alert alert-info " role="alert">
+                        <div class="alert alert-warning " role="alert">
                                 <h4 class="alert-title">Bilgilendirme!</h4>
                                 <div class="text-secondary">
                                     Personeller Tablosunda yaptığınız filtreleme işlemlerinde varsayılan olarak:
@@ -110,7 +110,7 @@
                                         <li><b>Aktif</b> Şubeler</li>
                                         <li><b>Aktif</b> Ünvanlar</li>
                                     </ul>
-                                    üzerinde arama yapılmaktadır. Bunlar dışında bir arama yapmak isterseniz, lütfen filtre ekle bölümünden ilgili alanları seçiniz!
+                                    üzerinde arama yapılmaktadır. Bunlar dışında bir arama yapmak isterseniz, lütfen filtre ekle bölümünden ilgili alanları(<b>Personel Durumu veya Şube Durumu veya Ünvan Durumu</b>) seçiniz!
                                 </div>
                             </div>
                 `)
@@ -811,13 +811,14 @@
         }
     });
     
-    function createDynamicTable(odataQuery,resultCount) {
+    function createDynamicTable(odataQuery, resultCount) {
+        debugger;
         $('#results').addClass("card table-responsive m-5 mt-3")
         let table = '<table id="dynamicTable" class="table card-table table-vcenter text-nowrap"><thead><tr id="dynamic-headers"></tr></thead><tbody></tbody></table>';
         $('#results').html(table);
         let columns = []
         var headers = $('#dynamic-headers');
-        console.log(headers)
+        //console.log(headers)
         // Başlıkları ekleyin
         $('#propertiesViewSelect option:selected').each(function () {
             if ($(this).hasClass('personalDetailProp')) {

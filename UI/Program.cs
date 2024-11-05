@@ -1,29 +1,48 @@
+﻿using System.Text;
 using System.Text.Json.Serialization;
 using Hangfire;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
+using Microsoft.IdentityModel.Tokens;
 using QuestPDF.Infrastructure;
 using Services;
 using Services.HangfireFilter;
+using UI.Helpers;
 using UI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddControllersWithViews();
 builder.Configuration.GetSection("RootPath").Value = builder.Environment.WebRootPath;
-
+var jwtSettings = builder.Configuration.GetSection("JwtOptions");
+builder.Services.AddScoped<JwtHelper>();
 QuestPDF.Settings.License = LicenseType.Community;
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.ExpireTimeSpan = TimeSpan.FromHours(10);
-        options.SlidingExpiration = true;
-        options.LoginPath = "/giris-yap";
-        options.Cookie.Name = "user";
-        options.AccessDeniedPath = "/403";
+builder.Services.AddDistributedMemoryCache();
 
-    });
+JwtBearerEventHandlers.Initialize(builder.Configuration);
+builder.Services.AddAuthentication(options =>
+{
+	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+   .AddJwtBearer(options =>
+   {
+	   options.TokenValidationParameters = new TokenValidationParameters
+	   {
+		   ValidateIssuer = true,
+		   ValidateAudience = true,
+		   ValidateLifetime = true,
+		   ValidateIssuerSigningKey = true,
+		   ValidIssuer = jwtSettings["Issuer"],
+		   ValidAudience = jwtSettings["Audience"],
+		   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!))
+	   };
+	   options.Events = JwtBearerEventHandlers.CreateEvents();
+	   
+   });
 builder.Services.AddSession(options =>
 {
+    options.IdleTimeout = TimeSpan.FromHours(10);
     options.Cookie.MaxAge = TimeSpan.FromHours(10);
     options.Cookie.HttpOnly = true;
 });
@@ -41,22 +60,21 @@ var connectionString = builder.Environment.IsDevelopment()
 builder.Services.AddServiceLayerService(connectionString, connectionString);
 //Test DB
 var app = builder.Build();
-
+app.UseMiddleware<RequestCultureMiddleware>(); //Kültür middleware
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
 	app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-//app.UseExceptionHandler("/404");//TODO
-app.UseHsts();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseSession();
 app.UseRouting();
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseMiddleware<RoleUpdateMiddleware>();
+app.UseMiddleware<RoleUpdateMiddleware>(); //Rol Kontrol middleware eğer kullanıcı aktifken değişirse oturum sonlanıyor
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
 	Authorization = new[] { new HangfireAuthorizationFilter() }

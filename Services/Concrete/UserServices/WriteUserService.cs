@@ -63,7 +63,7 @@ public class WriteUserService : IWriteUserService
                 if(usersBranch is not null) return result.SetStatus(false).SetErr("Branch is already assigned").SetMessage("Girmiş olduğunuz şubeler içerisinde atanmış bir genel müdür zaten mevcut lütfen girdiğiniz şubeleri kontrol ediniz.");
             }
             // Bu kullanıcının şubelerini BranchUser tablosuna ekleyin
-            mappedResult.Password = _passwordCryptoHelper.GenerateEmailToken(mappedResult.Username);
+            mappedResult.Password = _passwordCryptoHelper.EncryptString(mappedResult.Username);
             mappedResult.MailVerificationToken = _passwordCryptoHelper.GenerateEmailToken(mappedResult.Email);
             mappedResult.TokenExpiredDate = DateTime.Now.AddDays(3);
             mappedResult.IsDefaultPassword = true;

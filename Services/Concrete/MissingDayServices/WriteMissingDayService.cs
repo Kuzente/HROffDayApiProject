@@ -23,7 +23,7 @@ public class WriteMissingDayService : IWriteMissingDayService
         IResultDto result = new ResultDto();
         try
         {
-            if(dto.StartOffdayDate >= dto.EndOffDayDate || (dto.StartJobDate.HasValue && dto.EndOffDayDate >= dto.StartJobDate.Value))
+            if(dto.StartOffdayDate > dto.EndOffDayDate || (dto.StartJobDate.HasValue && dto.EndOffDayDate >= dto.StartJobDate.Value))
                 return result.SetStatus(false).SetErr("Datetime Error").SetMessage("Lütfen Girdiğiniz Tarihleri Kontrol ediniz.");
             var queryPersonal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate: p =>
                 p.Status == EntityStatusEnum.Online &&

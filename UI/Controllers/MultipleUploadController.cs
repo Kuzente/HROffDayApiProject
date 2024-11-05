@@ -6,6 +6,7 @@ using Services.Abstract.ExcelServices;
 using Services.Abstract.PersonalServices;
 using Services.Abstract.PositionServices;
 using Services.ExcelDownloadServices;
+using UI.Helpers;
 
 namespace UI.Controllers;
 
@@ -52,9 +53,10 @@ public class MultipleUploadController : BaseController
     {
         var branches = await _readBranchService.GetAllJustNames();
         var positions = await _readPositionService.GetAllJustNames();
+        string personalStaticSelects = PersonalStaticSelectsConverter.JsonToString();
 
         byte[] excelData =
-            _excelUploadScheme.ExportToExcel(positions, branches); // Entity listesini Excel verisi olarak alın.
+            _excelUploadScheme.ExportToExcel(positions, branches , personalStaticSelects); // Entity listesini Excel verisi olarak alın.
 
         var response = HttpContext.Response;
         response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";

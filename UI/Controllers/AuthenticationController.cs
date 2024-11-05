@@ -1,4 +1,6 @@
-﻿using System.Security.Claims;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
 using Core;
 using Core.DTOs;
@@ -7,13 +9,15 @@ using Core.DTOs.UserDtos.ReadDtos;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Services.Abstract.UserServices;
 using Services.HelperServices;
+using UI.Helpers;
 using UI.Models;
 
 namespace UI.Controllers;
-
 public class AuthenticationController : BaseController
 {
     private const string LoginRequestsKey = "AdminLoginRequests"; // bu appsettings üzerinden gelecek
@@ -21,16 +25,18 @@ public class AuthenticationController : BaseController
     private readonly RecaptchaVerifyHelper _recaptchaVerifyHelper;
     private readonly IReadUserService _readUserService;
     private readonly IWriteUserService _writeUserService;
+	private readonly JwtHelper _jwtHelper;
 
-	public AuthenticationController(RecaptchaVerifyHelper recaptchaVerifyHelper, IReadUserService readUserService, IConfiguration configuration, IWriteUserService writeUserService)
+	public AuthenticationController(RecaptchaVerifyHelper recaptchaVerifyHelper, IReadUserService readUserService, IConfiguration configuration, IWriteUserService writeUserService, JwtHelper jwtHelper)
 	{
 		_recaptchaVerifyHelper = recaptchaVerifyHelper;
 		_readUserService = readUserService;
 		_configuration = configuration;
 		_writeUserService = writeUserService;
+		_jwtHelper = jwtHelper;
 	}
 
-    #region ViewActions
+	#region ViewActions
 	public IActionResult Login()
 	{
 		if (HttpContext.User.Identity.IsAuthenticated)
@@ -49,7 +55,7 @@ public class AuthenticationController : BaseController
 	public async Task<IActionResult> NewPassword(ConfirmForgotPassDto dto)
 	{
 		if (HttpContext.User.Identity.IsAuthenticated)
-			return Redirect("/");
+			return Redirect("/");//todo
 		var result = await _writeUserService.ForgotPasswordConfirmEmailService(dto);
 		ViewBag.sitekey = _configuration["reCAPTCHA:sitekey"];
 		return View(result);
@@ -106,29 +112,30 @@ public class AuthenticationController : BaseController
              return Ok(res);
          }
         ResetLoginRequests();
-        List<Claim> userClaims = new List<Claim>
-        {
-            new(ClaimTypes.NameIdentifier,res.Data.ID.ToString()),
-            new(ClaimTypes.Name,res.Data.Username),
-            new(ClaimTypes.Email,res.Data.Email),
-            new(ClaimTypes.Role, res.Data.Role.ToString())
-        };
-        var claimsIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var authProperties = new AuthenticationProperties
-        {
-            IsPersistent = true, // remember me 
-            ExpiresUtc = DateTime.UtcNow.AddHours(10)
-        };
-        await HttpContext.SignOutAsync();
-        await HttpContext.SignInAsync(
-            CookieAuthenticationDefaults.AuthenticationScheme,
-            new ClaimsPrincipal(claimsIdentity),
-            authProperties);
-        return Ok(res);
+		// JWT oluştur
+		List<Claim> userClaims = new List<Claim>
+		{
+			new(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+			new(ClaimTypes.NameIdentifier,res.Data.ID.ToString()),
+			new(ClaimTypes.Name,res.Data.Username),
+			new(ClaimTypes.Email,res.Data.Email),
+			new(ClaimTypes.Role, res.Data.Role.ToString())
+		};
+		var token = _jwtHelper.GenerateJwtToken(userClaims);
+		// JWT'yi HTTP-Only ve Secure cookie olarak sakla
+		var cookieOptions = new CookieOptions
+		{
+			HttpOnly = true,
+			Secure = true, // HTTPS gerektirir
+			Expires = DateTime.Now.AddHours(Convert.ToDouble(_configuration["JwtOptions:ExpirePerHour"])),
+			SameSite = SameSiteMode.Strict,
+		};
+		Response.Cookies.Append(_configuration["JwtOptions:JwtCookieName"]!, token, cookieOptions);
+		return Ok(res);
     }
     public async Task<IActionResult> Logout()
     {
-        await HttpContext.SignOutAsync();
+		Response.Cookies.Delete(_configuration["JwtOptions:JwtCookieName"]!);
         return Redirect("/giris-yap");
     }
     #region Private Methods
@@ -172,5 +179,7 @@ public class AuthenticationController : BaseController
 
         HttpContext.Session.SetString(LoginRequestsKey, JsonSerializer.Serialize(adminLoginRequests));
     }
-    #endregion
+	#endregion
+
+	
 }

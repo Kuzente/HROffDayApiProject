@@ -158,7 +158,7 @@
         //Alacak İzin Saat bazından güne cevirme metodu
         function saatleriGunVeSaatlereCevir(saat) {
             // Toplam saatleri gün ve saatlere çevir
-            let gun = Math.floor(saat / 8);
+            let gun = saat >= 0 ? Math.floor(saat / 8) : Math.ceil(saat / 8);
             let kalanSaat = saat % 8;
 
             // Sonucu döndür
@@ -487,6 +487,8 @@
         updateButton.on('click', function () {
             spinnerStart(updateButton)
             let formData = $("#updatePersonalForm").serializeArray();
+            console.log(formData)
+            debugger;
             let foodAidValue = formData.find(item => item.name === "FoodAid").value
             if (!checkRequiredFields()) {
                 spinnerEnd(updateButton)
