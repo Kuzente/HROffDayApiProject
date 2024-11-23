@@ -154,11 +154,11 @@ public class WriteDailyCounterService : IWriteDailyCounterService
          IResultDto result = new ResultDto();
         try
         {
-            var todayStartPersonals =  _unitOfWork.ReadPersonalRepository.GetAll(
+            var todayStartPersonals =  await _unitOfWork.ReadPersonalRepository.GetAll(
                 predicate: p =>
                     p.FoodAidDate.Month == DateTime.UtcNow.AddHours(3).Month && 
                     p.FoodAidDate.Day == DateTime.UtcNow.AddHours(3).Day &&
-                    p.Status == EntityStatusEnum.Online).ToList();
+                    p.Status == EntityStatusEnum.Online).ToListAsync();
             if (!todayStartPersonals.Any())
             {
                 var log = new DailyFoodLog
@@ -177,7 +177,7 @@ public class WriteDailyCounterService : IWriteDailyCounterService
             else
             {
                 var logList = new List<DailyFoodLog>();
-                todayStartPersonals.ForEach(a =>
+                var tasks = todayStartPersonals.Select(async a =>
                 {
                     var log = new DailyFoodLog();
                     int yearsSinceStart = (int)((DateTime.UtcNow.AddHours(3) - a.FoodAidDate).TotalDays / 365);
@@ -197,14 +197,14 @@ public class WriteDailyCounterService : IWriteDailyCounterService
                             log.AddedFoodAidAmountDescription = "Gıda yardımı yapılmadı.";
                             break;
                     }
-                    
                     log.CreatedAt = DateTime.Now;
                     log.NameSurname = a.NameSurname;
                     logList.Add(log);
                 });
-                _unitOfWork.WritePersonalRepository.UpdateRange(todayStartPersonals);
+                await Task.WhenAll(tasks);
+				_unitOfWork.WritePersonalRepository.UpdateRange(todayStartPersonals);
                 await _unitOfWork.WriteDailyFoodLogRepository.AddRangeAsync(logList);
-                var commit = _unitOfWork.Commit();
+                var commit = await Task.Run(()=> _unitOfWork.Commit());
                 if(!commit)
                     return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
             }

@@ -13,7 +13,7 @@ namespace Services.HangfireFilter
 		public bool Authorize([NotNull] DashboardContext context)
 		{
 			var httpContext = context.GetHttpContext();
-			if (httpContext.User.Identity.IsAuthenticated && httpContext.User.FindFirst(ClaimTypes.Role)?.Value == nameof(UserRoleEnum.HumanResources))
+			if (httpContext.User.Identity.IsAuthenticated && (httpContext.User.FindFirst(ClaimTypes.Role)?.Value == nameof(UserRoleEnum.HumanResources) || httpContext.User.FindFirst(ClaimTypes.Role)?.Value == nameof(UserRoleEnum.SuperAdmin)))
 			{
 				return true;
 			}

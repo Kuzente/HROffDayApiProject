@@ -487,8 +487,6 @@
         updateButton.on('click', function () {
             spinnerStart(updateButton)
             let formData = $("#updatePersonalForm").serializeArray();
-            console.log(formData)
-            debugger;
             let foodAidValue = formData.find(item => item.name === "FoodAid").value
             if (!checkRequiredFields()) {
                 spinnerEnd(updateButton)

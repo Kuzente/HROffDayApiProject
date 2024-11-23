@@ -102,7 +102,7 @@ public static class ServiceRegistration
 				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time"),
 				
 			});
-			RecurringJob.AddOrUpdate<WriteDailyCounterService>("GunlukGidaOtomasyon", j => j.AddDailyFoodAidCounterLogService(), "30 01 * * *", options: new RecurringJobOptions
+			RecurringJob.AddOrUpdate<WriteDailyCounterService>("GunlukGidaOtomasyon", j => j.AddDailyFoodAidCounterLogService(), "31 01 * * *", options: new RecurringJobOptions
 			{
 				TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time"),
 				

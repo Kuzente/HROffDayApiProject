@@ -773,15 +773,20 @@
                 odataFilters.push("(Position/Status eq 'Online')")
             }
             let odataQuery = `${odataFilters.length > 0 ? `$filter=${odataFilters.join(' and ')}` : ''}${expandQuery}${personalSelectQuery}`;
-            console.log(odataQuery); // OData query string
+            
             $.ajax({
-                type: "GET",
-                url: `/query/detayli-filtre/${tableName}?${odataQuery}`,
+                type: "POST",
+                url: `/query/detayli-filtre/${tableName}`,
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    filter: "Position/ID eq 42bde01c-b00e-4b61-169d-08dc53e91b1d",
+                    expand: "PersonalDetails($select=BirthPlace)",
+                    select: "NameSurname",
+                }),
                 success: function (res) {
                     $('#mainDiv').removeClass('d-none');
                     $('#page-loader').addClass('d-none')
                     if (res) {
-                        console.log(res)
                         // Verilerle tableDic'i doldurun
                         res.forEach(row => {
                             for (let key in tableDic) {
@@ -792,7 +797,6 @@
                                 }
                             }
                         });
-                        console.log(tableDic)
                         createDynamicTable(tableDic, personalCumulativeProperties, res);
                     } else {
                         $('#error-modal-message').text(res.message);
@@ -885,6 +889,16 @@
         table += '</tbody></table>';
 
         $('#results').html(table);
+        // Datatable üzerinde sorting yaparken türkçe karakter sorunu çözümü
+        $.fn.dataTable.ext.type.order['turkish-string-pre'] = function (d) {
+            return d.toLowerCase()
+                .replace(/ç/g, 'c')
+                .replace(/ğ/g, 'g')
+                .replace(/ı/g, 'i')
+                .replace(/ö/g, 'o')
+                .replace(/ş/g, 's')
+                .replace(/ü/g, 'u');
+        };
         //Datatable Section
         let tableElement = $('#dynamicTable').DataTable({
             dom: 'lfBtip',
@@ -948,16 +962,7 @@
 
 
         });
-        // Datatable üzerinde sorting yaparken türkçe karakter sorunu çözümü
-        $.fn.dataTable.ext.type.order['turkish-string-pre'] = function (d) {
-            return d.toLowerCase()
-                .replace(/ç/g, 'c')
-                .replace(/ğ/g, 'g')
-                .replace(/ı/g, 'i')
-                .replace(/ö/g, 'o')
-                .replace(/ş/g, 's')
-                .replace(/ü/g, 'u');
-        };
+        
         // Sıralama butonları için olay dinleyici ekleme
         $('button.table-sort').on('click', function () {
             let sortColumn = $(this).data('sort');
