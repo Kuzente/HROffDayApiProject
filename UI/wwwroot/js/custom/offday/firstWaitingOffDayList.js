@@ -1,17 +1,18 @@
 ﻿document.addEventListener('DOMContentLoaded',function () {
-    let selectYear = new TomSelect($("[name='filterYear']"));
-    let selectMonth = new TomSelect($("[name='filterMonth']"));
+    let filterDateInput = $('.date-range');
     setFilterOptions();
     function setFilterOptions() {
         let urlParams = new URLSearchParams(window.location.search);
-        let filterYear = urlParams.get('filterYear');
-        let filterMonth = urlParams.get('filterMonth');
-        if (filterYear) {
-            selectYear.setValue([filterYear]);
+
+        if (urlParams.has("filterDate")) {
+            // query üzerinden gelen tarihleri ayrıştırıyoruz
+            const queryDates = searchParams.get("filterDate").split(" ile ");
+            //flatpickr instanceını değişkene atıyoruz
+            const flatpickrInstance = filterDateInput[0]._flatpickr;
+            //ilgili tarihleri değişkene set ediyoruz
+            flatpickrInstance.setDate(queryDates);
         }
-        if (filterMonth) {
-            selectMonth.setValue([filterMonth]);
-        }
+       
         if (urlParams.has("search")){
             $('#searchInput').val(urlParams.get('search'))
         }

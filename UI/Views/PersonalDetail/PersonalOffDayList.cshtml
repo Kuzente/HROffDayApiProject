@@ -217,22 +217,7 @@ else
                         <div class="col-md-10">
                             <form class="d-flex">
                                 <input type="hidden" name="id" value="@personelIdQuery">
-                                <select id="filterYear" name="filterYear" class="form-select">
-                                    <option value="">Yıl Seçiniz.</option>
-                                    @for (var year = 2017; year <= 2050; year++)
-                                    {
-                                        <option value="@year">@year</option>
-                                    }
-                                </select>
-                                <select id="filterMonth" name="filterMonth" class="form-select ms-2">
-                                    <option value="">Ay Seçiniz.</option>
-                                    @{
-                                        for (int month = 1; month <= 12; month++)
-                                        {
-                                            <option value="@month">@(new CultureInfo("tr-TR").DateTimeFormat.GetMonthName(month))</option>
-                                        }
-                                    }
-                                </select>
+                                <input class="form-control date-range" type="date" name="filterDate" placeholder="Tarih Aralığı Seçiniz" />
                                 <div class="ms-2 justify-content-end">
                                     <button class="btn btn-outline-primary" type="submit">Filtrele</button>
                                 </div>
@@ -259,8 +244,7 @@ else
                             <form method="post" action="/izin-excel">
                                 <button type="submit" class="btn btn-icon btn-green">
                                     <input type="hidden" name="id" value="@Context.Request.Query["id"]">
-                                    <input type="hidden" name="filterYear" value="@Context.Request.Query["filterYear"]">
-                                    <input type="hidden" name="filterMonth" value="@Context.Request.Query["filterMonth"]">
+                                    <input type="hidden" name="filterDate" value="@Context.Request.Query["filterDate"]">
                                     <input type="hidden" name="ReturnUrl" value="@returnUrl">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-spreadsheet" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>

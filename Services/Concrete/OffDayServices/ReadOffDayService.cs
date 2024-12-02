@@ -30,16 +30,29 @@ public class ReadOffDayService : IReadOffDayService
 	public async Task<ResultWithPagingDataDto<List<ReadWaitingOffDayListDto>>> GetFirstWaitingOffDaysListService(OffdayQuery query)
 	{
 		ResultWithPagingDataDto<List<ReadWaitingOffDayListDto>> res = new ResultWithPagingDataDto<List<ReadWaitingOffDayListDto>>(query.sayfa,query.search);
+		DateTime? filterStartDate = null;
+		DateTime? filterEndDate = null;
 		try
 		{
+			if (!string.IsNullOrWhiteSpace(query.filterDate))
+			{
+				var dates = query.filterDate.Split(" ile ");
+				if (dates.Length == 2)
+				{
+					filterStartDate = DateTime.Parse(dates[0].Trim());
+					filterEndDate = DateTime.Parse(dates[1].Trim());
+				}
+			}
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadOffDayRepository.GetAll(
 					predicate: a =>
 						(a.Status == EntityStatusEnum.Online &&
 						 a.OffDayStatus == OffDayStatusEnum.WaitingForFirst) &&
 						a.Personal.Status == EntityStatusEnum.Online &&
-						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
-						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth)&&
+						(string.IsNullOrWhiteSpace(query.filterDate) ||
+						(filterStartDate.HasValue && filterEndDate.HasValue &&
+						a.StartDate <= filterEndDate.Value && a.EndDate >= filterStartDate.Value))
+						&&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower())),
 					include: p=>p.Include(a=>a.Personal),
 					orderBy: p => p.OrderByDescending(a => a.CreatedAt)
@@ -76,8 +89,19 @@ public class ReadOffDayService : IReadOffDayService
 	public async Task<ResultWithPagingDataDto<List<ReadWaitingOffDayListDto>>> GetSecondWaitingOffDaysListService(OffdayQuery query)
 	{
 		ResultWithPagingDataDto<List<ReadWaitingOffDayListDto>> res = new ResultWithPagingDataDto<List<ReadWaitingOffDayListDto>>(query.sayfa,query.search);
+		DateTime? filterStartDate = null;
+		DateTime? filterEndDate = null;
 		try
 		{
+			if (!string.IsNullOrWhiteSpace(query.filterDate))
+			{
+				var dates = query.filterDate.Split(" ile ");
+				if (dates.Length == 2)
+				{
+					filterStartDate = DateTime.Parse(dates[0].Trim());
+					filterEndDate = DateTime.Parse(dates[1].Trim());
+				}
+			}
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadOffDayRepository.GetAll(
 					predicate: a =>
@@ -85,8 +109,9 @@ public class ReadOffDayService : IReadOffDayService
 						 a.OffDayStatus == OffDayStatusEnum.WaitingForSecond) &&
 						query.UserBranches.Any(q=>q == a.BranchId) &&
 						a.Personal.Status == EntityStatusEnum.Online &&
-						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
-						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth)&&
+						(string.IsNullOrWhiteSpace(query.filterDate) ||
+						(filterStartDate.HasValue && filterEndDate.HasValue &&
+						a.StartDate <= filterEndDate.Value && a.EndDate >= filterStartDate.Value)) &&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower())),
 					include: p=>p.Include(a=>a.Personal),
 					orderBy: p => p.OrderByDescending(a => a.CreatedAt)
@@ -123,8 +148,19 @@ public class ReadOffDayService : IReadOffDayService
 	public async Task<ResultWithPagingDataDto<List<ReadRejectedOffDayListDto>>> GetRejectedOffDaysListService(OffdayQuery query)
 	{
 		ResultWithPagingDataDto<List<ReadRejectedOffDayListDto>> res = new ResultWithPagingDataDto<List<ReadRejectedOffDayListDto>>(query.sayfa,query.search);
+		DateTime? filterStartDate = null;
+		DateTime? filterEndDate = null;
 		try
 		{
+			if (!string.IsNullOrWhiteSpace(query.filterDate))
+			{
+				var dates = query.filterDate.Split(" ile ");
+				if (dates.Length == 2)
+				{
+					filterStartDate = DateTime.Parse(dates[0].Trim());
+					filterEndDate = DateTime.Parse(dates[1].Trim());
+				}
+			}
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadOffDayRepository.GetAll(
 					predicate: a =>
@@ -132,8 +168,9 @@ public class ReadOffDayService : IReadOffDayService
 						 a.OffDayStatus == OffDayStatusEnum.Rejected &&
 						(a.Personal.Status == EntityStatusEnum.Online || a.Personal.Status == EntityStatusEnum.Offline) &&
 						(query.UserBranches.IsNullOrEmpty()|| query.UserBranches.Any(q=>q == a.BranchId)) &&
-						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear) &&
-						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth)&&
+						(string.IsNullOrWhiteSpace(query.filterDate) ||
+						(filterStartDate.HasValue && filterEndDate.HasValue &&
+						a.StartDate <= filterEndDate.Value && a.EndDate >= filterStartDate.Value)) &&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower())),
 					include: p=>p.Include(a=>a.Personal),
 					orderBy: p => p.OrderByDescending(a => a.CreatedAt)
@@ -170,6 +207,8 @@ public class ReadOffDayService : IReadOffDayService
 	public async Task<ResultWithPagingDataDto<ReadApprovedOffDayDto>> GetApprovedOffDaysListService(OffdayQuery query)
 	{
 		ResultWithPagingDataDto<ReadApprovedOffDayDto> res = new ResultWithPagingDataDto<ReadApprovedOffDayDto>(query.sayfa,query.search);
+		DateTime? filterStartDate = null;
+		DateTime? filterEndDate = null;
 		ReadApprovedOffDayDto mapDataDto = new()
 		{
 			ReadApprovedOffDayListDtos = new(),
@@ -178,6 +217,15 @@ public class ReadOffDayService : IReadOffDayService
 		};
 		try
 		{
+			if (!string.IsNullOrWhiteSpace(query.filterDate))
+			{
+				var dates = query.filterDate.Split(" ile ");
+				if (dates.Length == 2)
+				{
+					filterStartDate = DateTime.Parse(dates[0].Trim());
+					filterEndDate = DateTime.Parse(dates[1].Trim());
+				}
+			}
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadOffDayRepository.GetAll(
 					predicate: a =>
@@ -185,8 +233,9 @@ public class ReadOffDayService : IReadOffDayService
 						a.OffDayStatus == OffDayStatusEnum.Approved  && // İzin onaylanmış ise
 						(a.Personal.Status == EntityStatusEnum.Online || a.Personal.Status == EntityStatusEnum.Offline) && // İzne ait personel çalışan veya işten çıkarılmış ise
 						(query.UserBranches.IsNullOrEmpty() || query.UserBranches.Any(q=>q == a.BranchId)) && //Sisteme giren kullanıcıya ait atanmış şubeler var ise
-						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear || a.EndDate.Year == query.filterYear) && // Filtre üzerinde yıl seçilmiş ise
-						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth || a.EndDate.Month == query.filterMonth)&& // Filtre üzerinde ay seçilmiş ise
+						(string.IsNullOrWhiteSpace(query.filterDate) ||
+						(filterStartDate.HasValue && filterEndDate.HasValue &&
+						a.StartDate <= filterEndDate.Value && a.EndDate >= filterStartDate.Value)) &&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower()))&& // Filtre üzerinde arama yapılmış ise
 						(string.IsNullOrEmpty(query.positionName) || a.Personal.Position.ID.ToString() == query.positionName)&& // Filtre üzerinde ünvan seçili ise
 						(string.IsNullOrEmpty(query.branchName) || a.Personal.Branch.ID.ToString() == query.branchName)&& // Filtre üzerinde şube seçili ise
@@ -364,15 +413,27 @@ public class ReadOffDayService : IReadOffDayService
 	public async Task<ResultWithPagingDataDto<List<ReadPersonalOffDayListDto>>> GetPersonalOffDaysListService(OffdayQuery query)
 	{
 		ResultWithPagingDataDto<List<ReadPersonalOffDayListDto>> res = new ResultWithPagingDataDto<List<ReadPersonalOffDayListDto>>(query.sayfa,query.search);
+		DateTime? filterStartDate = null;
+		DateTime? filterEndDate = null;
 		try
 		{
+			if (!string.IsNullOrWhiteSpace(query.filterDate))
+			{
+				var dates = query.filterDate.Split(" ile ");
+				if (dates.Length == 2)
+				{
+					filterStartDate = DateTime.Parse(dates[0].Trim());
+					filterEndDate = DateTime.Parse(dates[1].Trim());
+				}
+			}
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadOffDayRepository.GetAll(
 					predicate: a =>
 						(a.Status == EntityStatusEnum.Online && a.OffDayStatus == OffDayStatusEnum.Approved) &&
 						(a.Personal.Status == EntityStatusEnum.Online || a.Personal.Status == EntityStatusEnum.Offline) && a.Personal_Id == query.id &&
-						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear || a.EndDate.Year == query.filterYear) &&
-						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth || a.EndDate.Month == query.filterMonth),
+						(string.IsNullOrWhiteSpace(query.filterDate) ||
+						(filterStartDate.HasValue && filterEndDate.HasValue &&
+						a.StartDate <= filterEndDate.Value && a.EndDate >= filterStartDate.Value)),
 					include: p=> p.Include(a=>a.Personal),
 					orderBy: p => p.OrderByDescending(a => a.CreatedAt)
 				));
@@ -426,8 +487,19 @@ public class ReadOffDayService : IReadOffDayService
 	public async Task<IResultWithDataDto<List<ReadApprovedOffDayListDto>>> GetExcelApprovedOffDayListService(OffdayQuery query)
 	{
 		IResultWithDataDto<List<ReadApprovedOffDayListDto>> res = new ResultWithDataDto<List<ReadApprovedOffDayListDto>>();
+		DateTime? filterStartDate = null;
+		DateTime? filterEndDate = null;
 		try
 		{
+			if (!string.IsNullOrWhiteSpace(query.filterDate))
+			{
+				var dates = query.filterDate.Split(" ile ");
+				if (dates.Length == 2)
+				{
+					filterStartDate = DateTime.Parse(dates[0].Trim());
+					filterEndDate = DateTime.Parse(dates[1].Trim());
+				}
+			}
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadOffDayRepository.GetAll(
 					predicate: a =>
@@ -435,8 +507,9 @@ public class ReadOffDayService : IReadOffDayService
 						(a.Personal.Status == EntityStatusEnum.Online || a.Personal.Status == EntityStatusEnum.Offline) &&
 						(query.UserBranches.IsNullOrEmpty() || query.UserBranches.Any(q=>q == a.BranchId)) &&
 						(!query.id.HasValue || a.Personal_Id == query.id) &&
-						(!query.filterYear.HasValue || a.StartDate.Year == query.filterYear || a.EndDate.Year == query.filterYear) &&
-						(!query.filterMonth.HasValue || a.StartDate.Month == query.filterMonth || a.EndDate.Month == query.filterMonth)&&
+						(string.IsNullOrWhiteSpace(query.filterDate) ||
+						(filterStartDate.HasValue && filterEndDate.HasValue &&
+						a.StartDate <= filterEndDate.Value && a.EndDate >= filterStartDate.Value)) &&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower()))&&
 						(string.IsNullOrEmpty(query.isFreedayLeave) || a.LeaveByFreeDay > 0),
 					include: p=>p.Include(a=>a.Personal).ThenInclude(a=>a.Branch).Include(a=>a.Personal.Position),

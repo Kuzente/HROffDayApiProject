@@ -1,34 +1,19 @@
 ﻿document.addEventListener('DOMContentLoaded',function () {
-    let selectYear = new TomSelect($("#filterYear"));
-    let selectMonth = new TomSelect($("#filterMonth"));
+    let filterDateInput = $('.date-range');
     let checkFreeDay = $('#filterForm input[name="isFreedayLeave"]')
-    let selectBranch;
-    let selectPosition;
-    
-    //Filtre Ayarları
-    function setFilterOptions() {
-        let urlParams = new URLSearchParams(window.location.search);
-        let filterYear = urlParams.get('filterYear');
-        let filterMonth = urlParams.get('filterMonth');
-        let filterPosition = urlParams.get('positionName');
-        let filterBranch = urlParams.get('branchName');
-        let filterFreeDay = urlParams.get('isFreedayLeave');
-        if (filterYear) {
-            selectYear.setValue([filterYear]);
-        }
-        if (filterMonth) {
-            
-            selectMonth.setValue([filterMonth]);
-        }
-        if (filterFreeDay){
-            checkFreeDay.prop('checked', true)
-        }
-        
-        
-       
-    }
-    setFilterOptions();
+    //filtre alanları
     let searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.has("filterDate")) {
+        // query üzerinden gelen tarihleri ayrıştırıyoruz
+        const queryDates = searchParams.get("filterDate").split(" ile ");
+        //flatpickr instanceını değişkene atıyoruz
+        const flatpickrInstance = filterDateInput[0]._flatpickr;
+        //ilgili tarihleri değişkene set ediyoruz
+        flatpickrInstance.setDate(queryDates);
+    }
+    if (searchParams.has("isFreedayLeave")) {
+        checkFreeDay.prop('checked', true)
+    }
     //Arama Yapılınca çalışan metod
     if (searchParams.has("search")){
         $('#searchInput').val(searchParams.get('search'))

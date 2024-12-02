@@ -4,9 +4,8 @@ public class OffdayQuery
 {
     public string search { get; set; } 
     public int sayfa { get; set; } = 1;
-    public int? filterYear { get; set; }
-    public int? filterMonth { get; set; }
-    public string positionName { get; set; }
+	public string filterDate { get; set; }
+	public string positionName { get; set; }
     public string branchName { get; set; }
     public string isFreedayLeave { get; set; }
     public Guid? id { get; set; }

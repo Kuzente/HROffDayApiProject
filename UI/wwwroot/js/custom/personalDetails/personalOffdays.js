@@ -1,6 +1,5 @@
 ﻿document.addEventListener('DOMContentLoaded',function () {
-    let selectYear = new TomSelect($("#filterYear"));
-    let selectMonth = new TomSelect($("#filterMonth"));
+    let filterDateInput = $('.date-range');
     let currentUrl = new URL(window.location.href);
     setFilterOptions();
     setPersonalHeader();
@@ -8,14 +7,16 @@
     //Filtre Ayarları
     function setFilterOptions() {
         let urlParams = new URLSearchParams(window.location.search);
-        let filterYear = urlParams.get('filterYear');
-        let filterMonth = urlParams.get('filterMonth');
-        if (filterYear) {
-            selectYear.setValue([filterYear]);
+
+        if (urlParams.has("filterDate")) {
+            // query üzerinden gelen tarihleri ayrıştırıyoruz
+            const queryDates = urlParams.get("filterDate").split(" ile ");
+            //flatpickr instanceını değişkene atıyoruz
+            const flatpickrInstance = filterDateInput[0]._flatpickr;
+            //ilgili tarihleri değişkene set ediyoruz
+            flatpickrInstance.setDate(queryDates);
         }
-        if (filterMonth) {
-            selectMonth.setValue([filterMonth]);
-        }
+       
         
     }
     function setPersonalHeader() {
