@@ -1,6 +1,5 @@
 ﻿document.addEventListener("DOMContentLoaded", () => {
-    let selectMonth = new TomSelect($('select[name="filterMonth"]'));
-    let selectYear = new TomSelect($('select[name="filterYear"]'));
+    let filterDateInput = $('.date-range');
     let filterReasonSelect = new TomSelect($("#filterReason"), { maxOptions: null });
     let addModalReasonInput = new TomSelect($("#addModalReasonInput"), { maxOptions: null });
     let filterBranchSelect = new TomSelect($("#filterBranch"), { maxOptions: null });
@@ -57,13 +56,14 @@
     if (searchParams.has("search")) {
         $('#searchInput').val(searchParams.get('search'));
     }
-    if (searchParams.has("filterMonth")) {
-        selectMonth.setValue(searchParams.get('filterMonth'));
+    if (searchParams.has("filterDate")) {
+        // query üzerinden gelen tarihleri ayrıştırıyoruz
+        const queryDates = searchParams.get("filterDate").split(" ile ");
+        //flatpickr instanceını değişkene atıyoruz
+        const flatpickrInstance = filterDateInput[0]._flatpickr;
+        //ilgili tarihleri değişkene set ediyoruz
+        flatpickrInstance.setDate(queryDates);
     }
-    if (searchParams.has("filterYear")) {
-        selectYear.setValue(searchParams.get('filterYear'));
-    }
-
     if (!searchParams.has('sortName') || !searchParams.has('sortBy') || searchParams.get('sortBy') === '') {
         $('button[data-sort="sort-createdAt"]').addClass('desc');
     } else {

@@ -29,19 +29,27 @@ public class ReadMissingDayService : IReadMissingDayService
     public async Task<ResultWithPagingDataDto<List<ReadMissingDayDto>>> GetMissingDayListByIdService(MissingDayQuery query)
     {
         ResultWithPagingDataDto<List<ReadMissingDayDto>> res = new ResultWithPagingDataDto<List<ReadMissingDayDto>>(query.sayfa, query.search);
-        try
+		DateTime? filterStartDate = null;
+		DateTime? filterEndDate = null;
+		try
         {
-            var allData = await Task.Run(() =>
+			if (!string.IsNullOrWhiteSpace(query.filterDate))
+			{
+				var dates = query.filterDate.Split(" ile ");
+				if (dates.Length == 2)
+				{
+					filterStartDate = DateTime.Parse(dates[0].Trim());
+					filterEndDate = DateTime.Parse(dates[1].Trim());
+				}
+			}
+			var allData = await Task.Run(() =>
                 _unitOfWork.ReadMissingDayRepository.GetAll(
                     predicate: a =>
                         a.Personal_Id == query.id &&
                         (a.Status == EntityStatusEnum.Online) &&
-						(!query.filterYear.HasValue ||
-						a.EndOffDayDate.Year == query.filterYear ||
-						a.StartOffdayDate.Year == query.filterYear) &&
-						(!query.filterMonth.HasValue ||
-						a.EndOffDayDate.Month == query.filterMonth ||
-						a.StartOffdayDate.Month == query.filterMonth
+						(string.IsNullOrWhiteSpace(query.filterDate) ||
+						(filterStartDate.HasValue && filterEndDate.HasValue &&
+						((a.StartOffdayDate <= filterEndDate.Value && a.EndOffDayDate >= filterStartDate.Value)))
 						),
                     orderBy: p =>
 					{
@@ -116,19 +124,27 @@ public class ReadMissingDayService : IReadMissingDayService
     public async Task<IResultWithDataDto<List<ReadMissingDayDto>>> ExcelGetPersonalMissingDayListByIdService(MissingDayQuery query)
     {
 	    IResultWithDataDto<List<ReadMissingDayDto>> res = new ResultWithDataDto<List<ReadMissingDayDto>>();
-        try
+		DateTime? filterStartDate = null;
+		DateTime? filterEndDate = null;
+		try
         {
-            var allData = await Task.Run(() =>
+			if (!string.IsNullOrWhiteSpace(query.filterDate))
+			{
+				var dates = query.filterDate.Split(" ile ");
+				if (dates.Length == 2)
+				{
+					filterStartDate = DateTime.Parse(dates[0].Trim());
+					filterEndDate = DateTime.Parse(dates[1].Trim());
+				}
+			}
+			var allData = await Task.Run(() =>
                 _unitOfWork.ReadMissingDayRepository.GetAll(
                     predicate: a =>
                         a.Personal_Id == query.id &&
                         (a.Status == EntityStatusEnum.Online) &&
-						(!query.filterYear.HasValue ||
-						a.EndOffDayDate.Year == query.filterYear ||
-						a.StartOffdayDate.Year == query.filterYear) &&
-						(!query.filterMonth.HasValue ||
-						a.EndOffDayDate.Month == query.filterMonth ||
-						a.StartOffdayDate.Month == query.filterMonth
+						(string.IsNullOrWhiteSpace(query.filterDate) ||
+						(filterStartDate.HasValue && filterEndDate.HasValue &&
+						((a.StartOffdayDate <= filterEndDate.Value && a.EndOffDayDate >= filterStartDate.Value)))
 						),
                     orderBy: p =>
 					{
@@ -200,21 +216,29 @@ public class ReadMissingDayService : IReadMissingDayService
 	public async Task<ResultWithPagingDataDto<List<ReadMissingDayDto>>> GetMissingDayListService(MissingDayQuery query)
 	{
 		ResultWithPagingDataDto<List<ReadMissingDayDto>> res = new ResultWithPagingDataDto<List<ReadMissingDayDto>>(query.sayfa, query.search);
+		DateTime? filterStartDate = null;
+		DateTime? filterEndDate = null;
 		try
 		{
+			if (!string.IsNullOrWhiteSpace(query.filterDate))
+			{
+				var dates = query.filterDate.Split(" ile ");
+				if (dates.Length == 2)
+				{
+					filterStartDate = DateTime.Parse(dates[0].Trim());
+					filterEndDate = DateTime.Parse(dates[1].Trim());
+				}
+			}
 			var allData = await Task.Run(() =>
 				_unitOfWork.ReadMissingDayRepository.GetAll(
 					predicate: a =>
 						(a.Personal.Status == EntityStatusEnum.Online || a.Personal.Status == EntityStatusEnum.Offline) &&
 						(a.Status == EntityStatusEnum.Online) &&
 						a.Branch.Status == EntityStatusEnum.Online &&
-						(!query.filterYear.HasValue ||
-						a.EndOffDayDate.Year == query.filterYear ||
-						a.StartOffdayDate.Year == query.filterYear) &&
-						(!query.filterMonth.HasValue ||
-						a.EndOffDayDate.Month == query.filterMonth ||
-						a.StartOffdayDate.Month == query.filterMonth
-						)&&
+						(string.IsNullOrWhiteSpace(query.filterDate) ||
+						(filterStartDate.HasValue && filterEndDate.HasValue &&
+						 ((a.StartOffdayDate <= filterEndDate.Value && a.EndOffDayDate >= filterStartDate.Value))))
+						 &&
 						(string.IsNullOrEmpty(query.filterReason) || a.Reason.Contains(query.filterReason)) &&
 						(string.IsNullOrEmpty(query.filterBranch) || a.Branch_Id.ToString().Contains(query.filterBranch)) &&
 						(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower())),
@@ -281,21 +305,29 @@ public class ReadMissingDayService : IReadMissingDayService
 	public async Task<IResultWithDataDto<List<ReadMissingDayDto>>> ExcelGetPersonalMissingDayListService(MissingDayQuery query)
 	{
 		IResultWithDataDto<List<ReadMissingDayDto>> res = new ResultWithDataDto<List<ReadMissingDayDto>>();
+		DateTime? filterStartDate = null;
+		DateTime? filterEndDate = null;
 		try
 		{
+			if (!string.IsNullOrWhiteSpace(query.filterDate))
+			{
+				var dates = query.filterDate.Split(" ile ");
+				if (dates.Length == 2)
+				{
+					filterStartDate = DateTime.Parse(dates[0].Trim());
+					filterEndDate = DateTime.Parse(dates[1].Trim());
+				}
+			}
 			var allData = await Task.Run(() =>
 							_unitOfWork.ReadMissingDayRepository.GetAll(
 								predicate: a =>
 									(a.Personal.Status == EntityStatusEnum.Online || a.Personal.Status == EntityStatusEnum.Offline) &&
 									(a.Status == EntityStatusEnum.Online) &&
 									a.Branch.Status == EntityStatusEnum.Online &&
-									(!query.filterYear.HasValue ||
-									a.EndOffDayDate.Year == query.filterYear ||
-									a.StartOffdayDate.Year == query.filterYear) &&
-									(!query.filterMonth.HasValue ||
-									a.EndOffDayDate.Month == query.filterMonth ||
-									a.StartOffdayDate.Month == query.filterMonth
-									) &&
+									(string.IsNullOrWhiteSpace(query.filterDate) ||
+									(filterStartDate.HasValue && filterEndDate.HasValue &&
+									((a.StartOffdayDate <= filterEndDate.Value && a.EndOffDayDate >= filterStartDate.Value))))
+									&&
 									(string.IsNullOrEmpty(query.filterReason) || a.Reason.Contains(query.filterReason)) &&
 									(string.IsNullOrEmpty(query.filterBranch) || a.Branch_Id.ToString().Contains(query.filterBranch)) &&
 									(string.IsNullOrEmpty(query.search) || a.Personal.NameSurname.ToLower().Contains(query.search.ToLower())),

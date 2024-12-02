@@ -36,8 +36,7 @@
                             <input type="hidden" name="search" value="@Context.Request.Query["search"]">
                             <input type="hidden" name="filterBranch" value="@Context.Request.Query["filterBranch"]">
                             <input type="hidden" name="filterReason" value="@Context.Request.Query["filterReason"]">
-                            <input type="hidden" name="filterYear" value="@Context.Request.Query["filterYear"]">
-                            <input type="hidden" name="filterMonth" value="@Context.Request.Query["filterMonth"]">
+                            <input type="hidden" name="filterDate" value="@Context.Request.Query["filterDate"]">
                             <input type="hidden" name="sortName" value="@Context.Request.Query["sortName"]">
                             <input type="hidden" name="sortBy" value="@Context.Request.Query["sortBy"]">
                             <input type="hidden" name="ReturnUrl" value="@returnUrl">
@@ -101,27 +100,9 @@ else
                                         <div class="dropdown-header" style="width: 500px;">Detaylı Filtre</div>
                                         <div class="p-3">
                                             <div class="row mb-2">
-                                                <div class="col-6">
-                                                    <label class="form-label">Yıl Seçiniz</label>
-                                                    <select name="filterYear" class="form-select">
-                                                        <option value="">Yıl Seçiniz.</option>
-                                                        @for (var year = 2017; year <= 2050; year++)
-                                                        {
-                                                            <option value="@year">@year</option>
-                                                        }
-                                                    </select>
-                                                </div>
-                                                <div class="col-6">
-                                                    <label class="form-label">Ay Seçiniz</label>
-                                                    <select name="filterMonth" class="form-select">
-                                                        <option value="">Ay Seçiniz.</option>
-                                                        @{
-                                                            for (int month = 1; month <= 12; month++)
-                                                            {
-                                                                <option value="@month">@(new CultureInfo("tr-TR").DateTimeFormat.GetMonthName(month))</option>
-                                                            }
-                                                        }
-                                                    </select>
+                                                <div class="col-12">
+                                                    <label class="form-label">Tarih Aralığı Seçiniz</label>
+                                                    <input class="form-control date-range" type="date" name="filterDate" placeholder="Tarih Aralığı Seçiniz" />
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
@@ -404,6 +385,7 @@ else
         </div>
     </form>
     @section Scripts {
+
         <script src="/js/custom/missingDay/missingDayList.js"></script>
     }
 }
