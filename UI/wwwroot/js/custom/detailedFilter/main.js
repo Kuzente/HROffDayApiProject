@@ -658,9 +658,6 @@
                         isFormValid = false;
                         return false;
                     }
-                    //let minAmount = Math.min(amount1, amount2);
-                    //let maxAmount = Math.max(amount1, amount2);
-                    //odataFilters.push(`${selectedPropValue} ge ${minAmount} and ${selectedPropValue} le ${maxAmount}`);
                     if (selectedType === 'Date') {
                         let date1 = new Date(amount1);
                         let date2 = new Date(amount2);
@@ -670,8 +667,11 @@
                             isFormValid = false;
                             return false;
                         }
-                        minAmount = date1 < date2 ? date1.toISOString() : date2.toISOString();
-                        maxAmount = date1 > date2 ? date1.toISOString() : date2.toISOString();
+                        //minAmount = date1 < date2 ? date1.toISOString() : date2.toISOString();
+                        //maxAmount = date1 > date2 ? date1.toISOString() : date2.toISOString();
+                        // Querye yazılırken herhangi bir iso dönüştürme işlemi yapmıyoruz direk yazıyoruz örneğin 2024-04-01
+                        minAmount = amount1 < amount2 ? amount1 : amount2;
+                        maxAmount = amount1 > amount2 ? amount1 : amount2;
                     } else {
                         minAmount = Math.min(amount1, amount2);
                         maxAmount = Math.max(amount1, amount2);
@@ -773,7 +773,7 @@
                 odataFilters.push("(Position/Status eq 'Online')")
             }
             let odataQuery = `${odataFilters.length > 0 ? `$filter=${odataFilters.join(' and ')}` : ''}${expandQuery}${personalSelectQuery}`;
-            
+            console.log(odataQuery);
             $.ajax({
                 type: "GET",
                 url: `/query/detayli-filtre/${tableName}?${odataQuery}`,
