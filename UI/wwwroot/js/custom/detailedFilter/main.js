@@ -775,14 +775,14 @@
             let odataQuery = `${odataFilters.length > 0 ? `$filter=${odataFilters.join(' and ')}` : ''}${expandQuery}${personalSelectQuery}`;
             
             $.ajax({
-                type: "POST",
-                url: `/query/detayli-filtre/${tableName}`,
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    filter: "Position/ID eq 42bde01c-b00e-4b61-169d-08dc53e91b1d",
-                    expand: "PersonalDetails($select=BirthPlace)",
-                    select: "NameSurname",
-                }),
+                type: "GET",
+                url: `/query/detayli-filtre/${tableName}?${odataQuery}`,
+                //contentType: 'application/json',
+                //data: JSON.stringify({
+                //    filter: "Position/ID eq 42bde01c-b00e-4b61-169d-08dc53e91b1d",
+                //    expand: "PersonalDetails($select=BirthPlace)",
+                //    select: "NameSurname",
+                //}),
                 success: function (res) {
                     $('#mainDiv').removeClass('d-none');
                     $('#page-loader').addClass('d-none')
@@ -913,7 +913,19 @@
                                     <path d="M8 15h8"></path>
                                     <path d="M11 11v7"></path>
                                 </svg>Excel Raporu`,
-                    titleAttr: 'Excel'
+                    titleAttr: 'Excel',
+                    customize: function (xlsx) {
+                        var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+                        // Tüm hücreleri kontrol ederek uygun şekilde düzenle
+                        $('row c', sheet).each(function () {
+                            var cellValue = $(this).find('v').text(); // Hücre değerini al
+                            if (cellValue) { // Eğer değer boş değilse işleme devam et
+                                $(this).attr('t', 'inlineStr'); // Hücreyi metin olarak ayarla
+                                $(this).html('<is><t>' + cellValue + '</t></is>'); // Değeri koruyarak metin formatında yaz
+                            }
+                        });
+                    }
                 }
             ],
             "language": datatableLanguage,
