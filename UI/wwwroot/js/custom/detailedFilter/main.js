@@ -774,21 +774,23 @@
             }
             let odataQuery = `${odataFilters.length > 0 ? `$filter=${odataFilters.join(' and ')}` : ''}${expandQuery}${personalSelectQuery}`;
             console.log(odataQuery);
+            const postData = {
+                "filter": odataFilters.length > 0 ? `${odataFilters.join(' and ')}` : "",
+                "orderby": "",
+                "expand": expandQueries.length > 0 ? `${expandQueries.join(',')}` : "",
+                "select": personalProperties.length > 0 ? `${personalProperties.join(',')}` : ""
+            };
             $.ajax({
-                type: "GET",
-                url: `/query/detayli-filtre/${tableName}?${odataQuery}`,
-                //contentType: 'application/json',
-                //data: JSON.stringify({
-                //    filter: "Position/ID eq 42bde01c-b00e-4b61-169d-08dc53e91b1d",
-                //    expand: "PersonalDetails($select=BirthPlace)",
-                //    select: "NameSurname",
-                //}),
+                type: "POST",
+                url: `/query/detayli-filtre`,
+                contentType:"application/json",
+                data: JSON.stringify(postData),
                 success: function (res) {
                     $('#mainDiv').removeClass('d-none');
                     $('#page-loader').addClass('d-none')
-                    if (res) {
+                    if (res.isSuccess && res.data) {
                         // Verilerle tableDic'i doldurun
-                        res.forEach(row => {
+                        res.data.forEach(row => {
                             for (let key in tableDic) {
                                 let path = tableDic[key].Path;
                                 let value = findValueByKey(row, path);
@@ -797,7 +799,7 @@
                                 }
                             }
                         });
-                        createDynamicTable(tableDic, personalCumulativeProperties, res);
+                        createDynamicTable(tableDic, personalCumulativeProperties, res.data);
                     } else {
                         $('#error-modal-message').text(res.message);
                         $('#error-modal').modal('show');
@@ -810,7 +812,7 @@
                     $('#error-modal').modal('show');
                 }
             });
-
+            
 
         }
     });
@@ -831,7 +833,7 @@
         let table = '<table id="dynamicTable" class="table"><thead><tr>';
         let columns = []
         // Başlıkları ekleyin
-        for (let key in tableDic) {
+        for (let key in tableDic) {     
             table += `<th>
                     <button class="table-sort" data-order="default" data-sort="${key}">${tableDic[key].Text}</button>
                     </th>`;
@@ -945,7 +947,7 @@
                         if (validFormat) {
                             if (type === 'display') {
                                 // Display format: '1 Ocak 1974'
-                                return moment(data, moment.ISO_8601).format('DD MMMM YYYY');
+                                return moment(data, moment.ISO_8601).format('DD.MM.YYYY');
                             } else if (type === 'sort' || type === 'type') {
                                 // Sort format: 'YYYYMMDD'
                                 return moment(data, moment.ISO_8601).format('YYYYMMDD');
