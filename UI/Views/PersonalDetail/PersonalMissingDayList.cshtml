@@ -333,19 +333,19 @@ else
                                     @data.BranchName
                                 </td>
                                 <td class="col-1">
-                                    <span class="badge bg-secondary">@data.StartOffdayDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
+                                    <span class="badge bg-secondary">@data.StartOffdayDate.ToString("dd.MM.yyyy", new CultureInfo("tr-TR"))</span>
                                 </td>
                                 <td class="col-1">
-                                    <span class="badge bg-secondary">@data.EndOffDayDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
+                                    <span class="badge bg-secondary">@data.EndOffDayDate.ToString("dd.MM.yyyy", new CultureInfo("tr-TR"))</span>
                                 </td>
                                 <td class="col-1">
-                                    <span class="badge bg-success">@(data.StartJobDate.HasValue ? data.StartJobDate.Value.ToString("dd MMMM yyyy", new CultureInfo("tr-TR")) : "Yok")</span>
+                                    <span class="badge bg-success">@(data.StartJobDate.HasValue ? data.StartJobDate.Value.ToString("dd.MM.yyyy", new CultureInfo("tr-TR")) : "Yok")</span>
                                 </td>
                                 <td class="col-1">
                                     @data.Reason
                                 </td>
                                 <td class="col-1">
-                                    <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
+                                    <span class="badge bg-purple">@data.CreatedAt.ToString("dd.MM.yyyy HH:mm", new CultureInfo("tr-TR"))</span>
                                 </td>
                                 <td class="col-1">
                                     <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="">Sil</button>

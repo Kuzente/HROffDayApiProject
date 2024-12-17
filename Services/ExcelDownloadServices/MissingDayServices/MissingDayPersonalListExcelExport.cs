@@ -43,13 +43,13 @@ namespace Services.ExcelDownloadServices.MissingDayServices
 					worksheet.Cells[row, 1].Value = entity.PersonalStatus == EntityStatusEnum.Offline ? $"{entity.NameSurname} (İşten Çıkarılmış)" : entity.NameSurname;
 					worksheet.Cells[row, 2].Value = entity.IdentificationNumber;
 					worksheet.Cells[row, 3].Value = entity.BranchName;
-					worksheet.Cells[row, 4].Value = entity.StartOffdayDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"));
+					worksheet.Cells[row, 4].Value = entity.StartOffdayDate.ToString("dd.MM.yyyy", new CultureInfo("tr-TR"));
 					;
-					worksheet.Cells[row, 5].Value = entity.EndOffDayDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"));
+					worksheet.Cells[row, 5].Value = entity.EndOffDayDate.ToString("dd.MM.yyyy", new CultureInfo("tr-TR"));
 					;
-					worksheet.Cells[row, 6].Value = entity.StartJobDate.HasValue ? entity.StartJobDate.Value.ToString("dd MMMM yyyy", new CultureInfo("tr-TR")) : "Yok";
+					worksheet.Cells[row, 6].Value = entity.StartJobDate.HasValue ? entity.StartJobDate.Value.ToString("dd.MM.yyyy", new CultureInfo("tr-TR")) : "Yok";
 					worksheet.Cells[row, 7].Value = entity.Reason;
-					worksheet.Cells[row, 8].Value = entity.CreatedAt.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"));
+					worksheet.Cells[row, 8].Value = entity.CreatedAt.ToString("dd.MM.yyyy HH:mm", new CultureInfo("tr-TR"));
 					// ... Diğer alanları ekleyin.
 					if (entity.PersonalStatus == EntityStatusEnum.Offline)
 					{

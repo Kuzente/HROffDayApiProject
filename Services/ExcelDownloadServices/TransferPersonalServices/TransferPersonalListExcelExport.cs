@@ -41,7 +41,7 @@ namespace Services.ExcelDownloadServices.TransferPersonalServices
 					worksheet.Cells[row, 3].Value = entity.NewBranch;
 					worksheet.Cells[row, 4].Value = entity.OldPosition;
 					worksheet.Cells[row, 5].Value = entity.NewPosition;
-					worksheet.Cells[row, 6].Value = entity.CreatedAt.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"));
+					worksheet.Cells[row, 6].Value = entity.CreatedAt.ToString("dd.MM.yyyy HH:mm", new CultureInfo("tr-TR"));
 
 					// ... Diğer alanları ekleyin.
 

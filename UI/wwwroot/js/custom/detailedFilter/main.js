@@ -773,7 +773,6 @@
                 odataFilters.push("(Position/Status eq 'Online')")
             }
             let odataQuery = `${odataFilters.length > 0 ? `$filter=${odataFilters.join(' and ')}` : ''}${expandQuery}${personalSelectQuery}`;
-            console.log(odataQuery);
             const postData = {
                 "filter": odataFilters.length > 0 ? `${odataFilters.join(' and ')}` : "",
                 "orderby": "",

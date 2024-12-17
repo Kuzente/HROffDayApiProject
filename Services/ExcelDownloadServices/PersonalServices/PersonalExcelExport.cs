@@ -25,11 +25,12 @@ public class PersonalExcelExport
             worksheet.Cells[1, 3].Value = "Şube";
             worksheet.Cells[1, 4].Value = "Ünvan";
             worksheet.Cells[1, 5].Value = "Cinsiyet";
-            worksheet.Cells[1, 6].Value = "İşe Başlama Tarihi";
-            worksheet.Cells[1, 7].Value = "Emeklilik Durumu";
-            worksheet.Cells[1, 8].Value = "Toplam Yıllık İzin";
-            worksheet.Cells[1, 9].Value = "Kullandığı Yıllık İzin";
-            worksheet.Cells[1, 10].Value = "Kalan Yıllık İzin";
+			worksheet.Cells[1, 6].Value = "SGK Durum";
+			worksheet.Cells[1, 7].Value = "Doğum Tarihi";
+			worksheet.Cells[1, 8].Value = "İşe Başlama Tarihi";
+            worksheet.Cells[1, 9].Value = "Toplam Yıllık İzin";
+            worksheet.Cells[1, 10].Value = "Kullandığı Yıllık İzin";
+            worksheet.Cells[1, 11].Value = "Kalan Yıllık İzin";
                 
                 
             // ... Diğer sütun başlıklarını ekleyin.
@@ -43,11 +44,12 @@ public class PersonalExcelExport
                 worksheet.Cells[row, 3].Value = entity.Branch.Name;
                 worksheet.Cells[row, 4].Value = entity.Position.Name;
                 worksheet.Cells[row, 5].Value = entity.Gender;
-                worksheet.Cells[row, 6].Value = entity.StartJobDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"));
-                worksheet.Cells[row, 7].Value = entity.RetiredOrOld ? "Emekli" : "Emekli Değil";
-                worksheet.Cells[row, 8].Value = entity.TotalYearLeave.ToString();
-                worksheet.Cells[row, 9].Value = entity.UsedYearLeave.ToString();
-                worksheet.Cells[row, 10].Value = (entity.TotalYearLeave - entity.UsedYearLeave).ToString();
+				worksheet.Cells[row, 6].Value = entity.RetiredOrOld ? "Emekli" : "Normal";
+				worksheet.Cells[row, 7].Value = entity.BirthDate.ToString("dd.MM.yyyy", new CultureInfo("tr-TR"));
+				worksheet.Cells[row, 8].Value = entity.StartJobDate.ToString("dd.MM.yyyy", new CultureInfo("tr-TR"));
+				worksheet.Cells[row, 9].Value = entity.TotalYearLeave.ToString();
+                worksheet.Cells[row, 10].Value = entity.UsedYearLeave.ToString();
+                worksheet.Cells[row, 11].Value = (entity.TotalYearLeave - entity.UsedYearLeave).ToString();
                 // ... Diğer alanları ekleyin.
 
                 row++;

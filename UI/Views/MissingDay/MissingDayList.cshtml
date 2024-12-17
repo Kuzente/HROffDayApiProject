@@ -209,20 +209,20 @@ else
                                 @data.BranchName
                             </td>
                             <td>
-                                <span class="badge bg-grey">@data.StartOffdayDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
+                                <span class="badge bg-grey">@data.StartOffdayDate.ToString("dd.MM.yyyy", new CultureInfo("tr-TR"))</span>
                             </td>
                             <td>
-                                <span class="badge bg-grey">@data.EndOffDayDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"))</span>
+                                <span class="badge bg-grey">@data.EndOffDayDate.ToString("dd.MM.yyyy", new CultureInfo("tr-TR"))</span>
 
                             </td>
                             <td>
-                                <span class="badge bg-success">@(data.StartJobDate?.ToString("dd MMMM yyyy", new CultureInfo("tr-TR")) ?? "Belirtilmemiş")</span>
+                                <span class="badge bg-success">@(data.StartJobDate?.ToString("dd.MM.yyyy", new CultureInfo("tr-TR")) ?? "Belirtilmemiş")</span>
                             </td>
                             <td>
                                 @data.Reason
                             </td>
                             <td>
-                                <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
+                                <span class="badge bg-purple">@data.CreatedAt.ToString("dd.MM.yyyy HH:mm", new CultureInfo("tr-TR"))</span>
                             </td>
                             <td class="col-1">
                                 <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="@data.NameSurname">

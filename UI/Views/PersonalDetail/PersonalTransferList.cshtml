@@ -329,7 +329,7 @@ else
                                     @data.NewPosition
                                 </td>
                                 <td class="col-1">
-                                    <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
+                                    <span class="badge bg-purple">@data.CreatedAt.ToString("dd.MM.yyyy HH:mm", new CultureInfo("tr-TR"))</span>
                                 </td>
                                 <td class="col-1">
                                     <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="">Sil</button>

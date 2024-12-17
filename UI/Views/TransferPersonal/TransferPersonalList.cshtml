@@ -174,8 +174,8 @@ else
                     {
                         <tr>
                             <td>
-                                @data.PersonalNameSurname
-                                
+                                <a href="/personel-detaylari?id=@data.Personal_Id">@data.PersonalNameSurname</a>
+
                             </td>
                             <td>
                                 
@@ -194,7 +194,7 @@ else
                                 
                             </td>
                             <td>
-                                <span class="badge bg-purple">@data.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"))</span>
+                                <span class="badge bg-purple">@data.CreatedAt.ToString("dd.MM.yyyy HH:mm", new CultureInfo("tr-TR"))</span>
                             </td>
                             <td class="col-1">
                                 <button data-deleteButton type="button" class="btn btn-danger btn-sm text-white btn-pill" data-bs-toggle="modal" data-bs-target="#archiveModal" data-item-id="@data.ID" data-item-personal="@data.PersonalNameSurname">Sil</button>

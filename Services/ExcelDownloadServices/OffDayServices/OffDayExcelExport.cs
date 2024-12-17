@@ -44,8 +44,8 @@ public class OffDayExcelExport
                 worksheet.Cells[row, 1].Value = entity.Personal.NameSurname;
                 worksheet.Cells[row, 2].Value = entity.BranchName;
                 worksheet.Cells[row, 3].Value = entity.PositionName;
-                worksheet.Cells[row, 4].Value = entity.StartDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"));
-                worksheet.Cells[row, 5].Value = entity.EndDate.ToString("dd MMMM yyyy", new CultureInfo("tr-TR"));
+                worksheet.Cells[row, 4].Value = entity.StartDate.ToString("dd.MM.yyyy", new CultureInfo("tr-TR"));
+                worksheet.Cells[row, 5].Value = entity.EndDate.ToString("dd.MM.yyyy", new CultureInfo("tr-TR"));
                 worksheet.Cells[row, 6].Value = entity.CountLeave;
                 worksheet.Cells[row, 7].Value = entity.LeaveByYear;
                 worksheet.Cells[row, 8].Value = entity.LeaveByWeek;
@@ -57,7 +57,7 @@ public class OffDayExcelExport
                 worksheet.Cells[row, 14].Value = entity.LeaveByFather;
                 worksheet.Cells[row, 15].Value = entity.LeaveByDead;
                 worksheet.Cells[row, 16].Value = entity.Description;
-                worksheet.Cells[row, 17].Value = entity.CreatedAt.ToString("dd MMMM yyyy HH:mm", new CultureInfo("tr-TR"));
+                worksheet.Cells[row, 17].Value = entity.CreatedAt.ToString("dd.MM.yyyy HH:mm", new CultureInfo("tr-TR"));
                 if (entity.Personal.Status == EntityStatusEnum.Offline)
                 {
                     worksheet.Row(row).Style.Fill.PatternType = ExcelFillStyle.Solid;

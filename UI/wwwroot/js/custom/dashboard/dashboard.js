@@ -51,7 +51,7 @@
                     if (item.StartJobDate) { // EĞER İŞE BAŞLAMA TARİHİ VARSA
                         let startJobDate = new Date(item.StartJobDate);
                         let endJobDate = new Date(item.EndJobDate);
-                        if (startJobDate < firstDayOfMonth && (item.EndJobDate === null || endJobDate > firstDayOfMonth)) {
+                        if (startJobDate < firstDayOfMonth && (item.EndJobDate === null || endJobDate >= firstDayOfMonth)) {
                             startMonthWorking++;
                         } 
                         if (startJobDate.getMonth() === index && startJobDate.getFullYear() === selectedYear) {
@@ -85,7 +85,7 @@
                          <td>${monthBanPersonelMan > 0 ? `${monthBanPersonelMan} Erkek` : ""}  ${monthBanPersonelWoman > 0 ? `${monthBanPersonelWoman} Kadın` : ""} ${monthBanPersonelMan <= 0 && monthBanPersonelWoman <= 0 ? "Yok" : ""}</td>
                          <td>${startMonthWorking + monthGetPersonel - monthBanPersonel}</td> 
         `;
-
+                //<td>${startMonthWorking + monthGetPersonel - monthBanPersonel}</td> 
                 // Tabloya satırı ekle
                 tableBody.appendChild(row);
             } else if (selectedYear < today.getFullYear()) {

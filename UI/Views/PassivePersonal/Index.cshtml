@@ -233,7 +233,7 @@ else
                             <span class="badge bg-pink">Kadın</span>
                         }
                     </td>
-                    <td>@data.StartJobDate.ToString("dd/MM/yyyy")</td>
+                    <td>@data.StartJobDate.ToString("dd.MM.yyyy")</td>
 
                     @if (@data.EndJobDate == null)
                     {
@@ -241,7 +241,7 @@ else
                     }
                     else
                     {
-                        <td>@data.EndJobDate?.ToString("dd/MM/yyyy")</td>
+                        <td>@data.EndJobDate?.ToString("dd.MM.yyyy")</td>
                     }
 
                     <td>
@@ -256,7 +256,7 @@ else
                             }
                         }
                     </td>
-                    <td>@data.BirthDate.ToString("dd/MM/yyyy")</td>
+                    <td>@data.BirthDate.ToString("dd.MM.yyyy")</td>
                     <td>
                         @data.TotalYearLeave
                     </td>
