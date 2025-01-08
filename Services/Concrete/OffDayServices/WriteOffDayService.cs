@@ -38,7 +38,9 @@ public class WriteOffDayService : IWriteOffDayService
 				return result.SetStatus(false).SetErr("Date and Count not equal").SetMessage("Girdiğiniz Tarih Aralığı İle İzin Günleri Uyuşmuyor."); 
 			var personal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate: p => p.ID == dto.Personal_Id && p.Status == EntityStatusEnum.Online);
 			if(personal is null) return result.SetStatus(false).SetErr("Personal Is Not Found").SetMessage("İlgili Personel Bulunamadı.");
-			if((personal.TotalYearLeave - personal.UsedYearLeave) < dto.LeaveByYear) return result.SetStatus(false).SetErr("Personal Total Year Leave Not Enought").SetMessage("Personelin yıllık izini yetersiz.Lütfen daha küçük bir değer giriniz");
+			if((personal.TotalYearLeave - personal.UsedYearLeave) < dto.LeaveByYear) return result.SetStatus(false).SetErr("Personal Total Year Leave Not Enought").SetMessage("Personelin yıllık izini yetersiz.Lütfen daha küçük bir değer giriniz.");
+			if (personal.TotalTakenLeave < dto.LeaveByTaken * 8)
+				return result.SetStatus(false).SetErr("Personal Total Taken Leave is not enought").SetMessage("Personelin alacak izin sayısı yetersiz.Lütfen daha küçük bir değer giriniz.");
 			var mappedResult = _mapper.Map<OffDay>(dto);
 			if (dto.LeaveByMarriedFatherDead is not null)
 			{
@@ -125,11 +127,24 @@ public class WriteOffDayService : IWriteOffDayService
 				{
 					if (a.Contains("LeaveByFather"))
 						mappedResult.LeaveByFather = 5;
-					else if (a.Contains("LeaveByDead"))
+					else
+						mappedResult.LeaveByFather = 0;
+
+					if (a.Contains("LeaveByDead"))
 						mappedResult.LeaveByDead = 3;
-					else if (a.Contains("LeaveByMarried"))
+					else
+						mappedResult.LeaveByDead = 0;
+					if (a.Contains("LeaveByMarried"))
 						mappedResult.LeaveByMarried = 3;
+					else
+						mappedResult.LeaveByMarried = 0;
 				});
+			}
+			else
+			{
+				mappedResult.LeaveByFather = 0;
+				mappedResult.LeaveByDead = 0;
+				mappedResult.LeaveByMarried = 0;
 			}
 			await _unitOfWork.WriteOffDayRepository.Update(mappedResult);
 		
@@ -259,13 +274,26 @@ public class WriteOffDayService : IWriteOffDayService
 				{
 					if (a.Contains("LeaveByFather"))
 						offDay.LeaveByFather = 5;
-					else if (a.Contains("LeaveByDead"))
+					else
+						offDay.LeaveByFather = 0;
+					
+					if (a.Contains("LeaveByDead"))
 						offDay.LeaveByDead = 3;
-					else if (a.Contains("LeaveByMarried"))
+					else
+						offDay.LeaveByDead = 0;
+					if (a.Contains("LeaveByMarried"))
 						offDay.LeaveByMarried = 3;
+					else
+						offDay.LeaveByMarried = 0;
 				});
 			}
-
+			else
+			{
+				offDay.LeaveByFather = 0;
+				offDay.LeaveByDead = 0;
+				offDay.LeaveByMarried = 0;
+			}
+			
 			offDay.StartDate = dto.StartDate;
 			offDay.EndDate = dto.EndDate;
 			offDay.Description = dto.Description;

@@ -58,15 +58,21 @@
             // Option elementinin data-positionName attribute'u üzerinden değeri al
             let positionName = selectedOption.attr('data-positionName');
             $("#positionInput").val(positionName); // Eğer positionName boşsa, boş bir string ata
-            YearLeaveCount = parseInt(selectedOption.attr('data-YearLeave'),10);
-            TakenLeaveCount = selectedOption.attr('data-TakenLeave')
+            YearLeaveCount = parseInt(selectedOption.attr('data-YearLeave'), 10);
+            TakenLeaveCount = parseFloat(selectedOption.attr('data-TakenLeave'));
             if (YearLeaveCount <= 0){
                 $('[name="LeaveByYear"]').attr('disabled', true);
     
             }
             else{
                 $('[name="LeaveByYear"]').removeAttr('disabled').prop('max', YearLeaveCount);
-                
+   
+            }
+            if (TakenLeaveCount < 8) {
+                $('[name="LeaveByTaken"]').attr('disabled', true);
+            } 
+            else {
+                $('[name="LeaveByTaken"]').removeAttr('disabled').prop('max', Math.floor(TakenLeaveCount / 8));
             }
             $('#personalTotalYearLeaveCount').val(YearLeaveCount);
             $("#personalTakenLeaveCount").val(`${saatleriGunVeSaatlereCevir(TakenLeaveCount)}`)
@@ -160,7 +166,13 @@
             $('#mainDiv').removeClass('d-none');
             $('#page-loader').addClass('d-none')
             return false;
-        }else if (totalValue !== differenceInDays){
+        } else if (Math.floor(TakenLeaveCount / 8) < $('[name="LeaveByTaken"]').val()) {
+            $('#error-modal-message').text("Personelin Alacak İzin Günü Yetersiz.Lütfen daha küçük bir değer giriniz.")
+            $('#error-modal').modal('show')
+            $('#mainDiv').removeClass('d-none');
+            $('#page-loader').addClass('d-none')
+            return false;
+        } else if (totalValue !== differenceInDays){
             $('#error-modal-message').text("Girdiğiniz Tarih Aralığı İle İzin Günleri Uyuşmuyor.")
             $('#error-modal').modal('show')
             $('#mainDiv').removeClass('d-none');
