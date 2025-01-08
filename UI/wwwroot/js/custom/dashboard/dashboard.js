@@ -75,7 +75,7 @@
                             }
                             monthBanPersonel++;
                         }
-                    }
+                    }                  
                 });
                 // Satıra değerleri ekle
                 row.innerHTML = `
@@ -87,13 +87,13 @@
         `;
                 //<td>${startMonthWorking + monthGetPersonel - monthBanPersonel}</td> 
                 // Tabloya satırı ekle
-                tableBody.appendChild(row);
+                tableBody.appendChild(row);              
             } else if (selectedYear < today.getFullYear()) {
                 response.forEach(function (item) {
                     if (item.StartJobDate) { // EĞER İŞE BAŞLAMA TARİHİ VARSA
                         let startJobDate = new Date(item.StartJobDate);
                         let endJobDate = new Date(item.EndJobDate);
-                        if (startJobDate < firstDayOfMonth && (item.EndJobDate === null || endJobDate > firstDayOfMonth)) {
+                        if (startJobDate < firstDayOfMonth && (item.EndJobDate === null || endJobDate >= firstDayOfMonth)) {
                             startMonthWorking++;
                         } 
                         if (startJobDate.getMonth() === index && startJobDate.getFullYear() === selectedYear) {
