@@ -87,7 +87,7 @@
     });
     function saatleriGunVeSaatlereCevir(saat) {
         // Toplam saatleri gün ve saatlere çevir
-        let gun = Math.floor(saat / 8);
+        let gun = saat >= 0 ? Math.floor(saat / 8) : Math.ceil(saat / 8);
         let kalanSaat = saat % 8;
 
         // Sonucu döndür
@@ -166,7 +166,7 @@
             $('#mainDiv').removeClass('d-none');
             $('#page-loader').addClass('d-none')
             return false;
-        } else if (Math.floor(TakenLeaveCount / 8) < $('[name="LeaveByTaken"]').val()) {
+        } else if ($('[name="LeaveByTaken"]').val() > 0 && Math.floor(TakenLeaveCount / 8) < $('[name="LeaveByTaken"]').val()) {
             $('#error-modal-message').text("Personelin Alacak İzin Günü Yetersiz.Lütfen daha küçük bir değer giriniz.")
             $('#error-modal').modal('show')
             $('#mainDiv').removeClass('d-none');

@@ -39,7 +39,7 @@ public class WriteOffDayService : IWriteOffDayService
 			var personal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate: p => p.ID == dto.Personal_Id && p.Status == EntityStatusEnum.Online);
 			if(personal is null) return result.SetStatus(false).SetErr("Personal Is Not Found").SetMessage("İlgili Personel Bulunamadı.");
 			if((personal.TotalYearLeave - personal.UsedYearLeave) < dto.LeaveByYear) return result.SetStatus(false).SetErr("Personal Total Year Leave Not Enought").SetMessage("Personelin yıllık izini yetersiz.Lütfen daha küçük bir değer giriniz.");
-			if (personal.TotalTakenLeave < dto.LeaveByTaken * 8)
+			if (dto.LeaveByTaken > 0 && personal.TotalTakenLeave < dto.LeaveByTaken * 8)
 				return result.SetStatus(false).SetErr("Personal Total Taken Leave is not enought").SetMessage("Personelin alacak izin sayısı yetersiz.Lütfen daha küçük bir değer giriniz.");
 			var mappedResult = _mapper.Map<OffDay>(dto);
 			if (dto.LeaveByMarriedFatherDead is not null)
