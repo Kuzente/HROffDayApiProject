@@ -156,7 +156,7 @@ public class QueryController : ODataController
 	[HttpPost("detayli-filtre")]
 	public async Task<IActionResult> DetayliFiltreGetWithPost([FromBody] ODataQueryParamsModel body)
 	{
-        IResultWithDataDto<IQueryable> result = new ResultWithDataDto<IQueryable>();
+        IResultWithDataDto<object> result = new ResultWithDataDto<object>();
         //Sadece Kümülatif kolonları seçildiyse de hata dönmen lazım
 		if (string.IsNullOrWhiteSpace(body.Select))
 		{
@@ -188,7 +188,8 @@ public class QueryController : ODataController
 
 		var queryableResult = await _readDetailedFilterService.GetDetailedFilterOdataService(nameof(Personal));
 		var appliedQuery = queryOptions.ApplyTo(queryableResult);
-        result.SetData(appliedQuery);
+       
+        result.SetData(appliedQuery.Cast<object>().ToList());
 		return Ok(result);
 	}
 
