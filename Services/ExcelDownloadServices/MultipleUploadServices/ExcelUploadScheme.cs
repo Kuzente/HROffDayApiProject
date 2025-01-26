@@ -2,15 +2,14 @@
 using Core.DTOs.PositionDTOs;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using System.Net.Http.Json;
 using System.Text.Json;
 
-namespace Services.ExcelDownloadServices;
+namespace Services.ExcelDownloadServices.MultipleUploadServices;
 
 public class ExcelUploadScheme
 {
-    public byte[] ExportToExcel(List<PositionNameDto> positions , List<BranchNameDto> branches , string personalSelects)
-    {
+	public byte[] ExportToExcel(List<PositionNameDto> positions, List<BranchNameDto> branches, string personalSelects)
+	{
 		try
 		{
 			var data = JsonSerializer.Deserialize<Dictionary<string, List<Dictionary<string, string>>>>(personalSelects);
@@ -118,6 +117,7 @@ public class ExcelUploadScheme
 				int columnIndex = 1;
 				foreach (var header in headersRequired)
 				{
+					worksheet.Column(columnIndex).Style.Numberformat.Format = "@";
 					worksheet.Cells[1, columnIndex].Style.Fill.PatternType = ExcelFillStyle.Solid;
 					worksheet.Cells[1, columnIndex].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Crimson);
 					worksheet.Cells[1, columnIndex++].Value = header;
@@ -148,8 +148,8 @@ public class ExcelUploadScheme
 
 			throw;
 		}
-    }
-	
+	}
+
 	private void AddPersonalSelectWorksheetWithData(ExcelPackage package, string sheetName, dynamic data)
 	{
 		ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(sheetName);

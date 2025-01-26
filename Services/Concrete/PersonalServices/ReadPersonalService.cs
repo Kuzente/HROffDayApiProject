@@ -1,9 +1,7 @@
-﻿using System.Collections.Immutable;
-using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using Core.DTOs;
 using Core.DTOs.BranchDTOs;
-using Core.DTOs.OffDayDTOs.ReadDtos;
+using Core.DTOs.MultipleUploadDtos;
 using Core.DTOs.PassivePersonalDtos;
 using Core.DTOs.PersonalDetailDto.ReadDtos;
 using Core.DTOs.PersonalDTOs;
@@ -17,7 +15,6 @@ using Data.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Services.Abstract.PersonalServices;
-using Services.HelperServices;
 
 namespace Services.Concrete.PersonalServices;
 
@@ -507,6 +504,90 @@ public class ReadPersonalService : IReadPersonalService
 				return res.SetStatus(false).SetErr("Personel Is Not Found").SetMessage("İlgili Personel bulunamadı.Lütfen sistemi kontrol ediniz!");
 			var mappedResult = _mapper.Map<ReadPersonalDetailsHeaderDto>(personel);
 			res.SetData(mappedResult);
+		}
+		catch (Exception e)
+		{
+			res.SetStatus(false).SetErr(e.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+		return res;
+	}
+
+	public async Task<IResultWithDataDto<List<SalaryUpdateDto>>> GetPersonalsSalary()
+	{
+		IResultWithDataDto<List<SalaryUpdateDto>> res = new ResultWithDataDto<List<SalaryUpdateDto>>();
+		try
+		{
+			var personels = await _unitOfWork.ReadPersonalRepository.GetAll(
+				predicate: p => p.Status == EntityStatusEnum.Online,
+				include: a => a.Include(p => p.PersonalDetails),
+				orderBy: o => o.OrderBy(p => p.NameSurname)
+				).Select(
+				p => new SalaryUpdateDto
+				{
+					NameSurname = p.NameSurname,
+					Id = p.ID,
+					Salary = p.PersonalDetails.Salary
+				}
+				).ToListAsync();
+			if (personels is null || personels.Count() <= 0) 
+				return res.SetStatus(false).SetErr("Personel Is Not Found").SetMessage("Personel Bulunamadı.Lütfen sistemi kontrol ediniz!");
+			res.SetData(personels);
+		}
+		catch (Exception e)
+		{
+			res.SetStatus(false).SetErr(e.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+		return res;
+	}
+
+	public async Task<IResultWithDataDto<List<IbanUpdateDto>>> GetPersonalsIbans()
+	{
+		IResultWithDataDto<List<IbanUpdateDto>> res = new ResultWithDataDto<List<IbanUpdateDto>>();
+		try
+		{
+			var personels = await _unitOfWork.ReadPersonalRepository.GetAll(
+				predicate: p => p.Status == EntityStatusEnum.Online,
+				include: a => a.Include(p => p.PersonalDetails),
+				orderBy: o => o.OrderBy(p => p.NameSurname)
+				).Select(
+				p => new IbanUpdateDto
+				{
+					NameSurname = p.NameSurname,
+					Id = p.ID,
+					IBAN = p.PersonalDetails.IBAN
+				}
+				).ToListAsync();
+			if (personels is null || personels.Count() <= 0)
+				return res.SetStatus(false).SetErr("Personel Is Not Found").SetMessage("Personel Bulunamadı.Lütfen sistemi kontrol ediniz!");
+			res.SetData(personels);
+		}
+		catch (Exception e)
+		{
+			res.SetStatus(false).SetErr(e.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+		return res;
+	}
+
+	public async Task<IResultWithDataDto<List<BankAccountUpdateDto>>> GetPersonalsBankAccounts()
+	{
+		IResultWithDataDto<List<BankAccountUpdateDto>> res = new ResultWithDataDto<List<BankAccountUpdateDto>>();
+		try
+		{
+			var personels = await _unitOfWork.ReadPersonalRepository.GetAll(
+				predicate: p => p.Status == EntityStatusEnum.Online,
+				include: a => a.Include(p => p.PersonalDetails),
+				orderBy: o => o.OrderBy(p => p.NameSurname)
+				).Select(
+				p => new BankAccountUpdateDto
+				{
+					NameSurname = p.NameSurname,
+					Id = p.ID,
+					BankAccount = p.PersonalDetails.BankAccount
+				}
+				).ToListAsync();
+			if (personels is null || personels.Count() <= 0)
+				return res.SetStatus(false).SetErr("Personel Is Not Found").SetMessage("Personel Bulunamadı.Lütfen sistemi kontrol ediniz!");
+			res.SetData(personels);
 		}
 		catch (Exception e)
 		{

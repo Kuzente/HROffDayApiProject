@@ -9,6 +9,7 @@ using Services;
 using Services.HangfireFilter;
 using UI.Helpers;
 using UI.Middlewares;
+using UI.test;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,6 +59,7 @@ var connectionString = builder.Environment.IsDevelopment()
 	? builder.Configuration.GetConnectionString("Local")
 	: builder.Configuration.GetConnectionString("ProdDbConnection");
 builder.Services.AddServiceLayerService(connectionString, connectionString);
+builder.Services.AddSingleton<CustomReflectionGetClass>();
 //Test DB
 var app = builder.Build();
 app.UseMiddleware<RequestCultureMiddleware>(); //Kültür middleware
@@ -148,8 +150,15 @@ app.MapControllerRoute(name: "recoveryPersonal", pattern: "personel-gerigetir", 
 
 #endregion
 #region MultipleUpload
-app.MapControllerRoute(name: "downloadScheme", pattern: "download-scheme", defaults: new { controller = "MultipleUpload", action = "GetExcelSheme" });
-app.MapControllerRoute(name: "personalUpload", pattern: "toplu-islemler", defaults: new { controller = "MultipleUpload", action = "PersonalUpload" });
+app.MapControllerRoute(name: "downloadPersonalScheme", pattern: "download-personal-scheme", defaults: new { controller = "MultipleUpload", action = "GetExcelUploadSheme" });
+app.MapControllerRoute(name: "downloadSalaryExcelScheme", pattern: "download-salary-scheme", defaults: new { controller = "MultipleUpload", action = "GetExcelSalaryUploadSheme" });
+app.MapControllerRoute(name: "downloadIbanExcelScheme", pattern: "download-iban-scheme", defaults: new { controller = "MultipleUpload", action = "GetExcelIBANUploadSheme" });
+app.MapControllerRoute(name: "downloadBankAccountExcelScheme", pattern: "download-bank-account-scheme", defaults: new { controller = "MultipleUpload", action = "GetExcelBankAccountUploadSheme" });
+app.MapControllerRoute(name: "multipleUploadGET", pattern: "toplu-islemler", defaults: new { controller = "MultipleUpload", action = "PersonalUpload" });
+app.MapControllerRoute(name: "personalUploadPOST", pattern: "toplu-personel-yukle", defaults: new { controller = "MultipleUpload", action = "PersonalUpload" });
+app.MapControllerRoute(name: "salaryUploadPOST", pattern: "toplu-maas-yukle", defaults: new { controller = "MultipleUpload", action = "SalaryUpload" });
+app.MapControllerRoute(name: "ibanUploadPOST", pattern: "toplu-iban-yukle", defaults: new { controller = "MultipleUpload", action = "IbanUpload" });
+app.MapControllerRoute(name: "bankAccountUploadPOST", pattern: "toplu-bankno-yukle", defaults: new { controller = "MultipleUpload", action = "BankAccountUpload" });
 #endregion
 #region DailyLog
 app.MapControllerRoute(name: "dailyLogPage", pattern: "gunluk-takip", defaults: new { controller = "DailyLog", action = "Index" });

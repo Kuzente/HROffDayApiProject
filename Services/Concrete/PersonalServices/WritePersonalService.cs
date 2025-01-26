@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core;
 using Core.DTOs;
+using Core.DTOs.MultipleUploadDtos;
 using Core.DTOs.PersonalCumulativeDtos.WriteDtos;
 using Core.DTOs.PersonalDetailDto.WriteDtos;
 using Core.DTOs.PersonalDTOs;
@@ -445,6 +446,121 @@ public class WritePersonalService : IWritePersonalService
 		catch (Exception ex)
 		{
 			result.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+		return result;
+	}
+
+	public async Task<IResultDto> UpdateMultiplePersonalSalaryAsyncService(List<SalaryUpdateDto> salaryUpdates, Guid userId, string ipAddress)
+	{
+		IResultDto result = new ResultDto();
+		try
+		{
+			var personalIds = salaryUpdates.Select(s => s.Id).Distinct().ToList();
+			
+			// Fetch all personnel in a single query
+			var personnelListQuery = _unitOfWork.ReadPersonalRepository.GetAll(
+				disableTracking: false,
+				predicate: p => personalIds.Contains(p.ID) && p.Status == EntityStatusEnum.Online,
+				include: p=> p.Include(a=> a.PersonalDetails)
+				);
+			
+			var personnelList = await personnelListQuery.ToListAsync();
+
+			if (personnelList.Count != personalIds.Count)
+				return result.SetStatus(false).SetErr("Missing personnel").SetMessage($"Bazı personel kayıtları eksik veya fazlalık. Birşeyler ters gitti !!!");
+			// Update salaries in memory
+			foreach (var update in salaryUpdates)
+			{
+				var personnel = personnelList.FirstOrDefault(p => p.ID == update.Id);
+				if (personnel != null)
+				{
+					personnel.PersonalDetails.Salary = update.NewSalary;
+
+				}
+			}
+			var resultCommit = _unitOfWork.Commit();
+			if (!resultCommit)
+				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+		}
+		catch (Exception ex)
+		{
+			return result.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+		return result;
+	}
+
+	public async Task<IResultDto> UpdateMultiplePersonalIbanAsyncService(List<IbanUpdateDto> ibanUpdates, Guid userId, string ipAddress)
+	{
+		IResultDto result = new ResultDto();
+		try
+		{
+			var personalIds = ibanUpdates.Select(s => s.Id).Distinct().ToList();
+
+			// Fetch all personnel in a single query
+			var personnelListQuery = _unitOfWork.ReadPersonalRepository.GetAll(
+				disableTracking: false,
+				predicate: p => personalIds.Contains(p.ID) && p.Status == EntityStatusEnum.Online,
+				include: p => p.Include(a => a.PersonalDetails)
+				);
+
+			var personnelList = await personnelListQuery.ToListAsync();
+
+			if (personnelList.Count != personalIds.Count)
+				return result.SetStatus(false).SetErr("Missing personnel").SetMessage($"Bazı personel kayıtları eksik veya fazlalık. Birşeyler ters gitti !!!");
+			// Update salaries in memory
+			foreach (var update in ibanUpdates)
+			{
+				var personnel = personnelList.FirstOrDefault(p => p.ID == update.Id);
+				if (personnel != null)
+				{
+					personnel.PersonalDetails.IBAN = update.NewIBAN;
+				}
+			}
+			var resultCommit = _unitOfWork.Commit();
+			if (!resultCommit)
+				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+		}
+		catch (Exception ex)
+		{
+			return result.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
+		}
+		return result;
+	}
+
+	public async Task<IResultDto> UpdateMultiplePersonalBankAccountAsyncService(List<BankAccountUpdateDto> bankAccountUpdates, Guid userId, string ipAddress)
+	{
+		IResultDto result = new ResultDto();
+		try
+		{
+			var personalIds = bankAccountUpdates.Select(s => s.Id).Distinct().ToList();
+
+			// Fetch all personnel in a single query
+			var personnelListQuery = _unitOfWork.ReadPersonalRepository.GetAll(
+				disableTracking: false,
+				predicate: p => personalIds.Contains(p.ID) && p.Status == EntityStatusEnum.Online,
+				include: p => p.Include(a => a.PersonalDetails)
+				);
+
+			var personnelList = await personnelListQuery.ToListAsync();
+
+			if (personnelList.Count != personalIds.Count)
+				return result.SetStatus(false).SetErr("Missing personnel").SetMessage($"Bazı personel kayıtları eksik veya fazlalık. Birşeyler ters gitti !!!");
+			// Update salaries in memory
+			foreach (var update in bankAccountUpdates)
+			{
+				var personnel = personnelList.FirstOrDefault(p => p.ID == update.Id);
+				if (personnel != null)
+				{
+					personnel.PersonalDetails.BankAccount = update.NewBankAccount;
+				}
+			}
+			var resultCommit = _unitOfWork.Commit();
+			if (!resultCommit)
+				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
+		}
+		catch (Exception ex)
+		{
+			return result.SetStatus(false).SetErr(ex.Message).SetMessage("İşleminiz sırasında bir hata meydana geldi! Lütfen daha sonra tekrar deneyin...");
 		}
 		return result;
 	}

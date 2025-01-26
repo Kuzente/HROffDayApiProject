@@ -1,4 +1,5 @@
 ﻿using Core.DTOs;
+using Core.DTOs.MultipleUploadDtos;
 using Core.DTOs.OffDayDTOs.ReadDtos;
 using Core.DTOs.PassivePersonalDtos;
 using Core.DTOs.PersonalDetailDto.ReadDtos;
@@ -19,4 +20,7 @@ public interface IReadPersonalService
 	Task<ResultWithPagingDataDto<List<PersonalDto>>> GetDeletedPersonalListService(PersonalQuery query); // Silinen Personel Listesi Servisi
 	Task<IResultWithDataDto<List<ReadPersonalsByBranchIdDto>>> GetAllPersonalByBranchIdService(Guid branchId); // İzin Ekleme Şube ID ye göre personel getiren Servis
 	Task<IResultWithDataDto<ReadPersonalDetailsHeaderDto>> GetPersonalDetailsHeaderByIdService(Guid id); // Personel Detayları Üst Menü Servisi
+	Task<IResultWithDataDto<List<SalaryUpdateDto>>> GetPersonalsSalary(); // Personel Maaşlarını getiren servis excel raporu için
+	Task<IResultWithDataDto<List<IbanUpdateDto>>> GetPersonalsIbans(); // Personel ibanlarını getiren servis excel raporu için
+	Task<IResultWithDataDto<List<BankAccountUpdateDto>>> GetPersonalsBankAccounts(); // Personel banka hesaplarını getiren servis excel raporu için
 }

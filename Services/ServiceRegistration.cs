@@ -28,7 +28,6 @@ using Services.Concrete.OffDayServices;
 using Services.Concrete.TransferPersonalService;
 using Services.Concrete.UserLogServices;
 using Services.Concrete.UserServices;
-using Services.ExcelDownloadServices;
 using Services.ExcelDownloadServices.BranchServices;
 using Services.ExcelDownloadServices.MissingDayServices;
 using Services.ExcelDownloadServices.OffDayServices;
@@ -39,6 +38,7 @@ using Services.HelperServices;
 using Services.PdfDownloadServices;
 using Services.ExcelDownloadServices.PersonalCountsServices;
 using Services.TestMailServices;
+using Services.ExcelDownloadServices.MultipleUploadServices;
 
 namespace Services;
 
@@ -84,6 +84,9 @@ public static class ServiceRegistration
 		services.AddScoped(typeof(MissingDayPersonalListExcelExport));
 		services.AddScoped(typeof(PersonalCountExcelExport));
 		services.AddScoped(typeof(ExcelUploadScheme));
+		services.AddScoped(typeof(SalaryExcelUploadScheme));
+		services.AddScoped(typeof(IbanExcelUploadScheme));
+		services.AddScoped(typeof(BankAccountExcelUploadScheme));
 		#endregion
 		#region HelperClasses
 		services.AddSingleton(typeof(RecaptchaVerifyHelper));
