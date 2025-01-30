@@ -478,6 +478,14 @@ public class WritePersonalService : IWritePersonalService
 
 				}
 			}
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "Personal",
+				LogType = LogType.Update,
+				Description = "Toplu Maaş Güncellendi.",
+				IpAddress = ipAddress,
+				UserID = userId,
+			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
@@ -516,6 +524,14 @@ public class WritePersonalService : IWritePersonalService
 					personnel.PersonalDetails.IBAN = update.NewIBAN;
 				}
 			}
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "Personal",
+				LogType = LogType.Update,
+				Description = "Toplu IBAN Güncellendi.",
+				IpAddress = ipAddress,
+				UserID = userId,
+			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
@@ -554,6 +570,14 @@ public class WritePersonalService : IWritePersonalService
 					personnel.PersonalDetails.BankAccount = update.NewBankAccount;
 				}
 			}
+			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
+			{
+				EntityName = "Personal",
+				LogType = LogType.Update,
+				Description = "Toplu Banka Hesabı Güncellendi.",
+				IpAddress = ipAddress,
+				UserID = userId,
+			});
 			var resultCommit = _unitOfWork.Commit();
 			if (!resultCommit)
 				return result.SetStatus(false).SetErr("Commit Fail").SetMessage("Data kayıt edilemedi! Lütfen yaptığınız işlem bilgilerini kontrol ediniz...");
