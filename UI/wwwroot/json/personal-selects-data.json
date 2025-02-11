@@ -27,7 +27,7 @@
     { "Name": "Ön Lisans", "Value": "Ön Lisans" },
     { "Name": "Lisans", "Value": "Lisans" },
     { "Name": "Yüksek Lisans", "Value": "Yüksek Lisans" },
-    {"Name": "Doktora","Value": "Doktora"}
+    { "Name": "Doktora", "Value": "Doktora" }
   ],
   "maritalStatus": [
     { "Name": "Bekar", "Value": "Bekar" },
@@ -72,7 +72,6 @@
       "Name": "Santral Görevlisi",
       "Value": "Santral Görevlisi"
     },
-
 
     {
       "Name": "Depo",
@@ -245,6 +244,14 @@
     {
       "Name": "Temizlik Ekibi",
       "Value": "Temizlik Ekibi"
+    },
+    {
+      "Name": "Mart Ayı Kısmı Süreli",
+      "Value": "Mart Ayı Kısmı Süreli"
+    },
+    {
+      "Name": "Iyaş Ajans",
+      "Value": "Iyaş Ajans"
     }
   ]
 }
