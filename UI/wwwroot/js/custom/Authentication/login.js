@@ -48,6 +48,10 @@
                         $('#error-modal-message').text(res.message)
                         $('#error-modal').modal('show')
                     }
+                }).fail(function (xhr, status, error) {
+                    spinnerEnd($('#submitButton')); // Hata durumunda da spinner durdur
+                    $('#error-modal-message').text("İsteğiniz işlenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.");
+                    $('#error-modal').modal('show');
                 })
             });
         });
