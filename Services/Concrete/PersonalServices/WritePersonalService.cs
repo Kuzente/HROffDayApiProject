@@ -104,7 +104,9 @@ public class WritePersonalService : IWritePersonalService
 		List<string> logDescriptions = new List<string>();
 		try
 		{
-			var getPersonal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(predicate:p=> p.ID == writeDto.ID,include:a=>a.Include(b=>b.Branch).Include(c=>c.Position));
+			var getPersonal = await _unitOfWork.ReadPersonalRepository.GetSingleAsync(
+				predicate:p=> p.ID == writeDto.ID,
+				include:a=>a.Include(b=>b.Branch).Include(c=>c.Position));
 			if (getPersonal is  null) return result.SetStatus(false).SetErr("Not Found Data").SetMessage("İlgili Personel Bulunamadı!!!");
 			if(getPersonal.Status != EntityStatusEnum.Online) return result.SetStatus(false).SetErr("Personel is Not Active").SetMessage("İlgili Personel Aktif Olarak Çalışmamaktadır!!!");
 			//Personel Şubesi veya Ünvanı Değişti ise nakil tablosuna ekleme yap
@@ -131,9 +133,32 @@ public class WritePersonalService : IWritePersonalService
 			var mapSet = _mapper.Map<Personal>(writeDto);
 			mapSet.ID = getPersonal.ID;
 			mapSet.CreatedAt = getPersonal.CreatedAt;
-			mapSet.TotalYearLeave = getPersonal.TotalYearLeave;
-			mapSet.UsedYearLeave = getPersonal.UsedYearLeave;
-			mapSet.YearLeaveDate = getPersonal.YearLeaveDate;
+			//Personelin yıllık izin yenilenme tarihi değişti ise
+			if (mapSet.YearLeaveDate != getPersonal.YearLeaveDate)
+			{
+				var oldCumulativeList = _unitOfWork.ReadPersonalCumulativeRepository.GetAll(predicate: p => p.Personal_Id == getPersonal.ID).ToList();
+				await _unitOfWork.WritePersonalCumulativeRepository.RemoveRangeAsync(oldCumulativeList);
+				//Yeni kümülatif hesabı
+				var cumulativeFormula = CalculateCumulativeHelper.CalculateCumulative(mapSet.YearLeaveDate, mapSet.BirthDate, mapSet.IsYearLeaveRetired, mapSet.RetiredDate);
+				//Yeni toplam hak edilen izin
+				var newTotalYearLeave = cumulativeFormula
+										.Split('+')
+										.Select(s => !string.IsNullOrEmpty(s) ? int.Parse(s) : 0)
+										.Sum();
+				//Yeni Personel Kümülatifleri
+				var personalCumulatives = CalculateCumulativeHelper.GetCumulativeList(cumulativeFormula, mapSet.YearLeaveDate.Year, 0);
+				mapSet.PersonalCumulatives = personalCumulatives;
+				mapSet.TotalYearLeave = newTotalYearLeave;
+				mapSet.UsedYearLeave = 0;
+				
+
+				//LOG EKLENEBİLİR
+			}
+			else
+			{
+				mapSet.TotalYearLeave = getPersonal.TotalYearLeave;
+				mapSet.UsedYearLeave = getPersonal.UsedYearLeave;
+			}
 			await _unitOfWork.WritePersonalRepository.Update(mapSet);
 			await _unitOfWork.WriteUserLogRepository.AddAsync(new UserLog
 			{

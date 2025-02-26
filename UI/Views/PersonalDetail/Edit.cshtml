@@ -38,730 +38,815 @@
 </div>
 <!--Top Header-->
 <div class="card container-xl mt-3">
-<div class="card-status-top bg-azure"></div>
-<div class="card-header">
-    <ul class="nav nav-tabs card-header-tabs flex-row-reverse">
-        <li class="nav-item">
-            <a id="personelNakilPage" href="" class="nav-link">Görevlendirmeler</a>
-        </li>
-        <li class="nav-item">
-            <a id="personelEksikGunPage" href="" class="nav-link">Eksik Gün</a>
-        </li>
-        <li class="nav-item">
-            <a id="personelİzinleriPage" href="" class="nav-link">Personele Ait İzinler</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active">Personel Detayları</a>
-        </li>
-    </ul>
-</div>
-<!--FirstCard-->
-<div class="card-body">
-    <!-- Card Header-->
-    <div class="d-flex align-items-start align-items-sm-center gap-4">
-        <span id="personalAvatar" class="avatar avatar-xl mb-4 rounded bg-primary-lt"></span>
-        <div class="col">
-            <div class="border rounded p-3 mb-2">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <span class="bg-yellow-lt avatar">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-dollar" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M13 21h-7a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v3"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h12.5"/><path d="M21 15h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5"/><path d="M19 21v1m0 -8v1"/>
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="col">
-                        <div id="badgeTotalTakenLeave" class="font-weight-medium">
-
+    <div class="card-status-top bg-azure"></div>
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs flex-row-reverse">
+            <li class="nav-item">
+                <a id="personelNakilPage" href="" class="nav-link">Görevlendirmeler</a>
+            </li>
+            <li class="nav-item">
+                <a id="personelEksikGunPage" href="" class="nav-link">Eksik Gün</a>
+            </li>
+            <li class="nav-item">
+                <a id="personelİzinleriPage" href="" class="nav-link">Personele Ait İzinler</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active">Personel Detayları</a>
+            </li>
+        </ul>
+    </div>
+    <!--FirstCard-->
+    <div class="card-body">
+        <!-- Card Header-->
+        <div class="d-flex align-items-start align-items-sm-center gap-4">
+            <span id="personalAvatar" class="avatar avatar-xl mb-4 rounded bg-primary-lt"></span>
+            <div class="col">
+                <div class="border rounded p-3 mb-2">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <span class="bg-yellow-lt avatar">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-dollar" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M13 21h-7a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v3" />
+                                    <path d="M16 3v4" />
+                                    <path d="M8 3v4" />
+                                    <path d="M4 11h12.5" />
+                                    <path d="M21 15h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5" />
+                                    <path d="M19 21v1m0 -8v1" />
+                                </svg>
+                            </span>
                         </div>
-                        <div id="alacak-izin-text" class="text-muted">
-                            Alacak İzin Miktarı
+                        <div class="col">
+                            <div id="badgeTotalTakenLeave" class="font-weight-medium">
+
+                            </div>
+                            <div id="alacak-izin-text" class="text-muted">
+                                Alacak İzin Miktarı
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="border rounded p-3">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <span class="bg-cyan-lt avatar">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-fish" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.69 7.44a6.973 6.973 0 0 0 -1.69 4.56c0 1.747 .64 3.345 1.699 4.571"/><path d="M2 9.504c7.715 8.647 14.75 10.265 20 2.498c-5.25 -7.761 -12.285 -6.142 -20 2.504"/><path d="M18 11v.01"/><path d="M11.5 10.5c-.667 1 -.667 2 0 3"/>
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="col">
-                        <div id="badgeFoodAid" class="font-weight-medium">
+                <div class="border rounded p-3">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <span class="bg-cyan-lt avatar">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-fish" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M16.69 7.44a6.973 6.973 0 0 0 -1.69 4.56c0 1.747 .64 3.345 1.699 4.571" />
+                                    <path d="M2 9.504c7.715 8.647 14.75 10.265 20 2.498c-5.25 -7.761 -12.285 -6.142 -20 2.504" />
+                                    <path d="M18 11v.01" />
+                                    <path d="M11.5 10.5c-.667 1 -.667 2 0 3" />
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="col">
+                            <div id="badgeFoodAid" class="font-weight-medium">
 
-                        </div>
-                        <div id="gida-yardim-text" class="text-muted">
-                            Güncel Gıda Yardımı
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="border rounded p-3 mb-2">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <span class="bg-green-lt avatar">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M12.5 21h-6.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v5"></path>
-                                <path d="M16 3v4"></path>
-                                <path d="M8 3v4"></path>
-                                <path d="M4 11h16"></path>
-                                <path d="M16 19h6"></path>
-                                <path d="M19 16v6"></path>
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="col">
-                        <div id="badgeTotalYearLeave" class="font-weight-medium">
-
-                        </div>
-                        <div class="text-muted">
-                            Hak Edilen Yıllık İzin Miktarı
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="border rounded p-3">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <span class="bg-red-lt avatar">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M12.5 21h-6.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v8"></path>
-                                <path d="M16 3v4"></path>
-                                <path d="M8 3v4"></path>
-                                <path d="M4 11h16"></path>
-                                <path d="M16 19h6"></path>
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="col">
-                        <div id="badgeUsedYearLeave" class="font-weight-medium">
-
-                        </div>
-                        <div class="text-muted">
-                            Kullanılan Yıllık İzin Miktarı
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="border rounded p-3">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <span class="bg-dark-lt avatar">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4"></path>
-                                <path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
-                                <path d="M15 3v4"></path>
-                                <path d="M7 3v4"></path>
-                                <path d="M3 11h16"></path>
-                                <path d="M18 16.496v1.504l1 1"></path>
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="col">
-                        <div id="balanceYearLeave" class="font-weight-medium">
-
-                        </div>
-                        <div class="text-muted">
-                            Kalan Yıllık İzin
-                        </div>
-                        <small class="text-danger" id="balanceYearWarning"></small>
-                    </div>
-                    <div class="col">
-                        <div class="dropdown filter-dropdown">
-                            <button class="btn btn-teal" data-bs-toggle="dropdown" data-bs-trigger="hover" data-bs-auto-close="outside">Detay</button>
-                            <div class="dropdown-menu dropdown-menu-start" style="z-index: 10000">
-                                <div class="dropdown-header" style="width: 250px;">Detaylı Kalan İzin Grafiği</div>
-
-                                <div id="balanceYearLeaveDetail" class="p-4"></div>
+                            </div>
+                            <div id="gida-yardim-text" class="text-muted">
+                                Güncel Gıda Yardımı
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-    </div>
-    <!-- Card Header-->
-</div>
-<!--FirstCard-->
-<div class="card-body">
-
-
-<!-- /Main Card -->
-<div class="card-header">
-    <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <a href="#tabs-home-1" class="nav-link active" data-bs-toggle="tab" aria-selected="true" role="tab">Kişisel Bilgiler</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a href="#tabs-profile-1" class="nav-link" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab">Diğer Bilgiler</a>
-        </li>
-        <li class="nav-item" role="presentation">
-            <a href="#tabs-profile-2" class="nav-link" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab">Yıllık İzin Kümülatif Bilgileri</a>
-        </li>
-        <li class="nav-item ms-auto" role="presentation">
-            <a href="#tabs-settings-1" class="nav-link" title="Settings" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
-                </svg>
-                Yıllık İzin, Alacak İzin ve Gıda Yardımı Ayarları
-            </a>
-        </li>
-    </ul>
-</div>
-
-<div class="card-body">
-<form id="updatePersonalForm" method="POST" onsubmit="return false">
-<div class="tab-content">
-
-<input type="hidden" name="ID">
-<input type="hidden" name="PersonalDetails.ID">
-<input type="hidden" name="returnUrl" value="@returnUrl">
-<div class="tab-pane active show" id="tabs-home-1" role="tabpanel">
-    <div class="hr-text mb-3 text-black">Personel Bilgileri</div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col mb-3">
-                <label class="form-label required">Adı Soyadı</label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
-                            <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
-                        </svg>
-                    </span>
-                    <input type="text" name="NameSurname" class="form-control" placeholder="Personal Ad-Soyadını Giriniz!" disabled>
-                </div>
-            </div>
-            <div class="col mb-3">
-                <label class="form-label required">İşe Başlama Tarihi</label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
-                            <path d="M16 3v4"></path>
-                            <path d="M8 3v4"></path>
-                            <path d="M4 11h16"></path>
-                            <path d="M11 15h1"></path>
-                            <path d="M12 15v3"></path>
-                        </svg>
-                    </span>
-                    <input id="StartJobDateInput" type="date" name="StartJobDate" class="form-control" placeholder="Personal İşe başlangıç Tarihi!" disabled>
-                </div>
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col mb-3">
-                <label class="form-label required">Doğum Tarihi</label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cake" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M3 20h18v-8a3 3 0 0 0 -3 -3h-12a3 3 0 0 0 -3 3v8z"></path>
-                            <path d="M3 14.803c.312 .135 .654 .204 1 .197a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1c.35 .007 .692 -.062 1 -.197"></path>
-                            <path d="M12 4l1.465 1.638a2 2 0 1 1 -3.015 .099l1.55 -1.737z"></path>
-                        </svg>
-                    </span>
-                    <input type="date" name="BirthDate" class="form-control" placeholder="Personal Doğum Tarihi!" disabled>
-                </div>
-            </div>
-            <div class="col mb-3">
-                <label class="form-label required">Doğum Yeri </label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-baby-carriage" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M18 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M2 5h2.5l1.632 4.897a6 6 0 0 0 5.693 4.103h2.675a5.5 5.5 0 0 0 0 -11h-.5v6"/><path d="M6 9h14"/><path d="M9 17l1 -3"/><path d="M16 14l1 3"/>
-                        </svg>
-                    </span>
-                    <input type="text" name="PersonalDetails.BirthPlace" class="form-control" placeholder="Personal Doğum Yeri Giriniz!" disabled>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-
-            <div class="col mb-3">
-                <label class="form-label required">TC Kimlik No </label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z"></path>
-                            <path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                            <path d="M15 8l2 0"></path>
-                            <path d="M15 12l2 0"></path>
-                            <path d="M7 16l10 0"></path>
-                        </svg>
-                    </span>
-                    <input type="text" name="IdentificationNumber" class="form-control" placeholder="Personal Tc Kimlik Giriniz!" disabled>
-                </div>
-            </div>
-            <div class="col mb-3">
-                <label class="form-label required">Sicil No </label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id-badge-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M7 12h3v4h-3z"></path>
-                            <path d="M10 6h-6a1 1 0 0 0 -1 1v12a1 1 0 0 0 1 1h16a1 1 0 0 0 1 -1v-12a1 1 0 0 0 -1 -1h-6"></path>
-                            <path d="M10 3m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"></path>
-                            <path d="M14 16h2"></path>
-                            <path d="M14 12h4"></path>
-                        </svg>
-                    </span>
-                    <input type="number" name="RegistirationNumber" class="form-control" placeholder="Personal Sicil No Giriniz!" disabled>
-                </div>
-            </div>
-
-        </div>
-        <div class="row">
-            <div class="col mb-3">
-                <label class="form-label required">SSK Numarası </label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id-badge" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 3m0 3a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-8a3 3 0 0 1 -3 -3z"/><path d="M12 13m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M10 6h4"/><path d="M9 18h6"/>
-                        </svg>
-                    </span>
-                    <input type="text" name="PersonalDetails.SskNumber" class="form-control" placeholder="Personal SSK No Giriniz!" disabled>
-                </div>
-            </div>
-            <div class="col mb-3">
-                <label class="form-label required">SGK Kodu </label>
-                <div class="input-group input-group-merge">
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-scan" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 9a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M4 8v-2a2 2 0 0 1 2 -2h2"/><path d="M4 16v2a2 2 0 0 0 2 2h2"/><path d="M16 4h2a2 2 0 0 1 2 2v2"/><path d="M16 20h2a2 2 0 0 0 2 -2v-2"/><path d="M8 16a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2"/>
-                        </svg>
-                    </span>
-                    <input type="text" name="PersonalDetails.SgkCode" class="form-control" placeholder="Personal SGK Kodunu Giriniz!" disabled>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col mb-3">
-                <label class="form-label required">Ünvan / Görev</label>
-                <select id="positionSelectModal" class="form-select" name="Position_Id" disabled>
-                </select>
-            </div>
-            <div class="col mb-3">
-                <label class="form-label required">Şube</label>
-                <select id="branchSelectModal" class="form-select" name="Branch_Id" disabled>
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-6 mb-3">
-                <label class="form-label required">Departman</label>
-                <select id="departmantNameSelect" data-required="true" class="form-select" data-departmantSelect name="PersonalDetails.DepartmantName" disabled>
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-4 mb-3 form-check form-switch mb-3 border">
-                <div class="d-flex flex-column align-items-center">
-                    <label class="form-label" for="RetiredOrOldInput">Emeklilik Durumu</label>
-                    <input class="form-check-input" name="RetiredOrOld" type="checkbox" id="RetiredOrOldInput" disabled>
-                </div>
-            </div>
-            <div class="col-2 mb-3 form-check form-switch mb-3 border ">
-                <div class="d-flex flex-column justify-content-center align-items-center">
-                    <label class="form-label" for="PersonalDetails.HandicappedInput">Engelli Personel</label>
-                    <input class="form-check-input" name="PersonalDetails.Handicapped" type="checkbox" id="PersonalDetails.HandicappedInput" disabled>
-                </div>
-            </div>
-
-            <div class="col-3 mb-3">
-                <div class="d-flex justify-content-center">
-                    <label class="form-label required">Cinsiyet</label>
-                </div>
-
-                <div class="d-flex justify-content-evenly">
-                    <label class="form-selectgroup-item">
-                        <input type="radio" value="Erkek" name="Gender" class="form-selectgroup-input" disabled>
-                        <span class="form-selectgroup-label">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-gender-male" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 14m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0"/><path d="M19 5l-5.4 5.4"/><path d="M19 5h-5"/><path d="M19 5v5"/>
-                            </svg>
-                            Erkek
-                        </span>
-                    </label>
-                    <label class="form-selectgroup-item">
-                        <input type="radio" value="Kadın" name="Gender" class="form-selectgroup-input" disabled>
-                        <span class="form-selectgroup-label">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/user -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-gender-female" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0"/><path d="M12 14v7"/><path d="M9 18h6"/>
-                            </svg>
-                            Kadın
-                        </span>
-                    </label>
-                </div>
-            </div>
-            <div class="col-3 mb-3">
-                <label class="form-label required">Maaş</label>
-                <div class="input-group">
-                    <input class="form-control" name="PersonalDetails.Salary" type="text" placeholder="Örn: 12350.45" disabled>
-                    <span class="input-group-text">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-currency-lira" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 5v15a7 7 0 0 0 7 -7"/><path d="M6 15l8 -4"/><path d="M14 7l-8 4"/>
-                        </svg>
-                    </span>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <div class=" text-end">
-        <button id="enableEditButton" data-enableEditBtn class="btn btn-secondary">Düzenlemeyi Etkinleştir</button>
-        <button disabled id="updatePersonalButton" data-updateBtn class="btn btn-lime">Personeli Güncelle</button>
-    </div>
-</div>
-<div class="tab-pane mb-3" id="tabs-profile-1" role="tabpanel">
-    <div class="hr-text mb-3 text-black">Diğer Bilgiler</div>
-    <div class="row">
-        <div class="col mb-3">
-            <label class="form-label">Anne Adı</label>
-            <div class="input-group input-group-merge">
-                <span class="input-group-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-woman" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M10 16v5"></path>
-                        <path d="M14 16v5"></path>
-                        <path d="M8 16h8l-2 -7h-4z"></path>
-                        <path d="M5 11c1.667 -1.333 3.333 -2 5 -2"></path>
-                        <path d="M19 11c-1.667 -1.333 -3.333 -2 -5 -2"></path>
-                        <path d="M12 4m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                    </svg>
-                </span>
-                <input type="text" name="PersonalDetails.MotherName" class="form-control" placeholder="Anne Adını Giriniz!" disabled>
-            </div>
-        </div>
-        <div class="col mb-3">
-            <label class="form-label">Baba Adı</label>
-            <div class="input-group input-group-merge">
-                <span class="input-group-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-man" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M10 16v5"></path>
-                        <path d="M14 16v5"></path>
-                        <path d="M9 9h6l-1 7h-4z"></path>
-                        <path d="M5 11c1.333 -1.333 2.667 -2 4 -2"></path>
-                        <path d="M19 11c-1.333 -1.333 -2.667 -2 -4 -2"></path>
-                        <path d="M12 4m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
-                    </svg>
-                </span>
-                <input type="text" name="PersonalDetails.FatherName" class="form-control" placeholder="Baba Adını Giriniz!" disabled>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col mb-3">
-            <label class="form-label">Eğitim Durumu</label>
-            <div class="input-group">
-                <span class="input-group-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-school" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 9l-10 -4l-10 4l10 4l10 -4v6"/><path d="M6 10.6v5.4a6 3 0 0 0 12 0v-5.4"/>
-                    </svg>
-                </span>
-                <select id="EducationStatusSelect" class="form-select" name="PersonalDetails.EducationStatus" disabled>
-                    
-                </select>
-            </div>
-
-        </div>
-        <div class="col mb-3">
-            <label class="form-label">Personelin Bulunduğu Grup</label>
-            <div class="input-group input-group-merge">
-                <span class="input-group-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-books" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 4m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"/><path d="M9 4m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"/><path d="M5 8h4"/><path d="M9 16h4"/><path d="M13.803 4.56l2.184 -.53c.562 -.135 1.133 .19 1.282 .732l3.695 13.418a1.02 1.02 0 0 1 -.634 1.219l-.133 .041l-2.184 .53c-.562 .135 -1.133 -.19 -1.282 -.732l-3.695 -13.418a1.02 1.02 0 0 1 .634 -1.219l.133 -.041z"/><path d="M14 9l4 -1"/><path d="M16 16l3.923 -.98"/>
-                    </svg>
-                </span>
-                <select id="PersonalGroupSelect" class="form-select" name="PersonalDetails.PersonalGroup" disabled>
-                    
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6 mb-3">
-            <label class="form-label">Telefon No </label>
-            <div class="input-group input-group-merge">
-                <span class="input-group-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-phone" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2"></path>
-                    </svg>
-                </span>
-                <input disabled type="tel" name="Phonenumber" class="form-control" data-mask="000-000-00-00" data-mask-visible="true" placeholder="000-000-00-00" autocomplete="off">
-            </div>
-        </div>
-        <div class="col-2 mb-3">
-            <label class="form-label">Medeni Durumu</label>
-            <div class="input-group">
-                <span class="input-group-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hand-ring-finger" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 13v-2.5a1.5 1.5 0 0 1 3 0v1.5"/><path d="M17 11.5a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1 -6 6h-2h.208a6 6 0 0 1 -5.012 -2.7a69.74 69.74 0 0 1 -.196 -.3c-.312 -.479 -1.407 -2.388 -3.286 -5.728a1.5 1.5 0 0 1 .536 -2.022a1.867 1.867 0 0 1 2.28 .28l1.47 1.47"/><path d="M11 11.5v-2a1.5 1.5 0 1 1 3 0v2.5"/><path d="M14 12v-6.5a1.5 1.5 0 0 1 3 0v6.5"/>
-                    </svg>
-                </span>
-                <select id="MaritalStatusSelect" class="form-select" name="PersonalDetails.MaritalStatus" disabled>
-                    
-                </select>
-            </div>
-
-        </div>
-        <div class="col-2 mb-3">
-            <label class="form-label">Beden Ölçüsü</label>
-            <div class="input-group">
-                <span class="input-group-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-ruler-3" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.875 8c.621 0 1.125 .512 1.125 1.143v5.714c0 .631 -.504 1.143 -1.125 1.143h-15.875a1 1 0 0 1 -1 -1v-5.857c0 -.631 .504 -1.143 1.125 -1.143h15.75z"/><path d="M9 8v2"/><path d="M6 8v3"/><path d="M12 8v3"/><path d="M18 8v3"/><path d="M15 8v2"/>
-                    </svg>
-                </span>
-                <select id="BodySizeSelect" class="form-select" name="PersonalDetails.BodySize" disabled>
-                    
-                </select>
-            </div>
-
-        </div>
-        <div class="col-2 mb-3">
-            <label class="form-label">Kan Grubu</label>
-            <div class="input-group">
-                <span class="input-group-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-vaccine" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 3l4 4"/><path d="M19 5l-4.5 4.5"/><path d="M11.5 6.5l6 6"/><path d="M16.5 11.5l-6.5 6.5h-4v-4l6.5 -6.5"/><path d="M7.5 12.5l1.5 1.5"/><path d="M10.5 9.5l1.5 1.5"/><path d="M3 21l3 -3"/>
-                    </svg>
-                </span>
-                <select id="BloodGroupSelect" class="form-select" name="PersonalDetails.BloodGroup" disabled>
-                    
-                </select>
-            </div>
-
-        </div>
-
-    </div>
-    <div class="row">
-        <div class="col mb-3">
-            <label class="form-label">Banka Hesap No</label>
-            <div class="input-group input-group-merge">
-                <span class="input-group-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-bank" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l18 0"/><path d="M3 10l18 0"/><path d="M5 6l7 -3l7 3"/><path d="M4 10l0 11"/><path d="M20 10l0 11"/><path d="M8 14l0 3"/><path d="M12 14l0 3"/><path d="M16 14l0 3"/>
-                    </svg>
-                </span>
-                <input type="text" name="PersonalDetails.BankAccount" class="form-control" placeholder="Banka Hesap No Giriniz" disabled>
-            </div>
-        </div>
-        <div class="col-6 mb-3">
-            <label class="form-label">IBAN Adresi </label>
-            <div class="input-group input-group-merge">
-                <span class="input-group-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-wallet" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12"/><path d="M20 12v4h-4a2 2 0 0 1 0 -4h4"/>
-                    </svg>
-                </span>
-                <input type="text" name="PersonalDetails.IBAN" class="form-control" data-mask="TR00-0000-0000-0000-0000-0000-00" data-mask-visible="true" placeholder="TR00-0000-0000-0000-0000-0000-00" autocomplete="off" disabled>
-            </div>
-        </div>
-
-    </div>
-    <div class="row">
-        <div class="col mb-3">
-            <label class="form-label">Adres </label>
-            <div class="input-group input-group-merge">
-                <span class="input-group-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-address-book" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20 6v12a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2z"/><path d="M10 16h6"/><path d="M13 11m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M4 8h3"/><path d="M4 12h3"/><path d="M4 16h3"/>
-                    </svg>
-                </span>
-                <textarea name="PersonalDetails.Address" class="form-control" data-bs-toggle="autosize" placeholder="Personel Adresini Giriniz!!!" disabled style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 59.6px;"></textarea>
-            </div>
-        </div>
-    </div>
-    <div class=" text-end">
-        <button id="enableEditButton" data-enableEditBtn class="btn btn-secondary">Düzenlemeyi Etkinleştir</button>
-        <button disabled id="updatePersonalButton" data-updateBtn class="btn btn-lime">Personeli Güncelle</button>
-    </div>
-</div>
-<div class="tab-pane" id="tabs-settings-1" role="tabpanel">
-    <div class="row mb-3 mt-3">
-        <div class="col pe-5">
-            <label class="form-label text-center mb-3">Yıllık İzin ve Gıda Yardımı</label>
-            <div class="row mb-3">
-                <div class="col">
-                    <div class="input-group input-group-merge">
-                        <span class="input-group-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bell-z-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.235 19c.865 0 1.322 1.024 .745 1.668a3.992 3.992 0 0 1 -2.98 1.332a3.992 3.992 0 0 1 -2.98 -1.332c-.552 -.616 -.158 -1.579 .634 -1.661l.11 -.006h4.471z" stroke-width="0" fill="currentColor"/><path d="M12 2c1.358 0 2.506 .903 2.875 2.141l.046 .171l.008 .043a8.013 8.013 0 0 1 4.024 6.069l.028 .287l.019 .289v2.931l.021 .136a3 3 0 0 0 1.143 1.847l.167 .117l.162 .099c.86 .487 .56 1.766 -.377 1.864l-.116 .006h-16c-1.028 0 -1.387 -1.364 -.493 -1.87a3 3 0 0 0 1.472 -2.063l.021 -.143l.001 -2.97a8 8 0 0 1 3.821 -6.454l.248 -.146l.01 -.043a3.003 3.003 0 0 1 2.562 -2.29l.182 -.017l.176 -.004zm2 6h-4l-.117 .007a1 1 0 0 0 -.883 .993l.007 .117a1 1 0 0 0 .993 .883h1.584l-2.291 2.293l-.076 .084c-.514 .637 -.07 1.623 .783 1.623h4l.117 -.007a1 1 0 0 0 .883 -.993l-.007 -.117a1 1 0 0 0 -.993 -.883h-1.586l2.293 -2.293l.076 -.084c.514 -.637 .07 -1.623 -.783 -1.623z" stroke-width="0" fill="currentColor"/>
-                            </svg>
-                        </span>
-                        <span data-yearLeaveDate class="form-control disabled"></span>
-                        <span class="input-group-text">
-                            Yıllık İzin Yenilenme Tarihi
-                        </span>
-                    </div>
-                    <small id="yearLeaveDateIsDefault" class="form-hint"></small>
-                    
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    <div class="input-group input-group-merge">
-                        <span class="input-group-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-fish" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M16.69 7.44a6.973 6.973 0 0 0 -1.69 4.56c0 1.747 .64 3.345 1.699 4.571"></path><path d="M2 9.504c7.715 8.647 14.75 10.265 20 2.498c-5.25 -7.761 -12.285 -6.142 -20 2.504"></path><path d="M18 11v.01"></path><path d="M11.5 10.5c-.667 1 -.667 2 0 3"></path>
-                            </svg>
-                        </span>
-                        <input type="number" data-foodAid name="FoodAid" class="form-control" disabled/>
-                        <span class="input-group-text">
-                            Gıda Yardımı Miktarı
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    <div class="input-group input-group-merge">
-                        <span class="input-group-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bell-z-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14.235 19c.865 0 1.322 1.024 .745 1.668a3.992 3.992 0 0 1 -2.98 1.332a3.992 3.992 0 0 1 -2.98 -1.332c-.552 -.616 -.158 -1.579 .634 -1.661l.11 -.006h4.471z" stroke-width="0" fill="currentColor"/><path d="M12 2c1.358 0 2.506 .903 2.875 2.141l.046 .171l.008 .043a8.013 8.013 0 0 1 4.024 6.069l.028 .287l.019 .289v2.931l.021 .136a3 3 0 0 0 1.143 1.847l.167 .117l.162 .099c.86 .487 .56 1.766 -.377 1.864l-.116 .006h-16c-1.028 0 -1.387 -1.364 -.493 -1.87a3 3 0 0 0 1.472 -2.063l.021 -.143l.001 -2.97a8 8 0 0 1 3.821 -6.454l.248 -.146l.01 -.043a3.003 3.003 0 0 1 2.562 -2.29l.182 -.017l.176 -.004zm2 6h-4l-.117 .007a1 1 0 0 0 -.883 .993l.007 .117a1 1 0 0 0 .993 .883h1.584l-2.291 2.293l-.076 .084c-.514 .637 -.07 1.623 .783 1.623h4l.117 -.007a1 1 0 0 0 .883 -.993l-.007 -.117a1 1 0 0 0 -.993 -.883h-1.586l2.293 -2.293l.076 -.084c.514 -.637 .07 -1.623 -.783 -1.623z" stroke-width="0" fill="currentColor"/>
-                            </svg>
-                        </span>
-                        <input type="date" data-foodAidDate name="FoodAidDate" class="form-control" disabled/>
-                        <span class="input-group-text">
-                            Gıda Yardımı Yenilenme Tarihi
-                        </span>
-                    </div>
-                    <small id="foodAidIsDefault" class="form-hint"></small>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col">
-                    <div class="input-group input-group-merge">
-                        <span class="input-group-text">
-                            <label class="form-switch">
-                                <input id="IsYearLeaveRetiredInput" class="form-check-input" type="checkbox" name="IsYearLeaveRetired" disabled>
-                            </label>
-                        </span>
-                        <span class="input-group-text d-flex flex-grow-1">Yıllık İzin Yenilenirken Emeklilik Baz Alınsın.</span>
-                    </div>
-                    <small id="isYearLeaveRetiredDefault" class="form-hint"></small>
-                </div>
-            </div>
-        </div>
-        <div class="col ps-5 border-start border-info">
-            <label class="form-label text-center mb-3">Toplam Alacak İzin</label>
-            <div class="row mb-3 ">
-                <div class="row mb-3">
-                    <div class="col">
-                        <div class="input-group input-group-merge">
-                            <span class="input-group-text">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-clock-hour-4">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M12 12l3 2"/><path d="M12 7v5"/>
+            <div class="col">
+                <div class="border rounded p-3 mb-2">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <span class="bg-green-lt avatar">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-plus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12.5 21h-6.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v5"></path>
+                                    <path d="M16 3v4"></path>
+                                    <path d="M8 3v4"></path>
+                                    <path d="M4 11h16"></path>
+                                    <path d="M16 19h6"></path>
+                                    <path d="M19 16v6"></path>
                                 </svg>
                             </span>
-                            <input type="number" data-takenLeave name="TotalTakenLeave" class="form-control" readonly/>
-                            <span class="input-group-text">
-                                Saat
+                        </div>
+                        <div class="col">
+                            <div id="badgeTotalYearLeave" class="font-weight-medium">
+
+                            </div>
+                            <div class="text-muted">
+                                Hak Edilen Yıllık İzin Miktarı
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="border rounded p-3">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <span class="bg-red-lt avatar">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-minus" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M12.5 21h-6.5a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v8"></path>
+                                    <path d="M16 3v4"></path>
+                                    <path d="M8 3v4"></path>
+                                    <path d="M4 11h16"></path>
+                                    <path d="M16 19h6"></path>
+                                </svg>
                             </span>
                         </div>
-                        <small class="form-hint">Lütfen saat düzenlemesi yaptıktan sonra personeli güncellemeyi unutmayınız.</small>
+                        <div class="col">
+                            <div id="badgeUsedYearLeave" class="font-weight-medium">
+
+                            </div>
+                            <div class="text-muted">
+                                Kullanılan Yıllık İzin Miktarı
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="border rounded p-3">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <span class="bg-dark-lt avatar">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/arrow-up -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4"></path>
+                                    <path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
+                                    <path d="M15 3v4"></path>
+                                    <path d="M7 3v4"></path>
+                                    <path d="M3 11h16"></path>
+                                    <path d="M18 16.496v1.504l1 1"></path>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="col">
+                            <div id="balanceYearLeave" class="font-weight-medium">
+
+                            </div>
+                            <div class="text-muted">
+                                Kalan Yıllık İzin
+                            </div>
+                            <small class="text-danger" id="balanceYearWarning"></small>
+                        </div>
+                        <div class="col">
+                            <div class="dropdown filter-dropdown">
+                                <button class="btn btn-teal" data-bs-toggle="dropdown" data-bs-trigger="hover" data-bs-auto-close="outside">Detay</button>
+                                <div class="dropdown-menu dropdown-menu-start" style="z-index: 10000">
+                                    <div class="dropdown-header" style="width: 250px;">Detaylı Kalan İzin Grafiği</div>
+
+                                    <div id="balanceYearLeaveDetail" class="p-4"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- Card Header-->
+    </div>
+    <!--FirstCard-->
+    <div class="card-body">
+
+
+        <!-- /Main Card -->
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a href="#tabs-home-1" class="nav-link active" data-bs-toggle="tab" aria-selected="true" role="tab">Kişisel Bilgiler</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a href="#tabs-profile-1" class="nav-link" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab">Diğer Bilgiler</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a href="#tabs-profile-2" class="nav-link" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab">Yıllık İzin Kümülatif Bilgileri</a>
+                </li>
+                <li class="nav-item ms-auto" role="presentation">
+                    <a href="#tabs-settings-1" class="nav-link" title="Settings" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path>
+                            <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
+                        </svg>
+                        Yıllık İzin, Alacak İzin ve Gıda Yardımı Ayarları
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card-body">
+            <form id="updatePersonalForm" method="POST" onsubmit="return false">
+                <div class="tab-content">
+
+                    <input type="hidden" name="ID">
+                    <input type="hidden" name="PersonalDetails.ID">
+                    <input type="hidden" name="returnUrl" value="@returnUrl">
+                    <div class="tab-pane active show" id="tabs-home-1" role="tabpanel">
+                        <div class="hr-text mb-3 text-black">Personel Bilgileri</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label class="form-label required">Adı Soyadı</label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                                                <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                                            </svg>
+                                        </span>
+                                        <input type="text" name="NameSurname" class="form-control" placeholder="Personal Ad-Soyadını Giriniz!" disabled>
+                                    </div>
+                                </div>
+                                <div class="col mb-3">
+                                    <label class="form-label required">İşe Başlama Tarihi</label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"></path>
+                                                <path d="M16 3v4"></path>
+                                                <path d="M8 3v4"></path>
+                                                <path d="M4 11h16"></path>
+                                                <path d="M11 15h1"></path>
+                                                <path d="M12 15v3"></path>
+                                            </svg>
+                                        </span>
+                                        <input id="StartJobDateInput" type="date" name="StartJobDate" class="form-control" placeholder="Personal İşe başlangıç Tarihi!" disabled>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label class="form-label required">Doğum Tarihi</label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cake" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M3 20h18v-8a3 3 0 0 0 -3 -3h-12a3 3 0 0 0 -3 3v8z"></path>
+                                                <path d="M3 14.803c.312 .135 .654 .204 1 .197a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1c.35 .007 .692 -.062 1 -.197"></path>
+                                                <path d="M12 4l1.465 1.638a2 2 0 1 1 -3.015 .099l1.55 -1.737z"></path>
+                                            </svg>
+                                        </span>
+                                        <input type="date" name="BirthDate" class="form-control" placeholder="Personal Doğum Tarihi!" disabled>
+                                    </div>
+                                </div>
+                                <div class="col mb-3">
+                                    <label class="form-label required">Doğum Yeri </label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-baby-carriage" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M8 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                <path d="M18 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                <path d="M2 5h2.5l1.632 4.897a6 6 0 0 0 5.693 4.103h2.675a5.5 5.5 0 0 0 0 -11h-.5v6" />
+                                                <path d="M6 9h14" />
+                                                <path d="M9 17l1 -3" />
+                                                <path d="M16 14l1 3" />
+                                            </svg>
+                                        </span>
+                                        <input type="text" name="PersonalDetails.BirthPlace" class="form-control" placeholder="Personal Doğum Yeri Giriniz!" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col mb-3">
+                                    <label class="form-label required">TC Kimlik No </label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v10a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z"></path>
+                                                <path d="M9 10m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                                <path d="M15 8l2 0"></path>
+                                                <path d="M15 12l2 0"></path>
+                                                <path d="M7 16l10 0"></path>
+                                            </svg>
+                                        </span>
+                                        <input type="text" name="IdentificationNumber" class="form-control" placeholder="Personal Tc Kimlik Giriniz!" disabled>
+                                    </div>
+                                </div>
+                                <div class="col mb-3">
+                                    <label class="form-label required">Sicil No </label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id-badge-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M7 12h3v4h-3z"></path>
+                                                <path d="M10 6h-6a1 1 0 0 0 -1 1v12a1 1 0 0 0 1 1h16a1 1 0 0 0 1 -1v-12a1 1 0 0 0 -1 -1h-6"></path>
+                                                <path d="M10 3m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v3a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z"></path>
+                                                <path d="M14 16h2"></path>
+                                                <path d="M14 12h4"></path>
+                                            </svg>
+                                        </span>
+                                        <input type="number" name="RegistirationNumber" class="form-control" placeholder="Personal Sicil No Giriniz!" disabled>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label class="form-label required">SSK Numarası </label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-id-badge" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M5 3m0 3a3 3 0 0 1 3 -3h8a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-8a3 3 0 0 1 -3 -3z" />
+                                                <path d="M12 13m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                                <path d="M10 6h4" />
+                                                <path d="M9 18h6" />
+                                            </svg>
+                                        </span>
+                                        <input type="text" name="PersonalDetails.SskNumber" class="form-control" placeholder="Personal SSK No Giriniz!" disabled>
+                                    </div>
+                                </div>
+                                <div class="col mb-3">
+                                    <label class="form-label required">SGK Kodu </label>
+                                    <div class="input-group input-group-merge">
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-scan" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M10 9a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                <path d="M4 8v-2a2 2 0 0 1 2 -2h2" />
+                                                <path d="M4 16v2a2 2 0 0 0 2 2h2" />
+                                                <path d="M16 4h2a2 2 0 0 1 2 2v2" />
+                                                <path d="M16 20h2a2 2 0 0 0 2 -2v-2" />
+                                                <path d="M8 16a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2" />
+                                            </svg>
+                                        </span>
+                                        <input type="text" name="PersonalDetails.SgkCode" class="form-control" placeholder="Personal SGK Kodunu Giriniz!" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col mb-3">
+                                    <label class="form-label required">Ünvan / Görev</label>
+                                    <select id="positionSelectModal" class="form-select" name="Position_Id" disabled>
+                                    </select>
+                                </div>
+                                <div class="col mb-3">
+                                    <label class="form-label required">Şube</label>
+                                    <select id="branchSelectModal" class="form-select" name="Branch_Id" disabled>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label class="form-label required">Departman</label>
+                                    <select id="departmantNameSelect" data-required="true" class="form-select" data-departmantSelect name="PersonalDetails.DepartmantName" disabled>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 mb-3 form-check form-switch mb-3 border">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <label class="form-label" for="RetiredOrOldInput">Emeklilik Durumu</label>
+                                        <input class="form-check-input" name="RetiredOrOld" type="checkbox" id="RetiredOrOldInput" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-2 mb-3 form-check form-switch mb-3 border ">
+                                    <div class="d-flex flex-column justify-content-center align-items-center">
+                                        <label class="form-label" for="PersonalDetails.HandicappedInput">Engelli Personel</label>
+                                        <input class="form-check-input" name="PersonalDetails.Handicapped" type="checkbox" id="PersonalDetails.HandicappedInput" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="col-3 mb-3">
+                                    <div class="d-flex justify-content-center">
+                                        <label class="form-label required">Cinsiyet</label>
+                                    </div>
+
+                                    <div class="d-flex justify-content-evenly">
+                                        <label class="form-selectgroup-item">
+                                            <input type="radio" value="Erkek" name="Gender" class="form-selectgroup-input" disabled>
+                                            <span class="form-selectgroup-label">
+                                                <!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-gender-male" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path d="M10 14m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" />
+                                                    <path d="M19 5l-5.4 5.4" />
+                                                    <path d="M19 5h-5" />
+                                                    <path d="M19 5v5" />
+                                                </svg>
+                                                Erkek
+                                            </span>
+                                        </label>
+                                        <label class="form-selectgroup-item">
+                                            <input type="radio" value="Kadın" name="Gender" class="form-selectgroup-input" disabled>
+                                            <span class="form-selectgroup-label">
+                                                <!-- Download SVG icon from http://tabler-icons.io/i/user -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-gender-female" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path d="M12 9m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0" />
+                                                    <path d="M12 14v7" />
+                                                    <path d="M9 18h6" />
+                                                </svg>
+                                                Kadın
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-3 mb-3">
+                                    <label class="form-label required">Maaş</label>
+                                    <div class="input-group">
+                                        <input class="form-control" name="PersonalDetails.Salary" type="text" placeholder="Örn: 12350.45" disabled>
+                                        <span class="input-group-text">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-currency-lira" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M10 5v15a7 7 0 0 0 7 -7" />
+                                                <path d="M6 15l8 -4" />
+                                                <path d="M14 7l-8 4" />
+                                            </svg>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class=" text-end">
+                            <button id="enableEditButton" data-enableEditBtn class="btn btn-secondary">Düzenlemeyi Etkinleştir</button>
+                            <button disabled id="updatePersonalButton" data-updateBtn class="btn btn-lime">Personeli Güncelle</button>
+                        </div>
+                    </div>
+                    <div class="tab-pane mb-3" id="tabs-profile-1" role="tabpanel">
+                        <div class="hr-text mb-3 text-black">Diğer Bilgiler</div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label class="form-label">Anne Adı</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-woman" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M10 16v5"></path>
+                                            <path d="M14 16v5"></path>
+                                            <path d="M8 16h8l-2 -7h-4z"></path>
+                                            <path d="M5 11c1.667 -1.333 3.333 -2 5 -2"></path>
+                                            <path d="M19 11c-1.667 -1.333 -3.333 -2 -5 -2"></path>
+                                            <path d="M12 4m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                        </svg>
+                                    </span>
+                                    <input type="text" name="PersonalDetails.MotherName" class="form-control" placeholder="Anne Adını Giriniz!" disabled>
+                                </div>
+                            </div>
+                            <div class="col mb-3">
+                                <label class="form-label">Baba Adı</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-man" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M10 16v5"></path>
+                                            <path d="M14 16v5"></path>
+                                            <path d="M9 9h6l-1 7h-4z"></path>
+                                            <path d="M5 11c1.333 -1.333 2.667 -2 4 -2"></path>
+                                            <path d="M19 11c-1.333 -1.333 -2.667 -2 -4 -2"></path>
+                                            <path d="M12 4m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                        </svg>
+                                    </span>
+                                    <input type="text" name="PersonalDetails.FatherName" class="form-control" placeholder="Baba Adını Giriniz!" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label class="form-label">Eğitim Durumu</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-school" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M22 9l-10 -4l-10 4l10 4l10 -4v6" />
+                                            <path d="M6 10.6v5.4a6 3 0 0 0 12 0v-5.4" />
+                                        </svg>
+                                    </span>
+                                    <select id="EducationStatusSelect" class="form-select" name="PersonalDetails.EducationStatus" disabled>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col mb-3">
+                                <label class="form-label">Personelin Bulunduğu Grup</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-books" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M5 4m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+                                            <path d="M9 4m0 1a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1z" />
+                                            <path d="M5 8h4" />
+                                            <path d="M9 16h4" />
+                                            <path d="M13.803 4.56l2.184 -.53c.562 -.135 1.133 .19 1.282 .732l3.695 13.418a1.02 1.02 0 0 1 -.634 1.219l-.133 .041l-2.184 .53c-.562 .135 -1.133 -.19 -1.282 -.732l-3.695 -13.418a1.02 1.02 0 0 1 .634 -1.219l.133 -.041z" />
+                                            <path d="M14 9l4 -1" />
+                                            <path d="M16 16l3.923 -.98" />
+                                        </svg>
+                                    </span>
+                                    <select id="PersonalGroupSelect" class="form-select" name="PersonalDetails.PersonalGroup" disabled>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Telefon No </label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-phone" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2"></path>
+                                        </svg>
+                                    </span>
+                                    <input disabled type="tel" name="Phonenumber" class="form-control" data-mask="000-000-00-00" data-mask-visible="true" placeholder="000-000-00-00" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-2 mb-3">
+                                <label class="form-label">Medeni Durumu</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hand-ring-finger" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M8 13v-2.5a1.5 1.5 0 0 1 3 0v1.5" />
+                                            <path d="M17 11.5a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1 -6 6h-2h.208a6 6 0 0 1 -5.012 -2.7a69.74 69.74 0 0 1 -.196 -.3c-.312 -.479 -1.407 -2.388 -3.286 -5.728a1.5 1.5 0 0 1 .536 -2.022a1.867 1.867 0 0 1 2.28 .28l1.47 1.47" />
+                                            <path d="M11 11.5v-2a1.5 1.5 0 1 1 3 0v2.5" />
+                                            <path d="M14 12v-6.5a1.5 1.5 0 0 1 3 0v6.5" />
+                                        </svg>
+                                    </span>
+                                    <select id="MaritalStatusSelect" class="form-select" name="PersonalDetails.MaritalStatus" disabled>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-2 mb-3">
+                                <label class="form-label">Beden Ölçüsü</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-ruler-3" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M19.875 8c.621 0 1.125 .512 1.125 1.143v5.714c0 .631 -.504 1.143 -1.125 1.143h-15.875a1 1 0 0 1 -1 -1v-5.857c0 -.631 .504 -1.143 1.125 -1.143h15.75z" />
+                                            <path d="M9 8v2" />
+                                            <path d="M6 8v3" />
+                                            <path d="M12 8v3" />
+                                            <path d="M18 8v3" />
+                                            <path d="M15 8v2" />
+                                        </svg>
+                                    </span>
+                                    <select id="BodySizeSelect" class="form-select" name="PersonalDetails.BodySize" disabled>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-2 mb-3">
+                                <label class="form-label">Kan Grubu</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-vaccine" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M17 3l4 4" />
+                                            <path d="M19 5l-4.5 4.5" />
+                                            <path d="M11.5 6.5l6 6" />
+                                            <path d="M16.5 11.5l-6.5 6.5h-4v-4l6.5 -6.5" />
+                                            <path d="M7.5 12.5l1.5 1.5" />
+                                            <path d="M10.5 9.5l1.5 1.5" />
+                                            <path d="M3 21l3 -3" />
+                                        </svg>
+                                    </span>
+                                    <select id="BloodGroupSelect" class="form-select" name="PersonalDetails.BloodGroup" disabled>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label class="form-label">Banka Hesap No</label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building-bank" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M3 21l18 0" />
+                                            <path d="M3 10l18 0" />
+                                            <path d="M5 6l7 -3l7 3" />
+                                            <path d="M4 10l0 11" />
+                                            <path d="M20 10l0 11" />
+                                            <path d="M8 14l0 3" />
+                                            <path d="M12 14l0 3" />
+                                            <path d="M16 14l0 3" />
+                                        </svg>
+                                    </span>
+                                    <input type="text" name="PersonalDetails.BankAccount" class="form-control" placeholder="Banka Hesap No Giriniz" disabled>
+                                </div>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label">IBAN Adresi </label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-wallet" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12" />
+                                            <path d="M20 12v4h-4a2 2 0 0 1 0 -4h4" />
+                                        </svg>
+                                    </span>
+                                    <input type="text" name="PersonalDetails.IBAN" class="form-control" data-mask="TR00-0000-0000-0000-0000-0000-00" data-mask-visible="true" placeholder="TR00-0000-0000-0000-0000-0000-00" autocomplete="off" disabled>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label class="form-label">Adres </label>
+                                <div class="input-group input-group-merge">
+                                    <span class="input-group-text">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-address-book" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path d="M20 6v12a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2z" />
+                                            <path d="M10 16h6" />
+                                            <path d="M13 11m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                                            <path d="M4 8h3" />
+                                            <path d="M4 12h3" />
+                                            <path d="M4 16h3" />
+                                        </svg>
+                                    </span>
+                                    <textarea name="PersonalDetails.Address" class="form-control" data-bs-toggle="autosize" placeholder="Personel Adresini Giriniz!!!" disabled style="overflow: hidden; overflow-wrap: break-word; resize: none; text-align: start; height: 59.6px;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" text-end">
+                            <button id="enableEditButton" data-enableEditBtn class="btn btn-secondary">Düzenlemeyi Etkinleştir</button>
+                            <button disabled id="updatePersonalButton" data-updateBtn class="btn btn-lime">Personeli Güncelle</button>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tabs-settings-1" role="tabpanel">
+                        <div class="row mb-3 mt-3">
+                            <div class="col pe-5">
+                                <label class="form-label text-center mb-3">Yıllık İzin ve Gıda Yardımı</label>
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <div class="input-group input-group-merge">
+                                            <span class="input-group-text">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bell-z-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path d="M14.235 19c.865 0 1.322 1.024 .745 1.668a3.992 3.992 0 0 1 -2.98 1.332a3.992 3.992 0 0 1 -2.98 -1.332c-.552 -.616 -.158 -1.579 .634 -1.661l.11 -.006h4.471z" stroke-width="0" fill="currentColor" />
+                                                    <path d="M12 2c1.358 0 2.506 .903 2.875 2.141l.046 .171l.008 .043a8.013 8.013 0 0 1 4.024 6.069l.028 .287l.019 .289v2.931l.021 .136a3 3 0 0 0 1.143 1.847l.167 .117l.162 .099c.86 .487 .56 1.766 -.377 1.864l-.116 .006h-16c-1.028 0 -1.387 -1.364 -.493 -1.87a3 3 0 0 0 1.472 -2.063l.021 -.143l.001 -2.97a8 8 0 0 1 3.821 -6.454l.248 -.146l.01 -.043a3.003 3.003 0 0 1 2.562 -2.29l.182 -.017l.176 -.004zm2 6h-4l-.117 .007a1 1 0 0 0 -.883 .993l.007 .117a1 1 0 0 0 .993 .883h1.584l-2.291 2.293l-.076 .084c-.514 .637 -.07 1.623 .783 1.623h4l.117 -.007a1 1 0 0 0 .883 -.993l-.007 -.117a1 1 0 0 0 -.993 -.883h-1.586l2.293 -2.293l.076 -.084c.514 -.637 .07 -1.623 -.783 -1.623z" stroke-width="0" fill="currentColor" />
+                                                </svg>
+                                            </span>
+                                            <input type="date" data-yearLeaveDate data-firstYearLeaveDate name="YearLeaveDate" class="form-control" disabled />
+                                            <span class="input-group-text">
+                                                Yıllık İzin Yenilenme Tarihi
+                                            </span>
+                                        </div>
+                                        <small id="yearLeaveDateIsDefault" class="form-hint"></small>
+
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <div class="input-group input-group-merge">
+                                            <span class="input-group-text">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-fish" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <path d="M16.69 7.44a6.973 6.973 0 0 0 -1.69 4.56c0 1.747 .64 3.345 1.699 4.571"></path>
+                                                    <path d="M2 9.504c7.715 8.647 14.75 10.265 20 2.498c-5.25 -7.761 -12.285 -6.142 -20 2.504"></path>
+                                                    <path d="M18 11v.01"></path>
+                                                    <path d="M11.5 10.5c-.667 1 -.667 2 0 3"></path>
+                                                </svg>
+                                            </span>
+                                            <input type="number" data-foodAid name="FoodAid" class="form-control" disabled />
+                                            <span class="input-group-text">
+                                                Gıda Yardımı Miktarı
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <div class="input-group input-group-merge">
+                                            <span class="input-group-text">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-bell-z-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path d="M14.235 19c.865 0 1.322 1.024 .745 1.668a3.992 3.992 0 0 1 -2.98 1.332a3.992 3.992 0 0 1 -2.98 -1.332c-.552 -.616 -.158 -1.579 .634 -1.661l.11 -.006h4.471z" stroke-width="0" fill="currentColor" />
+                                                    <path d="M12 2c1.358 0 2.506 .903 2.875 2.141l.046 .171l.008 .043a8.013 8.013 0 0 1 4.024 6.069l.028 .287l.019 .289v2.931l.021 .136a3 3 0 0 0 1.143 1.847l.167 .117l.162 .099c.86 .487 .56 1.766 -.377 1.864l-.116 .006h-16c-1.028 0 -1.387 -1.364 -.493 -1.87a3 3 0 0 0 1.472 -2.063l.021 -.143l.001 -2.97a8 8 0 0 1 3.821 -6.454l.248 -.146l.01 -.043a3.003 3.003 0 0 1 2.562 -2.29l.182 -.017l.176 -.004zm2 6h-4l-.117 .007a1 1 0 0 0 -.883 .993l.007 .117a1 1 0 0 0 .993 .883h1.584l-2.291 2.293l-.076 .084c-.514 .637 -.07 1.623 .783 1.623h4l.117 -.007a1 1 0 0 0 .883 -.993l-.007 -.117a1 1 0 0 0 -.993 -.883h-1.586l2.293 -2.293l.076 -.084c.514 -.637 .07 -1.623 -.783 -1.623z" stroke-width="0" fill="currentColor" />
+                                                </svg>
+                                            </span>
+                                            <input type="date" data-foodAidDate name="FoodAidDate" class="form-control" disabled/>
+                                            <span class="input-group-text">
+                                                Gıda Yardımı Yenilenme Tarihi
+                                            </span>
+                                        </div>
+                                        <small id="foodAidIsDefault" class="form-hint"></small>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <div class="input-group input-group-merge">
+                                            <span class="input-group-text">
+                                                <label class="form-switch">
+                                                    <input id="IsYearLeaveRetiredInput" class="form-check-input" type="checkbox" name="IsYearLeaveRetired" disabled>
+                                                </label>
+                                            </span>
+                                            <span class="input-group-text d-flex flex-grow-1">Yıllık İzin Yenilenirken Emeklilik Baz Alınsın.</span>
+                                        </div>
+                                        <small id="isYearLeaveRetiredDefault" class="form-hint"></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col ps-5 border-start border-info">
+                                <label class="form-label text-center mb-3">Toplam Alacak İzin</label>
+                                <div class="row mb-3 ">
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            <div class="input-group input-group-merge">
+                                                <span class="input-group-text">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-clock-hour-4">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                                        <path d="M12 12l3 2" />
+                                                        <path d="M12 7v5" />
+                                                    </svg>
+                                                </span>
+                                                <input type="number" data-takenLeave name="TotalTakenLeave" class="form-control" readonly />
+                                                <span class="input-group-text">
+                                                    Saat
+                                                </span>
+                                            </div>
+                                            <small class="form-hint">Lütfen saat düzenlemesi yaptıktan sonra personeli güncellemeyi unutmayınız.</small>
+                                        </div>
+
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            <div class="input-group input-group-merge">
+                                                <input data-hourInput type="number" placeholder="Saat Giriniz" disabled class="form-control" />
+                                                <button type="button" data-addHour class="btn btn-success" disabled>Saat Ekle</button>
+                                                <button type="button" data-removeHour class="btn btn-danger" disabled>Saat Çıkart</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" text-end">
+                            <button id="enableEditButton" data-enableEditBtn class="btn btn-secondary">Düzenlemeyi Etkinleştir</button>
+                            <button disabled id="updatePersonalButton" data-updateBtn class="btn btn-lime">Personeli Güncelle</button>
+                        </div>
                     </div>
 
+
+
                 </div>
-                <div class="row mb-3">
-                    <div class="col">
-                        <div class="input-group input-group-merge">
-                            <input data-hourInput type="number" placeholder="Saat Giriniz" disabled class="form-control"/>
-                            <button type="button" data-addHour class="btn btn-success" disabled>Saat Ekle</button>
-                            <button type="button" data-removeHour class="btn btn-danger" disabled>Saat Çıkart</button>
+            </form>
+            <div class="tab-content">
+                <div class="tab-pane mb-3" id="tabs-profile-2" role="tabpanel">
+                    <div class="card-body">
+                        <div class="col table-responsive " style="max-height: 400px">
+                            <table class="table table-nowrap">
+                                <thead class="sticky-top">
+                                    <tr>
+                                        <th class="text-center" scope="col">Yıl</th>
+                                        <th class="text-center" scope="col">Hak Edilen Yıllık İzin Miktarı</th>
+                                        <th class="text-center" scope="col">Kalan Yıllık İzin Miktarı</th>
+                                        <th class="text-center" scope="col">İzin Föyü <br>İmzalandı Mı</th>
+                                        <th class="text-center" scope="col">Bildirim<br>Açık Mı</th>
+                                        <th class="text-center" scope="col">Güncelle</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cumulative-inputs-section">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class=" text-end">
-        <button id="enableEditButton" data-enableEditBtn class="btn btn-secondary">Düzenlemeyi Etkinleştir</button>
-        <button disabled id="updatePersonalButton" data-updateBtn class="btn btn-lime">Personeli Güncelle</button>
-    </div>
-</div>
 
-
-
-</div>
-</form>
-<div class="tab-content">
-    <div class="tab-pane mb-3" id="tabs-profile-2" role="tabpanel">
-        <div class="card-body">
-            <div class="col table-responsive " style="max-height: 400px">
-                <table class="table table-nowrap">
-                    <thead class="sticky-top">
-                    <tr>
-                        <th class="text-center" scope="col">Yıl</th>
-                        <th class="text-center" scope="col">Hak Edilen Yıllık İzin Miktarı</th>
-                        <th class="text-center" scope="col">Kalan Yıllık İzin Miktarı</th>
-                        <th class="text-center" scope="col">İzin Föyü <br>İmzalandı Mı</th>
-                        <th class="text-center" scope="col">Bildirim<br>Açık Mı</th>
-                        <th class="text-center" scope="col">Güncelle</th>
-                    </tr>
-                    </thead>
-                        <tbody id="cumulative-inputs-section">
-
-                        </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-
-<!-- /Main Card -->
-<!-- /Account Delete -->
-<div class="card">
-    <h3 class="card-header">Personeli Sil</h3>
-    <div class="card-body">
-        <div class="alert alert-danger" role="alert">
-            <div class="d-flex">
-                <div style="width: 40px;height: 40px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alert-triangle" width="40" height="40" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <path d="M12 9v4"></path>
-                        <path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"></path>
-                        <path d="M12 16h.01"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h4 class="alert-title">Emin Misiniz&hellip;</h4>
-                    <div class="text-secondary">İlgili Personel Sistemden Silinecektir...</div>
+        <!-- /Main Card -->
+        <!-- /Account Delete -->
+        <div class="card">
+            <h3 class="card-header">Personeli Sil</h3>
+            <div class="card-body">
+                <div class="alert alert-danger" role="alert">
+                    <div class="d-flex">
+                        <div style="width: 40px;height: 40px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alert-triangle" width="40" height="40" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M12 9v4"></path>
+                                <path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"></path>
+                                <path d="M12 16h.01"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="alert-title">Emin Misiniz&hellip;</h4>
+                            <div class="text-secondary">İlgili Personel Sistemden Silinecektir...</div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <button style="width: 150px;" id="deleteButton" type="button" class="btn btn-danger m-3" data-bs-toggle="modal" data-bs-target="#archiveModal">Personeli Sil</button>
         </div>
+        <!-- /Account Delete -->
+
+
     </div>
-    <button style="width: 150px;" id="deleteButton" type="button" class="btn btn-danger m-3" data-bs-toggle="modal" data-bs-target="#archiveModal">Personeli Sil</button>
-</div>
-<!-- /Account Delete -->
-
-
-</div>
 </div>
 <!--DeletePersonalModal-->
 <div class="modal modal-blur fade" id="archiveModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -771,7 +856,10 @@
             <div class="modal-status bg-danger"></div>
             <div class="modal-body text-center py-4">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                    <path d="M12 9v4" />
+                    <path d="M12 17h.01" />
                 </svg>
                 <h3>Emin Misiniz?</h3>
                 <div class="text-muted">
@@ -805,10 +893,10 @@
             <div class="modal-body py-4">
                 <div class="text-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-purple icon-lg icon-tabler-info-hexagon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M19.875 6.27c.7 .398 1.13 1.143 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033z"/>
-                        <path d="M12 9h.01"/>
-                        <path d="M11 12h1v4h1"/>
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M19.875 6.27c.7 .398 1.13 1.143 1.125 1.948v7.284c0 .809 -.443 1.555 -1.158 1.948l-6.75 4.27a2.269 2.269 0 0 1 -2.184 0l-6.75 -4.27a2.225 2.225 0 0 1 -1.158 -1.948v-7.285c0 -.809 .443 -1.554 1.158 -1.947l6.75 -3.98a2.33 2.33 0 0 1 2.25 0l6.75 3.98h-.033z" />
+                        <path d="M12 9h.01" />
+                        <path d="M11 12h1v4h1" />
                     </svg>
                     <h3>Emin Misiniz?</h3>
                     <div class="text-muted">
@@ -853,7 +941,8 @@
                 <div class="text-center">
 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-orange icon-lg icon-tabler-help-hexagon-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.425 1.414a3.33 3.33 0 0 1 3.026 -.097l.19 .097l6.775 3.995l.096 .063l.092 .077l.107 .075a3.224 3.224 0 0 1 1.266 2.188l.018 .202l.005 .204v7.284c0 1.106 -.57 2.129 -1.454 2.693l-.17 .1l-6.803 4.302c-.918 .504 -2.019 .535 -3.004 .068l-.196 -.1l-6.695 -4.237a3.225 3.225 0 0 1 -1.671 -2.619l-.007 -.207v-7.285c0 -1.106 .57 -2.128 1.476 -2.705l6.95 -4.098zm1.575 13.586a1 1 0 0 0 -.993 .883l-.007 .117l.007 .127a1 1 0 0 0 1.986 0l.007 -.117l-.007 -.127a1 1 0 0 0 -.993 -.883zm1.368 -6.673a2.98 2.98 0 0 0 -3.631 .728a1 1 0 0 0 1.44 1.383l.171 -.18a.98 .98 0 0 1 1.11 -.15a1 1 0 0 1 -.34 1.886l-.232 .012a1 1 0 0 0 .111 1.994a3 3 0 0 0 1.371 -5.673z" stroke-width="0" fill="currentColor"/>
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M10.425 1.414a3.33 3.33 0 0 1 3.026 -.097l.19 .097l6.775 3.995l.096 .063l.092 .077l.107 .075a3.224 3.224 0 0 1 1.266 2.188l.018 .202l.005 .204v7.284c0 1.106 -.57 2.129 -1.454 2.693l-.17 .1l-6.803 4.302c-.918 .504 -2.019 .535 -3.004 .068l-.196 -.1l-6.695 -4.237a3.225 3.225 0 0 1 -1.671 -2.619l-.007 -.207v-7.285c0 -1.106 .57 -2.128 1.476 -2.705l6.95 -4.098zm1.575 13.586a1 1 0 0 0 -.993 .883l-.007 .117l.007 .127a1 1 0 0 0 1.986 0l.007 -.117l-.007 -.127a1 1 0 0 0 -.993 -.883zm1.368 -6.673a2.98 2.98 0 0 0 -3.631 .728a1 1 0 0 0 1.44 1.383l.171 -.18a.98 .98 0 0 1 1.11 -.15a1 1 0 0 1 -.34 1.886l-.232 .012a1 1 0 0 0 .111 1.994a3 3 0 0 0 1.371 -5.673z" stroke-width="0" fill="currentColor" />
                     </svg>
                     <h3>Emin Misiniz?</h3>
                     <div class="text-muted">
@@ -919,7 +1008,10 @@
             <div class="modal-status bg-blue"></div>
             <div class="modal-body text-center py-4">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-blue icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                    <path d="M12 9v4" />
+                    <path d="M12 17h.01" />
                 </svg>
                 <h3>Erkenden Yıllık İzin Ekle</h3>
                 <div class="text-muted">
@@ -953,7 +1045,10 @@
             <div class="modal-status bg-danger"></div>
             <div class="modal-body text-center py-4">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                    <path d="M12 9v4" />
+                    <path d="M12 17h.01" />
                 </svg>
                 <h3>Yıllık İzin Hakkını Sil</h3>
                 <div class="text-muted">
@@ -980,7 +1075,42 @@
     </div>
 </div>
 <!--Kumulatif Sil Modal-->
-
+<!--Yıllık İzin Yenilenme Tarihi Modal-->
+<div class="modal modal-blur fade" id="yearLeaveDate-update-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-status bg-blue"></div>
+            <div class="modal-body text-center py-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-blue icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                    <path d="M12 9v4" />
+                    <path d="M12 17h.01" />
+                </svg>
+                <h3>Uyarı</h3>
+                <div class="text-muted">
+                    Personelin yıllık izin yenilenme tarihinde yapılan güncelleme nedeniyle, yıllık izin sayıları ve kümülatifleri sıfırlanacak ve yeniden hesaplanacaktır. Devam etmek istediğinizden emin misiniz?
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="w-100">
+                    <div class="row">
+                        <div class="col">
+                            <a href="#" class="btn w-100" data-bs-dismiss="modal">
+                                İptal
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a id="yearLeaveDate-modal-button-add" href="#" class="btn btn-blue w-100" data-bs-dismiss="modal">
+                                Devam Et
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts
 {

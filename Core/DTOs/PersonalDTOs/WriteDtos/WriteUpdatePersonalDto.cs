@@ -25,8 +25,8 @@ public class WriteUpdatePersonalDto
     public double TotalTakenLeave { get; set; }
     [Required]
     public string Gender { get; set; }
-    [Required]
-    public int TotalYearLeave { get; set; }
+    //[Required]
+    //public int TotalYearLeave { get; set; }
     [Required] 
     public int FoodAid { get; set; }
     [Required] 
@@ -35,5 +35,7 @@ public class WriteUpdatePersonalDto
     public Guid Branch_Id { get; set; }
     [Required]
     public Guid Position_Id { get; set; }
-    public WriteUpdatePersonalDetailDto PersonalDetails { get; set; }
+	[Required]
+	public DateTime YearLeaveDate { get; set; }
+	public WriteUpdatePersonalDetailDto PersonalDetails { get; set; }
 }

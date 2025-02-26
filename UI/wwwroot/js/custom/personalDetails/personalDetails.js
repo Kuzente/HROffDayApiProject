@@ -9,6 +9,7 @@
     let BloodGroupSelect = $('#BloodGroupSelect');
     const updateButton = $('button[data-updateBtn]')
     const enableEditButton = $('button[data-enableEditBtn]')
+    let firstYearLeaveDate;
     $.ajax({
         type: "GET",
         url: `/get-personel-detaylari${window.location.search}`
@@ -112,13 +113,16 @@
             $('textarea[name="PersonalDetails.Address"]').val(data.personalDetails.address);
             //Manuel Ayarlar
             $('[data-takenLeave]').val(data.totalTakenLeave); // Manuel Alacak İzin alanı
-            $('[data-yearLeaveDate]').text(new Date(data.yearLeaveDate).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' }))
+            //$('[data-yearLeaveDate]').text(new Date(data.yearLeaveDate).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' }))
             if (!data.isYearLeaveRetired){
                 $('#isYearLeaveRetiredDefault').remove()
             }
             else{
                 $('#isYearLeaveRetiredDefault').text("Yıllık İzin Yenilenirken 20 günden yenilenecektir.")
             }
+            initializeFlatpickr($("[data-yearLeaveDate]")).setDate(data.yearLeaveDate); //TODO
+            firstYearLeaveDate = data.yearLeaveDate.split("T")[0];
+            $("[data-yearLeaveDate]").attr("data-firstYearLeaveDate", firstYearLeaveDate);
             if (data.yearLeaveDate === data.startJobDate){
                 $('#yearLeaveDateIsDefault').text("Yıllık İzin Yenilenme Tarihi Varsayılan olarak İşe Başlangıç Tarihinden Alındı.") 
             }
@@ -528,24 +532,47 @@
                     }
                 }
             });
-            //Formun id'sini kullanarak formu gönder
-            $.ajax({
-                type: "POST",
-                url: "/personel-detaylari",
-                data: formData // Form verilerini al
-            }).done(function (res) {
-                spinnerEnd(updateButton)
-                if (res.isSuccess) {
-                    $('#success-modal-message').text("Personel Başarılı Bir Şekilde Güncellendi.")
-                    $('#success-modal').modal('show');
-                    $('#success-modal').on('hidden.bs.modal', function () {
-                        window.location.reload();
-                    })
-                } else {
-                    $('#error-modal-message').text(res.message)
-                    $('#error-modal').modal('show');
-                }
-            });
+            if (firstYearLeaveDate !== formData.find(item => item.name === "YearLeaveDate").value) {
+                $('#yearLeaveDate-update-modal').modal('show'); // Modalı göster
+
+                // Modal kapatıldığında spinner'ı durdur
+                $('#yearLeaveDate-update-modal').on('hidden.bs.modal', function () {
+                    spinnerEnd(updateButton);
+                });
+
+                // İptal butonuna tıklandığında modalı kapat ve işlemi sonlandır
+                $('#yearLeaveDate-update-modal').on('click', '[data-bs-dismiss="modal"]', function () {
+                    $('#yearLeaveDate-update-modal').modal('hide');
+                });
+                $('#yearLeaveDate-modal-button-add').on('click', function () {
+                    $('#yearLeaveDate-update-modal').modal('hide');
+                    performUpdate(formData, updateButton);
+                });
+            }
+            else {
+                performUpdate(formData, updateButton);
+            }
+            
+            function performUpdate(formData, updateButton) {
+                //Formun id'sini kullanarak formu gönder
+                $.ajax({
+                    type: "POST",
+                    url: "/personel-detaylari",
+                    data: formData // Form verilerini al
+                }).done(function (res) {
+                    spinnerEnd(updateButton)
+                    if (res.isSuccess) {
+                        $('#success-modal-message').text("Personel Başarılı Bir Şekilde Güncellendi.")
+                        $('#success-modal').modal('show');
+                        $('#success-modal').on('hidden.bs.modal', function () {
+                            window.location.reload();
+                        })
+                    } else {
+                        $('#error-modal-message').text(res.message)
+                        $('#error-modal').modal('show');
+                    }
+                });
+            }
         });
 
         //Personeli Sil Butonu Tıklandığında Butonu Tıklandığında
