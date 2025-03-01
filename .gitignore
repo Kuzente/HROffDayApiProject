@@ -365,3 +365,5 @@ FodyWeavers.xsd
 /UI/appsettings.Development.json
 /UI/appsettings.Development.json
 /UI/appsettings.Production.json
+
+.idea
