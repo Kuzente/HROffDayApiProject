@@ -68,10 +68,7 @@ namespace UI.Controllers
             else
             { 
                 if (!GetClientUserId().HasValue) return Redirect("/404"); // Veya uygun bir hata sayfası
-                //result = await _writeBranchService.AddAsync(dto,GetClientUserId()!.Value,GetClientIpAddress()); 
-                var task1 =  _writeBranchService.AddAsync(dto,GetClientUserId()!.Value,GetClientIpAddress()); 
-                var task2 = _writeBranchService.AddAsync(dto,GetClientUserId()!.Value,GetClientIpAddress());
-                var result2 = await Task.WhenAll(task1, task2);
+                result = await _writeBranchService.AddAsync(dto,GetClientUserId()!.Value,GetClientIpAddress());
             }
             
             return Ok(result);
